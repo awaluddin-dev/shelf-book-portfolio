@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+
 import { useEffect, useState } from "react";
 
 export function CircuitBoardBg() {

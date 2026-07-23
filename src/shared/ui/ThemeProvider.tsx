@@ -24,7 +24,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 }
 
 function ThemeContextWrapper({ children }: { children: React.ReactNode }) {
-  const { theme, setTheme, resolvedTheme } = useNextTheme();
+  const { setTheme, resolvedTheme } = useNextTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

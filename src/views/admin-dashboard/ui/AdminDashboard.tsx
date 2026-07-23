@@ -5,14 +5,14 @@ import { Loader } from "@/shared/ui/Loader";
 import { AdminSidebar } from "@/shared/ui/admin/AdminSidebar";
 import { useRouter } from "next/navigation";
 import {
-  Briefcase,
-  LogOut,
-  LayoutDashboard,
-  Check,
-  X,
-  MessageSquare,
-  ChevronRight,
-  ChevronLeft,
+  
+  
+  
+  
+  
+  
+  
+  
   CheckCircle,
   AlertCircle,
   Save,

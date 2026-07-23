@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Edit2, Save, X, Layers } from "lucide-react";
+import { Plus, Trash2, Edit2, Save, X } from "lucide-react";
 import { AdminSidebar } from "@/shared/ui/admin/AdminSidebar";
 
 export default function AdminArchitecture() {
