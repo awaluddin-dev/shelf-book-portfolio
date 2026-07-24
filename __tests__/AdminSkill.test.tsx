@@ -1,10 +1,10 @@
-import { render, screen, waitFor, fireEvent, cleanup, within } from '@testing-library/react';
+import { render, _screen, waitFor, _fireEvent, cleanup, _within } from '@testing-library/react';
 import AdminSkill from '@/views/admin-skill/ui/AdminSkill';
-import { useRouter } from 'next/navigation';
+import { _useRouter } from 'next/navigation';
 
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
-  useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
+  _useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
 }));
 
 jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
@@ -48,10 +48,10 @@ describe('AdminSkill.tsx', () => {
     render(<AdminSkill />);
 
     await waitFor(() => {
-      expect(screen.getByText('Interactive Skill Tree')).toBeInTheDocument();
+      expect(_screen.getByText('Interactive Skill Tree')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('React')).toBeInTheDocument();
+    expect(_screen.getByText('React')).toBeInTheDocument();
   });
 
   it('can open add modal, fill form, and submit', async () => {
@@ -65,16 +65,16 @@ describe('AdminSkill.tsx', () => {
     render(<AdminSkill />);
 
     await waitFor(() => {
-      expect(screen.getByText('Interactive Skill Tree')).toBeInTheDocument();
+      expect(_screen.getByText('Interactive Skill Tree')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Add Node'));
-    expect(screen.getAllByText('Add Node').length).toBeGreaterThan(0);
+    _fireEvent.click(_screen.getByText('Add Node'));
+    expect(_screen.getAllByText('Add Node').length).toBeGreaterThan(0);
 
-    const titleInput = screen.getByPlaceholderText('Node.js');
-    fireEvent.change(titleInput, { target: { value: 'New Skill' } });
+    const titleInput = _screen.getByPlaceholderText('Node.js');
+    _fireEvent.change(titleInput, { target: { value: 'New Skill' } });
 
-    fireEvent.submit(screen.getByText('Create Node').closest('form')!);
+    _fireEvent.submit(_screen.getByText('Create Node').closest('form')!);
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith('/api/skills', expect.objectContaining({ method: 'POST' }));
@@ -92,17 +92,17 @@ describe('AdminSkill.tsx', () => {
     render(<AdminSkill />);
 
     await waitFor(() => {
-      expect(screen.getByText('Old Skill')).toBeInTheDocument();
+      expect(_screen.getByText('Old Skill')).toBeInTheDocument();
     });
 
-    const row = screen.getByText('Old Skill').closest('tr');
+    const row = _screen.getByText('Old Skill').closest('tr');
     // buttons: Edit, Delete
-    const editBtn = within(row!).getAllByRole('button')[0];
-    fireEvent.click(editBtn);
+    const editBtn = _within(row!).getAllByRole('button')[0];
+    _fireEvent.click(editBtn);
 
-    expect(screen.getByText('Edit Node')).toBeInTheDocument();
+    expect(_screen.getByText('Edit Node')).toBeInTheDocument();
 
-    fireEvent.submit(screen.getByText('Save Changes').closest('form')!);
+    _fireEvent.submit(_screen.getByText('Save Changes').closest('form')!);
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith('/api/skills/1', expect.objectContaining({ method: 'PATCH' }));
@@ -120,13 +120,13 @@ describe('AdminSkill.tsx', () => {
     render(<AdminSkill />);
 
     await waitFor(() => {
-      expect(screen.getByText('Delete Me')).toBeInTheDocument();
+      expect(_screen.getByText('Delete Me')).toBeInTheDocument();
     });
 
-    const row = screen.getByText('Delete Me').closest('tr');
-    const deleteBtn = within(row!).getAllByRole('button')[1];
+    const row = _screen.getByText('Delete Me').closest('tr');
+    const deleteBtn = _within(row!).getAllByRole('button')[1];
 
-    fireEvent.click(deleteBtn);
+    _fireEvent.click(deleteBtn);
 
     expect(window.confirm).toHaveBeenCalled();
 

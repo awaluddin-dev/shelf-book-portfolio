@@ -12,7 +12,8 @@
     "clean": "next clean",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "sonar": "sonar-scanner-npm"
   },
   "dependencies": {
     "@marsidev/react-turnstile": "^1.5.3",
@@ -53,6 +54,7 @@
     "eslint-config-next": "16.0.8",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
+    "sonarqube-scanner": "^5.0.0",
     "typescript-eslint": "^8.65.0"
   }
 }

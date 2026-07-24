@@ -1,15 +1,15 @@
-import { getTagProjectCount, getRelatedProjects } from '@/entities/project/model/projects-data';
-import { projects } from '@/entities/testimonial/model/data';
+import { getTagProjectCount, getRelatedProjects } from '@/entities/project/model/_projects-data';
+import { _projects } from '@/entities/testimonial/model/data';
 
 jest.mock('@/entities/testimonial/model/data', () => ({
-  projects: [
+  _projects: [
     { id: '1', name: 'Project 1', tags: ['React', 'Node'] },
     { id: '2', name: 'Project 2', tags: ['React', 'TypeScript'] },
     { id: '3', name: 'Project 3', tags: ['Node', 'PostgreSQL'] },
   ]
 }));
 
-describe('projects-data.ts', () => {
+describe('_projects-data.ts', () => {
   it('getTagProjectCount returns correct count', () => {
     expect(getTagProjectCount('React')).toBe(2);
     expect(getTagProjectCount('Node')).toBe(2);
@@ -17,7 +17,7 @@ describe('projects-data.ts', () => {
     expect(getTagProjectCount('Unknown')).toBe(0);
   });
 
-  it('getRelatedProjects returns most related projects', () => {
+  it('getRelatedProjects returns most related _projects', () => {
     const current = { id: '1', name: 'Project 1', tags: ['React', 'Node'] } as any;
     const related = getRelatedProjects(current);
     

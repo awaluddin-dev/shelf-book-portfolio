@@ -12,7 +12,7 @@ interface ContactModalProps {
 
 export default function ContactModal({ isOpen, onClose, portfolioStatus, triggerToast }: ContactModalProps) {
   const [formData, setFormData] = useState({ name: '', email: '', projectType: 'contract', message: '' });
-  const [_isSubmitting, _setIsSubmitting] = useState(false);
+  const [_isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

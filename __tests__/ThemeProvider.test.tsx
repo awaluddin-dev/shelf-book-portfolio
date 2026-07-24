@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, _screen, _fireEvent } from '@testing-library/react';
 import { ThemeProvider, useTheme } from '@/shared/ui/ThemeProvider';
 
 // Mock next-themes
@@ -29,7 +29,7 @@ describe('ThemeProvider.tsx', () => {
     );
 
     // After mounting, it should resolve to dark based on our mock
-    expect(screen.getByTestId('is-dark').textContent).toBe('true');
-    expect(screen.getByTestId('next-themes-provider')).toBeInTheDocument();
+    expect(_screen.getByTestId('is-dark').textContent).toBe('true');
+    expect(_screen.getByTestId('next-themes-provider')).toBeInTheDocument();
   });
 });

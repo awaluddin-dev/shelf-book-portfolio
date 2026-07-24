@@ -1,11 +1,11 @@
-import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react';
+import { render, _screen, waitFor, _fireEvent, cleanup } from '@testing-library/react';
 import AdminDashboard from '@/views/admin-dashboard/ui/AdminDashboard';
 import { useTheme } from 'next-themes';
-import { useRouter } from 'next/navigation';
+import { _useRouter } from 'next/navigation';
 
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
-  useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
+  _useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
 }));
 
 jest.mock('next-themes', () => ({
@@ -71,12 +71,12 @@ describe('AdminDashboard.tsx', () => {
     render(<AdminDashboard />);
 
     await waitFor(() => {
-      expect(screen.getByText('Dashboard Overview')).toBeInTheDocument();
+      expect(_screen.getByText('Dashboard Overview')).toBeInTheDocument();
     });
 
-    expect(screen.getByDisplayValue('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('1 pending review')).toBeInTheDocument();
-    expect(screen.getByText('Open to Opportunities')).toBeInTheDocument();
+    expect(_screen.getByDisplayValue('John Doe')).toBeInTheDocument();
+    expect(_screen.getByText('1 pending review')).toBeInTheDocument();
+    expect(_screen.getByText('Open to Opportunities')).toBeInTheDocument();
   });
 
   it('allows saving hero config', async () => {
@@ -94,14 +94,14 @@ describe('AdminDashboard.tsx', () => {
     render(<AdminDashboard />);
 
     await waitFor(() => {
-      expect(screen.getByText('Dashboard Overview')).toBeInTheDocument();
+      expect(_screen.getByText('Dashboard Overview')).toBeInTheDocument();
     });
 
-    const saveBtn = screen.getByText('Save Changes');
-    fireEvent.click(saveBtn);
+    const saveBtn = _screen.getByText('Save Changes');
+    _fireEvent.click(saveBtn);
 
     await waitFor(() => {
-      expect(screen.getByText('Hero Section updated successfully')).toBeInTheDocument();
+      expect(_screen.getByText('Hero Section updated successfully')).toBeInTheDocument();
     });
   });
 });

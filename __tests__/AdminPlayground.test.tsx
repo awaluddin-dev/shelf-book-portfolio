@@ -1,10 +1,10 @@
-import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
+import { render, _screen, _fireEvent, cleanup, waitFor } from '@testing-library/react';
 import AdminPlayground from '@/views/admin-playground/ui/AdminPlayground';
-import { useRouter } from 'next/navigation';
+import { _useRouter } from 'next/navigation';
 
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
-  useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
+  _useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
 }));
 
 jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
@@ -43,24 +43,24 @@ describe('AdminPlayground.tsx', () => {
 
   it('renders correctly', () => {
     render(<AdminPlayground />);
-    expect(screen.getByText('Theme Playground')).toBeInTheDocument();
+    expect(_screen.getByText('Theme Playground')).toBeInTheDocument();
   });
 
   it('toggles theme', () => {
     render(<AdminPlayground />);
-    const themeBtn = screen.getAllByRole('button')[0]; // first button is theme toggle
-    fireEvent.click(themeBtn);
+    const themeBtn = _screen.getAllByRole('button')[0]; // first button is theme toggle
+    _fireEvent.click(themeBtn);
     expect(mockSetTheme).toHaveBeenCalledWith('light');
   });
 
   it('exports css to clipboard', async () => {
     render(<AdminPlayground />);
-    const exportBtn = screen.getByText('Export CSS');
-    fireEvent.click(exportBtn);
+    const exportBtn = _screen.getByText('Export CSS');
+    _fireEvent.click(exportBtn);
 
     expect(mockWriteText).toHaveBeenCalled();
     await waitFor(() => {
-      expect(screen.getByText('CSS Copied to clipboard!')).toBeInTheDocument();
+      expect(_screen.getByText('CSS Copied to clipboard!')).toBeInTheDocument();
     });
   });
 });

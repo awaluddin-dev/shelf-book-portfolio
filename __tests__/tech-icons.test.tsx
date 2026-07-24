@@ -1,5 +1,5 @@
 import { getTechIconAndColor } from '@/shared/lib/tech-icons';
-import { render } from '@testing-library/react';
+import { _render } from '@testing-library/react';
 
 describe('tech-icons.tsx', () => {
   it('returns correctly for Node.js', () => {

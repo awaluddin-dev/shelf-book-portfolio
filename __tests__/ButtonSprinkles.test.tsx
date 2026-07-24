@@ -1,11 +1,11 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, _screen, _fireEvent } from '@testing-library/react';
 import { ButtonSprinkles } from '@/shared/ui/ButtonSprinkles';
 
 describe('ButtonSprinkles.tsx', () => {
   it('attaches click listener and does not render anything visible', () => {
-    const { container } = render(<ButtonSprinkles />);
+    const { _container } = render(<ButtonSprinkles />);
     // The component itself returns null
-    expect(container.firstChild).toBeNull();
+    expect(_container.firstChild).toBeNull();
   });
 
   it('triggers sprinkle creation on button click', () => {
@@ -36,7 +36,7 @@ describe('ButtonSprinkles.tsx', () => {
     // Since jsdom doesn't support Element.animate, we need to mock it
     Element.prototype.animate = jest.fn();
 
-    fireEvent.click(btn!);
+    _fireEvent.click(btn!);
     
     // Assert that animate was called (sprinkles were created)
     expect(Element.prototype.animate).toHaveBeenCalled();

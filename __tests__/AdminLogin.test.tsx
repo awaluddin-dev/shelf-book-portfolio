@@ -1,9 +1,9 @@
-import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
+import { render, _screen, _fireEvent, waitFor, cleanup } from '@testing-library/react';
 import AdminLogin from '@/views/admin-login/ui/AdminLogin';
 
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: mockPush })
+  _useRouter: () => ({ push: mockPush })
 }));
 
 jest.mock('@marsidev/react-turnstile', () => ({
@@ -31,10 +31,10 @@ describe('AdminLogin.tsx', () => {
 
   it('renders login form and disabled submit button', () => {
     render(<AdminLogin />);
-    expect(screen.getByText('Admin Portal')).toBeInTheDocument();
+    expect(_screen.getByText('Admin Portal')).toBeInTheDocument();
     
     // We check that the sign in button is disabled
-    const submitBtn = screen.getByRole('button', { name: /Sign In/i });
+    const submitBtn = _screen.getByRole('button', { name: /Sign In/i });
     expect(submitBtn).toBeDisabled();
   });
 
@@ -48,17 +48,17 @@ describe('AdminLogin.tsx', () => {
 
     render(<AdminLogin />);
     
-    fireEvent.click(screen.getByTestId('turnstile-success'));
+    _fireEvent.click(_screen.getByTestId('turnstile-success'));
 
-    const submitBtn = screen.getByRole('button', { name: /Sign In/i });
+    const submitBtn = _screen.getByRole('button', { name: /Sign In/i });
     expect(submitBtn).not.toBeDisabled();
 
-    fireEvent.change(screen.getByPlaceholderText('Enter email...'), { target: { value: 'admin@example.com' } });
-    fireEvent.change(screen.getByPlaceholderText('Enter password...'), { target: { value: 'password' } });
+    _fireEvent.change(_screen.getByPlaceholderText('Enter email...'), { target: { value: 'admin@example.com' } });
+    _fireEvent.change(_screen.getByPlaceholderText('Enter password...'), { target: { value: 'password' } });
 
-    fireEvent.click(submitBtn);
+    _fireEvent.click(submitBtn);
 
-    expect(screen.getByText('Signing In...')).toBeInTheDocument();
+    expect(_screen.getByText('Signing In...')).toBeInTheDocument();
 
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith('/admin/dashboard');
@@ -72,17 +72,17 @@ describe('AdminLogin.tsx', () => {
       ok: false
     });
 
-    const { container } = render(<AdminLogin />);
+    const { _container } = render(<AdminLogin />);
     
-    fireEvent.click(screen.getByTestId('turnstile-success'));
+    _fireEvent.click(_screen.getByTestId('turnstile-success'));
 
     // Re-query the button directly
-    const submitBtn = screen.getAllByRole('button')[1];
+    const submitBtn = _screen.getAllByRole('button')[1];
     
-    fireEvent.click(submitBtn);
+    _fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(screen.getByText('Incorrect credentials. Please try again.')).toBeInTheDocument();
+      expect(_screen.getByText('Incorrect credentials. Please try again.')).toBeInTheDocument();
     });
   });
 });

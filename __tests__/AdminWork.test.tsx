@@ -1,10 +1,10 @@
-import { render, screen, waitFor, fireEvent, cleanup, within } from '@testing-library/react';
+import { render, _screen, waitFor, _fireEvent, cleanup, _within } from '@testing-library/react';
 import AdminWork from '@/views/admin-work/ui/AdminWork';
-import { useRouter } from 'next/navigation';
+import { _useRouter } from 'next/navigation';
 
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
-  useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
+  _useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
 }));
 
 jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
@@ -48,10 +48,10 @@ describe('AdminWork.tsx', () => {
     render(<AdminWork />);
 
     await waitFor(() => {
-      expect(screen.getByText('Work Experience Management')).toBeInTheDocument();
+      expect(_screen.getByText('Work Experience Management')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Dev')).toBeInTheDocument();
+    expect(_screen.getByText('Dev')).toBeInTheDocument();
   });
 
   it('can open add modal, fill form, and submit', async () => {
@@ -65,16 +65,16 @@ describe('AdminWork.tsx', () => {
     render(<AdminWork />);
 
     await waitFor(() => {
-      expect(screen.getByText('Work Experience Management')).toBeInTheDocument();
+      expect(_screen.getByText('Work Experience Management')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Add New'));
-    expect(screen.getByText('Add New Experience')).toBeInTheDocument();
+    _fireEvent.click(_screen.getByText('Add New'));
+    expect(_screen.getByText('Add New Experience')).toBeInTheDocument();
 
-    const roleInput = screen.getByPlaceholderText('e.g. Software Engineer');
-    fireEvent.change(roleInput, { target: { value: 'New Role' } });
+    const roleInput = _screen.getByPlaceholderText('e.g. Software Engineer');
+    _fireEvent.change(roleInput, { target: { value: 'New Role' } });
 
-    fireEvent.submit(screen.getByText('Create Experience').closest('form')!);
+    _fireEvent.submit(_screen.getByText('Create Experience').closest('form')!);
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith('/api/work', expect.objectContaining({ method: 'POST' }));
@@ -92,17 +92,17 @@ describe('AdminWork.tsx', () => {
     render(<AdminWork />);
 
     await waitFor(() => {
-      expect(screen.getByText('Old Role')).toBeInTheDocument();
+      expect(_screen.getByText('Old Role')).toBeInTheDocument();
     });
 
-    const row = screen.getByText('Old Role').closest('tr');
+    const row = _screen.getByText('Old Role').closest('tr');
     // buttons: View, Edit, Delete
-    const editBtn = within(row!).getAllByRole('button')[1];
-    fireEvent.click(editBtn);
+    const editBtn = _within(row!).getAllByRole('button')[1];
+    _fireEvent.click(editBtn);
 
-    expect(screen.getByText('Edit Experience')).toBeInTheDocument();
+    expect(_screen.getByText('Edit Experience')).toBeInTheDocument();
 
-    fireEvent.submit(screen.getByText('Save Changes').closest('form')!);
+    _fireEvent.submit(_screen.getByText('Save Changes').closest('form')!);
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith('/api/work/1', expect.objectContaining({ method: 'PATCH' }));
@@ -120,13 +120,13 @@ describe('AdminWork.tsx', () => {
     render(<AdminWork />);
 
     await waitFor(() => {
-      expect(screen.getByText('Delete Me')).toBeInTheDocument();
+      expect(_screen.getByText('Delete Me')).toBeInTheDocument();
     });
 
-    const row = screen.getByText('Delete Me').closest('tr');
-    const deleteBtn = within(row!).getAllByRole('button')[2];
+    const row = _screen.getByText('Delete Me').closest('tr');
+    const deleteBtn = _within(row!).getAllByRole('button')[2];
 
-    fireEvent.click(deleteBtn);
+    _fireEvent.click(deleteBtn);
 
     expect(window.confirm).toHaveBeenCalled();
 

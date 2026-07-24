@@ -1,0 +1,107 @@
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/AdminArchitecture.test.tsx
+  7:2  error  Parsing error: Property assignment expected
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/AdminCurrent.test.tsx
+  7:2  error  Parsing error: Property assignment expected
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/AdminDashboard.test.tsx
+  8:2  error  Parsing error: Property assignment expected
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/AdminLearning.test.tsx
+  7:2  error  Parsing error: Property assignment expected
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/AdminLifecycle.test.tsx
+  7:2  error  Parsing error: Property assignment expected
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/AdminPlayground.test.tsx
+  7:2  error  Parsing error: Property assignment expected
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/AdminProficiency.test.tsx
+  7:2  error  Parsing error: Property assignment expected
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/AdminProjects.test.tsx
+  7:2  error  Parsing error: Property assignment expected
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/AdminSkill.test.tsx
+  7:2  error  Parsing error: Property assignment expected
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/AdminTestimoni.test.tsx
+  7:2  error  Parsing error: Property assignment expected
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/AdminWork.test.tsx
+  7:2  error  Parsing error: Property assignment expected
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/BookItem.test.tsx
+  3:10  warning  'projects' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/ButtonSprinkles.test.tsx
+  1:18  warning  'screen' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/MermaidDiagram.test.tsx
+  41:9  warning  'container' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/ThemeProvider.test.tsx
+  1:26  warning  'fireEvent' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/projects-data.test.ts
+  2:10  warning  'projects' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/__tests__/tech-icons.test.tsx
+  2:10  warning  'render' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/fix-lint.js
+   3:10  warning  'removeUnusedImports' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  10:43  warning  'match' is defined but never used. Allowed unused args must match /^_/u                @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/jest.setup.ts
+  2:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/src/views/admin-testimoni/ui/AdminTestimoni.tsx
+  36:15  warning  'statusData' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/src/views/home/ui/Home.tsx
+  284:7  error  Parsing error: Declaration or statement expected
+
+/home/awaluddin/workshop/shelf-book-portofolio/src/views/home/ui/components/ExperienceSection.tsx
+   5:21   warning  'Milestone' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+   5:43   warning  'ChevronRight' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+   5:57   warning  'MapPin' is defined but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
+   5:65   warning  'ChevronLeft' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   5:78   warning  'Calendar' is defined but never used. Allowed unused vars must match /^_/u                       @typescript-eslint/no-unused-vars
+   5:88   warning  'GitPullRequest' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+   5:104  warning  'Star' is defined but never used. Allowed unused vars must match /^_/u                           @typescript-eslint/no-unused-vars
+   5:110  warning  'GitFork' is defined but never used. Allowed unused vars must match /^_/u                        @typescript-eslint/no-unused-vars
+   5:119  warning  'X' is defined but never used. Allowed unused vars must match /^_/u                              @typescript-eslint/no-unused-vars
+   5:128  warning  'ExternalLink' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+   5:152  warning  'FolderGit2' is defined but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+   8:49   warning  'activeRoadmap' is defined but never used. Allowed unused args must match /^_/u                  @typescript-eslint/no-unused-vars
+   8:87   warning  'renderIcon' is defined but never used. Allowed unused args must match /^_/u                     @typescript-eslint/no-unused-vars
+  38:12   warning  'expandedRoadmapId' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  38:31   warning  'setExpandedRoadmapId' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/src/views/home/ui/components/HeroSection.tsx
+  3:18  warning  'AnimatePresence' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  8:35  warning  'gh' is defined but never used. Allowed unused args must match /^_/u               @typescript-eslint/no-unused-vars
+  8:50  warning  'isDark' is defined but never used. Allowed unused args must match /^_/u           @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/src/views/home/ui/components/ProficiencySection.tsx
+   5:15  warning  'ChevronDown' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+   5:28  warning  'ChevronUp' is defined but never used. Allowed unused vars must match /^_/u                        @typescript-eslint/no-unused-vars
+  11:12  warning  'selectedLevelFilter' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  11:33  warning  'setSelectedLevelFilter' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/src/views/home/ui/components/ProjectsSection.tsx
+  2:36  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  2:47  warning  'useCallback' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/awaluddin/workshop/shelf-book-portofolio/src/views/home/ui/components/TestimonialsSection.tsx
+  2:17  warning  'useState' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  3:10  warning  'motion' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  3:18  warning  'AnimatePresence' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  5:32  warning  'Star' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  7:57  warning  'isLoading' is defined but never used. Allowed unused args must match /^_/u        @typescript-eslint/no-unused-vars
+
+✖ 51 problems (12 errors, 39 warnings)
+
+[ELIFECYCLE] Command failed with exit code 1.

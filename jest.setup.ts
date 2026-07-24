@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import React from 'react';
+
 
 // Common global mocks that apply to all tests
 global.ResizeObserver = jest.fn().mockImplementation(() => ({

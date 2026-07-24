@@ -1,10 +1,10 @@
-import { render, screen, waitFor, fireEvent, cleanup, within } from '@testing-library/react';
+import { render, _screen, waitFor, _fireEvent, cleanup, _within } from '@testing-library/react';
 import AdminLearning from '@/views/admin-learning/ui/AdminLearning';
-import { useRouter } from 'next/navigation';
+import { _useRouter } from 'next/navigation';
 
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
-  useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
+  _useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
 }));
 
 jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
@@ -44,10 +44,10 @@ describe('AdminLearning.tsx', () => {
     render(<AdminLearning />);
 
     await waitFor(() => {
-      expect(screen.getByText('Upcoming Tech & Roadmap')).toBeInTheDocument();
+      expect(_screen.getByText('Upcoming Tech & Roadmap')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('GraphQL')).toBeInTheDocument();
+    expect(_screen.getByText('GraphQL')).toBeInTheDocument();
   });
 
   it('can open add modal, fill form, and submit', async () => {
@@ -61,16 +61,16 @@ describe('AdminLearning.tsx', () => {
     render(<AdminLearning />);
 
     await waitFor(() => {
-      expect(screen.getByText('Upcoming Tech & Roadmap')).toBeInTheDocument();
+      expect(_screen.getByText('Upcoming Tech & Roadmap')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Add Tech'));
-    expect(screen.getAllByText('Add Tech').length).toBeGreaterThan(0);
+    _fireEvent.click(_screen.getByText('Add Tech'));
+    expect(_screen.getAllByText('Add Tech').length).toBeGreaterThan(0);
 
-    const techInput = screen.getAllByRole('textbox')[0];
-    fireEvent.change(techInput, { target: { value: 'New Tech' } });
+    const techInput = _screen.getAllByRole('textbox')[0];
+    _fireEvent.change(techInput, { target: { value: 'New Tech' } });
 
-    fireEvent.submit(screen.getByText('Create Tech Goal').closest('form')!);
+    _fireEvent.submit(_screen.getByText('Create Tech Goal').closest('form')!);
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith('/api/learning', expect.objectContaining({ method: 'POST' }));
@@ -88,17 +88,17 @@ describe('AdminLearning.tsx', () => {
     render(<AdminLearning />);
 
     await waitFor(() => {
-      expect(screen.getByText('Old Tech')).toBeInTheDocument();
+      expect(_screen.getByText('Old Tech')).toBeInTheDocument();
     });
 
-    const row = screen.getByText('Old Tech').closest('tr');
+    const row = _screen.getByText('Old Tech').closest('tr');
     // buttons: Edit, Delete
-    const editBtn = within(row!).getAllByRole('button')[0];
-    fireEvent.click(editBtn);
+    const editBtn = _within(row!).getAllByRole('button')[0];
+    _fireEvent.click(editBtn);
 
-    expect(screen.getByText('Edit Tech')).toBeInTheDocument();
+    expect(_screen.getByText('Edit Tech')).toBeInTheDocument();
 
-    fireEvent.submit(screen.getByText('Save Changes').closest('form')!);
+    _fireEvent.submit(_screen.getByText('Save Changes').closest('form')!);
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith('/api/learning/1', expect.objectContaining({ method: 'PATCH' }));
@@ -116,13 +116,13 @@ describe('AdminLearning.tsx', () => {
     render(<AdminLearning />);
 
     await waitFor(() => {
-      expect(screen.getByText('Delete Me')).toBeInTheDocument();
+      expect(_screen.getByText('Delete Me')).toBeInTheDocument();
     });
 
-    const row = screen.getByText('Delete Me').closest('tr');
-    const deleteBtn = within(row!).getAllByRole('button')[1];
+    const row = _screen.getByText('Delete Me').closest('tr');
+    const deleteBtn = _within(row!).getAllByRole('button')[1];
 
-    fireEvent.click(deleteBtn);
+    _fireEvent.click(deleteBtn);
 
     expect(window.confirm).toHaveBeenCalled();
 

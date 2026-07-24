@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import SkillTree from '@/entities/skill/ui/SkillTree';
 
