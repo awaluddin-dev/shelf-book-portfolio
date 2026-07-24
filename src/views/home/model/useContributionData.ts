@@ -112,9 +112,9 @@ export function useContributionData(username = "awaluddin-dev") {
     const months: {
       label: string;
       monthNum: number;
-      weeks: typeof data.weeks;
+      weeks: any[][];
     }[] = [];
-    let currentMonthWeeks: typeof data.weeks = [];
+    let currentMonthWeeks: any[][] = [];
     let currentMonthLabel = "";
     let currentMonthNum = -1;
 

@@ -1,20 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Loader } from '@/shared/ui/Loader';
 import { AdminSidebar } from '@/shared/ui/admin/AdminSidebar';
 import { useRouter } from 'next/navigation';
-import { Briefcase, LogOut, LayoutDashboard, Check, X, MessageSquare, ChevronRight, ChevronLeft, CheckCircle, AlertCircle } from 'lucide-react';
+import { X, MessageSquare, ChevronRight, ChevronLeft, CheckCircle, AlertCircle, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from 'next-themes';
 import { cn } from '@/shared/lib/utils';
 import { Testimonial } from '@/entities/testimonial/model/data';
 
 export default function AdminTestimoni() {
-  const [status, setStatus] = useState<'available' | 'busy'>('available');
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [, setIsProcessing] = useState(false);
   const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
   
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,9 +21,7 @@ export default function AdminTestimoni() {
   const paginatedItems = testimonials.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const router = useRouter();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
+  const { resolvedTheme: _resolvedTheme } = useTheme();
   const [toastMessage, setToastMessage] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
@@ -44,16 +40,6 @@ export default function AdminTestimoni() {
     });
   }, [router]);
 
-  const toggleStatus = async () => {
-    const nextStatus = status === 'available' ? 'busy' : 'available';
-    setStatus(nextStatus);
-    await fetch('/api/status', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-      body: JSON.stringify({ status: nextStatus })
-    });
-  };
-
   const handleTestimonialAction = async (e: React.MouseEvent, id: string, newStatus: 'accepted' | 'rejected') => {
     e.stopPropagation();
     
@@ -71,7 +57,7 @@ export default function AdminTestimoni() {
       if (!res.ok) throw new Error('Failed to update testimonial');
       
       setToastMessage({ message: `Testimonial successfully ${newStatus}`, type: 'success' });
-    } catch (err) {
+    } catch {
       setTestimonials(previousTestimonials);
       setToastMessage({ message: 'Failed to update testimonial', type: 'error' });
       setIsProcessing(false);
@@ -82,11 +68,6 @@ export default function AdminTestimoni() {
     if (selectedTestimonial?.id === id) {
       setSelectedTestimonial(null);
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('isAdmin');
-    router.push('/admin/login');
   };
 
   return (

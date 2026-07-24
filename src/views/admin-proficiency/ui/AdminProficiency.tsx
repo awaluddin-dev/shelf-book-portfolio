@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Loader } from '@/shared/ui/Loader';
 import { AdminSidebar } from '@/shared/ui/admin/AdminSidebar';
 import { useRouter } from 'next/navigation';
-import { Briefcase, LogOut, LayoutDashboard, MessageSquare, ChevronRight, ChevronLeft, CheckCircle, AlertCircle, Edit, Trash2, Plus, Network, Rocket, Layers, Cpu, X } from 'lucide-react';
+import { ChevronRight, ChevronLeft, CheckCircle, AlertCircle, Edit, Trash2, Plus, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from 'next-themes';
 import { cn } from '@/shared/lib/utils';
@@ -12,7 +11,7 @@ import { cn } from '@/shared/lib/utils';
 export default function AdminProficiency() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [, setIsProcessing] = useState(false);
   
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -20,9 +19,7 @@ export default function AdminProficiency() {
   const paginatedItems = categories.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const router = useRouter();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
+  const { resolvedTheme: _resolvedTheme } = useTheme();
   const [toastMessage, setToastMessage] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
   
   const [showModal, setShowModal] = useState(false);
@@ -39,7 +36,7 @@ export default function AdminProficiency() {
       const res = await fetch('/api/proficiency');
       const data = await res.json();
       setCategories(data.data?.proficiency || data.proficiency || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : [])));
-    } catch (e) {}
+    } catch {}
     setLoading(false);
   };
 
@@ -48,13 +45,9 @@ export default function AdminProficiency() {
       router.push('/admin/login');
       return;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
   }, [router]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('isAdmin');
-    router.push('/admin/login');
-  };
 
   const handleSave = async (e: React.FormEvent) => {
     setIsProcessing(true);
@@ -75,7 +68,7 @@ export default function AdminProficiency() {
       setShowModal(false);
       setEditingItem(null);
       fetchData();
-    } catch (err) {
+    } catch {
       setToastMessage({ message: 'Failed to save category', type: 'error' });
     }
     setIsProcessing(false);
@@ -92,7 +85,7 @@ export default function AdminProficiency() {
       
       setToastMessage({ message: 'Successfully deleted category', type: 'success' });
       fetchData();
-    } catch (err) {
+    } catch {
       setToastMessage({ message: 'Failed to delete category', type: 'error' });
     }
     setIsProcessing(false);

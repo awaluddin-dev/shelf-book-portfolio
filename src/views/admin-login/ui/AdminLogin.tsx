@@ -35,7 +35,7 @@ export default function AdminLogin() {
       } else {
         setError(true);
       }
-    } catch (_err) {
+    } catch {
       setError(true);
     } finally {
       setIsLoading(false);

@@ -5,19 +5,12 @@ import { Loader } from "@/shared/ui/Loader";
 import { AdminSidebar } from "@/shared/ui/admin/AdminSidebar";
 import { useRouter } from "next/navigation";
 import {
-  
-  
-  
-  
-  
-  
-  
-  
   CheckCircle,
   AlertCircle,
   Save,
   Plus,
   Trash2,
+  Briefcase,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useTheme } from "next-themes";
@@ -25,7 +18,6 @@ import { cn } from "@/shared/lib/utils";
 import { Testimonial } from "@/entities/testimonial/model/data";
 
 export default function AdminDashboard() {
-  const [status, setStatus] = useState<"available" | "busy">("available");
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [heroConfig, setHeroConfig] = useState<any>({ name: '', role: '' });
   const [metrics, setMetrics] = useState<any[]>([]);
@@ -33,8 +25,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
+  const { resolvedTheme: _resolvedTheme } = useTheme();
   const [toastMessage, setToastMessage] = useState<{
     message: string;
     type: "success" | "error";
@@ -55,7 +46,7 @@ export default function AdminDashboard() {
         router.push("/admin/login");
         return;
       }
-    } catch (e) {
+    } catch {
       localStorage.removeItem("token");
       localStorage.removeItem("isAdmin");
       router.push("/admin/login");
@@ -71,8 +62,7 @@ export default function AdminDashboard() {
       fetch("/api/status").then((res) => res.json()),
       fetch("/api/testimonials?all=true").then((res) => res.json()),
       fetch("/api/hero").then((res) => res.json()),
-    ]).then(([statusData, testData, heroData]) => {
-      setStatus(statusData.data?.status || statusData.status);
+    ]).then(([, testData, heroData]) => {
       setTestimonials(
         testData.data?.testimonials ||
           testData.testimonials ||
@@ -99,21 +89,6 @@ export default function AdminDashboard() {
     });
   }, [router]);
 
-  const toggleStatus = async () => {
-    setIsProcessing(true);
-    const nextStatus = status === "available" ? "busy" : "available";
-    setStatus(nextStatus);
-    await fetch("/api/status", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({ status: nextStatus }),
-    });
-    setIsProcessing(false);
-  };
-
   const saveHeroConfig = async () => {
     setIsProcessing(true);
     try {
@@ -130,7 +105,7 @@ export default function AdminDashboard() {
         message: "Hero Section updated successfully",
         type: "success",
       });
-    } catch (err) {
+    } catch {
       setToastMessage({
         message: "Failed to update hero section",
         type: "error",
