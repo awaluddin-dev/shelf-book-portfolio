@@ -34,7 +34,6 @@ export default function AdminTestimoni() {
       fetch('/api/status').then(res => res.json()),
       fetch('/api/testimonials?all=true').then(res => res.json())
     ]).then(([statusData, testData]) => {
-      setStatus((statusData.data?.status || statusData.status));
       setTestimonials(testData.data?.testimonials || testData.testimonials || (Array.isArray(testData.data) ? testData.data : (Array.isArray(testData) ? testData : [])));
       setLoading(false);
     });
