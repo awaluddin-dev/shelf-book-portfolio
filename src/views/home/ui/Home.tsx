@@ -173,8 +173,6 @@ export default function Portfolio() {
   const heatmapRef = useRef<HTMLDivElement>(null);
   const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const fadeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const { _timelineData, _repoData, _languageData, _heatmapStats, _monthsData } = gh;
   const isLoading = pd.loading || gh.loading;
 
   const { scrollYProgress } = useScroll();
