@@ -83,26 +83,26 @@ export default function AdminProjects() {
     <form onSubmit={(e) => { e.preventDefault(); handleSave(formData); }} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label className="text-xs font-mono text-neu-text-muted">Title</label>
-          <input required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
+          <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminprojects-1">Title</label>
+          <input id="field-adminprojects-1" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-mono text-neu-text-muted">Subtitle</label>
-          <input required value={formData.subtitle} onChange={e => setFormData({...formData, subtitle: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
+          <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminprojects-2">Subtitle</label>
+          <input id="field-adminprojects-2" required value={formData.subtitle} onChange={e => setFormData({...formData, subtitle: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-mono text-neu-text-muted">Category</label>
-          <input required value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
+          <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminprojects-3">Category</label>
+          <input id="field-adminprojects-3" required value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-mono text-neu-text-muted">Date</label>
-          <input required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
+          <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminprojects-4">Date</label>
+          <input id="field-adminprojects-4" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
         </div>
       </div>
 
       <div className="space-y-1">
-        <label className="text-xs font-mono text-neu-text-muted">Tags (comma separated)</label>
-        <input required value={formData.tags} onChange={e => setFormData({...formData, tags: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
+        <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminprojects-5">Tags (comma separated)</label>
+        <input id="field-adminprojects-5" required value={formData.tags} onChange={e => setFormData({...formData, tags: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -121,24 +121,24 @@ export default function AdminProjects() {
           </div>
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-mono text-neu-text-muted">Spine Text</label>
-          <input required value={formData.spineText} onChange={e => setFormData({...formData, spineText: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
+          <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminprojects-6">Spine Text</label>
+          <input id="field-adminprojects-6" required value={formData.spineText} onChange={e => setFormData({...formData, spineText: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label className="text-xs font-mono text-neu-text-muted">GitHub URL</label>
-          <input value={formData.github} onChange={e => setFormData({...formData, github: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
+          <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminprojects-7">GitHub URL</label>
+          <input id="field-adminprojects-7" value={formData.github} onChange={e => setFormData({...formData, github: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
         </div>
         <div className="col-span-full space-y-1">
-          <label className="text-xs font-mono text-neu-accent font-bold flex items-center gap-1.5">⚡ Architecture Diagram (Excalidraw Export)</label>
-          <input value={formData.architectureImage} onChange={e => setFormData({...formData, architectureImage: e.target.value})} placeholder="/assets/architecture.svg or /assets/diagram.png" className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-neu-accent/20" />
-          <p className="text-[10px] text-neu-text-muted font-mono pl-1">Export your Excalidraw diagram as SVG/PNG, place it in /public/assets/, then paste the path here.</p>
+          <label className="text-xs font-mono text-neu-accent font-bold flex items-center gap-1.5" htmlFor="field-adminprojects-8">⚡ Architecture Diagram (Excalidraw Export)</label>
+          <input id="field-adminprojects-8" value={formData.architectureImage} onChange={e => setFormData({...formData, architectureImage: e.target.value})} placeholder="/assets/architecture.svg or /assets/diagram.png" className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-neu-accent/20" />
+          <p className="text-xs text-neu-text-muted font-mono pl-1">Export your Excalidraw diagram as SVG/PNG, place it in /public/assets/, then paste the path here.</p>
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-mono text-neu-text-muted">Demo URL (Optional)</label>
-          <input value={formData.demoUrl} onChange={e => setFormData({...formData, demoUrl: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
+          <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminprojects-9">Demo URL (Optional)</label>
+          <input id="field-adminprojects-9" value={formData.demoUrl} onChange={e => setFormData({...formData, demoUrl: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
         </div>
       </div>
 
@@ -171,15 +171,15 @@ export default function AdminProjects() {
                 <input placeholder="Date" value={phase.date} onChange={e => updatePhase(i, 'date', e.target.value)} className="w-full px-3 py-2 rounded-lg glass-card-inset text-xs outline-none focus:border-neu-accent border border-transparent" />
                 <input placeholder="Title" value={phase.title} onChange={e => updatePhase(i, 'title', e.target.value)} className="w-full px-3 py-2 rounded-lg glass-card-inset text-xs outline-none focus:border-neu-accent border border-transparent" />
               </div>
-              <textarea placeholder="Description" value={phase.description} onChange={e => updatePhase(i, 'description', e.target.value)} className="w-full px-3 py-2 rounded-lg glass-card-inset text-xs outline-none focus:border-neu-accent border border-transparent min-h-[60px]" />
+              <textarea placeholder="Description" value={phase.description} onChange={e => updatePhase(i, 'description', e.target.value)} className="w-full px-3 py-2 rounded-lg glass-card-inset text-xs outline-none focus:border-neu-accent border border-transparent min-h-16" />
             </div>
           ))}
         </div>
       </div>
 
       <div className="space-y-1">
-        <label className="text-xs font-mono text-neu-text-muted">Markdown Content</label>
-        <textarea required value={formData.markdown} onChange={e => setFormData({...formData, markdown: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-mono outline-none focus:border-neu-accent border border-transparent min-h-[200px]" />
+        <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminprojects-10">Markdown Content</label>
+        <textarea id="field-adminprojects-10" required value={formData.markdown} onChange={e => setFormData({...formData, markdown: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-mono outline-none focus:border-neu-accent border border-transparent min-h-52" />
       </div>
 
       <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
@@ -221,7 +221,7 @@ export default function AdminProjects() {
                 <tr key={proj.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                   <td className="p-4">
                     <div className="font-bold">{proj.title}</div>
-                    <div className="text-xs text-neu-text-muted truncate max-w-[250px]">{proj.subtitle}</div>
+                    <div className="text-xs text-neu-text-muted truncate max-w-64">{proj.subtitle}</div>
                   </td>
                   <td className="p-4">
                     <span className="px-2 py-1 rounded-md glass-card-inset text-xs font-mono text-neu-accent">{proj.category}</span>
@@ -229,10 +229,10 @@ export default function AdminProjects() {
                   <td className="p-4 text-sm">{proj.date}</td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button onClick={() => onEdit(proj)} className="p-2 rounded-lg hover:bg-neu-accent/10 text-neu-accent transition-colors">
+                      <button type="button" onClick={() => onEdit(proj)} className="p-2 rounded-lg hover:bg-neu-accent/10 text-neu-accent transition-colors">
                         <Edit size={16} />
                       </button>
-                      <button onClick={() => handleDelete(proj.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-red-500 transition-colors">
+                      <button type="button" onClick={() => handleDelete(proj.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-red-500 transition-colors">
                         <Trash2 size={16} />
                       </button>
                     </div>
@@ -255,7 +255,7 @@ export default function AdminProjects() {
               Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, projects.length)} of {projects.length} entries
             </span>
             <div className="flex items-center gap-2">
-              <button
+              <button type="button"
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 className="p-2 rounded-xl glass-card text-neu-text hover:bg-black/5 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
@@ -265,7 +265,7 @@ export default function AdminProjects() {
               <div className="text-sm font-bold font-mono px-2">
                 {currentPage} / {totalPages}
               </div>
-              <button
+              <button type="button"
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 className="p-2 rounded-xl glass-card text-neu-text hover:bg-black/5 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-all"

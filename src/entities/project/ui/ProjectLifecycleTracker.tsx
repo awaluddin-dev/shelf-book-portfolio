@@ -148,7 +148,7 @@ export default function ProjectLifecycleTracker({
                 <div className="flex-shrink-0 w-40 pt-1">
                   <div
                     className={cn(
-                      "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider mb-2 border",
+                      "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono font-bold uppercase tracking-wider mb-2 border",
                       meta.colorClass,
                     )}
                   >

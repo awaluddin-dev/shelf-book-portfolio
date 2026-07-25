@@ -89,7 +89,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
 
             <div className="flex gap-3 items-center justify-between md:justify-end w-full md:w-auto">
               <div className="hidden md:flex flex-wrap gap-3 bg-neu-bg p-1.5 rounded-2xl shadow-neu-inset">
-                <button
+                <button type="button"
                   onClick={() => setSelectedCategory(null)}
                   className={cn(
                     "px-5 py-2.5 text-xs font-mono uppercase tracking-wider rounded-xl transition-all relative",
@@ -112,7 +112,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                   <span className="relative z-10">All</span>
                 </button>
                 {(categories || []).map((cat) => (
-                  <button
+                  <button type="button"
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
                     className={cn(
@@ -165,11 +165,11 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                   </option>
                 </select>
                 <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-neu-text-muted">
-                  <span className="text-[9px]">▼</span>
+                  <span className="text-xs">▼</span>
                 </div>
               </div>
 
-              <button
+              <button type="button"
                 onClick={() => setIsFilterModalOpen(true)}
                 className="md:hidden flex items-center justify-center p-3 rounded-xl glass-card text-neu-text-muted hover:text-neu-accent transition-colors"
               >
@@ -197,7 +197,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                 >
                   <div className="flex justify-between items-center mb-6">
                     <h3 className="text-lg font-bold">Filter Projects</h3>
-                    <button
+                    <button type="button"
                       onClick={() => setIsFilterModalOpen(false)}
                       className="p-2 rounded-full glass-card-inset text-neu-text-muted hover:text-neu-accent"
                     >
@@ -205,7 +205,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                     </button>
                   </div>
                   <div className="flex flex-col gap-3">
-                    <button
+                    <button type="button"
                       onClick={() => {
                         setSelectedCategory(null);
                         setIsFilterModalOpen(false);
@@ -220,7 +220,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                       All Projects
                     </button>
                     {(categories || []).map((cat) => (
-                      <button
+                      <button type="button"
                         key={cat}
                         onClick={() => {
                           setSelectedCategory(cat);
@@ -256,14 +256,14 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
 
               {!isLoading && !focusedProject && filteredProjects.length > 0 && (
                 <>
-                  <button
+                  <button type="button"
                     onClick={() => scrollShelf("left")}
                     className="absolute left-4 top-[45%] -translate-y-1/2 z-20 p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5"
                     aria-label="Scroll Left"
                   >
                     <ChevronLeft size={20} />
                   </button>
-                  <button
+                  <button type="button"
                     onClick={() => scrollShelf("right")}
                     className="absolute right-4 top-[45%] -translate-y-1/2 z-20 p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5"
                     aria-label="Scroll Right"
@@ -310,7 +310,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                     }}
                   />
                   <div
-                    className="relative z-10 flex-shrink-0 flex items-center justify-center w-[280px] md:w-[320px] h-[340px] md:h-[400px]"
+                    className="relative z-10 flex-shrink-0 flex items-center justify-center w-72 md:w-80 h-80 md:h-96"
                     style={{ perspective: "1200px" }}
                   >
                     <motion.div
@@ -345,7 +345,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                     >
                       <div className="absolute left-[12px] top-0 bottom-0 w-[4px] bg-gradient-to-r from-black/20 to-transparent z-40 pointer-events-none" />
                       <div
-                        className="absolute right-[-8px] top-[4px] bottom-[4px] w-[10px] bg-stone-100 dark:bg-zinc-800 border-y border-r border-stone-300 dark:border-zinc-700/60 rounded-r shadow-md z-10"
+                        className="absolute right-[-8px] top-1 bottom-1 w-2.5 bg-stone-100 dark:bg-zinc-800 border-y border-r border-stone-300 dark:border-zinc-700/60 rounded-r shadow-md z-10"
                         style={{
                           transform: "skewY(6deg)",
                           backgroundImage:
@@ -354,7 +354,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                       />
                       <div
                         className={cn(
-                          "w-[200px] md:w-[240px] h-[280px] md:h-[340px] rounded-r-xl shadow-2xl relative flex flex-col justify-between p-6 border-y border-r border-white/20 overflow-hidden z-20",
+                          "w-52 md:w-60 h-72 md:h-80 rounded-r-xl shadow-2xl relative flex flex-col justify-between p-6 border-y border-r border-white/20 overflow-hidden z-20",
                           !(
                             focusedProject.coverColor ||
                             focusedProject.spineColor
@@ -387,10 +387,10 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                         <div className="absolute inset-0 bg-gradient-to-tr from-black/15 via-transparent to-white/10 pointer-events-none z-10" />
                         <div className="relative z-20 flex flex-col h-full justify-between">
                           <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                            <span className="text-[9px] font-mono font-bold tracking-widest text-white/70 uppercase">
+                            <span className="text-xs font-mono font-bold tracking-widest text-white/70 uppercase">
                               {focusedProject.category}
                             </span>
-                            <span className="text-[8px] font-mono text-white/50">
+                            <span className="text-xs font-mono text-white/50">
                               {focusedProject.date}
                             </span>
                           </div>
@@ -398,16 +398,16 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                             <h4 className="text-lg md:text-xl font-display font-black text-white tracking-tight leading-snug drop-shadow-md">
                               {focusedProject.title}
                             </h4>
-                            <p className="text-[10px] md:text-xs text-white/80 font-mono mt-1.5 font-medium italic line-clamp-2 leading-relaxed">
+                            <p className="text-xs md:text-xs text-white/80 font-mono mt-1.5 font-medium italic line-clamp-2 leading-relaxed">
                               {focusedProject.subtitle}
                             </p>
                           </div>
                           <div className="flex items-center justify-between pt-2 border-t border-white/15">
                             <div className="flex flex-col">
-                              <span className="text-[7px] font-mono text-white/40 tracking-wider uppercase">
+                              <span className="text-xs font-mono text-white/40 tracking-wider uppercase">
                                 Author
                               </span>
-                              <span className="text-[9px] font-mono font-bold text-white/80 leading-none">
+                              <span className="text-xs font-mono font-bold text-white/80 leading-none">
                                 {pd.heroConfig?.name?.toUpperCase() ||
                                   "AWALUDDIN"}
                               </span>
@@ -446,7 +446,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                       : ""}
                     . Try checking for typos or simplifying your search query.
                   </p>
-                  <button
+                  <button type="button"
                     onClick={() => {
                       setSearchQuery("");
                       setSelectedCategory(null);

@@ -104,7 +104,7 @@ export default function AdminTestimoni() {
                   </td>
                   <td className="px-6 py-4">
                     <span className={cn(
-                      "px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider font-bold",
+                      "px-2.5 py-1 rounded-full text-xs font-mono uppercase tracking-wider font-bold",
                       t.status === 'pending' ? "bg-amber-500/20 text-amber-600 dark:text-amber-400" :
                       t.status === 'accepted' || !t.status ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400" :
                       "bg-red-500/20 text-red-600 dark:text-red-400"
@@ -115,14 +115,14 @@ export default function AdminTestimoni() {
                   <td className="px-6 py-4 flex justify-end gap-2">
                     {t.status === 'pending' && (
                       <>
-                        <button 
+                        <button type="button" 
                           onClick={(e) => handleTestimonialAction(e, t.id, 'accepted')}
                           className="p-2 rounded-xl glass-card text-emerald-500 hover:scale-105 active:scale-95 transition-all"
                           title="Accept"
                         >
                           <Check size={16} />
                         </button>
-                        <button 
+                        <button type="button" 
                           onClick={(e) => handleTestimonialAction(e, t.id, 'rejected')}
                           className="p-2 rounded-xl glass-card text-red-500 hover:scale-105 active:scale-95 transition-all"
                           title="Reject"
@@ -150,7 +150,7 @@ export default function AdminTestimoni() {
               Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, testimonials.length)} of {testimonials.length} entries
             </span>
             <div className="flex items-center gap-2">
-              <button
+              <button type="button"
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 className="p-2 rounded-xl glass-card text-neu-text hover:bg-black/5 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
@@ -160,7 +160,7 @@ export default function AdminTestimoni() {
               <div className="text-sm font-bold font-mono px-2">
                 {currentPage} / {totalPages}
               </div>
-              <button
+              <button type="button"
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 className="p-2 rounded-xl glass-card text-neu-text hover:bg-black/5 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
@@ -176,7 +176,7 @@ export default function AdminTestimoni() {
       {selectedTestimonial && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-neu-bg rounded-3xl shadow-neu-modal w-full max-w-lg p-8 relative border border-white/5">
-            <button 
+            <button type="button" 
               onClick={() => setSelectedTestimonial(null)}
               className="absolute top-5 right-5 p-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-neu-text transition-colors"
             >
@@ -190,7 +190,7 @@ export default function AdminTestimoni() {
                 <h3 className="text-lg font-bold font-display">{selectedTestimonial.name}</h3>
                 <p className="text-xs text-neu-text-muted">{selectedTestimonial.role} @ {selectedTestimonial.company}</p>
                 {selectedTestimonial.url && (
-                  <a href={selectedTestimonial.url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-mono text-neu-accent hover:underline break-all">
+                  <a href={selectedTestimonial.url} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-neu-accent hover:underline break-all">
                     {selectedTestimonial.url}
                   </a>
                 )}
@@ -202,13 +202,13 @@ export default function AdminTestimoni() {
             
             {selectedTestimonial.status === 'pending' && selectedTestimonial.id && (
               <div className="flex gap-4">
-                <button 
+                <button type="button" 
                   onClick={(e) => handleTestimonialAction(e, selectedTestimonial.id, 'rejected')}
                   className="flex-1 py-3 rounded-xl font-bold text-red-500 glass-card hover:shadow-neu-sm active:scale-95 transition-all text-sm"
                 >
                   Reject
                 </button>
-                <button 
+                <button type="button" 
                   onClick={(e) => handleTestimonialAction(e, selectedTestimonial.id, 'accepted')}
                   className="flex-1 py-3 rounded-xl font-bold text-white bg-emerald-500 shadow-neu hover:shadow-neu-sm active:scale-95 transition-all text-sm"
                 >

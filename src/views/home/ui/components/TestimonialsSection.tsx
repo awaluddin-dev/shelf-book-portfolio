@@ -33,7 +33,7 @@ export function TestimonialsSection({ testimonialsList, _isLoading, setSelectedT
               <div
                 key={`${t.id}-dup-${index}`}
                 className={cn(
-                  "flex-shrink-0 w-[85vw] sm:w-[440px] max-w-[400px] sm:max-w-none p-5 sm:p-8 rounded-3xl glass-card relative flex flex-col justify-between group transition-all duration-500 ease-out border border-white/5",
+                  "flex-shrink-0 w-[85vw] sm:w-[440px] max-w-96 sm:max-w-none p-5 sm:p-8 rounded-3xl glass-card relative flex flex-col justify-between group transition-all duration-500 ease-out border border-white/5",
                   "transform-gpu perspective-1000",
                   index % 2 === 0
                     ? "rotate-y-4 -rotate-1"
@@ -43,7 +43,7 @@ export function TestimonialsSection({ testimonialsList, _isLoading, setSelectedT
                 )}
               >
                 {t.url && (
-                  <div className="mb-6 inline-flex px-3 py-1 rounded-full glass-card-inset text-[10px] font-mono text-neu-accent font-semibold tracking-wide">
+                  <div className="mb-6 inline-flex px-3 py-1 rounded-full glass-card-inset text-xs font-mono text-neu-accent font-semibold tracking-wide">
                     ✦ Verifiable URL Profile
                   </div>
                 )}
@@ -60,7 +60,7 @@ export function TestimonialsSection({ testimonialsList, _isLoading, setSelectedT
                       &ldquo;{t.testimonial}&rdquo;
                     </div>
                     {t.testimonial?.length > 150 && (
-                      <button
+                      <button type="button"
                         onClick={() => setSelectedTestimonial(t)}
                         className="mt-3 text-xs font-bold text-neu-accent hover:underline relative z-20 flex items-center gap-1 self-start"
                       >
@@ -94,7 +94,7 @@ export function TestimonialsSection({ testimonialsList, _isLoading, setSelectedT
                     {(t.tags || []).map((tag: string) => (
                       <span
                         key={tag}
-                        className="px-2.5 py-1 glass-card-inset text-[10px] font-mono font-medium rounded-lg text-neu-text-muted"
+                        className="px-2.5 py-1 glass-card-inset text-xs font-mono font-medium rounded-lg text-neu-text-muted"
                       >
                         #{tag}
                       </span>

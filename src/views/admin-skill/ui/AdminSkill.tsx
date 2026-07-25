@@ -40,41 +40,41 @@ export default function AdminSkill() {
     <form onSubmit={(e) => { e.preventDefault(); handleSave(formData); }} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-                <label className="text-xs font-mono text-neu-text-muted">ID (lowercase, no spaces)</label>
-                <input required value={formData.id} onChange={e => setFormData({...formData, id: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="nodejs" />
+                <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminskill-1">ID (lowercase, no spaces)</label>
+                <input id="field-adminskill-1" required value={formData.id} onChange={e => setFormData({...formData, id: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="nodejs" />
             </div>
             <div className="space-y-1">
-                <label className="text-xs font-mono text-neu-text-muted">Display Title</label>
-                <input required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Node.js" />
+                <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminskill-2">Display Title</label>
+                <input id="field-adminskill-2" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Node.js" />
             </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-                <label className="text-xs font-mono text-neu-text-muted">Category</label>
-                <input required value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Core Backend" />
+                <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminskill-3">Category</label>
+                <input id="field-adminskill-3" required value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Core Backend" />
             </div>
             <div className="space-y-1">
-                <label className="text-xs font-mono text-neu-text-muted">Level / Subtext</label>
-                <input required value={formData.level} onChange={e => setFormData({...formData, level: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Production · 3+ yrs" />
+                <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminskill-4">Level / Subtext</label>
+                <input id="field-adminskill-4" required value={formData.level} onChange={e => setFormData({...formData, level: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Production · 3+ yrs" />
             </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-                <label className="text-xs font-mono text-neu-text-muted">X Coordinate</label>
-                <input required type="number" value={formData.x} onChange={e => setFormData({...formData, x: parseInt(e.target.value) || 0})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="80" />
+                <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminskill-5">X Coordinate</label>
+                <input id="field-adminskill-5" required type="number" value={formData.x} onChange={e => setFormData({...formData, x: Number.parseInt(e.target.value) || 0})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="80" />
             </div>
             <div className="space-y-1">
-                <label className="text-xs font-mono text-neu-text-muted">Y Coordinate</label>
-                <input required type="number" value={formData.y} onChange={e => setFormData({...formData, y: parseInt(e.target.value) || 0})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="80" />
+                <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminskill-6">Y Coordinate</label>
+                <input id="field-adminskill-6" required type="number" value={formData.y} onChange={e => setFormData({...formData, y: Number.parseInt(e.target.value) || 0})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="80" />
             </div>
         </div>
         <div className="space-y-1">
-            <label className="text-xs font-mono text-neu-text-muted">Connections (comma separated IDs)</label>
-            <input value={formData.connections} onChange={e => setFormData({...formData, connections: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="typescript, nestjs" />
+            <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminskill-7">Connections (comma separated IDs)</label>
+            <input id="field-adminskill-7" value={formData.connections} onChange={e => setFormData({...formData, connections: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="typescript, nestjs" />
         </div>
         <div className="space-y-1">
-            <label className="text-xs font-mono text-neu-text-muted">Detailed Description</label>
-            <textarea required value={formData.details} onChange={e => setFormData({...formData, details: e.target.value})} rows={3} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none resize-none" placeholder="Details about this skill..." />
+            <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminskill-8">Detailed Description</label>
+            <textarea id="field-adminskill-8" required value={formData.details} onChange={e => setFormData({...formData, details: e.target.value})} rows={3} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none resize-none" placeholder="Details about this skill..." />
         </div>
         
         <button type="submit" className="w-full py-3 rounded-xl font-bold text-white bg-neu-accent shadow-neu hover:shadow-neu-sm active:scale-95 transition-all text-sm mt-4">

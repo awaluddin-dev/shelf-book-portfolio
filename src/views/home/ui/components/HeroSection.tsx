@@ -19,7 +19,7 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                   <div className="h-12 bg-neu-accent/5 rounded-xl w-1/2" />
                 </div>
                 <div className="lg:col-span-4 flex flex-col gap-6">
-                  <div className="h-[400px] bg-neu-accent/5 rounded-3xl w-full" />
+                  <div className="h-96 bg-neu-accent/5 rounded-3xl w-full" />
                 </div>
               </div>
             ) : (
@@ -75,7 +75,7 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                       ].map((tech) => (
                         <span
                           key={tech}
-                          className="px-3 py-1.5 text-[11px] md:text-xs font-mono text-neutral-400 bg-white/5 border border-white/10 rounded-full"
+                          className="px-3 py-1.5 text-xs md:text-xs font-mono text-neutral-400 bg-white/5 border border-white/10 rounded-full"
                         >
                           {tech}
                         </span>
@@ -87,7 +87,7 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                       transition={{ delay: 0.25 }}
                       className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mt-2 md:mt-4"
                     >
-                      <button
+                      <button type="button"
                         onClick={() =>
                           document
                             .getElementById("projects")
@@ -138,7 +138,7 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                           GitHub
                         </span>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-[10px] text-neu-text-muted">
+                          <span className="text-xs text-neu-text-muted">
                             awaluddin-dev
                           </span>
                           <Github
@@ -157,7 +157,7 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                           LinkedIn
                         </span>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-[10px] text-neu-text-muted">
+                          <span className="text-xs text-neu-text-muted">
                             awaluddin0001
                           </span>
                           <Linkedin
@@ -176,7 +176,7 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                           Dev.to
                         </span>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-[10px] text-neu-text-muted">
+                          <span className="text-xs text-neu-text-muted">
                             awaluddin
                           </span>
                           <PenTool
@@ -185,7 +185,7 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                           />
                         </div>
                       </a>
-                      <button
+                      <button type="button"
                         onClick={() => setShowInquiryModal(true)}
                         className="w-full flex items-center justify-between p-2.5 rounded-xl glass-card-inset hover:text-neu-accent transition-all group text-left cursor-pointer border-none outline-none"
                       >
@@ -193,7 +193,7 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                           Inquiries
                         </span>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-[10px] text-neu-text-muted">
+                          <span className="text-xs text-neu-text-muted">
                             Contact Me
                           </span>
                           <Mail
@@ -204,8 +204,8 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                       </button>
                     </div>
                     <div className="w-full h-px bg-white/5 my-2" />
-                    <div className="flex flex-col gap-1.5 font-mono text-[11px]">
-                      <span className="text-neu-text-muted/60 font-bold uppercase tracking-widest mb-1 text-[9px]">
+                    <div className="flex flex-col gap-1.5 font-mono text-xs">
+                      <span className="text-neu-text-muted/60 font-bold uppercase tracking-widest mb-1 text-xs">
                         Status
                       </span>
                       <div className="flex items-center gap-2">
@@ -246,8 +246,8 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                       </span>
                     </div>
                     <div className="w-full h-px bg-white/5 my-2" />
-                    <div className="flex flex-col gap-1.5 font-mono text-[11px]">
-                      <span className="text-neu-text-muted/60 font-bold uppercase tracking-widest mb-1 text-[9px]">
+                    <div className="flex flex-col gap-1.5 font-mono text-xs">
+                      <span className="text-neu-text-muted/60 font-bold uppercase tracking-widest mb-1 text-xs">
                         Response Time
                       </span>
                       <span className="text-neu-text-muted pl-4">
@@ -302,7 +302,7 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                             {item.value || item.val}
                           </span>
                         </div>
-                        <span className="text-[10px] sm:text-[11px] md:text-xs font-sans font-semibold text-neu-text-muted leading-tight uppercase tracking-wider">
+                        <span className="text-xs sm:text-xs md:text-xs font-sans font-semibold text-neu-text-muted leading-tight uppercase tracking-wider">
                           {item.label}
                         </span>
                       </div>

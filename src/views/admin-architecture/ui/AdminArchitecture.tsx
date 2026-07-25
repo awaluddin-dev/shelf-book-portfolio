@@ -36,10 +36,10 @@ export default function AdminArchitecture() {
     <>
       <div className="flex gap-4">
         <input placeholder="Node ID (e.g. gateway)" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-1/3 px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
-        <input placeholder="Order (e.g. 0)" type="number" value={formData.order} onChange={e => setFormData({...formData, order: parseInt(e.target.value) || 0})} className="w-20 px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
+        <input placeholder="Order (e.g. 0)" type="number" value={formData.order} onChange={e => setFormData({...formData, order: Number.parseInt(e.target.value) || 0})} className="w-20 px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
       </div>
       <input placeholder="Title (e.g. NestJS Gateway)" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
-      <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none min-h-[100px]" />
+      <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none min-h-24" />
       <input placeholder="KPI/Metrics (e.g. Response: <12ms)" value={formData.metrics} onChange={e => setFormData({...formData, metrics: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
     </>
   );
@@ -52,8 +52,8 @@ export default function AdminArchitecture() {
       toastMessage={toastMessage}
     >
       <div className="mb-8">
-        <label className="text-sm font-bold text-neu-text-muted mb-2 block">Select Project</label>
-        <select 
+        <label className="text-sm font-bold text-neu-text-muted mb-2 block" htmlFor="field-adminarchitecture-1">Select Project</label>
+        <select id="field-adminarchitecture-1" 
           value={selectedProjectId} 
           onChange={(e) => setSelectedProjectId(e.target.value)}
           className="w-full max-w-md px-4 py-2 rounded-xl glass-card-inset text-sm font-bold outline-none focus:border-neu-accent"
@@ -71,8 +71,8 @@ export default function AdminArchitecture() {
               <div className="space-y-4">
                 {formFields}
                 <div className="flex gap-2">
-                  <button onClick={() => onSave(item.id)} className="px-4 py-2 rounded-lg bg-neu-accent text-white font-bold text-sm flex items-center gap-2"><Save size={14}/> Save</button>
-                  <button onClick={() => setIsEditing(null)} className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-zinc-800 text-neu-text font-bold text-sm"><X size={14}/></button>
+                  <button type="button" onClick={() => onSave(item.id)} className="px-4 py-2 rounded-lg bg-neu-accent text-white font-bold text-sm flex items-center gap-2"><Save size={14}/> Save</button>
+                  <button type="button" onClick={() => setIsEditing(null)} className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-zinc-800 text-neu-text font-bold text-sm"><X size={14}/></button>
                 </div>
               </div>
             ) : (
@@ -83,7 +83,7 @@ export default function AdminArchitecture() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-mono bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded text-neu-text-muted">{item.name}</span>
+                      <span className="text-xs font-mono bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded text-neu-text-muted">{item.name}</span>
                       <h3 className="font-bold text-lg text-neu-accent">{item.title}</h3>
                     </div>
                     <p className="font-medium text-neu-text mb-2 text-sm">{item.description}</p>
@@ -91,8 +91,8 @@ export default function AdminArchitecture() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => {setIsEditing(item); setFormData({name: item.name, title: item.title, description: item.description, metrics: item.metrics, order: item.order});}} className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-neu-accent"><Edit2 size={16}/></button>
-                  <button onClick={() => handleDelete(item.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-red-500"><Trash2 size={16}/></button>
+                  <button type="button" onClick={() => {setIsEditing(item); setFormData({name: item.name, title: item.title, description: item.description, metrics: item.metrics, order: item.order});}} className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-neu-accent"><Edit2 size={16}/></button>
+                  <button type="button" onClick={() => handleDelete(item.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-red-500"><Trash2 size={16}/></button>
                 </div>
               </div>
             )}
@@ -103,12 +103,12 @@ export default function AdminArchitecture() {
           <div className="p-6 rounded-2xl glass-card border border-neu-accent space-y-4">
             {formFields}
             <div className="flex gap-2">
-              <button onClick={() => onSave()} className="px-4 py-2 rounded-lg bg-neu-accent text-white font-bold text-sm flex items-center gap-2"><Save size={14}/> Save</button>
-              <button onClick={() => setIsEditing(null)} className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-zinc-800 text-neu-text font-bold text-sm"><X size={14}/></button>
+              <button type="button" onClick={() => onSave()} className="px-4 py-2 rounded-lg bg-neu-accent text-white font-bold text-sm flex items-center gap-2"><Save size={14}/> Save</button>
+              <button type="button" onClick={() => setIsEditing(null)} className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-zinc-800 text-neu-text font-bold text-sm"><X size={14}/></button>
             </div>
           </div>
         ) : (
-          <button onClick={() => {setIsEditing({ id: 'new' }); setFormData({name: '', title: '', description: '', metrics: '', order: filteredItems.length});}} className="p-6 rounded-2xl glass-card-inset border-2 border-dashed border-gray-300 dark:border-zinc-700 flex flex-col items-center justify-center gap-3 text-neu-text-muted hover:text-neu-accent hover:border-neu-accent transition-colors cursor-pointer min-h-[200px]">
+          <button type="button" onClick={() => {setIsEditing({ id: 'new' }); setFormData({name: '', title: '', description: '', metrics: '', order: filteredItems.length});}} className="p-6 rounded-2xl glass-card-inset border-2 border-dashed border-gray-300 dark:border-zinc-700 flex flex-col items-center justify-center gap-3 text-neu-text-muted hover:text-neu-accent hover:border-neu-accent transition-colors cursor-pointer min-h-52">
             <Plus size={24} />
             <span className="font-bold text-sm">Add Architecture Node</span>
           </button>

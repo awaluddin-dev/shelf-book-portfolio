@@ -89,7 +89,7 @@ const SkillTreeNode = memo(function SkillTreeNode({
         textAnchor="middle"
         className={cn(
           "font-mono font-bold tracking-tight select-none pointer-events-none transition-all duration-300",
-          isMobile ? "text-[8px]" : "text-[10px]",
+          "text-xs",
           active
             ? "fill-current " + colors.text
             : anyActive && !connectedToActive
@@ -345,7 +345,7 @@ export default function SkillTree({
           </div>
         </div>
         <div className="flex justify-center items-center py-10">
-          <div className="w-full max-w-4xl h-[300px] rounded-2xl glass-card-inset flex flex-col justify-between p-6 relative overflow-hidden">
+          <div className="w-full max-w-4xl h-72 rounded-2xl glass-card-inset flex flex-col justify-between p-6 relative overflow-hidden">
             <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gray-300/20 dark:bg-zinc-700/20 rounded-full blur-3xl"></div>
             <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-gray-300/20 dark:bg-zinc-700/20 rounded-full blur-3xl"></div>
             <svg
@@ -442,7 +442,7 @@ export default function SkillTree({
         <div
           className={cn(
             "relative",
-            isMobile ? "w-full max-w-[320px] h-[940px]" : "w-full h-[420px]",
+            isMobile ? "w-full max-w-80 h-[940px]" : "w-full h-96",
           )}
         >
           <svg
@@ -555,7 +555,7 @@ export default function SkillTree({
       </div>
 
       {/* Dynamic Proficiency Details card below tree */}
-      <div className="mt-6 p-5 rounded-2xl glass-card-inset relative min-h-[110px] flex flex-col justify-center border border-white/5">
+      <div className="mt-6 p-5 rounded-2xl glass-card-inset relative min-h-28 flex flex-col justify-center border border-white/5">
         <AnimatePresence mode="wait">
           {hoveredNode ? (
             <motion.div
@@ -569,7 +569,7 @@ export default function SkillTree({
               <div className="md:col-span-1 border-r border-gray-300/30 dark:border-gray-700/30 pr-4">
                 <span
                   className={cn(
-                    "text-[10px] font-mono font-bold uppercase tracking-wider block mb-1",
+                    "text-xs font-mono font-bold uppercase tracking-wider block mb-1",
                     getCategoryColor(hoveredNode.category).text,
                   )}
                 >
@@ -578,12 +578,12 @@ export default function SkillTree({
                 <h4 className="text-lg font-bold text-neu-text tracking-tight leading-tight mb-1">
                   {hoveredNode.title}
                 </h4>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 glass-card rounded-xl text-[10px] font-mono font-bold text-neu-accent mt-1">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 glass-card rounded-xl text-xs font-mono font-bold text-neu-accent mt-1">
                   Proficiency: {hoveredNode.level}
                 </div>
               </div>
               <div className="md:col-span-3 pl-2">
-                <span className="text-[10px] font-mono text-neu-accent font-bold uppercase tracking-widest block mb-1">
+                <span className="text-xs font-mono text-neu-accent font-bold uppercase tracking-widest block mb-1">
                   TECHNICAL APPLICATION & DEPLOYED CONCEPTS
                 </span>
                 <p className="text-sm text-neu-text-muted leading-relaxed font-sans font-light">

@@ -325,7 +325,7 @@ export default function Portfolio() {
     <div className="min-h-screen bg-neu-bg text-neu-text px-6 pb-6 md:px-12 md:pb-12 lg:px-24 lg:pb-24 pt-[2.7rem] font-sans transition-colors duration-300 relative">
       <motion.div
         id="scroll-progress"
-        className="fixed top-0 left-0 right-0 h-[4px] bg-neu-accent z-[100] origin-left"
+        className="fixed top-0 left-0 right-0 h-1 bg-neu-accent z-[100] origin-left"
         style={{ scaleX }}
       />
 
@@ -363,7 +363,7 @@ export default function Portfolio() {
                 transition={{ type: "spring", stiffness: 350, damping: 25 }}
                 className="flex items-center gap-1 sm:gap-2 overflow-visible flex-shrink-0"
               >
-                <button
+                <button type="button"
                   onClick={() =>
                     window.scrollTo({ top: 0, behavior: "smooth" })
                   }
@@ -373,7 +373,7 @@ export default function Portfolio() {
                   aria-label="Scroll to Top"
                 >
                   <div className="relative z-10 transition-transform duration-300 group-hover:-translate-y-0.5 text-neu-text-muted group-hover:text-neu-accent">
-                    <ArrowUp size={16} className="sm:w-[18px] sm:h-[18px]" />
+                    <ArrowUp size={16} className="sm:w-5 sm:h-5" />
                   </div>
                   <AnimatePresence>
                     {hoveredDockId === "scroll-top" && (
@@ -385,10 +385,10 @@ export default function Portfolio() {
                           type: "spring",
                           stiffness: 450,
                           damping: 24 }}
-                        className="absolute bottom-full mb-3 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none left-1/2"
+                        className="absolute bottom-full mb-3 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-xs font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none left-1/2"
                       >
                         Back to Top
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[5px] w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-r border-b border-neu-accent/20" />
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-r border-b border-neu-accent/20" />
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -402,21 +402,21 @@ export default function Portfolio() {
             {
               id: "proficiency",
               label: "Stack & Insights",
-              icon: <Cpu size={16} className="sm:w-[18px] sm:h-[18px]" /> },
+              icon: <Cpu size={16} className="sm:w-5 sm:h-5" /> },
             {
               id: "experience",
               label: "Experience",
-              icon: <Briefcase size={16} className="sm:w-[18px] sm:h-[18px]" /> },
+              icon: <Briefcase size={16} className="sm:w-5 sm:h-5" /> },
             {
               id: "endorse",
               label: "Endorse",
               icon: (
-                <MessageSquare size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <MessageSquare size={16} className="sm:w-5 sm:h-5" />
               ) },
           ].map((sec) => {
             const active = activeSection === sec.id;
             return (
-              <button
+              <button type="button"
                 key={sec.id}
                 onClick={() =>
                   document
@@ -455,10 +455,10 @@ export default function Portfolio() {
                         type: "spring",
                         stiffness: 450,
                         damping: 24 }}
-                      className="absolute bottom-full mb-3 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none left-1/2"
+                      className="absolute bottom-full mb-3 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-xs font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none left-1/2"
                     >
                       {sec.label}
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[5px] w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-r border-b border-neu-accent/20" />
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-r border-b border-neu-accent/20" />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -468,7 +468,7 @@ export default function Portfolio() {
 
           <div className="w-[1px] h-6 bg-neu-text/10 dark:bg-neu-text/15 mx-1 flex-shrink-0" />
 
-          <button
+          <button type="button"
             onClick={toggleTheme}
             onMouseEnter={() => setHoveredDockId("theme")}
             onMouseLeave={() => setHoveredDockId(null)}
@@ -482,9 +482,9 @@ export default function Portfolio() {
               )}
             >
               {isDark ? (
-                <Sun size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <Sun size={16} className="sm:w-5 sm:h-5" />
               ) : (
-                <Moon size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <Moon size={16} className="sm:w-5 sm:h-5" />
               )}
             </div>
             <AnimatePresence>
@@ -494,10 +494,10 @@ export default function Portfolio() {
                   animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
                   exit={{ opacity: 0, y: 6, x: "-50%", scale: 0.8 }}
                   transition={{ type: "spring", stiffness: 450, damping: 24 }}
-                  className="absolute bottom-full mb-3 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none left-1/2"
+                  className="absolute bottom-full mb-3 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-xs font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none left-1/2"
                 >
                   {isDark ? "Light Mode" : "Dark Mode"}
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[5px] w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-r border-b border-neu-accent/20" />
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-r border-b border-neu-accent/20" />
                 </motion.div>
               )}
             </AnimatePresence>

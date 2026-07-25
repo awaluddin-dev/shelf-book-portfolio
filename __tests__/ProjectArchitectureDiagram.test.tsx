@@ -22,12 +22,12 @@ describe('ProjectArchitectureDiagram.tsx', () => {
 
   it('renders loading initially', () => {
     mockFetch.mockImplementation(() => new Promise(() => {})); 
-    render(<ProjectArchitectureDiagram project={{ id: '1' }} isDark={false} />);
+    render(<ProjectArchitectureDiagram project={{ id: '1' } as any} />);
     expect(screen.getByText('Loading Architecture...')).toBeInTheDocument();
   });
 
   it('renders image view if architectureImage is provided', async () => {
-    render(<ProjectArchitectureDiagram project={{ id: '1', architectureImage: 'http://example.com/image.png' }} isDark={false} />);
+    render(<ProjectArchitectureDiagram project={{ id: '1', architectureImage: 'http://example.com/image.png' } as any} />);
     
     await waitFor(() => {
       expect(screen.getByText('System Architecture')).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe('ProjectArchitectureDiagram.tsx', () => {
       ]})
     });
 
-    render(<ProjectArchitectureDiagram project={{ id: '1' }} isDark={false} />);
+    render(<ProjectArchitectureDiagram project={{ id: '1' } as any} />);
     
     await waitFor(() => {
       expect(screen.getByText('System Architecture')).toBeInTheDocument();
@@ -60,7 +60,7 @@ describe('ProjectArchitectureDiagram.tsx', () => {
       json: () => Promise.resolve({ data: [] })
     });
 
-    render(<ProjectArchitectureDiagram project={{ id: '1' }} isDark={false} />);
+    render(<ProjectArchitectureDiagram project={{ id: '1' } as any} />);
     
     await waitFor(() => {
       expect(screen.getByText('System Architecture')).toBeInTheDocument();

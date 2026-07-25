@@ -9,7 +9,7 @@ const mockProject = {
   tags: ['React'],
   spineColor: '#FF0000',
   spineText: 'TEST SPINE TEXT'
-} as typeof projects[0];
+} as any;
 
 describe('BookItem.tsx', () => {
   it('renders correctly and responds to mouse events', () => {

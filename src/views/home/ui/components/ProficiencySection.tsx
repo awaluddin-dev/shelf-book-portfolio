@@ -32,19 +32,19 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2.5 font-mono text-xs glass-card-inset px-4 py-2.5 rounded-2xl border border-white/5 select-none self-start md:self-auto z-10">
               <div className="relative group cursor-help flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                <span className="text-neu-text font-medium text-[11px] sm:text-xs">
+                <span className="text-neu-text font-medium text-xs sm:text-xs">
                   Production-ready
                 </span>
               </div>
               <div className="relative group cursor-help flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-                <span className="text-neu-text font-medium text-[11px] sm:text-xs">
+                <span className="text-neu-text font-medium text-xs sm:text-xs">
                   In Use
                 </span>
               </div>
               <div className="relative group cursor-help flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-purple-500" />
-                <span className="text-neu-text font-medium text-[11px] sm:text-xs">
+                <span className="text-neu-text font-medium text-xs sm:text-xs">
                   Building
                 </span>
               </div>
@@ -78,10 +78,10 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
                             )}
                           />
                           <div className="flex flex-col text-left">
-                            <h4 className="font-display font-bold text-[14px] sm:text-[15px] text-neu-text leading-tight group-hover/item:text-neu-accent transition-colors duration-300">
+                            <h4 className="font-display font-bold text-sm sm:text-base text-neu-text leading-tight group-hover/item:text-neu-accent transition-colors duration-300">
                               {skill.name}
                             </h4>
-                            <p className="font-mono text-[11px] sm:text-[11.5px] text-neu-text-muted mt-1 leading-snug">
+                            <p className="font-mono text-xs sm:text-[11.5px] text-neu-text-muted mt-1 leading-snug">
                               {skill.subtext}
                             </p>
                           </div>
@@ -89,7 +89,7 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
                         <div className="flex-shrink-0">
                           <span
                             className={cn(
-                              "text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg border transition-all duration-300",
+                              "text-xs font-mono font-bold px-2.5 py-1 rounded-lg border transition-all duration-300",
                               skill.status === "Production-ready" &&
                                 "border-emerald-500/20 text-emerald-600 bg-emerald-500/5 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/30",
                               skill.status === "In Use" &&
@@ -177,9 +177,9 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
           </div>
           <div className="p-6 sm:p-10 rounded-3xl glass-card mb-10 overflow-hidden">
             <div className="relative my-8 px-4 hidden md:block">
-              <div className="absolute top-1/2 left-0 right-0 h-[3px] bg-gray-300 dark:bg-zinc-800/80 -translate-y-1/2 rounded-full" />
+              <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-300 dark:bg-zinc-800/80 -translate-y-1/2 rounded-full" />
               <motion.div
-                className="absolute top-1/2 left-0 h-[3px] bg-neu-accent -translate-y-1/2 rounded-full origin-left"
+                className="absolute top-1/2 left-0 h-1 bg-neu-accent -translate-y-1/2 rounded-full origin-left"
                 initial={{ width: "0%" }}
                 animate={{
                   width: `${(selectedRoadmapIndex / Math.max(activeRoadmap.length - 1, 1)) * 100}%`,
@@ -191,14 +191,14 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
                   const isSelected = selectedRoadmapIndex === index;
                   const isPast = index <= selectedRoadmapIndex;
                   return (
-                    <button
+                    <button type="button"
                       key={index}
                       onClick={() => setSelectedRoadmapIndex(index)}
                       className="flex flex-col items-center group cursor-pointer relative z-10 focus:outline-none"
                     >
                       <span
                         className={cn(
-                          "font-mono text-[11px] font-bold tracking-wider mb-3 transition-colors duration-300 uppercase",
+                          "font-mono text-xs font-bold tracking-wider mb-3 transition-colors duration-300 uppercase",
                           isSelected
                             ? "text-neu-accent font-extrabold"
                             : "text-neu-text-muted group-hover:text-neu-text",
@@ -242,7 +242,7 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
                       </div>
                       <span
                         className={cn(
-                          "mt-3 text-xs font-bold tracking-tight text-center max-w-[120px] transition-colors duration-300",
+                          "mt-3 text-xs font-bold tracking-tight text-center max-w-32 transition-colors duration-300",
                           isSelected
                             ? "text-neu-text"
                             : "text-neu-text-muted group-hover:text-neu-text",
@@ -257,7 +257,7 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
             </div>
             <div className="flex md:hidden flex-wrap gap-2 justify-center mb-6">
               {(activeRoadmap || []).map((item: any, index: number) => (
-                <button
+                <button type="button"
                   key={index}
                   onClick={() => setSelectedRoadmapIndex(index)}
                   className={cn(
@@ -306,7 +306,7 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
                   </p>
                   <div className="flex items-center gap-6 pt-2">
                     <div>
-                      <span className="block font-mono text-[10px] text-neu-text-muted uppercase tracking-wider">
+                      <span className="block font-mono text-xs text-neu-text-muted uppercase tracking-wider">
                         Estimated Depth
                       </span>
                       <span className="text-sm font-semibold text-neu-text">
@@ -315,7 +315,7 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
                     </div>
                     <div className="w-[1px] h-8 bg-gray-300/60 dark:bg-zinc-800" />
                     <div>
-                      <span className="block font-mono text-[10px] text-neu-text-muted uppercase tracking-wider">
+                      <span className="block font-mono text-xs text-neu-text-muted uppercase tracking-wider">
                         Direction
                       </span>
                       <span className="text-sm font-semibold text-neu-text inline-flex items-center gap-1">
@@ -327,7 +327,7 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
                 </div>
                 <div className="lg:col-span-5 space-y-6">
                   <div className="p-5 rounded-2xl bg-white/20 dark:bg-black/10 border border-white/10">
-                    <span className="block font-mono text-[10px] text-neu-accent font-extrabold uppercase tracking-widest mb-3">
+                    <span className="block font-mono text-xs text-neu-accent font-extrabold uppercase tracking-widest mb-3">
                       Core Topics to Master
                     </span>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-neu-text-muted">
@@ -342,7 +342,7 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
                     </ul>
                   </div>
                   <div className="p-5 rounded-2xl bg-white/20 dark:bg-black/10 border border-white/10">
-                    <span className="block font-mono text-[10px] text-neu-accent font-extrabold uppercase tracking-widest mb-3">
+                    <span className="block font-mono text-xs text-neu-accent font-extrabold uppercase tracking-widest mb-3">
                       Planned Prototype Projects
                     </span>
                     <ul className="space-y-2 text-xs text-neu-text-muted font-mono">
