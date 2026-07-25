@@ -1,17 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Loader } from '@/shared/ui/Loader';
 import { AdminSidebar } from '@/shared/ui/admin/AdminSidebar';
 import { useRouter } from 'next/navigation';
-import { Briefcase, Edit, Trash2, Plus, X, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
+import { Edit, Trash2, Plus, X, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { cn } from '@/shared/lib/utils';
 
 export default function AdminProjects() {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [, setIsProcessing] = useState(false);
   
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -49,6 +47,7 @@ export default function AdminProjects() {
       router.push('/admin/login');
       return;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
   }, [router]);
 

@@ -1,10 +1,25 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Network, Layers, Activity, ZoomIn, ZoomOut, RotateCcw, Maximize2, X, Move, Image as ImageIcon } from 'lucide-react';
-import { TransformWrapper, TransformComponent, useControls } from 'react-zoom-pan-pinch';
-import EmptyState from '@/shared/ui/EmptyState';
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  Network,
+  Layers,
+  Activity,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  Maximize2,
+  X,
+  Move,
+  Image as ImageIcon,
+} from "lucide-react";
+import {
+  TransformWrapper,
+  TransformComponent,
+  useControls,
+} from "react-zoom-pan-pinch";
+import EmptyState from "@/shared/ui/EmptyState";
 
 // --- Toolbar Controls (must be inside TransformWrapper) ---
 function ZoomControls() {
@@ -37,7 +52,13 @@ function ZoomControls() {
 }
 
 // --- Fullscreen Viewer ---
-function FullscreenViewer({ imageUrl, onClose }: { imageUrl: string; onClose: () => void }) {
+function FullscreenViewer({
+  imageUrl,
+  onClose,
+}: {
+  imageUrl: string;
+  onClose: () => void;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -47,9 +68,13 @@ function FullscreenViewer({ imageUrl, onClose }: { imageUrl: string; onClose: ()
       onClick={onClose}
     >
       {/* Header bar */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0" onClick={e => e.stopPropagation()}>
+      <div
+        className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0"
+        onClick={(e) => e.stopPropagation()}
+      >
         <span className="text-xs font-mono text-white/60 flex items-center gap-2">
-          <Move size={12} /> Drag to pan • Scroll / Pinch to zoom • Click outside to close
+          <Move size={12} /> Drag to pan • Scroll / Pinch to zoom • Click
+          outside to close
         </span>
         <button
           onClick={onClose}
@@ -60,7 +85,10 @@ function FullscreenViewer({ imageUrl, onClose }: { imageUrl: string; onClose: ()
       </div>
 
       {/* Zoomable Canvas */}
-      <div className="flex-1 overflow-hidden" onClick={e => e.stopPropagation()}>
+      <div
+        className="flex-1 overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
         <TransformWrapper
           initialScale={1}
           minScale={0.3}
@@ -68,11 +96,15 @@ function FullscreenViewer({ imageUrl, onClose }: { imageUrl: string; onClose: ()
           centerOnInit
           limitToBounds={false}
         >
-          <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
+          <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
             <img
               src={imageUrl}
               alt="Architecture Diagram"
-              style={{ maxWidth: '90vw', maxHeight: '85vh', objectFit: 'contain' }}
+              style={{
+                maxWidth: "90vw",
+                maxHeight: "85vh",
+                objectFit: "contain",
+              }}
             />
           </TransformComponent>
           <ZoomControls />
@@ -89,9 +121,10 @@ function ImageView({ imageUrl }: { imageUrl: string }) {
   return (
     <>
       {/* Compact Pan/Zoom Canvas */}
-      <div className="relative rounded-2xl overflow-hidden border border-white/5 bg-zinc-950/50 dark:bg-black/30 group"
-        style={{ height: '420px' }}>
-
+      <div
+        className="relative rounded-2xl overflow-hidden border border-white/5 bg-zinc-950/50 dark:bg-black/30 group"
+        style={{ height: "420px" }}
+      >
         {/* Hint overlay */}
         <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-[10px] font-mono text-white/70 pointer-events-none select-none">
           <Move size={10} /> Drag · Scroll to zoom
@@ -115,13 +148,23 @@ function ImageView({ imageUrl }: { imageUrl: string }) {
           wheel={{ step: 0.1 }}
         >
           <TransformComponent
-            wrapperStyle={{ width: '100%', height: '100%', cursor: 'grab' }}
-            contentStyle={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            wrapperStyle={{ width: "100%", height: "100%", cursor: "grab" }}
+            contentStyle={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
             <img
               src={imageUrl}
               alt="Architecture Diagram"
-              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', userSelect: 'none', pointerEvents: 'none' }}
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+                objectFit: "contain",
+                userSelect: "none",
+                pointerEvents: "none",
+              }}
               draggable={false}
             />
           </TransformComponent>
@@ -132,7 +175,10 @@ function ImageView({ imageUrl }: { imageUrl: string }) {
       {/* Fullscreen Portal */}
       <AnimatePresence>
         {isFullscreen && (
-          <FullscreenViewer imageUrl={imageUrl} onClose={() => setIsFullscreen(false)} />
+          <FullscreenViewer
+            imageUrl={imageUrl}
+            onClose={() => setIsFullscreen(false)}
+          />
         )}
       </AnimatePresence>
     </>
@@ -140,7 +186,13 @@ function ImageView({ imageUrl }: { imageUrl: string }) {
 }
 
 // --- Legacy Node View Mode ---
-function NodeView({ nodes, projectId }: { nodes: any[]; projectId: string }) {
+function NodeView({
+  nodes,
+  projectId: _projectId,
+}: {
+  nodes: any[];
+  projectId: string;
+}) {
   const [hoveredNode, setHoveredNode] = useState<any | null>(null);
 
   return (
@@ -154,14 +206,20 @@ function NodeView({ nodes, projectId }: { nodes: any[]; projectId: string }) {
                 onMouseEnter={() => setHoveredNode(node)}
                 onMouseLeave={() => setHoveredNode(null)}
                 className={`relative cursor-pointer transition-all duration-300 rounded-2xl p-5 w-48 shrink-0 flex flex-col items-center text-center 
-                  ${hoveredNode?.id === node.id ? 'glass-card border-neu-accent scale-105' : 'glass-card-inset border-transparent hover:border-white/10'}`}
-                style={{ borderWidth: '2px' }}
+                  ${hoveredNode?.id === node.id ? "glass-card border-neu-accent scale-105" : "glass-card-inset border-transparent hover:border-white/10"}`}
+                style={{ borderWidth: "2px" }}
               >
-                <div className={`p-3 rounded-xl mb-3 ${hoveredNode?.id === node.id ? 'bg-neu-accent/20 text-neu-accent' : 'bg-black/5 dark:bg-white/5 text-neu-text'}`}>
+                <div
+                  className={`p-3 rounded-xl mb-3 ${hoveredNode?.id === node.id ? "bg-neu-accent/20 text-neu-accent" : "bg-black/5 dark:bg-white/5 text-neu-text"}`}
+                >
                   <Layers size={24} />
                 </div>
-                <h5 className="font-bold text-neu-text text-sm mb-1">{node.name}</h5>
-                <p className="text-[10px] font-mono text-neu-text-muted line-clamp-2">{node.title}</p>
+                <h5 className="font-bold text-neu-text text-sm mb-1">
+                  {node.name}
+                </h5>
+                <p className="text-[10px] font-mono text-neu-text-muted line-clamp-2">
+                  {node.title}
+                </p>
 
                 {hoveredNode?.id === node.id && (
                   <div className="absolute -inset-1 border-2 border-neu-accent/30 rounded-2xl animate-pulse -z-10" />
@@ -181,22 +239,35 @@ function NodeView({ nodes, projectId }: { nodes: any[]; projectId: string }) {
       {/* Hover detail panel */}
       <div className="mt-2 p-5 rounded-2xl glass-card relative min-h-[96px] flex flex-col justify-center border border-white/5">
         {hoveredNode ? (
-          <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center"
+          >
             <div className="md:col-span-3">
               <span className="text-xs font-mono text-neu-accent font-bold uppercase tracking-wider block mb-1">
                 Node: {hoveredNode.name}
               </span>
-              <h5 className="text-sm font-bold text-neu-text font-display">{hoveredNode.title}</h5>
-              <p className="text-xs text-neu-text-muted mt-1 leading-relaxed font-light">{hoveredNode.description}</p>
+              <h5 className="text-sm font-bold text-neu-text font-display">
+                {hoveredNode.title}
+              </h5>
+              <p className="text-xs text-neu-text-muted mt-1 leading-relaxed font-light">
+                {hoveredNode.description}
+              </p>
             </div>
             <div className="p-3 rounded-xl glass-card-inset text-center md:col-span-1 border border-white/5 flex flex-col justify-center items-center gap-1 h-full">
-              <span className="text-[9px] font-mono text-neu-text-muted block uppercase flex items-center gap-1"><Activity size={10} /> KPI Performance</span>
-              <span className="text-xs font-mono font-bold text-neu-accent block">{hoveredNode.metrics}</span>
+              <span className="text-[9px] font-mono text-neu-text-muted block uppercase flex items-center gap-1">
+                <Activity size={10} /> KPI Performance
+              </span>
+              <span className="text-xs font-mono font-bold text-neu-accent block">
+                {hoveredNode.metrics}
+              </span>
             </div>
           </motion.div>
         ) : (
           <p className="text-xs font-mono text-neu-text-muted text-center italic flex items-center justify-center gap-2">
-            <Layers size={14} /> Hover over any component node to inspect technical metrics.
+            <Layers size={14} /> Hover over any component node to inspect
+            technical metrics.
           </p>
         )}
       </div>
@@ -205,20 +276,27 @@ function NodeView({ nodes, projectId }: { nodes: any[]; projectId: string }) {
 }
 
 // --- Main Component ---
-export default function ProjectArchitectureDiagram({ project, isDark }: { project: any; isDark: boolean }) {
+export default function ProjectArchitectureDiagram({
+  project,
+  isDark: _isDark,
+}: {
+  project: any;
+  isDark: boolean;
+}) {
   const [nodes, setNodes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const hasImage = !!(project?.architectureImage);
+  const hasImage = !!project?.architectureImage;
 
   useEffect(() => {
     if (hasImage) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(false);
       return;
     }
-    fetch('/api/architecture')
-      .then(res => res.json())
-      .then(data => {
+    fetch("/api/architecture")
+      .then((res) => res.json())
+      .then((data) => {
         const arr = data.data || data;
         const projectNodes = (Array.isArray(arr) ? arr : [])
           .filter((n: any) => n.projectId === project?.id)
@@ -226,14 +304,18 @@ export default function ProjectArchitectureDiagram({ project, isDark }: { projec
         setNodes(projectNodes);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setLoading(false);
       });
   }, [project?.id, hasImage]);
 
   if (loading) {
-    return <div className="h-40 flex items-center justify-center text-neu-text-muted animate-pulse">Loading Architecture...</div>;
+    return (
+      <div className="h-40 flex items-center justify-center text-neu-text-muted animate-pulse">
+        Loading Architecture...
+      </div>
+    );
   }
 
   const showEmptyState = !hasImage && nodes.length === 0;
@@ -247,8 +329,8 @@ export default function ProjectArchitectureDiagram({ project, isDark }: { projec
           </h4>
           <p className="text-xs font-mono text-neu-text-muted mt-1">
             {hasImage
-              ? 'Drag to pan · Scroll or pinch to zoom · Click ⛶ for fullscreen.'
-              : 'Hover over nodes to inspect technical details and orchestration patterns.'}
+              ? "Drag to pan · Scroll or pinch to zoom · Click ⛶ for fullscreen."
+              : "Hover over nodes to inspect technical details and orchestration patterns."}
           </p>
         </div>
         {hasImage && (

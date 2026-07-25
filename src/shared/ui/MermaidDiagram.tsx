@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useId } from "react";
 import { GitBranch } from "lucide-react";
 
 interface MermaidDiagramProps {
@@ -11,7 +11,8 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRendered, setIsRendered] = useState(false);
-  const idRef = useRef(`mermaid-${Math.random().toString(36).slice(2)}`);
+  const reactId = useId();
+  const idRef = useRef(`mermaid-${reactId.replace(/[^a-zA-Z0-9]/g, "")}`);
 
   useEffect(() => {
     let cancelled = false;

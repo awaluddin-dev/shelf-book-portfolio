@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { Copy, Save, Moon, Sun, CheckCircle, Palette } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'motion/react';
-import { cn } from '@/shared/lib/utils';
 
 export default function AdminPlayground() {
   const router = useRouter();
@@ -28,6 +27,7 @@ export default function AdminPlayground() {
 
   // Sync state when dark mode toggles
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setThemeConfig({
       bg: isDark ? '#222831' : '#F9F7F7',
       secondary: isDark ? '#393E46' : '#DBE2EF',
@@ -53,7 +53,6 @@ export default function AdminPlayground() {
     root.style.setProperty('--color-neu-text', themeConfig.text);
     root.style.setProperty('--color-neu-accent', themeConfig.accent);
 
-    const shadowHex = isDark ? '#000000' : '#111D2E'; // Dark shadow color
     const lightShadowHex = isDark ? themeConfig.secondary : '#ffffff'; // Light shadow color
     
     // We can't perfectly construct complex rgba shadows with hex without parsing, 
