@@ -4,9 +4,9 @@ import '@testing-library/jest-dom'
 import { AdminCrudTable } from '@/shared/ui/admin/AdminCrudTable'
 
 // Mock the router
-const mockPush = jest.fn()
+const mockRouter = { push: jest.fn() }
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: mockPush })
+  useRouter: () => mockRouter
 }))
 
 jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
@@ -97,10 +97,11 @@ describe('AdminCrudTable', () => {
   })
 
   it('handles edit and save successfully', async () => {
-    const mockItems = [{ id: '1', title: 'Item 1' }]
+    let mockItems = [{ id: '1', title: 'Item 1' }]
     
     global.fetch = jest.fn((url: any, options: any) => {
       if (options?.method === 'PATCH') {
+        mockItems = [{ id: '1', title: 'Updated Item 1' }]
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ success: true })
@@ -142,7 +143,7 @@ describe('AdminCrudTable', () => {
 
     expect(global.fetch).toHaveBeenCalledWith('/api/test/1', expect.objectContaining({
       method: 'PATCH',
-      body: JSON.stringify({ title: 'Updated Item 1', id: '1', modified: true })
+      body: JSON.stringify({ title: 'Updated Item 1', modified: true })
     }))
 
     // Should re-fetch
