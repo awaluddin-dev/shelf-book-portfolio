@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Quote, Link as LinkIcon } from 'lucide-react';
-import { Testimonial } from "@/entities/testimonial/model/data";
+import { Testimonial } from "@/shared/types";
 
 interface TestimonialModalProps {
   selectedTestimonial: Testimonial | null;

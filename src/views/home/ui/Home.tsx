@@ -1,5 +1,5 @@
 "use client";
-import { testimonials as mockTestimonials } from "@/entities/testimonial/model/data";
+
 
 import { useState, useEffect, useRef, useMemo, memo, useCallback } from "react";
 import Image from "next/image";
@@ -92,7 +92,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { Testimonial } from "@/entities/testimonial/model/data";
+import { Testimonial } from "@/shared/types";
 import { cn } from "@/shared/lib/utils";
 
 import { getTechIconAndColor } from "@/shared/lib/tech-icons";
@@ -103,15 +103,11 @@ import {
   getTagProjectCount,
   getRelatedProjects,
   TECHNICAL_IMAGERY,
-} from "@/entities/project/model/projects-data";
+  legendLevels,
+} from "@/shared/lib/helpers";
 import MermaidDiagram from "@/shared/ui/MermaidDiagram";
 import ProjectLifecycleTracker from "@/entities/project/ui/ProjectLifecycleTracker";
 import BookItem from "@/entities/project/ui/BookItem";
-import {
-  legendLevels,
-  roadmapItems,
-} from "@/entities/skill/model/roadmap-data";
-
 import ContactModal from "@/features/contact/ui/ContactModal";
 import MobileFilterModal from "./components/MobileFilterModal";
 import ProjectModal from "./components/ProjectModal";
@@ -222,69 +218,12 @@ export default function Portfolio() {
   }, []);
 
   // Use dynamic if available, fallback to static imports or defaults
-  const activeRoadmap =
-    dynamicRoadmap.length > 0 ? dynamicRoadmap : roadmapItems;
+  const activeRoadmap = dynamicRoadmap;
   const activeProficiency = dynamicProficiency;
   const activeWork = dynamicWork;
-  const activeCurrentFocus =
-    dynamicCurrentFocus.length > 0
-      ? dynamicCurrentFocus
-      : [
-          {
-            title: "Writing",
-            icon: "PenTool",
-            description:
-              '"I Rewrote a Fintech Platform Alone — No Handover, No Team, No Docs"',
-            link: "https://dev.to/awaluddin",
-            linkText: "Read on dev.to",
-          },
-          {
-            title: "Current Work",
-            icon: "Code2",
-            description:
-              "Building AuraFlow AI, an intelligent project management and estimation agent.",
-            link: "https://github.com/awaluddin-dev",
-            linkText: "View Repository",
-          },
-          {
-            title: "Upcoming Tech",
-            icon: "Rocket",
-            description:
-              "Deep diving into local LLM orchestration and vector database optimization.",
-            link: "#experience",
-            linkText: "See Roadmap",
-          },
-        ];
+  const activeCurrentFocus = dynamicCurrentFocus;
 
-  const activeMetrics =
-    dynamicMetrics.length > 0
-      ? dynamicMetrics
-      : [
-          {
-            val: "5+ Years",
-            label: "Engineering Experience",
-            icon: "Code2",
-            isSavings: false,
-          },
-          {
-            val: "Enterprise & Fintech",
-            label: "INDUSTRY EXPERIENCE",
-            icon: "Briefcase",
-            isSavings: false,
-          },
-          {
-            val: "$18K/yr",
-            label: "Infra Cost Savings",
-            icon: "TrendingUp",
-            isSavings: true,
-          },
-          {
-            val: "@ Astra Group",
-            label: "CURRENT CONTRACT",
-            icon: "MapPin",
-            isSavings: false,
-          },
-        ];
+  const activeMetrics = dynamicMetrics;
 
   const renderIcon = (
     iconName: string,
@@ -406,7 +345,6 @@ export default function Portfolio() {
       })
       .catch((err) => {
         console.error(err);
-        setTestimonialsList(mockTestimonials);
       });
   }, []);
   const [portfolioStatus, setPortfolioStatus] = useState<"available" | "busy">(
@@ -1656,7 +1594,7 @@ export default function Portfolio() {
                       <div className="flex flex-wrap gap-2 mb-6">
                         {(focusedProject.tags || []).map((tag: string) => {
                           const { color, icon } = getTechIconAndColor(tag);
-                          const count = getTagProjectCount(tag);
+                          const count = getTagProjectCount(tag, activeProjects);
                           return (
                             <div
                               key={tag}
@@ -1763,7 +1701,7 @@ export default function Portfolio() {
                         setSelectedProject={setSelectedProject}
                         setFocusedProject={setFocusedProject}
                         isDark={isDark}
-                        getTagProjectCount={getTagProjectCount}
+                        getTagProjectCount={(t) => getTagProjectCount(t, activeProjects)}
                       />
                     ))}
                   </AnimatePresence>
@@ -2186,103 +2124,105 @@ export default function Portfolio() {
 
             {/* Details panel for the selected roadmap item */}
             <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedRoadmapIndex}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.35, ease: "easeInOut" }}
-                className="mt-6 p-6 sm:p-8 rounded-3xl glass-card-inset border border-gray-300/30 dark:border-gray-800/40 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
-              >
-                {/* Tech Info */}
-                <div className="lg:col-span-7 space-y-5">
-                  <div className="flex items-center gap-3">
-                    <div className="p-3.5 rounded-2xl glass-card text-neu-accent">
-                      {renderIcon(
-                        activeRoadmap[selectedRoadmapIndex].icon,
-                        false,
-                        24,
-                      )}
+              {activeRoadmap.length > 0 && activeRoadmap[selectedRoadmapIndex] && (
+                <motion.div
+                  key={`roadmap-details-${selectedRoadmapIndex}`}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                  className="mt-6 p-6 sm:p-8 rounded-3xl glass-card-inset border border-gray-300/30 dark:border-gray-800/40 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+                >
+                  {/* Tech Info */}
+                  <div className="lg:col-span-7 space-y-5">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3.5 rounded-2xl glass-card text-neu-accent">
+                        {renderIcon(
+                          activeRoadmap[selectedRoadmapIndex].icon,
+                          false,
+                          24,
+                        )}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2.5 flex-wrap">
+                          <span className="font-mono text-xs font-bold tracking-widest text-neu-accent uppercase">
+                            {activeRoadmap[selectedRoadmapIndex].quarter}
+                          </span>
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold tracking-wider uppercase bg-white/50 dark:bg-black/30 border border-gray-300/40 dark:border-zinc-800 text-neu-accent/90">
+                            <span className="w-1.5 h-1.5 rounded-full bg-neu-accent mr-1.5" />
+                            {activeRoadmap[selectedRoadmapIndex].status}
+                          </span>
+                        </div>
+                        <h4 className="text-xl font-bold text-neu-text mt-1">
+                          {activeRoadmap[selectedRoadmapIndex].tech}
+                        </h4>
+                      </div>
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2.5 flex-wrap">
-                        <span className="font-mono text-xs font-bold tracking-widest text-neu-accent uppercase">
-                          {activeRoadmap[selectedRoadmapIndex].quarter}
+
+                    <p className="text-sm text-neu-text-muted leading-relaxed">
+                      {activeRoadmap[selectedRoadmapIndex].description}
+                    </p>
+
+                    <div className="flex items-center gap-6 pt-2">
+                      <div>
+                        <span className="block font-mono text-[10px] text-neu-text-muted uppercase tracking-wider">
+                          Estimated Depth
                         </span>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold tracking-wider uppercase bg-white/50 dark:bg-black/30 border border-gray-300/40 dark:border-zinc-800 text-neu-accent/90">
-                          <span className="w-1.5 h-1.5 rounded-full bg-neu-accent mr-1.5" />
-                          {activeRoadmap[selectedRoadmapIndex].status}
+                        <span className="text-sm font-semibold text-neu-text">
+                          {activeRoadmap[selectedRoadmapIndex].depth}
                         </span>
                       </div>
-                      <h4 className="text-xl font-bold text-neu-text mt-1">
-                        {activeRoadmap[selectedRoadmapIndex].tech}
-                      </h4>
+                      <div className="w-[1px] h-8 bg-gray-300/60 dark:bg-zinc-800" />
+                      <div>
+                        <span className="block font-mono text-[10px] text-neu-text-muted uppercase tracking-wider">
+                          Direction
+                        </span>
+                        <span className="text-sm font-semibold text-neu-text inline-flex items-center gap-1">
+                          <TrendingUp size={14} className="text-neu-accent" />{" "}
+                          Continuous Growth
+                        </span>
+                      </div>
                     </div>
                   </div>
 
-                  <p className="text-sm text-neu-text-muted leading-relaxed">
-                    {activeRoadmap[selectedRoadmapIndex].description}
-                  </p>
-
-                  <div className="flex items-center gap-6 pt-2">
-                    <div>
-                      <span className="block font-mono text-[10px] text-neu-text-muted uppercase tracking-wider">
-                        Estimated Depth
+                  {/* Topics & Target Projects */}
+                  <div className="lg:col-span-5 space-y-6">
+                    {/* Core Topics */}
+                    <div className="p-5 rounded-2xl bg-white/20 dark:bg-black/10 border border-white/10">
+                      <span className="block font-mono text-[10px] text-neu-accent font-extrabold uppercase tracking-widest mb-3">
+                        Core Topics to Master
                       </span>
-                      <span className="text-sm font-semibold text-neu-text">
-                        {activeRoadmap[selectedRoadmapIndex].depth}
-                      </span>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-neu-text-muted">
+                        {activeRoadmap[selectedRoadmapIndex].topics.map(
+                          (topic: any, i: number) => (
+                            <li key={i} className="flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-neu-accent/80 flex-shrink-0" />
+                              <span>{topic}</span>
+                            </li>
+                          ),
+                        )}
+                      </ul>
                     </div>
-                    <div className="w-[1px] h-8 bg-gray-300/60 dark:bg-zinc-800" />
-                    <div>
-                      <span className="block font-mono text-[10px] text-neu-text-muted uppercase tracking-wider">
-                        Direction
+
+                    {/* Target Projects */}
+                    <div className="p-5 rounded-2xl bg-white/20 dark:bg-black/10 border border-white/10">
+                      <span className="block font-mono text-[10px] text-neu-accent font-extrabold uppercase tracking-widest mb-3">
+                        Planned Prototype Projects
                       </span>
-                      <span className="text-sm font-semibold text-neu-text inline-flex items-center gap-1">
-                        <TrendingUp size={14} className="text-neu-accent" />{" "}
-                        Continuous Growth
-                      </span>
+                      <ul className="space-y-2 text-xs text-neu-text-muted font-mono">
+                        {(activeRoadmap[selectedRoadmapIndex].projects || []).map(
+                          (proj: any, i: number) => (
+                            <li key={i} className="flex items-start gap-2.5">
+                              <span className="mt-0.5 text-neu-accent">✦</span>
+                              <span className="text-neu-text">{proj}</span>
+                            </li>
+                          ),
+                        )}
+                      </ul>
                     </div>
                   </div>
-                </div>
-
-                {/* Topics & Target Projects */}
-                <div className="lg:col-span-5 space-y-6">
-                  {/* Core Topics */}
-                  <div className="p-5 rounded-2xl bg-white/20 dark:bg-black/10 border border-white/10">
-                    <span className="block font-mono text-[10px] text-neu-accent font-extrabold uppercase tracking-widest mb-3">
-                      Core Topics to Master
-                    </span>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-neu-text-muted">
-                      {activeRoadmap[selectedRoadmapIndex].topics.map(
-                        (topic: any, i: number) => (
-                          <li key={i} className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-neu-accent/80 flex-shrink-0" />
-                            <span>{topic}</span>
-                          </li>
-                        ),
-                      )}
-                    </ul>
-                  </div>
-
-                  {/* Target Projects */}
-                  <div className="p-5 rounded-2xl bg-white/20 dark:bg-black/10 border border-white/10">
-                    <span className="block font-mono text-[10px] text-neu-accent font-extrabold uppercase tracking-widest mb-3">
-                      Planned Prototype Projects
-                    </span>
-                    <ul className="space-y-2 text-xs text-neu-text-muted font-mono">
-                      {(activeRoadmap[selectedRoadmapIndex].projects || []).map(
-                        (proj: any, i: number) => (
-                          <li key={i} className="flex items-start gap-2.5">
-                            <span className="mt-0.5 text-neu-accent">✦</span>
-                            <span className="text-neu-text">{proj}</span>
-                          </li>
-                        ),
-                      )}
-                    </ul>
-                  </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              )}
             </AnimatePresence>
           </div>
         </motion.div>
@@ -3383,9 +3323,9 @@ export default function Portfolio() {
         isBannerMinimized={isBannerMinimized} 
         setIsBannerMinimized={setIsBannerMinimized} 
         isDark={isDark} 
-        getRelatedProjects={getRelatedProjects} 
+        getRelatedProjects={(p) => getRelatedProjects(p, activeProjects)} 
         getTechIconAndColor={getTechIconAndColor} 
-        getTagProjectCount={getTagProjectCount} 
+        getTagProjectCount={(t) => getTagProjectCount(t, activeProjects)} 
         TECHNICAL_IMAGERY={TECHNICAL_IMAGERY} 
       />      {/* Quick-Send Availability Inquiry Modal */}
       <ContactModal

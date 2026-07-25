@@ -1,12 +1,11 @@
-import { projects } from '@/entities/testimonial/model/data';
-import { Testimonial } from '@/entities/testimonial/model/data';
+import { Project, Testimonial } from '@/shared/types';
 
 export interface HomeState {
   searchQuery: string;
   selectedCategory: string | null;
-  selectedProject: typeof projects[0] | null;
+  selectedProject: Project | null;
   isBannerMinimized: boolean;
-  focusedProject: typeof projects[0] | null;
+  focusedProject: Project | null;
   hoveredSkillNode: any;
   mounted: boolean;
   chartType: 'temporal' | 'repository';

@@ -8,7 +8,7 @@ import { Briefcase, LogOut, LayoutDashboard, Check, X, MessageSquare, ChevronRig
 import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from 'next-themes';
 import { cn } from '@/shared/lib/utils';
-import { Testimonial } from '@/entities/testimonial/model/data';
+import { Testimonial } from '@/shared/types';
 
 export default function AdminTestimoni() {
   const [status, setStatus] = useState<'available' | 'busy'>('available');
