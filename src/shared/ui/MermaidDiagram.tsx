@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useId } from "react";
 import { GitBranch } from "lucide-react";
 
 interface MermaidDiagramProps {
@@ -11,7 +11,8 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRendered, setIsRendered] = useState(false);
-  const idRef = useRef(`mermaid-${Math.random().toString(36).slice(2)}`);
+  const reactId = useId();
+  const idRef = useRef(`mermaid-${reactId.replace(/[^a-zA-Z0-9]/g, "")}`);
 
   useEffect(() => {
     let cancelled = false;
@@ -81,10 +82,10 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
           <GitBranch size={12} />
           <span className="font-bold">Mermaid Error:</span>
         </p>
-        <pre className="text-[10px] text-rose-300 mt-2 whitespace-pre-wrap">{error}</pre>
+        <pre className="text-xs text-rose-300 mt-2 whitespace-pre-wrap">{error}</pre>
         <details className="mt-3">
-          <summary className="text-[10px] font-mono text-rose-400/70 cursor-pointer">Show source</summary>
-          <pre className="mt-2 p-2 bg-black/20 rounded text-[10px] text-zinc-400 whitespace-pre-wrap">{chart}</pre>
+          <summary className="text-xs font-mono text-rose-400/70 cursor-pointer">Show source</summary>
+          <pre className="mt-2 p-2 bg-black/20 rounded text-xs text-zinc-400 whitespace-pre-wrap">{chart}</pre>
         </details>
       </div>
     );
@@ -93,7 +94,7 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
   return (
     <div className="relative my-6 rounded-2xl overflow-hidden border border-white/5 bg-zinc-950/70">
       {/* Header bar */}
-      <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border-b border-white/5 text-[10px] font-mono uppercase tracking-wider text-neutral-400">
+      <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border-b border-white/5 text-xs font-mono uppercase tracking-wider text-neutral-400">
         <GitBranch size={10} className="text-neu-accent" />
         <span className="text-neu-accent">Mermaid Diagram</span>
       </div>
@@ -106,7 +107,7 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
       {/* Rendered SVG */}
       <div
         ref={ref}
-        className={`p-5 overflow-x-auto transition-opacity duration-300 ${isRendered ? "opacity-100" : "opacity-0 min-h-[120px]"}`}
+        className={`p-5 overflow-x-auto transition-opacity duration-300 ${isRendered ? "opacity-100" : "opacity-0 min-h-32"}`}
       />
     </div>
   );

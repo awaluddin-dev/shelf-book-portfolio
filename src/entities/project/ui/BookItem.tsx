@@ -84,7 +84,7 @@ export default function BookItem({
           <div className="w-full h-1 bg-black/10 rounded-full mb-4 shadow-inner"></div>
 
           <div className="flex-1 relative flex items-center justify-center">
-            <span className="absolute whitespace-pre-wrap transform -rotate-90 origin-center text-sm md:text-[10px] lg:text-xs font-mono font-bold tracking-widest text-white drop-shadow-md w-[260px] md:w-[220px] text-center leading-tight">
+            <span className="absolute whitespace-pre-wrap transform -rotate-90 origin-center text-sm md:text-xs lg:text-xs font-mono font-bold tracking-widest text-white drop-shadow-md w-64 md:w-56 text-center leading-tight">
               {project.spineText}
             </span>
           </div>

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { X, Sparkles, Send } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 
@@ -12,7 +12,7 @@ interface ContactModalProps {
 
 export default function ContactModal({ isOpen, onClose, portfolioStatus, triggerToast }: ContactModalProps) {
   const [formData, setFormData] = useState({ name: '', email: '', projectType: 'contract', message: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [_isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +68,7 @@ export default function ContactModal({ isOpen, onClose, portfolioStatus, trigger
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
               className="bg-neu-bg rounded-3xl shadow-neu-modal w-full max-w-lg p-6 sm:p-8 relative border border-white/5"
             >
-              <button 
+              <button type="button" 
                 onClick={() => onClose()}
                 className="absolute top-5 right-5 p-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-neu-text transition-colors"
                 title="Close"
@@ -96,8 +96,8 @@ export default function ContactModal({ isOpen, onClose, portfolioStatus, trigger
                 onSubmit={handleSubmit}
               >
                 <div>
-                  <label className="block text-xs font-mono text-neu-text-muted mb-1.5 uppercase font-bold">Your Name</label>
-                  <input 
+                  <label className="block text-xs font-mono text-neu-text-muted mb-1.5 uppercase font-bold" htmlFor="field-contactmodal-1">Your Name</label>
+                  <input id="field-contactmodal-1" 
                     type="text" 
                     required 
                     placeholder="E.g., Sarah Jenkins" 
@@ -107,8 +107,8 @@ export default function ContactModal({ isOpen, onClose, portfolioStatus, trigger
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-mono text-neu-text-muted mb-1.5 uppercase font-bold">Your Email</label>
-                  <input 
+                  <label className="block text-xs font-mono text-neu-text-muted mb-1.5 uppercase font-bold" htmlFor="field-contactmodal-2">Your Email</label>
+                  <input id="field-contactmodal-2" 
                     type="email" 
                     required 
                     placeholder="E.g., sarah@company.com" 
@@ -118,8 +118,8 @@ export default function ContactModal({ isOpen, onClose, portfolioStatus, trigger
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-mono text-neu-text-muted mb-1.5 uppercase font-bold">Project Type</label>
-                  <select 
+                  <label className="block text-xs font-mono text-neu-text-muted mb-1.5 uppercase font-bold" htmlFor="field-contactmodal-3">Project Type</label>
+                  <select id="field-contactmodal-3" 
                     value={formData.projectType}
                     onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl glass-card text-neu-text focus:outline-none focus:ring-0 transition-all border border-transparent focus:border-neu-accent/20 text-sm"
@@ -131,8 +131,8 @@ export default function ContactModal({ isOpen, onClose, portfolioStatus, trigger
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-mono text-neu-text-muted mb-1.5 uppercase font-bold">Message</label>
-                  <textarea 
+                  <label className="block text-xs font-mono text-neu-text-muted mb-1.5 uppercase font-bold" htmlFor="field-contactmodal-4">Message</label>
+                  <textarea id="field-contactmodal-4" 
                     rows={4} 
                     required 
                     placeholder="Briefly describe your project goals, stack, or role details..." 

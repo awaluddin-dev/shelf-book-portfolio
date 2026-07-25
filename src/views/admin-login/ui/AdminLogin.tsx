@@ -35,7 +35,7 @@ export default function AdminLogin() {
       } else {
         setError(true);
       }
-    } catch (err) {
+    } catch {
       setError(true);
     } finally {
       setIsLoading(false);
@@ -56,7 +56,7 @@ export default function AdminLogin() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2">
+            <label htmlFor="email" className="block text-xs font-mono font-bold uppercase tracking-wider mb-2">
               Email
             </label>
             <div className="relative">
@@ -64,7 +64,8 @@ export default function AdminLogin() {
                 <User size={16} />
               </div>
               <input
-                type="text"
+                id="email"
+                type="email"
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -76,7 +77,7 @@ export default function AdminLogin() {
             </div>
           </div>
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2">
+            <label htmlFor="password" className="block text-xs font-mono font-bold uppercase tracking-wider mb-2">
               Password
             </label>
             <div className="relative">
@@ -84,6 +85,7 @@ export default function AdminLogin() {
                 <Lock size={16} />
               </div>
               <input
+                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => {

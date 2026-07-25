@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { Copy, Save, Moon, Sun, CheckCircle, Palette } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'motion/react';
-import { cn } from '@/shared/lib/utils';
 
 export default function AdminPlayground() {
   const router = useRouter();
@@ -28,6 +27,7 @@ export default function AdminPlayground() {
 
   // Sync state when dark mode toggles
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setThemeConfig({
       bg: isDark ? '#222831' : '#F9F7F7',
       secondary: isDark ? '#393E46' : '#DBE2EF',
@@ -53,7 +53,6 @@ export default function AdminPlayground() {
     root.style.setProperty('--color-neu-text', themeConfig.text);
     root.style.setProperty('--color-neu-accent', themeConfig.accent);
 
-    const shadowHex = isDark ? '#000000' : '#111D2E'; // Dark shadow color
     const lightShadowHex = isDark ? themeConfig.secondary : '#ffffff'; // Light shadow color
     
     // We can't perfectly construct complex rgba shadows with hex without parsing, 
@@ -119,13 +118,13 @@ ${isDark ? '.dark' : ':root'} {
               Theme Playground
             </h1>
             <div className="flex items-center gap-4">
-              <button 
+              <button type="button" 
                 onClick={() => setTheme(isDark ? 'light' : 'dark')}
                 className="p-3 rounded-full glass-card hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
               >
                 {isDark ? <Sun size={20} /> : <Moon size={20} />}
               </button>
-              <button 
+              <button type="button" 
                 onClick={handleExport}
                 className="flex items-center gap-2 px-5 py-2.5 bg-neu-accent text-white font-bold rounded-xl shadow-neu-sm hover:scale-105 active:scale-95 transition-all text-sm"
               >
@@ -180,7 +179,7 @@ ${isDark ? '.dark' : ':root'} {
                     <input 
                       type="range" min="0.01" max="1" step="0.01"
                       value={themeConfig.shadowOpacity}
-                      onChange={(e) => updateConfig('shadowOpacity', parseFloat(e.target.value))}
+                      onChange={(e) => updateConfig('shadowOpacity', Number.parseFloat(e.target.value))}
                       className="w-full accent-neu-accent"
                     />
                   </div>
@@ -192,7 +191,7 @@ ${isDark ? '.dark' : ':root'} {
                     <input 
                       type="range" min="4" max="64" step="1"
                       value={themeConfig.shadowBlur}
-                      onChange={(e) => updateConfig('shadowBlur', parseInt(e.target.value))}
+                      onChange={(e) => updateConfig('shadowBlur', Number.parseInt(e.target.value))}
                       className="w-full accent-neu-accent"
                     />
                   </div>
@@ -229,17 +228,17 @@ ${isDark ? '.dark' : ':root'} {
               <div className="p-8 rounded-3xl glass-card space-y-6">
                 <h4 className="font-bold text-lg">Interactive Elements</h4>
                 <div className="flex gap-4">
-                  <button className="flex-1 py-3 px-4 rounded-xl shadow-neu bg-neu-bg text-neu-accent font-bold hover:shadow-neu-sm active:shadow-neu-inset transition-all">
+                  <button type="button" className="flex-1 py-3 px-4 rounded-xl shadow-neu bg-neu-bg text-neu-accent font-bold hover:shadow-neu-sm active:shadow-neu-inset transition-all">
                     Neumorphic Button
                   </button>
-                  <button className="flex-1 py-3 px-4 rounded-xl shadow-neu bg-neu-accent text-white font-bold hover:opacity-90 active:scale-95 transition-all">
+                  <button type="button" className="flex-1 py-3 px-4 rounded-xl shadow-neu bg-neu-accent text-white font-bold hover:opacity-90 active:scale-95 transition-all">
                     Accent Button
                   </button>
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="text-xs font-mono opacity-70">Sample Input</label>
-                  <input 
+                  <label className="text-xs font-mono opacity-70" htmlFor="field-adminplayground-1">Sample Input</label>
+                  <input id="field-adminplayground-1" 
                     type="text" 
                     placeholder="Type something..."
                     className="w-full px-4 py-3 rounded-xl glass-card-inset bg-transparent border-none outline-none focus:ring-2 focus:ring-neu-accent/50"

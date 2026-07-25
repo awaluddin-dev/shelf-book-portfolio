@@ -1,4 +1,4 @@
-import { memo, useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { memo, useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Network } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
@@ -15,261 +15,6 @@ interface SkillNode {
   connections: string[];
 }
 
-const defaultSkillNodes: SkillNode[] = [
-  // ── ZONA HIJAU: Core Backend ──────────────────────────────────────────────
-  // x: 80 (kolom 1) | 220 (kolom 2) | 360 (kolom 3, hanya dist-systems)
-
-  {
-    id: "nodejs",
-    title: "Node.js",
-    category: "Core Backend",
-    level: "Production · 3+ yrs",
-    x: 80,
-    y: 80,
-    details:
-      "High-concurrency event-driven runtime across SERA, Telkomsel, and HDI — event loop optimization, stream piping, ESM module resolution, and multi-core clustering.",
-    connections: ["typescript", "nestjs"],
-  },
-  {
-    id: "typescript",
-    title: "TypeScript",
-    category: "Core Backend",
-    level: "Production · 3+ yrs",
-    x: 80,
-    y: 210,
-    details:
-      "Strict typing across all Node.js projects at SERA and HDI — DTO validation with class-validator, discriminated unions, generic service patterns, and interface-driven DI.",
-    connections: ["nestjs"],
-  },
-  {
-    id: "nestjs",
-    title: "NestJS",
-    category: "Core Backend",
-    level: "Production · 2+ yrs",
-    x: 80,
-    y: 340,
-    details:
-      "Enterprise backend framework at SERA and HDI — Guards, Interceptors, custom decorators, DI containers, native microservice transporters, and monorepo setups.",
-    connections: ["rest-api"],
-  },
-  {
-    id: "go",
-    title: "Go",
-    category: "Core Backend",
-    level: "Production · 1 yr",
-    x: 220,
-    y: 80,
-    details:
-      "IoT monitoring backend at Telkomsel — goroutine concurrency, channel patterns, lightweight stateless service handlers, gRPC endpoints, and bare-metal deployment.",
-    connections: ["dist-systems"],
-  },
-  {
-    id: "dist-systems",
-    title: "Dist. Systems",
-    category: "Core Backend",
-    level: "Production · Enterprise",
-    x: 220,
-    y: 210,
-    details:
-      "Event-driven microservice architecture at SERA — fault-tolerant messaging, circuit breaker patterns, saga-based payroll data flows, and distributed state management.",
-    connections: ["postgres", "redis"],
-  },
-  {
-    id: "rest-api",
-    title: "REST API",
-    category: "Core Backend",
-    level: "Production · All roles",
-    x: 220,
-    y: 340,
-    details:
-      "REST API design across all engineering roles — versioning strategies, DTO contracts, standardized error responses, pagination patterns, and Swagger/OpenAPI documentation.",
-    connections: ["dist-systems"],
-  },
-
-  // ── ZONA BIRU: Infrastructure ─────────────────────────────────────────────
-  // x: 520 (kolom 4) | 640 (kolom 5) | 760 (kolom 6) | 880 (kolom 7)
-
-  {
-    id: "postgres",
-    title: "PostgreSQL",
-    category: "Infrastructure",
-    level: "Production · 3+ yrs",
-    x: 460,
-    y: 80,
-    details:
-      "Primary database across HDI P2P lending, Maccon, and AuraFlow AI — advanced indexing (B-Tree, GIN), JSONB, recursive CTEs, OCC locking, and TypeORM migrations.",
-    connections: ["redis"],
-  },
-  {
-    id: "redis",
-    title: "Redis",
-    category: "Infrastructure",
-    level: "Production · 2+ yrs",
-    x: 460,
-    y: 210,
-    details:
-      "Distributed caching and queue backbone — BullMQ job management in AuraFlow AI, Redlock distributed locks, Pub/Sub channels, and cache-aside invalidation strategies.",
-    connections: ["bullmq"],
-  },
-  {
-    id: "bullmq",
-    title: "BullMQ",
-    category: "Infrastructure",
-    level: "In Use · AuraFlow",
-    x: 460,
-    y: 340,
-    details:
-      "Async job queue for AuraFlow AI pipeline — job prioritization, configurable retry policies, delayed execution, and concurrency control between Node.js gateway and Python worker.",
-    connections: [],
-  },
-  {
-    id: "docker",
-    title: "Docker",
-    category: "Infrastructure",
-    level: "Production · 2+ yrs",
-    x: 580,
-    y: 80,
-    details:
-      "Containerization at Telkomsel and SERA — multi-stage builds, Compose for local dev environments, image layer optimization, and CI/CD environment parity via Jenkins.",
-    connections: ["k8s"],
-  },
-  {
-    id: "k8s",
-    title: "Kubernetes",
-    category: "Infrastructure",
-    level: "Production · Telkomsel",
-    x: 580,
-    y: 210,
-    details:
-      "Bare-metal K8s cluster at Telkomsel — physical node provisioning, Helm chart management, Ingress routing rules, ConfigMap/Secret management, and ArgoCD GitOps sync.",
-    connections: ["argocd"],
-  },
-  {
-    id: "argocd",
-    title: "ArgoCD",
-    category: "Infrastructure",
-    level: "Production · Telkomsel",
-    x: 580,
-    y: 340,
-    details:
-      "GitOps-based continuous deployment at Telkomsel — automated sync policies, environment-based rollback, promotion pipelines, and real-time application health monitoring.",
-    connections: [],
-  },
-  {
-    id: "azure-servicebus",
-    title: "Azure Svc Bus",
-    category: "Infrastructure",
-    level: "Production · SERA",
-    x: 700,
-    y: 80,
-    details:
-      "Enterprise message broker at SERA — SAP and Mekari Talenta integration via topics/subscriptions, dead-letter queue handling, session-based ordering, and retry policies.",
-    connections: ["azure-apim", "python"],
-  },
-  {
-    id: "azure-apim",
-    title: "Azure APIM",
-    category: "Infrastructure",
-    level: "Production · SERA",
-    x: 700,
-    y: 340,
-    details:
-      "API management layer at SERA — policy-based authentication, rate limiting, request/response transformation, and backend abstraction for SAP and FMS 2.0 integrations.",
-    connections: ["sap-integration"],
-  },
-
-  // ── ZONA UNGU: AI & Integrations ─────────────────────────────────────────
-  // x: 1000 (kolom 8) | 1120 (kolom 9) | 1240 (kolom 10, Mekari saja)
-
-  {
-    id: "python",
-    title: "Python",
-    category: "AI & Integrations",
-    level: "In Use · AuraFlow",
-    x: 880,
-    y: 80,
-    details:
-      "AI worker runtime for AuraFlow — async scripting, Pydantic schema validation, structured logging (grep-friendly, no icons), and multi-threaded LangGraph agent execution.",
-    connections: ["langgraph", "langchain"],
-  },
-  {
-    id: "langchain",
-    title: "LangChain",
-    category: "AI & Integrations",
-    level: "In Use · AuraFlow",
-    x: 880,
-    y: 210,
-    details:
-      "Agent tooling and chain composition for AuraFlow — prompt templates, structured output parsers, memory management, and tool-calling integration with LLM providers.",
-    connections: ["llm-router"],
-  },
-  {
-    id: "sap-integration",
-    title: "SAP Integration",
-    category: "AI & Integrations",
-    level: "Production · SERA",
-    x: 880,
-    y: 340,
-    details:
-      "Enterprise SAP payroll data sync at SERA — integration via Azure Service Bus, idempotent message processing, field mapping to internal driver schemas, and error recovery flows.",
-    connections: ["mekari-talenta"],
-  },
-  {
-    id: "langgraph",
-    title: "LangGraph",
-    category: "AI & Integrations",
-    level: "Building · AuraFlow",
-    x: 1030,
-    y: 80,
-    details:
-      "Stateful multi-agent orchestration for AuraFlow AI — parse-validate loop with conditional branching, human-in-the-loop approval gates, and multi-provider LLM router integration.",
-    connections: ["llm-router"],
-  },
-  {
-    id: "llm-router",
-    title: "LLM Router",
-    category: "AI & Integrations",
-    level: "Building · AuraFlow",
-    x: 1030,
-    y: 210,
-    details:
-      "Custom multi-provider abstraction layer for AuraFlow — sequential fallback across Claude, Gemini, OpenAI, Groq, and Azure OpenAI via environment-configurable LLM_PROVIDER_ORDER.",
-    connections: ["claude-api"],
-  },
-  {
-    id: "mekari-talenta",
-    title: "Mekari Talenta",
-    category: "AI & Integrations",
-    level: "Production · SERA",
-    x: 1030,
-    y: 340,
-    details:
-      "HR and attendance data integration at SERA — webhook consumption, event-driven sync to driver management system, and reconciliation with SAP payroll outputs via Service Bus.",
-    connections: [],
-  },
-  {
-    id: "claude-api",
-    title: "Claude / Gemini",
-    category: "AI & Integrations",
-    level: "In Use · AuraFlow",
-    x: 1180,
-    y: 80,
-    details:
-      "Primary LLM providers in AuraFlow router — structured JSON response parsing, multi-modal ingestion, token budget management, and retry-on-failure fallback to next provider.",
-    connections: ["vectordb"],
-  },
-  {
-    id: "vectordb",
-    title: "pgvector",
-    category: "AI & Integrations",
-    level: "Building · Planned",
-    x: 1180,
-    y: 210,
-    details:
-      "Planned semantic search layer for AuraFlow RAG pipeline — pgvector extension on PostgreSQL, cosine similarity queries, embedding storage, and hybrid keyword+vector search.",
-    connections: [],
-  },
-];
 
 interface SkillNodeProps {
   node: SkillNode;
@@ -344,7 +89,7 @@ const SkillTreeNode = memo(function SkillTreeNode({
         textAnchor="middle"
         className={cn(
           "font-mono font-bold tracking-tight select-none pointer-events-none transition-all duration-300",
-          isMobile ? "text-[8px]" : "text-[10px]",
+          "text-xs",
           active
             ? "fill-current " + colors.text
             : anyActive && !connectedToActive
@@ -367,7 +112,7 @@ export default function SkillTree({
   isLoading?: boolean;
 }) {
   const [nodes, setNodes] = useState<SkillNode[]>([]);
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  // const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   useEffect(() => {
     fetch('/api/skills')
@@ -600,7 +345,7 @@ export default function SkillTree({
           </div>
         </div>
         <div className="flex justify-center items-center py-10">
-          <div className="w-full max-w-4xl h-[300px] rounded-2xl glass-card-inset flex flex-col justify-between p-6 relative overflow-hidden">
+          <div className="w-full max-w-4xl h-72 rounded-2xl glass-card-inset flex flex-col justify-between p-6 relative overflow-hidden">
             <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gray-300/20 dark:bg-zinc-700/20 rounded-full blur-3xl"></div>
             <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-gray-300/20 dark:bg-zinc-700/20 rounded-full blur-3xl"></div>
             <svg
@@ -697,7 +442,7 @@ export default function SkillTree({
         <div
           className={cn(
             "relative",
-            isMobile ? "w-full max-w-[320px] h-[940px]" : "w-full h-[420px]",
+            isMobile ? "w-full max-w-80 h-[940px]" : "w-full h-96",
           )}
         >
           <svg
@@ -810,7 +555,7 @@ export default function SkillTree({
       </div>
 
       {/* Dynamic Proficiency Details card below tree */}
-      <div className="mt-6 p-5 rounded-2xl glass-card-inset relative min-h-[110px] flex flex-col justify-center border border-white/5">
+      <div className="mt-6 p-5 rounded-2xl glass-card-inset relative min-h-28 flex flex-col justify-center border border-white/5">
         <AnimatePresence mode="wait">
           {hoveredNode ? (
             <motion.div
@@ -824,7 +569,7 @@ export default function SkillTree({
               <div className="md:col-span-1 border-r border-gray-300/30 dark:border-gray-700/30 pr-4">
                 <span
                   className={cn(
-                    "text-[10px] font-mono font-bold uppercase tracking-wider block mb-1",
+                    "text-xs font-mono font-bold uppercase tracking-wider block mb-1",
                     getCategoryColor(hoveredNode.category).text,
                   )}
                 >
@@ -833,12 +578,12 @@ export default function SkillTree({
                 <h4 className="text-lg font-bold text-neu-text tracking-tight leading-tight mb-1">
                   {hoveredNode.title}
                 </h4>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 glass-card rounded-xl text-[10px] font-mono font-bold text-neu-accent mt-1">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 glass-card rounded-xl text-xs font-mono font-bold text-neu-accent mt-1">
                   Proficiency: {hoveredNode.level}
                 </div>
               </div>
               <div className="md:col-span-3 pl-2">
-                <span className="text-[10px] font-mono text-neu-accent font-bold uppercase tracking-widest block mb-1">
+                <span className="text-xs font-mono text-neu-accent font-bold uppercase tracking-widest block mb-1">
                   TECHNICAL APPLICATION & DEPLOYED CONCEPTS
                 </span>
                 <p className="text-sm text-neu-text-muted leading-relaxed font-sans font-light">

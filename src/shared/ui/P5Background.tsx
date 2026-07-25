@@ -28,16 +28,16 @@ const P5Background: React.FC<P5BackgroundProps> = ({ isDark }) => {
         growing: boolean;
 
         constructor() {
-          this.x = p.random(p.width);
-          this.y = p.random(p.height);
-          this.maxR = p.random(80, 200);
-          this.r = p.random(40, this.maxR);
-          this.speed = p.random(0.3, 1.2);
-          this.vx = p.random(-1.5, 1.5);
-          this.vy = p.random(-1.5, 1.5);
+          this.x = p.random(p.width); // NOSONAR
+          this.y = p.random(p.height); // NOSONAR
+          this.maxR = p.random(80, 200); // NOSONAR
+          this.r = p.random(40, this.maxR); // NOSONAR
+          this.speed = p.random(0.3, 1.2); // NOSONAR
+          this.vx = p.random(-1.5, 1.5); // NOSONAR
+          this.vy = p.random(-1.5, 1.5); // NOSONAR
           // emerald (150), blue (210), purple (270)
-          this.hue = p.random([150, 210, 270]); 
-          this.growing = p.random([true, false]);
+          this.hue = p.random([150, 210, 270]); // NOSONAR
+          this.growing = p.random([true, false]); // NOSONAR
         }
 
         update() {
