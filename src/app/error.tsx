@@ -11,7 +11,8 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('Unhandled App Router Error:', error);
+    // NOSONAR: We explicitly want to log unhandled runtime errors in the Error Boundary to the console for debugging
+    console.error('Unhandled App Router Error:', error); // NOSONAR
   }, [error]);
 
   return (

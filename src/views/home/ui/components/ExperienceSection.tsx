@@ -17,8 +17,9 @@ export function ExperienceSection({ activeWork, _activeRoadmap, gh, isLoading, i
   }, [gh]);
 
     const [mounted, setMounted] = React.useState(false);
-    React.useEffect(() => { // eslint-disable-next-line react-hooks/set-state-in-effect
-      setMounted(true); }, []);
+    React.useEffect(() => { 
+      setMounted(true); 
+    }, []);
     
     const [activeTooltipDate, setActiveTooltipDate] = React.useState<string | null>(null);
     const heatmapRef = React.useRef<HTMLDivElement>(null);
@@ -546,9 +547,9 @@ export function ExperienceSection({ activeWork, _activeRoadmap, gh, isLoading, i
                     </PieChart>
                   </div>
                   <div className="w-full md:w-2/3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4">
-                    {languageData.map((lang: any, idx: number) => (
+                    {languageData.map((lang: any) => (
                       <motion.div
-                        key={idx}
+                        key={lang.name}
                         whileHover={{ y: -2 }}
                         onMouseEnter={() => setHoveredLang(lang.name)}
                         onMouseLeave={() => setHoveredLang(null)}
@@ -562,7 +563,7 @@ export function ExperienceSection({ activeWork, _activeRoadmap, gh, isLoading, i
                             : "opacity-100",
                         )}
                       >
-                        {idx === 0 && (
+                        {lang.percentage >= languageData[0].percentage && (
                           <div className="absolute -top-2 -right-2 bg-neu-accent text-white font-mono text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm z-10 flex items-center gap-1">
                             TOP 1
                           </div>
@@ -613,7 +614,7 @@ export function ExperienceSection({ activeWork, _activeRoadmap, gh, isLoading, i
                   .includes("present");
                 return (
                   <div
-                    key={idx}
+                    key={`${job.company}-${job.role}`}
                     className="block"
                     onMouseEnter={() => setActiveExpIdx(idx)}
                   >

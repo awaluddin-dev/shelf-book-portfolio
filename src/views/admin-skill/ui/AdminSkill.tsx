@@ -1,114 +1,43 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { AdminPageLayout } from '@/shared/ui/admin/AdminPageLayout';
 import { AdminTable, AdminTableActions } from '@/shared/ui/admin/AdminTable';
+import { useAdminCrud } from '@/shared/hooks/useAdminCrud';
 
 export default function AdminSkill() {
-  const [skills, setSkills] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [, setIsProcessing] = useState(false);
+  const {
+    items: skills, loading, toastMessage, showModal, setShowModal, editingItem,
+    handleSave, handleDelete, openAddModal, openEditModal
+  } = useAdminCrud({
+    apiUrl: '/api/skills',
+    dataKey: 'skills',
+    formatPayload: (formData) => ({
+      ...formData,
+      id: formData.id || formData.title.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+      connections: formData.connections.split(',').map((s: string) => s.trim()).filter(Boolean)
+    })
+  });
+
   const [currentPage, setCurrentPage] = useState(1);
-  const router = useRouter();
-  const [toastMessage, setToastMessage] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
-  
-  const [showModal, setShowModal] = useState(false);
-  const [editingItem, setEditingItem] = useState<any | null>(null);
   const [formData, setFormData] = useState({
     id: '', title: '', category: '', level: '', details: '', x: 0, y: 0, connections: ''
   });
 
-  const fetchData = async () => {
-    try {
-      const res = await fetch('/api/skills');
-      const data = await res.json();
-      setSkills(data.data?.skills || data.skills || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : [])));
-    } catch {}
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    if (localStorage.getItem('isAdmin') !== 'true') {
-      router.push('/admin/login');
-      return;
-    }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchData();
-  }, [router]);
-
-  const handleSave = async (e: React.FormEvent) => {
-    setIsProcessing(true);
-    e.preventDefault();
-    try {
-      const url = editingItem ? `/api/skills/${editingItem.id}` : '/api/skills';
-      const method = editingItem ? 'PATCH' : 'POST';
-      
-      const payload = {
-        ...formData,
-        id: formData.id || formData.title.toLowerCase().replace(/[^a-z0-9]/g, '-'),
-        connections: formData.connections.split(',').map(s => s.trim()).filter(Boolean)
-      };
-      
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-        body: JSON.stringify(payload)
-      });
-      
-      if (!res.ok) throw new Error('Failed to save');
-      
-      setToastMessage({ message: `Successfully ${editingItem ? 'updated' : 'added'} skill node`, type: 'success' });
-      setShowModal(false);
-      setEditingItem(null);
-      fetchData();
-    } catch {
-      setToastMessage({ message: 'Failed to save skill node', type: 'error' });
-    }
-    setIsProcessing(false);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
-
-  const handleDelete = async (id: string) => {
-    setIsProcessing(true);
-    if (!confirm('Are you sure you want to delete this node?')) return;
-    
-    try {
-      const res = await fetch(`/api/skills/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
-      if (!res.ok) throw new Error('Failed to delete');
-      
-      setToastMessage({ message: 'Successfully deleted skill node', type: 'success' });
-      fetchData();
-    } catch {
-      setToastMessage({ message: 'Failed to delete skill node', type: 'error' });
-    }
-    setIsProcessing(false);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
-
-  const openAddModal = () => {
-    setEditingItem(null);
-    setFormData({ id: '', title: '', category: 'Core Backend', level: '', details: '', x: 0, y: 0, connections: '' });
-    setShowModal(true);
-  };
-
-  const openEditModal = (item: any) => {
-    setEditingItem(item);
-    setFormData({
-      id: item.id || '',
-      title: item.title || '',
-      category: item.category || '',
-      level: item.level || '',
-      details: item.details || '',
-      x: item.x || 0,
-      y: item.y || 0,
-      connections: (item.data?.connections || item.connections || (Array.isArray(item.data) ? item.data : (Array.isArray(item) ? item : []))).join(', ')
-    });
-    setShowModal(true);
-  };
+  const onAdd = () => openAddModal({ id: '', title: '', category: 'Core Backend', level: '', details: '', x: 0, y: 0, connections: '' }, setFormData);
+  const onEdit = (item: any) => openEditModal(item, (data) => setFormData({
+    id: data.id || '',
+    title: data.title || '',
+    category: data.category || '',
+    level: data.level || '',
+    details: data.details || '',
+    x: data.x || 0,
+    y: data.y || 0,
+    connections: (data.data?.connections || data.connections || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []))).join(', ')
+  }));
 
   const formContent = (
-    <form onSubmit={handleSave} className="space-y-4">
+    <form onSubmit={(e) => { e.preventDefault(); handleSave(formData); }} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
                 <label className="text-xs font-mono text-neu-text-muted">ID (lowercase, no spaces)</label>
@@ -159,7 +88,7 @@ export default function AdminSkill() {
       activePath="/admin/skill"
       title="Interactive Skill Tree"
       loading={loading}
-      onAdd={openAddModal}
+      onAdd={onAdd}
       addButtonLabel="Add Node"
       toastMessage={toastMessage}
       showModal={showModal}
@@ -187,7 +116,7 @@ export default function AdminSkill() {
             <td className="px-6 py-4">
               <div className="text-xs text-neu-text-muted font-mono">X: {w.x} | Y: {w.y}</div>
             </td>
-            <AdminTableActions onEdit={() => openEditModal(w)} onDelete={() => handleDelete(w.id)} />
+            <AdminTableActions onEdit={() => onEdit(w)} onDelete={() => handleDelete(w.id)} />
           </>
         )}
       />

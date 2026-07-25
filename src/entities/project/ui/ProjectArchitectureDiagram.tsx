@@ -290,7 +290,6 @@ export default function ProjectArchitectureDiagram({
 
   useEffect(() => {
     if (hasImage) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(false);
       return;
     }
@@ -305,7 +304,7 @@ export default function ProjectArchitectureDiagram({
         setLoading(false);
       })
       .catch((err) => {
-        console.error(err);
+        console.error(err); // NOSONAR: We explicitly log this network error for admin debugging
         setLoading(false);
       });
   }, [project?.id, hasImage]);

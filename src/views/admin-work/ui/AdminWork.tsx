@@ -1,112 +1,44 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { AdminPageLayout } from '@/shared/ui/admin/AdminPageLayout';
 import { AdminTable } from '@/shared/ui/admin/AdminTable';
+import { useAdminCrud } from '@/shared/hooks/useAdminCrud';
 import { Edit, Trash2, Eye, X } from 'lucide-react';
 
 export default function AdminWork() {
-  const [workExperiences, setWorkExperiences] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [, setIsProcessing] = useState(false);
+  const {
+    items: workExperiences, loading, toastMessage, showModal, setShowModal, editingItem: editingWork,
+    handleSave, handleDelete, openAddModal, openEditModal
+  } = useAdminCrud({
+    apiUrl: '/api/work',
+    dataKey: 'workExperience',
+    formatPayload: (formData) => ({
+      ...formData,
+      bullets: formData.bullets.split('\\n').map((b: string) => b.trim()).filter(Boolean)
+    })
+  });
+
   const [currentPage, setCurrentPage] = useState(1);
-  const router = useRouter();
-  const [toastMessage, setToastMessage] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
-  
-  const [showModal, setShowModal] = useState(false);
-  const [editingWork, setEditingWork] = useState<any | null>(null);
   const [formData, setFormData] = useState({
     years: '', duration: '', company: '', role: '', stack: '', teaser: '', fullImpact: '', bullets: ''
   });
   const [viewingWork, setViewingWork] = useState<any | null>(null);
 
-  const fetchWork = async () => {
-    try {
-      const res = await fetch('/api/work');
-      const data = await res.json();
-      setWorkExperiences(data.data?.workExperience || data.workExperience || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : [])));
-    } catch {}
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    if (localStorage.getItem('isAdmin') !== 'true') {
-      router.push('/admin/login');
-      return;
-    }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchWork();
-  }, [router]);
-
-  const handleSave = async (e: React.FormEvent) => {
-    setIsProcessing(true);
-    e.preventDefault();
-    try {
-      const url = editingWork ? `/api/work/${editingWork.id}` : '/api/work';
-      const method = editingWork ? 'PATCH' : 'POST';
-      
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-        body: JSON.stringify({
-          ...formData,
-          bullets: formData.bullets.split('\\n').map(b => b.trim()).filter(Boolean)
-        })
-      });
-      
-      if (!res.ok) throw new Error('Failed to save');
-      
-      setToastMessage({ message: `Successfully ${editingWork ? 'updated' : 'added'} experience`, type: 'success' });
-      setShowModal(false);
-      setEditingWork(null);
-      fetchWork();
-    } catch {
-      setToastMessage({ message: 'Failed to save experience', type: 'error' });
-    }
-    setIsProcessing(false);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
-
-  const handleDelete = async (id: string) => {
-    setIsProcessing(true);
-    if (!confirm('Are you sure you want to delete this experience?')) return;
-    
-    try {
-      const res = await fetch(`/api/work/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
-      if (!res.ok) throw new Error('Failed to delete');
-      
-      setToastMessage({ message: 'Successfully deleted experience', type: 'success' });
-      fetchWork();
-    } catch {
-      setToastMessage({ message: 'Failed to delete experience', type: 'error' });
-    }
-    setIsProcessing(false);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
-
-  const openAddModal = () => {
-    setFormData({ years: '', duration: '', company: '', role: '', stack: '', teaser: '', fullImpact: '', bullets: '' });
-    setShowModal(true);
-  };
-
-  const openEditModal = (work: any) => {
-    setEditingWork(work);
-    setFormData({
-      years: work.years || '',
-      duration: work.duration || '',
-      company: work.company || '',
-      role: work.role || '',
-      stack: work.stack || '',
-      teaser: work.teaser || '',
-      fullImpact: work.fullImpact || '',
-      bullets: Array.isArray(work.bullets) ? work.bullets.join('\\n') : (work.bullets || '')
-    });
-    setShowModal(true);
-  };
+  const onAdd = () => openAddModal({ years: '', duration: '', company: '', role: '', stack: '', teaser: '', fullImpact: '', bullets: '' }, setFormData);
+  const onEdit = (work: any) => openEditModal(work, (data) => setFormData({
+    years: data.years || '',
+    duration: data.duration || '',
+    company: data.company || '',
+    role: data.role || '',
+    stack: data.stack || '',
+    teaser: data.teaser || '',
+    fullImpact: data.fullImpact || '',
+    bullets: Array.isArray(data.bullets) ? data.bullets.join('\\n') : (data.bullets || '')
+  }));
 
   const formContent = (
-    <form onSubmit={handleSave} className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+    <form onSubmit={(e) => { e.preventDefault(); handleSave(formData); }} className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
         <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
                 <label className="text-xs font-mono text-neu-text-muted">Role</label>
@@ -155,7 +87,7 @@ export default function AdminWork() {
       activePath="/admin/work"
       title="Work Experience Management"
       loading={loading}
-      onAdd={openAddModal}
+      onAdd={onAdd}
       addButtonLabel="Add New"
       toastMessage={toastMessage}
       showModal={showModal}
@@ -184,7 +116,7 @@ export default function AdminWork() {
               <button onClick={() => setViewingWork(w)} className="p-2 rounded-xl glass-card text-neu-text hover:scale-105 active:scale-95 transition-all" title="View Detail">
                 <Eye size={16} />
               </button>
-              <button onClick={() => openEditModal(w)} className="p-2 rounded-xl glass-card text-neu-accent hover:scale-105 active:scale-95 transition-all" title="Edit">
+              <button onClick={() => onEdit(w)} className="p-2 rounded-xl glass-card text-neu-accent hover:scale-105 active:scale-95 transition-all" title="Edit">
                 <Edit size={16} />
               </button>
               <button onClick={() => handleDelete(w.id)} className="p-2 rounded-xl glass-card text-red-500 hover:scale-105 active:scale-95 transition-all" title="Delete">
@@ -256,7 +188,7 @@ export default function AdminWork() {
               </button>
               <button onClick={() => {
                 setViewingWork(null);
-                openEditModal(viewingWork);
+                onEdit(viewingWork);
               }} className="px-6 py-2.5 rounded-xl font-bold text-white bg-neu-accent shadow-neu hover:shadow-neu-sm active:scale-95 transition-all text-sm flex items-center gap-2">
                 <Edit size={16} /> Edit Experience
               </button>

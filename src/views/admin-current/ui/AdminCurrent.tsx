@@ -1,105 +1,28 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { AdminPageLayout } from '@/shared/ui/admin/AdminPageLayout';
 import { AdminTable, AdminTableActions } from '@/shared/ui/admin/AdminTable';
+import { useAdminCrud } from '@/shared/hooks/useAdminCrud';
 
 export default function AdminCurrent() {
-  const [items, setItems] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [, setIsProcessing] = useState(false);
+  const {
+    items, loading, toastMessage, showModal, setShowModal, editingItem,
+    handleSave, handleDelete, openAddModal, openEditModal
+  } = useAdminCrud({ apiUrl: '/api/current', dataKey: 'current' });
+
   const [currentPage, setCurrentPage] = useState(1);
-  const router = useRouter();
-  const [toastMessage, setToastMessage] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
-  
-  const [showModal, setShowModal] = useState(false);
-  const [editingItem, setEditingItem] = useState<any | null>(null);
   const [formData, setFormData] = useState({
     title: '', icon: 'PenTool', description: '', link: '', linkText: ''
   });
 
-  const fetchData = async () => {
-    try {
-      const res = await fetch('/api/current');
-      const data = await res.json();
-      setItems(data.data?.current || data.current || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : [])));
-    } catch {}
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    if (localStorage.getItem('isAdmin') !== 'true') {
-      router.push('/admin/login');
-      return;
-    }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchData();
-  }, [router]);
-
-  const handleSave = async (e: React.FormEvent) => {
-    setIsProcessing(true);
-    e.preventDefault();
-    try {
-      const url = editingItem ? `/api/current/${editingItem.id}` : '/api/current';
-      const method = editingItem ? 'PATCH' : 'POST';
-      
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-        body: JSON.stringify(formData)
-      });
-      
-      if (!res.ok) throw new Error('Failed to save');
-      
-      setToastMessage({ message: `Successfully ${editingItem ? 'updated' : 'added'} current focus`, type: 'success' });
-      setShowModal(false);
-      setEditingItem(null);
-      fetchData();
-    } catch {
-      setToastMessage({ message: 'Failed to save item', type: 'error' });
-    }
-    setIsProcessing(false);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
-
-  const handleDelete = async (id: string) => {
-    setIsProcessing(true);
-    if (!confirm('Are you sure you want to delete this item?')) return;
-    
-    try {
-      const res = await fetch(`/api/current/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
-      if (!res.ok) throw new Error('Failed to delete');
-      
-      setToastMessage({ message: 'Successfully deleted item', type: 'success' });
-      fetchData();
-    } catch {
-      setToastMessage({ message: 'Failed to delete item', type: 'error' });
-    }
-    setIsProcessing(false);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
-
-  const openAddModal = () => {
-    setEditingItem(null);
-    setFormData({ title: '', icon: 'PenTool', description: '', link: '', linkText: '' });
-    setShowModal(true);
-  };
-
-  const openEditModal = (item: any) => {
-    setEditingItem(item);
-    setFormData({
-      title: item.title || '',
-      icon: item.icon || 'PenTool',
-      description: item.description || '',
-      link: item.link || '',
-      linkText: item.linkText || ''
-    });
-    setShowModal(true);
-  };
+  const onAdd = () => openAddModal({ title: '', icon: 'PenTool', description: '', link: '', linkText: '' }, setFormData);
+  const onEdit = (item: any) => openEditModal(item, (data) => setFormData({
+    title: data.title || '', icon: data.icon || 'PenTool', description: data.description || '', link: data.link || '', linkText: data.linkText || ''
+  }));
 
   const formContent = (
-    <form onSubmit={handleSave} className="space-y-4">
+    <form onSubmit={(e) => { e.preventDefault(); handleSave(formData); }} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
                 <label className="text-xs font-mono text-neu-text-muted">Title</label>
@@ -136,7 +59,7 @@ export default function AdminCurrent() {
       activePath="/admin/current"
       title="Right Now Focus"
       loading={loading}
-      onAdd={openAddModal}
+      onAdd={onAdd}
       addButtonLabel="Add Focus"
       toastMessage={toastMessage}
       showModal={showModal}
@@ -161,7 +84,7 @@ export default function AdminCurrent() {
               <div className="text-xs font-bold text-neu-accent">{w.linkText}</div>
               <div className="text-xs text-neu-text-muted">{w.link}</div>
             </td>
-            <AdminTableActions onEdit={() => openEditModal(w)} onDelete={() => handleDelete(w.id)} />
+            <AdminTableActions onEdit={() => onEdit(w)} onDelete={() => handleDelete(w.id)} />
           </>
         )}
       />
