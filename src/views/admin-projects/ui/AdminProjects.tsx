@@ -134,7 +134,7 @@ export default function AdminProjects() {
         <div className="col-span-full space-y-1">
           <label className="text-xs font-mono text-neu-accent font-bold flex items-center gap-1.5">⚡ Architecture Diagram (Excalidraw Export)</label>
           <input value={formData.architectureImage} onChange={e => setFormData({...formData, architectureImage: e.target.value})} placeholder="/assets/architecture.svg or /assets/diagram.png" className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-neu-accent/20" />
-          <p className="text-[10px] text-neu-text-muted font-mono pl-1">Export your Excalidraw diagram as SVG/PNG, place it in /public/assets/, then paste the path here.</p>
+          <p className="text-xs text-neu-text-muted font-mono pl-1">Export your Excalidraw diagram as SVG/PNG, place it in /public/assets/, then paste the path here.</p>
         </div>
         <div className="space-y-1">
           <label className="text-xs font-mono text-neu-text-muted">Demo URL (Optional)</label>
@@ -171,7 +171,7 @@ export default function AdminProjects() {
                 <input placeholder="Date" value={phase.date} onChange={e => updatePhase(i, 'date', e.target.value)} className="w-full px-3 py-2 rounded-lg glass-card-inset text-xs outline-none focus:border-neu-accent border border-transparent" />
                 <input placeholder="Title" value={phase.title} onChange={e => updatePhase(i, 'title', e.target.value)} className="w-full px-3 py-2 rounded-lg glass-card-inset text-xs outline-none focus:border-neu-accent border border-transparent" />
               </div>
-              <textarea placeholder="Description" value={phase.description} onChange={e => updatePhase(i, 'description', e.target.value)} className="w-full px-3 py-2 rounded-lg glass-card-inset text-xs outline-none focus:border-neu-accent border border-transparent min-h-[60px]" />
+              <textarea placeholder="Description" value={phase.description} onChange={e => updatePhase(i, 'description', e.target.value)} className="w-full px-3 py-2 rounded-lg glass-card-inset text-xs outline-none focus:border-neu-accent border border-transparent min-h-16" />
             </div>
           ))}
         </div>
@@ -179,7 +179,7 @@ export default function AdminProjects() {
 
       <div className="space-y-1">
         <label className="text-xs font-mono text-neu-text-muted">Markdown Content</label>
-        <textarea required value={formData.markdown} onChange={e => setFormData({...formData, markdown: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-mono outline-none focus:border-neu-accent border border-transparent min-h-[200px]" />
+        <textarea required value={formData.markdown} onChange={e => setFormData({...formData, markdown: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-mono outline-none focus:border-neu-accent border border-transparent min-h-52" />
       </div>
 
       <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
@@ -221,7 +221,7 @@ export default function AdminProjects() {
                 <tr key={proj.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                   <td className="p-4">
                     <div className="font-bold">{proj.title}</div>
-                    <div className="text-xs text-neu-text-muted truncate max-w-[250px]">{proj.subtitle}</div>
+                    <div className="text-xs text-neu-text-muted truncate max-w-64">{proj.subtitle}</div>
                   </td>
                   <td className="p-4">
                     <span className="px-2 py-1 rounded-md glass-card-inset text-xs font-mono text-neu-accent">{proj.category}</span>

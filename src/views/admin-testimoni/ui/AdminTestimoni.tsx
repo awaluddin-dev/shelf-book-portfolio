@@ -104,7 +104,7 @@ export default function AdminTestimoni() {
                   </td>
                   <td className="px-6 py-4">
                     <span className={cn(
-                      "px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider font-bold",
+                      "px-2.5 py-1 rounded-full text-xs font-mono uppercase tracking-wider font-bold",
                       t.status === 'pending' ? "bg-amber-500/20 text-amber-600 dark:text-amber-400" :
                       t.status === 'accepted' || !t.status ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400" :
                       "bg-red-500/20 text-red-600 dark:text-red-400"
@@ -190,7 +190,7 @@ export default function AdminTestimoni() {
                 <h3 className="text-lg font-bold font-display">{selectedTestimonial.name}</h3>
                 <p className="text-xs text-neu-text-muted">{selectedTestimonial.role} @ {selectedTestimonial.company}</p>
                 {selectedTestimonial.url && (
-                  <a href={selectedTestimonial.url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-mono text-neu-accent hover:underline break-all">
+                  <a href={selectedTestimonial.url} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-neu-accent hover:underline break-all">
                     {selectedTestimonial.url}
                   </a>
                 )}

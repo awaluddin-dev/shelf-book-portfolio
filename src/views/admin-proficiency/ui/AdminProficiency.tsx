@@ -66,11 +66,11 @@ export default function AdminProficiency() {
                         </button>
                         <div className="grid grid-cols-2 gap-3 mb-3">
                             <div className="space-y-1">
-                                <label className="text-[10px] font-mono text-neu-text-muted">Skill Name</label>
+                                <label className="text-xs font-mono text-neu-text-muted">Skill Name</label>
                                 <input required value={skill.name} onChange={e => handleUpdateSkill(index, 'name', e.target.value)} className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50" placeholder="Node.js" />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-[10px] font-mono text-neu-text-muted">Status</label>
+                                <label className="text-xs font-mono text-neu-text-muted">Status</label>
                                 <select value={skill.status} onChange={e => handleUpdateSkill(index, 'status', e.target.value)} className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50">
                                     <option value="Production-ready">Production-ready</option>
                                     <option value="In Use">In Use</option>
@@ -79,7 +79,7 @@ export default function AdminProficiency() {
                             </div>
                         </div>
                         <div className="space-y-1">
-                            <label className="text-[10px] font-mono text-neu-text-muted">Subtext (Experience / Context)</label>
+                            <label className="text-xs font-mono text-neu-text-muted">Subtext (Experience / Context)</label>
                             <input required value={skill.subtext} onChange={e => handleUpdateSkill(index, 'subtext', e.target.value)} className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50" placeholder="Production · 3+ yrs · ..." />
                         </div>
                     </div>

@@ -300,22 +300,22 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                 >
                   <div className="min-w-[740px] flex flex-col pt-6">
                     <div className="flex w-full">
-                      <div className="relative text-[9px] font-mono text-neu-text-muted w-8 pr-2 select-none flex-shrink-0 h-[146px] sm:h-[136px]">
-                        <span className="absolute top-[55px] sm:top-[53px] left-3 leading-[12px] sm:leading-[10px]">
+                      <div className="relative text-xs font-mono text-neu-text-muted w-8 pr-2 select-none flex-shrink-0 h-36 sm:h-36">
+                        <span className="absolute top-14 sm:top-14 left-3 leading-[12px] sm:leading-[10px]">
                           Mon
                         </span>
-                        <span className="absolute top-[85px] sm:top-[79px] left-3 leading-[12px] sm:leading-[10px]">
+                        <span className="absolute top-20 sm:top-20 left-3 leading-[12px] sm:leading-[10px]">
                           Wed
                         </span>
-                        <span className="absolute top-[115px] sm:top-[105px] left-3 leading-[12px] sm:leading-[10px]">
+                        <span className="absolute top-28 sm:top-28 left-3 leading-[12px] sm:leading-[10px]">
                           Fri
                         </span>
                       </div>
-                      <div className="flex-1 flex gap-[3px] justify-between items-stretch">
+                      <div className="flex-1 flex gap-1 justify-between items-stretch">
                         {(monthsData || []).map(
                           (monthGroup: any, mIdx: number) => (
-                            <div key={mIdx} className="flex shrink-0 gap-[3px]">
-                              <div className="flex gap-[3px] shrink-0">
+                            <div key={mIdx} className="flex shrink-0 gap-1">
+                              <div className="flex gap-1 shrink-0">
                                 {(monthGroup.weeks || []).map(
                                   (week: any[], wIdxInMonth: number) => {
                                     const isColInHoveredMonth =
@@ -327,7 +327,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                                       <div
                                         key={wIdxInMonth}
                                         className={cn(
-                                          "flex flex-col gap-[3px] shrink-0 relative pt-10 px-[1px] rounded-md transition-all duration-300",
+                                          "flex flex-col gap-1 shrink-0 relative pt-10 px-px rounded-md transition-all duration-300",
                                           isColInHoveredMonth
                                             ? "bg-neu-accent/[0.04] dark:bg-neu-accent/[0.08] ring-1 ring-neu-accent/15 scale-[1.02] z-10"
                                             : hoveredMonth !== null
@@ -346,7 +346,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                                               setHoveredMonth(null)
                                             }
                                             className={cn(
-                                              "absolute top-0 left-0 text-[10px] sm:text-[10px] font-mono text-neu-text-muted whitespace-nowrap cursor-pointer transition-all duration-200 hover:text-neu-accent select-none",
+                                              "absolute top-0 left-0 text-xs sm:text-xs font-mono text-neu-text-muted whitespace-nowrap cursor-pointer transition-all duration-200 hover:text-neu-accent select-none",
                                               hoveredMonth ===
                                                 monthGroup.monthNum
                                                 ? "text-neu-accent font-bold"
@@ -408,7 +408,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                                               >
                                                 <div
                                                   className={cn(
-                                                    "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 rounded-lg bg-black/95 dark:bg-neutral-900 text-white text-[9px] font-mono whitespace-nowrap transition-all duration-150 z-50 shadow-lg border border-white/10 pointer-events-none",
+                                                    "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 rounded-lg bg-black/95 dark:bg-neutral-900 text-white text-xs font-mono whitespace-nowrap transition-all duration-150 z-50 shadow-lg border border-white/10 pointer-events-none",
                                                     activeTooltipDate ===
                                                       day.date
                                                       ? "opacity-100 translate-y-0 scale-100"
@@ -444,11 +444,11 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                 </div>
 
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mt-6 pt-4 border-t border-gray-300/10 dark:border-gray-700/10 select-none">
-                  <div className="flex flex-wrap items-center gap-1.5 lg:ml-auto text-[10px] font-mono text-neu-text-muted bg-neu-bg/50 shadow-neu-inset p-2 rounded-xl border border-white/5 w-fit">
+                  <div className="flex flex-wrap items-center gap-1.5 lg:ml-auto text-xs font-mono text-neu-text-muted bg-neu-bg/50 shadow-neu-inset p-2 rounded-xl border border-white/5 w-fit">
                     {selectedLevelFilter !== null ? (
                       <button
                         onClick={() => setSelectedLevelFilter(null)}
-                        className="text-[10px] font-mono text-neu-accent hover:underline cursor-pointer flex items-center gap-1 active:scale-95 transition-transform mr-2"
+                        className="text-xs font-mono text-neu-accent hover:underline cursor-pointer flex items-center gap-1 active:scale-95 transition-transform mr-2"
                       >
                         ✕ Clear Filter
                       </button>
@@ -500,12 +500,12 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                       Most Used Languages
                     </h3>
                   </div>
-                  <span className="text-[10px] font-mono text-neu-text-muted bg-neu-bg/50 px-2 py-1 rounded-md">
+                  <span className="text-xs font-mono text-neu-text-muted bg-neu-bg/50 px-2 py-1 rounded-md">
                     Live from GitHub
                   </span>
                 </div>
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-6">
-                  <div className="w-full md:w-1/3 flex justify-center items-center h-[240px] relative">
+                  <div className="w-full md:w-1/3 flex justify-center items-center h-60 relative">
                     <PieChart width={240} height={240}>
                       <Pie
                         data={languageData}
@@ -565,7 +565,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                         )}
                       >
                         {lang.percentage >= languageData[0].percentage && (
-                          <div className="absolute -top-2 -right-2 bg-neu-accent text-white font-mono text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm z-10 flex items-center gap-1">
+                          <div className="absolute -top-2 -right-2 bg-neu-accent text-white font-mono text-xs font-bold px-1.5 py-0.5 rounded shadow-sm z-10 flex items-center gap-1">
                             TOP 1
                           </div>
                         )}
@@ -580,7 +580,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                             </span>
                           </div>
                         </div>
-                        <span className="text-[10px] font-mono text-neu-text-muted">
+                        <span className="text-xs font-mono text-neu-text-muted">
                           {lang.percentage.toFixed(1)}%
                         </span>
                       </motion.div>
@@ -600,7 +600,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
               whileInView="show"
               viewport={{ once: true, margin: "-100px" }}
             >
-              <div className="hidden md:grid grid-cols-12 gap-4 px-6 pb-4 border-b border-gray-300/20 dark:border-zinc-800/20 text-[10px] font-mono font-bold tracking-[0.2em] text-neu-text-muted uppercase">
+              <div className="hidden md:grid grid-cols-12 gap-4 px-6 pb-4 border-b border-gray-300/20 dark:border-zinc-800/20 text-xs font-mono font-bold tracking-[0.2em] text-neu-text-muted uppercase">
                 <div className="col-span-3">Year / Duration</div>
                 <div className="col-span-3">Company</div>
                 <div className="col-span-4">Role & Tech Stack</div>
@@ -640,7 +640,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                       )}
                     >
                       {isPresent && (
-                        <div className="absolute -top-2 -left-2 bg-neu-accent text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1">
+                        <div className="absolute -top-2 -left-2 bg-neu-accent text-white font-mono text-xs font-bold px-2 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />{" "}
                           CURRENT
                         </div>
@@ -654,7 +654,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                         >
                           {job.years}
                         </span>
-                        <span className="text-[10px] font-mono text-neu-text-muted mt-0.5 uppercase tracking-wider">
+                        <span className="text-xs font-mono text-neu-text-muted mt-0.5 uppercase tracking-wider">
                           {job.duration}
                         </span>
                       </div>
@@ -675,7 +675,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                         </span>
                       </div>
                       <div className="col-span-2 text-right hidden md:block">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-mono font-bold bg-neu-accent/10 text-neu-accent border border-neu-accent/15 tracking-tight">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-neu-accent/10 text-neu-accent border border-neu-accent/15 tracking-tight">
                           ✦ {job.teaser}
                         </span>
                       </div>
@@ -702,7 +702,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                           <div className="px-6 pb-6 pt-2 bg-white/20 dark:bg-zinc-800/10 rounded-b-2xl border-t border-gray-300/10 dark:border-zinc-800/10">
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-4">
                               <div className="lg:col-span-4 p-4 rounded-xl bg-neu-bg border border-white/10 dark:border-zinc-800/50 shadow-neu-inset flex flex-col justify-center">
-                                <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-neu-accent mb-1.5 flex items-center gap-1">
+                                <span className="text-xs font-mono font-bold uppercase tracking-widest text-neu-accent mb-1.5 flex items-center gap-1">
                                   <Sparkles
                                     size={12}
                                     className="text-neu-accent animate-pulse"
@@ -714,7 +714,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                                 </p>
                               </div>
                               <div className="lg:col-span-8">
-                                <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-neu-text-muted mb-2 block">
+                                <span className="text-xs font-mono font-bold uppercase tracking-widest text-neu-text-muted mb-2 block">
                                   Core Contributions & Technical Delivery
                                 </span>
                                 <ul className="space-y-2.5">

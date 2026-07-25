@@ -165,7 +165,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                   </option>
                 </select>
                 <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-neu-text-muted">
-                  <span className="text-[9px]">▼</span>
+                  <span className="text-xs">▼</span>
                 </div>
               </div>
 
@@ -310,7 +310,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                     }}
                   />
                   <div
-                    className="relative z-10 flex-shrink-0 flex items-center justify-center w-[280px] md:w-[320px] h-[340px] md:h-[400px]"
+                    className="relative z-10 flex-shrink-0 flex items-center justify-center w-72 md:w-80 h-80 md:h-96"
                     style={{ perspective: "1200px" }}
                   >
                     <motion.div
@@ -345,7 +345,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                     >
                       <div className="absolute left-[12px] top-0 bottom-0 w-[4px] bg-gradient-to-r from-black/20 to-transparent z-40 pointer-events-none" />
                       <div
-                        className="absolute right-[-8px] top-[4px] bottom-[4px] w-[10px] bg-stone-100 dark:bg-zinc-800 border-y border-r border-stone-300 dark:border-zinc-700/60 rounded-r shadow-md z-10"
+                        className="absolute right-[-8px] top-1 bottom-1 w-2.5 bg-stone-100 dark:bg-zinc-800 border-y border-r border-stone-300 dark:border-zinc-700/60 rounded-r shadow-md z-10"
                         style={{
                           transform: "skewY(6deg)",
                           backgroundImage:
@@ -354,7 +354,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                       />
                       <div
                         className={cn(
-                          "w-[200px] md:w-[240px] h-[280px] md:h-[340px] rounded-r-xl shadow-2xl relative flex flex-col justify-between p-6 border-y border-r border-white/20 overflow-hidden z-20",
+                          "w-52 md:w-60 h-72 md:h-80 rounded-r-xl shadow-2xl relative flex flex-col justify-between p-6 border-y border-r border-white/20 overflow-hidden z-20",
                           !(
                             focusedProject.coverColor ||
                             focusedProject.spineColor
@@ -387,10 +387,10 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                         <div className="absolute inset-0 bg-gradient-to-tr from-black/15 via-transparent to-white/10 pointer-events-none z-10" />
                         <div className="relative z-20 flex flex-col h-full justify-between">
                           <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                            <span className="text-[9px] font-mono font-bold tracking-widest text-white/70 uppercase">
+                            <span className="text-xs font-mono font-bold tracking-widest text-white/70 uppercase">
                               {focusedProject.category}
                             </span>
-                            <span className="text-[8px] font-mono text-white/50">
+                            <span className="text-xs font-mono text-white/50">
                               {focusedProject.date}
                             </span>
                           </div>
@@ -398,16 +398,16 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                             <h4 className="text-lg md:text-xl font-display font-black text-white tracking-tight leading-snug drop-shadow-md">
                               {focusedProject.title}
                             </h4>
-                            <p className="text-[10px] md:text-xs text-white/80 font-mono mt-1.5 font-medium italic line-clamp-2 leading-relaxed">
+                            <p className="text-xs md:text-xs text-white/80 font-mono mt-1.5 font-medium italic line-clamp-2 leading-relaxed">
                               {focusedProject.subtitle}
                             </p>
                           </div>
                           <div className="flex items-center justify-between pt-2 border-t border-white/15">
                             <div className="flex flex-col">
-                              <span className="text-[7px] font-mono text-white/40 tracking-wider uppercase">
+                              <span className="text-xs font-mono text-white/40 tracking-wider uppercase">
                                 Author
                               </span>
-                              <span className="text-[9px] font-mono font-bold text-white/80 leading-none">
+                              <span className="text-xs font-mono font-bold text-white/80 leading-none">
                                 {pd.heroConfig?.name?.toUpperCase() ||
                                   "AWALUDDIN"}
                               </span>

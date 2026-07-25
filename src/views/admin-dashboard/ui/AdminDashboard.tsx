@@ -302,7 +302,7 @@ export default function AdminDashboard() {
                       <div className="space-y-3">
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-1">
-                            <label className="text-[10px] font-mono text-neu-text-muted">
+                            <label className="text-xs font-mono text-neu-text-muted">
                               Value (e.g. 5+ Years)
                             </label>
                             <input
@@ -314,7 +314,7 @@ export default function AdminDashboard() {
                             />
                           </div>
                           <div className="space-y-1">
-                            <label className="text-[10px] font-mono text-neu-text-muted">
+                            <label className="text-xs font-mono text-neu-text-muted">
                               Label (e.g. EXPERIENCE)
                             </label>
                             <input
@@ -328,7 +328,7 @@ export default function AdminDashboard() {
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-1">
-                            <label className="text-[10px] font-mono text-neu-text-muted">
+                            <label className="text-xs font-mono text-neu-text-muted">
                               Icon Name
                             </label>
                             <select

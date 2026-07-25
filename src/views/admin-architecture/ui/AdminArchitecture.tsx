@@ -39,7 +39,7 @@ export default function AdminArchitecture() {
         <input placeholder="Order (e.g. 0)" type="number" value={formData.order} onChange={e => setFormData({...formData, order: parseInt(e.target.value) || 0})} className="w-20 px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
       </div>
       <input placeholder="Title (e.g. NestJS Gateway)" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
-      <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none min-h-[100px]" />
+      <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none min-h-24" />
       <input placeholder="KPI/Metrics (e.g. Response: <12ms)" value={formData.metrics} onChange={e => setFormData({...formData, metrics: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
     </>
   );
@@ -83,7 +83,7 @@ export default function AdminArchitecture() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-mono bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded text-neu-text-muted">{item.name}</span>
+                      <span className="text-xs font-mono bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded text-neu-text-muted">{item.name}</span>
                       <h3 className="font-bold text-lg text-neu-accent">{item.title}</h3>
                     </div>
                     <p className="font-medium text-neu-text mb-2 text-sm">{item.description}</p>
@@ -108,7 +108,7 @@ export default function AdminArchitecture() {
             </div>
           </div>
         ) : (
-          <button onClick={() => {setIsEditing({ id: 'new' }); setFormData({name: '', title: '', description: '', metrics: '', order: filteredItems.length});}} className="p-6 rounded-2xl glass-card-inset border-2 border-dashed border-gray-300 dark:border-zinc-700 flex flex-col items-center justify-center gap-3 text-neu-text-muted hover:text-neu-accent hover:border-neu-accent transition-colors cursor-pointer min-h-[200px]">
+          <button onClick={() => {setIsEditing({ id: 'new' }); setFormData({name: '', title: '', description: '', metrics: '', order: filteredItems.length});}} className="p-6 rounded-2xl glass-card-inset border-2 border-dashed border-gray-300 dark:border-zinc-700 flex flex-col items-center justify-center gap-3 text-neu-text-muted hover:text-neu-accent hover:border-neu-accent transition-colors cursor-pointer min-h-52">
             <Plus size={24} />
             <span className="font-bold text-sm">Add Architecture Node</span>
           </button>

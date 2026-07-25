@@ -137,7 +137,7 @@ function ImageView({ imageUrl }: { imageUrl: string }) {
         style={{ height: "420px" }}
       >
         {/* Hint overlay */}
-        <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-[10px] font-mono text-white/70 pointer-events-none select-none">
+        <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-xs font-mono text-white/70 pointer-events-none select-none">
           <Move size={10} /> Drag · Scroll to zoom
         </div>
 
@@ -226,7 +226,7 @@ function NodeView({
                 <h5 className="font-bold text-neu-text text-sm mb-1">
                   {node.name}
                 </h5>
-                <p className="text-[10px] font-mono text-neu-text-muted line-clamp-2">
+                <p className="text-xs font-mono text-neu-text-muted line-clamp-2">
                   {node.title}
                 </p>
 
@@ -236,7 +236,7 @@ function NodeView({
               </div>
 
               {idx < nodes.length - 1 && (
-                <div className="w-12 h-[2px] bg-neu-text-muted/30 shrink-0 relative flex items-center mx-1">
+                <div className="w-12 h-0.5 bg-neu-text-muted/30 shrink-0 relative flex items-center mx-1">
                   <div className="absolute right-0 w-2 h-2 border-t-2 border-r-2 border-neu-text-muted/30 rotate-45 transform translate-x-1" />
                 </div>
               )}
@@ -246,7 +246,7 @@ function NodeView({
       </div>
 
       {/* Hover detail panel */}
-      <div className="mt-2 p-5 rounded-2xl glass-card relative min-h-[96px] flex flex-col justify-center border border-white/5">
+      <div className="mt-2 p-5 rounded-2xl glass-card relative min-h-24 flex flex-col justify-center border border-white/5">
         {hoveredNode ? (
           <motion.div
             initial={{ opacity: 0, y: 5 }}
@@ -265,7 +265,7 @@ function NodeView({
               </p>
             </div>
             <div className="p-3 rounded-xl glass-card-inset text-center md:col-span-1 border border-white/5 flex flex-col justify-center items-center gap-1 h-full">
-              <span className="text-[9px] font-mono text-neu-text-muted block uppercase flex items-center gap-1">
+              <span className="text-xs font-mono text-neu-text-muted block uppercase flex items-center gap-1">
                 <Activity size={10} /> KPI Performance
               </span>
               <span className="text-xs font-mono font-bold text-neu-accent block">
@@ -339,7 +339,7 @@ export default function ProjectArchitectureDiagram({
           </p>
         </div>
         {hasImage && (
-          <span className="flex items-center gap-1.5 text-[10px] font-mono text-neu-accent/70 border border-neu-accent/20 px-2.5 py-1 rounded-lg bg-neu-accent/5">
+          <span className="flex items-center gap-1.5 text-xs font-mono text-neu-accent/70 border border-neu-accent/20 px-2.5 py-1 rounded-lg bg-neu-accent/5">
             <ImageIcon size={10} /> Excalidraw Export
           </span>
         )}

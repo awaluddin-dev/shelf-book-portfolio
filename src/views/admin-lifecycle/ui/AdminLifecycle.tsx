@@ -55,7 +55,7 @@ export default function AdminLifecycle() {
         <input placeholder="Order (e.g. 0)" type="number" value={formData.order} onChange={e => setFormData({...formData, order: parseInt(e.target.value) || 0})} className="w-20 px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
       </div>
       <input placeholder="Title (e.g. Initial Architecture Design)" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
-      <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none min-h-[80px]" />
+      <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none min-h-20" />
       <input placeholder="Evidence URL (e.g. https://link-to-pdf.com) - Optional" value={formData.evidentUrl || ''} onChange={e => setFormData({...formData, evidentUrl: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
     </>
   );
@@ -99,8 +99,8 @@ export default function AdminLifecycle() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-mono bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded text-neu-text-muted">{item.stage}</span>
-                      <span className="text-[10px] font-mono font-bold text-neu-accent">{item.date}</span>
+                      <span className="text-xs font-mono bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded text-neu-text-muted">{item.stage}</span>
+                      <span className="text-xs font-mono font-bold text-neu-accent">{item.date}</span>
                     </div>
                     <h3 className="font-bold text-lg text-neu-text mb-1">{item.title}</h3>
                     <p className="font-medium text-neu-text-muted text-sm">{item.description}</p>
@@ -150,7 +150,7 @@ export default function AdminLifecycle() {
               evidentUrl: '',
               order: filteredItems.length
             });
-          }} className="p-6 rounded-2xl glass-card-inset border-2 border-dashed border-gray-300 dark:border-zinc-700 flex flex-col items-center justify-center gap-3 text-neu-text-muted hover:text-neu-accent hover:border-neu-accent transition-colors cursor-pointer min-h-[200px]">
+          }} className="p-6 rounded-2xl glass-card-inset border-2 border-dashed border-gray-300 dark:border-zinc-700 flex flex-col items-center justify-center gap-3 text-neu-text-muted hover:text-neu-accent hover:border-neu-accent transition-colors cursor-pointer min-h-52">
             <Plus size={24} />
             <span className="font-bold text-sm">Add Lifecycle Phase</span>
           </button>
