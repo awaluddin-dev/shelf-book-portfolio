@@ -284,16 +284,11 @@ export default function ProjectArchitectureDiagram({
   isDark: boolean;
 }) {
   const [nodes, setNodes] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
   const hasImage = !!project?.architectureImage;
+  const [loading, setLoading] = useState(!hasImage);
 
   useEffect(() => {
-    if (hasImage) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setLoading(false);
-      return;
-    }
+    if (hasImage) return;
     fetch("/api/architecture")
       .then((res) => res.json())
       .then((data) => {
