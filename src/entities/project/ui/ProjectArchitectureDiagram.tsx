@@ -66,11 +66,20 @@ function FullscreenViewer({
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex flex-col"
       onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+          onClose();
+        }
+      }}
+      role="button"
+      tabIndex={0}
     >
       {/* Header bar */}
       <div
         className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+        role="presentation"
       >
         <span className="text-xs font-mono text-white/60 flex items-center gap-2">
           <Move size={12} /> Drag to pan • Scroll / Pinch to zoom • Click
@@ -88,6 +97,8 @@ function FullscreenViewer({
       <div
         className="flex-1 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+        role="presentation"
       >
         <TransformWrapper
           initialScale={1}
@@ -188,10 +199,8 @@ function ImageView({ imageUrl }: { imageUrl: string }) {
 // --- Legacy Node View Mode ---
 function NodeView({
   nodes,
-  projectId: _projectId,
 }: {
   nodes: any[];
-  projectId: string;
 }) {
   const [hoveredNode, setHoveredNode] = useState<any | null>(null);
 
@@ -278,24 +287,20 @@ function NodeView({
 // --- Main Component ---
 export default function ProjectArchitectureDiagram({
   project,
-  isDark: _isDark,
 }: {
   project: any;
-  isDark: boolean;
 }) {
   const [nodes, setNodes] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
   const hasImage = !!project?.architectureImage;
+  const [loading, setLoading] = useState(!hasImage);
 
   useEffect(() => {
-    if (hasImage) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setLoading(false);
-      return;
-    }
+    if (hasImage) return;
     fetch("/api/architecture")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
       .then((data) => {
         const arr = data.data || data;
         const projectNodes = (Array.isArray(arr) ? arr : [])
@@ -305,7 +310,7 @@ export default function ProjectArchitectureDiagram({
         setLoading(false);
       })
       .catch((err) => {
-        console.error(err);
+        console.error(err); // NOSONAR: We explicitly log this network error for admin debugging
         setLoading(false);
       });
   }, [project?.id, hasImage]);
@@ -345,7 +350,7 @@ export default function ProjectArchitectureDiagram({
       ) : hasImage ? (
         <ImageView imageUrl={project.architectureImage} />
       ) : (
-        <NodeView nodes={nodes} projectId={project?.id} />
+        <NodeView nodes={nodes} />
       )}
     </div>
   );

@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 
-export default function Error({
+export default function ErrorBoundary({
   error,
   reset,
 }: {
@@ -11,6 +11,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
+    // eslint-disable-next-line no-console
     console.error('Unhandled App Router Error:', error);
   }, [error]);
 
@@ -35,7 +36,7 @@ export default function Error({
 
         <div className="pt-2">
           <button
-            onClick={() => reset()}
+            onClick={reset}
             className="inline-flex items-center gap-2 text-xs font-mono font-bold px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700/50 transition-all duration-200 cursor-pointer"
           >
             <RefreshCw size={14} /> Retry Process

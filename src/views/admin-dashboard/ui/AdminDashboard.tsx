@@ -367,7 +367,7 @@ export default function AdminDashboard() {
                                   )
                                 }
                                 className="rounded bg-black/5 dark:bg-white/5 border-transparent text-neu-accent focus:ring-neu-accent"
-                              />
+                              />{" "}
                               Highlight (Savings)
                             </label>
                           </div>

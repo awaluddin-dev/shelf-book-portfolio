@@ -1,114 +1,44 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { AdminPageLayout } from '@/shared/ui/admin/AdminPageLayout';
 import { AdminTable, AdminTableActions } from '@/shared/ui/admin/AdminTable';
+import { useAdminCrud } from '@/shared/hooks/useAdminCrud';
 
 export default function AdminLearning() {
-  const [items, setItems] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [, setIsProcessing] = useState(false);
+  const {
+    items, loading, toastMessage, showModal, setShowModal, editingItem,
+    handleSave, handleDelete, openAddModal, openEditModal
+  } = useAdminCrud({ 
+    apiUrl: '/api/learning', 
+    dataKey: 'roadmap',
+    formatPayload: (formData) => ({
+      ...formData,
+      topics: formData.topics.split(',').map((s: string) => s.trim()).filter(Boolean),
+      projects: formData.projects.split(',').map((s: string) => s.trim()).filter(Boolean)
+    })
+  });
+
   const [currentPage, setCurrentPage] = useState(1);
-  const router = useRouter();
-  const [toastMessage, setToastMessage] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
-  
-  const [showModal, setShowModal] = useState(false);
-  const [editingItem, setEditingItem] = useState<any | null>(null);
   const [formData, setFormData] = useState({
     tech: '', quarter: '', status: 'Planned', icon: 'Terminal', description: '', depth: '', topics: '', projects: ''
   });
 
-  const fetchData = async () => {
-    try {
-      const res = await fetch('/api/learning');
-      const data = await res.json();
-      setItems(data.data?.roadmap || data.roadmap || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : [])));
-    } catch {}
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    if (localStorage.getItem('isAdmin') !== 'true') {
-      router.push('/admin/login');
-      return;
-    }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchData();
-  }, [router]);
-
-  const handleSave = async (e: React.FormEvent) => {
-    setIsProcessing(true);
-    e.preventDefault();
-    try {
-      const url = editingItem ? `/api/learning/${editingItem.id}` : '/api/learning';
-      const method = editingItem ? 'PATCH' : 'POST';
-      
-      const payload = {
-        ...formData,
-        topics: formData.topics.split(',').map(s => s.trim()).filter(Boolean),
-        projects: formData.projects.split(',').map(s => s.trim()).filter(Boolean)
-      };
-      
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-        body: JSON.stringify(payload)
-      });
-      
-      if (!res.ok) throw new Error('Failed to save');
-      
-      setToastMessage({ message: `Successfully ${editingItem ? 'updated' : 'added'} roadmap item`, type: 'success' });
-      setShowModal(false);
-      setEditingItem(null);
-      fetchData();
-    } catch {
-      setToastMessage({ message: 'Failed to save roadmap item', type: 'error' });
-    }
-    setIsProcessing(false);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
-
-  const handleDelete = async (id: string) => {
-    setIsProcessing(true);
-    if (!confirm('Are you sure you want to delete this item?')) return;
-    
-    try {
-      const res = await fetch(`/api/learning/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
-      if (!res.ok) throw new Error('Failed to delete');
-      
-      setToastMessage({ message: 'Successfully deleted item', type: 'success' });
-      fetchData();
-    } catch {
-      setToastMessage({ message: 'Failed to delete item', type: 'error' });
-    }
-    setIsProcessing(false);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
-
-  const openAddModal = () => {
-    setEditingItem(null);
-    setFormData({ tech: '', quarter: '', status: 'Planned', icon: 'Terminal', description: '', depth: '', topics: '', projects: '' });
-    setShowModal(true);
-  };
-
-  const openEditModal = (item: any) => {
-    setEditingItem(item);
-    setFormData({
-      tech: item.tech || '',
-      quarter: item.quarter || '',
-      status: item.status || 'Planned',
-      icon: item.icon || 'Terminal',
-      description: item.description || '',
-      depth: item.depth || '',
-      topics: (item.data?.topics || item.topics || (Array.isArray(item.data) ? item.data : (Array.isArray(item) ? item : []))).join(', '),
-      projects: (item.data?.projects || item.projects || (Array.isArray(item.data) ? item.data : (Array.isArray(item) ? item : []))).join(', ')
-    });
-    setShowModal(true);
-  };
+  const onAdd = () => openAddModal({ tech: '', quarter: '', status: 'Planned', icon: 'Terminal', description: '', depth: '', topics: '', projects: '' }, setFormData);
+  
+  const onEdit = (item: any) => openEditModal(item, (data) => setFormData({
+    tech: data.tech || '',
+    quarter: data.quarter || '',
+    status: data.status || 'Planned',
+    icon: data.icon || 'Terminal',
+    description: data.description || '',
+    depth: data.depth || '',
+    topics: (data.data?.topics || data.topics || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []))).join(', '),
+    projects: (data.data?.projects || data.projects || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []))).join(', ')
+  }));
 
   const formContent = (
-    <form onSubmit={handleSave} className="space-y-4">
+    <form onSubmit={(e) => { e.preventDefault(); handleSave(formData); }} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
                 <label className="text-xs font-mono text-neu-text-muted">Technology Name</label>
@@ -161,7 +91,7 @@ export default function AdminLearning() {
       activePath="/admin/learning"
       title="Upcoming Tech & Roadmap"
       loading={loading}
-      onAdd={openAddModal}
+      onAdd={onAdd}
       addButtonLabel="Add Tech"
       toastMessage={toastMessage}
       showModal={showModal}
@@ -185,7 +115,7 @@ export default function AdminLearning() {
             <td className="px-6 py-4">
               <div className="font-bold text-neu-text text-xs">{w.status}</div>
             </td>
-            <AdminTableActions onEdit={() => openEditModal(w)} onDelete={() => handleDelete(w.id)} />
+            <AdminTableActions onEdit={() => onEdit(w)} onDelete={() => handleDelete(w.id)} />
           </>
         )}
       />

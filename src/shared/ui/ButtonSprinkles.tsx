@@ -13,39 +13,40 @@ export function ButtonSprinkles() {
     for (let i = 0; i < numSprinkles; i++) {
       const sprinkle = document.createElement("div");
       
-      const size = Math.random() * 5 + 3; // 3px to 8px
-      const color = colors[Math.floor(Math.random() * colors.length)];
+      const random = () => crypto.getRandomValues(new Uint32Array(1))[0] / 4294967295;
+      const size = random() * 5 + 3; // 3px to 8px
+      const color = colors[Math.floor(random() * colors.length)];
       
       // Calculate random position on the perimeter
-      const p = Math.random() * perimeter;
+      const p = random() * perimeter;
       let px, py, tx, ty;
       
-      const velocity = Math.random() * 40 + 30;
+      const velocity = random() * 40 + 30;
 
       if (p < rect.width) {
         // Top edge
         px = rect.left + p;
         py = rect.top;
-        tx = (Math.random() - 0.5) * velocity;
-        ty = -(Math.random() * velocity + 10);
+        tx = (random() - 0.5) * velocity;
+        ty = -(random() * velocity + 10);
       } else if (p < rect.width + rect.height) {
         // Right edge
         px = rect.right;
         py = rect.top + (p - rect.width);
-        tx = Math.random() * velocity + 10;
-        ty = (Math.random() - 0.5) * velocity;
+        tx = random() * velocity + 10;
+        ty = (random() - 0.5) * velocity;
       } else if (p < 2 * rect.width + rect.height) {
         // Bottom edge
         px = rect.right - (p - rect.width - rect.height);
         py = rect.bottom;
-        tx = (Math.random() - 0.5) * velocity;
-        ty = Math.random() * velocity + 10;
+        tx = (random() - 0.5) * velocity;
+        ty = random() * velocity + 10;
       } else {
         // Left edge
         px = rect.left;
         py = rect.bottom - (p - 2 * rect.width - rect.height);
-        tx = -(Math.random() * velocity + 10);
-        ty = (Math.random() - 0.5) * velocity;
+        tx = -(random() * velocity + 10);
+        ty = (random() - 0.5) * velocity;
       }
 
       sprinkle.style.position = "fixed";
@@ -54,7 +55,7 @@ export function ButtonSprinkles() {
       sprinkle.style.width = `${size}px`;
       sprinkle.style.height = `${size}px`;
       sprinkle.style.backgroundColor = color;
-      sprinkle.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+      sprinkle.style.borderRadius = random() > 0.5 ? "50%" : "2px";
       sprinkle.style.pointerEvents = "none";
       sprinkle.style.zIndex = "99999";
       
@@ -64,7 +65,7 @@ export function ButtonSprinkles() {
         { transform: "translate(-50%, -50%) scale(1)", opacity: 1 },
         { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
       ], {
-        duration: Math.random() * 400 + 400, // 400ms to 800ms
+        duration: random() * 400 + 400, // 400ms to 800ms
         easing: "cubic-bezier(0.25, 1, 0.5, 1)",
         fill: "forwards"
       });

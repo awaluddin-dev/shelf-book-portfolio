@@ -5,7 +5,7 @@ import { cn } from "@/shared/lib/utils";
 import { Briefcase, GitCommit, Code, Activity, ChevronUp, ChevronDown, Sparkles, BarChart2 } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend, PieChart, Pie, Cell } from "recharts";
 
-export function ExperienceSection({ activeWork, _activeRoadmap, gh, isLoading, isDark, _renderIcon, legendLevels }: any) {
+export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLevels }: any) {
     const [chartType, setChartType] = useState<"temporal" | "repository">("temporal");
     const { timelineData = [], repoData = [], languageData = [], heatmapStats = { total: 0, maxStreak: 0, avgIntensity: 0 }, monthsData = [] } = gh || {};
     
@@ -17,8 +17,10 @@ export function ExperienceSection({ activeWork, _activeRoadmap, gh, isLoading, i
   }, [gh]);
 
     const [mounted, setMounted] = React.useState(false);
-    React.useEffect(() => { // eslint-disable-next-line react-hooks/set-state-in-effect
-      setMounted(true); }, []);
+    React.useEffect(() => { 
+      const timer = setTimeout(() => setMounted(true), 0);
+      return () => clearTimeout(timer);
+    }, []);
     
     const [activeTooltipDate, setActiveTooltipDate] = React.useState<string | null>(null);
     const heatmapRef = React.useRef<HTMLDivElement>(null);
@@ -35,7 +37,7 @@ export function ExperienceSection({ activeWork, _activeRoadmap, gh, isLoading, i
     
     const [selectedLevelFilter, setSelectedLevelFilter] = React.useState<number | null>(null);
 
-    const [_expandedRoadmapId, _setExpandedRoadmapId] = useState<string | null>(null);
+
     const [hoveredMonth, setHoveredMonth] = useState<number | null>(null);
     const [hoveredLang, setHoveredLang] = useState<string | null>(null);
     const [activeExpIdx, setActiveExpIdx] = useState<number | null>(null);
@@ -546,9 +548,9 @@ export function ExperienceSection({ activeWork, _activeRoadmap, gh, isLoading, i
                     </PieChart>
                   </div>
                   <div className="w-full md:w-2/3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4">
-                    {languageData.map((lang: any, idx: number) => (
+                    {languageData.map((lang: any) => (
                       <motion.div
-                        key={idx}
+                        key={lang.name}
                         whileHover={{ y: -2 }}
                         onMouseEnter={() => setHoveredLang(lang.name)}
                         onMouseLeave={() => setHoveredLang(null)}
@@ -562,7 +564,7 @@ export function ExperienceSection({ activeWork, _activeRoadmap, gh, isLoading, i
                             : "opacity-100",
                         )}
                       >
-                        {idx === 0 && (
+                        {lang.percentage >= languageData[0].percentage && (
                           <div className="absolute -top-2 -right-2 bg-neu-accent text-white font-mono text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm z-10 flex items-center gap-1">
                             TOP 1
                           </div>
@@ -613,12 +615,20 @@ export function ExperienceSection({ activeWork, _activeRoadmap, gh, isLoading, i
                   .includes("present");
                 return (
                   <div
-                    key={idx}
+                    key={`${job.company}-${job.role}`}
                     className="block"
                     onMouseEnter={() => setActiveExpIdx(idx)}
                   >
                     <div
                       onClick={() => setActiveExpIdx(isActive ? null : idx)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setActiveExpIdx(isActive ? null : idx);
+                        }
+                      }}
+                      role="button"
+                      tabIndex={0}
                       className={cn(
                         "grid grid-cols-1 md:grid-cols-12 gap-4 items-center py-6 px-6 rounded-2xl cursor-pointer transition-all duration-300 group relative border-b border-gray-300/10 dark:border-zinc-800/10 last:border-0",
                         isActive

@@ -30,7 +30,7 @@ export function useContributionData(username = "awaluddin-dev") {
       .then((res) => {
         if (cancelled) return;
         const payload = res.data || res;
-        if (payload && payload.calendar) {
+        if (payload?.calendar) {
           setData({
             weeks: payload.calendar,
             timelineData: payload.timeline || [],
