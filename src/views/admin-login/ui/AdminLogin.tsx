@@ -86,7 +86,7 @@ export default function AdminLogin() {
               </div>
               <input
                 id="password"
-                type={showPassword ? "text" : "password"}
+                type="password"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
