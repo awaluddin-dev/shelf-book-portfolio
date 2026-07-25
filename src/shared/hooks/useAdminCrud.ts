@@ -47,6 +47,7 @@ export function useAdminCrud(options: UseAdminCrudOptions) {
       router.push('/admin/login');
       return;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);

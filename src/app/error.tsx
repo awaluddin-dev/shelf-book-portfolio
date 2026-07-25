@@ -11,7 +11,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // NOSONAR: We explicitly want to log unhandled runtime errors in the Error Boundary to the console for debugging
+    // eslint-disable-next-line no-console
     console.error('Unhandled App Router Error:', error); // NOSONAR
   }, [error]);
 
