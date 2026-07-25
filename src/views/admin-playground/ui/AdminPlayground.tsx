@@ -12,11 +12,10 @@ export default function AdminPlayground() {
   const router = useRouter();
   const { resolvedTheme, setTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
-
+  
   const [toast, setToast] = useState<string | null>(null);
 
-  // Theme State Variables
-  const [themeConfig, setThemeConfig] = useState({
+  const getInitialThemeConfig = (isDark: boolean) => ({
     bg: isDark ? '#222831' : '#F9F7F7',
     secondary: isDark ? '#393E46' : '#DBE2EF',
     text: isDark ? '#EEEEEE' : '#112D4E',
@@ -26,17 +25,12 @@ export default function AdminPlayground() {
     glassOpacity: isDark ? 0.1 : 0.4,
   });
 
+  // Theme State Variables
+  const [themeConfig, setThemeConfig] = useState(getInitialThemeConfig(isDark));
+
   // Sync state when dark mode toggles
   useEffect(() => {
-    setThemeConfig({
-      bg: isDark ? '#222831' : '#F9F7F7',
-      secondary: isDark ? '#393E46' : '#DBE2EF',
-      text: isDark ? '#EEEEEE' : '#112D4E',
-      accent: isDark ? '#00ADB5' : '#3F72AF',
-      shadowOpacity: isDark ? 0.5 : 0.08,
-      shadowBlur: 16,
-      glassOpacity: isDark ? 0.1 : 0.4,
-    });
+    setThemeConfig(getInitialThemeConfig(isDark));
   }, [isDark]);
 
   useEffect(() => {
