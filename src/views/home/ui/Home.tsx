@@ -105,6 +105,7 @@ import {
   TECHNICAL_IMAGERY,
   legendLevels,
 } from "@/shared/lib/helpers";
+import { fetchWithRetry, warmupDatabase } from "@/shared/lib/fetchUtils";
 import MermaidDiagram from "@/shared/ui/MermaidDiagram";
 import ProjectLifecycleTracker from "@/entities/project/ui/ProjectLifecycleTracker";
 import BookItem from "@/entities/project/ui/BookItem";
@@ -134,87 +135,101 @@ export default function Portfolio() {
   const [dynamicWork, setDynamicWork] = useState<any[]>([]);
 
   useEffect(() => {
-    // Fetch Roadmap
-    fetch("/api/learning")
-      .then((res) => res.json())
-      .then((resData) => {
-        const payload = resData.data || resData;
-        const arr = payload.roadmap || (Array.isArray(payload) ? payload : []);
-        if (arr.length > 0) setDynamicRoadmap(arr);
-      })
-      .catch(console.error);
+    const initializeData = async () => {
+      try {
+        await warmupDatabase((attempt) => {
+          if (attempt === 1) {
+            setToastMessage("Waking up database (cold start)... Please wait.");
+          }
+        });
 
-    // Fetch Proficiency
-    fetch("/api/proficiency")
-      .then((res) => res.json())
-      .then((resData) => {
-        const payload = resData.data || resData;
-        const arr =
-          payload.proficiency || (Array.isArray(payload) ? payload : []);
-        if (arr.length > 0) setDynamicProficiency(arr);
-      })
-      .catch(console.error);
+        // Fetch Roadmap
+        fetchWithRetry("/api/learning")
+          .then((res) => res.json())
+          .then((resData) => {
+            const payload = resData.data || resData;
+            const arr = payload.roadmap || (Array.isArray(payload) ? payload : []);
+            if (arr.length > 0) setDynamicRoadmap(arr);
+          })
+          .catch(console.error);
 
-    // Fetch Current Focus
-    fetch("/api/current")
-      .then((res) => res.json())
-      .then((resData) => {
-        const payload = resData.data || resData;
-        const arr =
-          payload.currentFocus || (Array.isArray(payload) ? payload : []);
-        if (arr.length > 0) setDynamicCurrentFocus(arr);
-      })
-      .catch(console.error);
+        // Fetch Proficiency
+        fetchWithRetry("/api/proficiency")
+          .then((res) => res.json())
+          .then((resData) => {
+            const payload = resData.data || resData;
+            const arr =
+              payload.proficiency || (Array.isArray(payload) ? payload : []);
+            if (arr.length > 0) setDynamicProficiency(arr);
+          })
+          .catch(console.error);
 
-    // Fetch Hero without manual localStorage caching to ensure latest data
-    fetch("/api/hero", { cache: "no-store" })
-      .then((res) => res.json())
-      .then((resData) => {
-        const payload = resData.data || resData;
-        if (payload.heroConfig) setDynamicHeroConfig(payload.heroConfig);
-        const metricsArr =
-          payload.metrics || (Array.isArray(payload) ? payload : []);
-        if (metricsArr.length > 0) setDynamicMetrics(metricsArr);
-      })
-      .catch(console.error);
+        // Fetch Current Focus
+        fetchWithRetry("/api/current")
+          .then((res) => res.json())
+          .then((resData) => {
+            const payload = resData.data || resData;
+            const arr =
+              payload.currentFocus || (Array.isArray(payload) ? payload : []);
+            if (arr.length > 0) setDynamicCurrentFocus(arr);
+          })
+          .catch(console.error);
 
-    // Fetch Projects
-    fetch("/api/projects")
-      .then((res) => res.json())
-      .then((resData) => {
-        const payload = resData.data || resData;
-        const arr = payload.projects || (Array.isArray(payload) ? payload : []);
-        if (arr.length > 0) setDynamicProjects(arr);
-      })
-      .catch(console.error);
+        // Fetch Hero without manual localStorage caching to ensure latest data
+        fetchWithRetry("/api/hero", { cache: "no-store" })
+          .then((res) => res.json())
+          .then((resData) => {
+            const payload = resData.data || resData;
+            if (payload.heroConfig) setDynamicHeroConfig(payload.heroConfig);
+            const metricsArr =
+              payload.metrics || (Array.isArray(payload) ? payload : []);
+            if (metricsArr.length > 0) setDynamicMetrics(metricsArr);
+          })
+          .catch(console.error);
 
-    // Fetch Work
-    fetch("/api/work")
-      .then((res) => res.json())
-      .then((resData) => {
-        const payload = resData.data || resData;
-        const arr =
-          payload.workExperience ||
-          payload.workExperiences ||
-          (Array.isArray(payload) ? payload : []);
-        if (arr.length > 0) {
-          arr.sort((a: any, b: any) => {
-            const isPresentA = a.years.toLowerCase().includes("present") || a.years.toLowerCase().includes("current") || a.years.toLowerCase().includes("now");
-            const isPresentB = b.years.toLowerCase().includes("present") || b.years.toLowerCase().includes("current") || b.years.toLowerCase().includes("now");
-            
-            if (isPresentA && !isPresentB) return -1;
-            if (!isPresentA && isPresentB) return 1;
+        // Fetch Projects
+        fetchWithRetry("/api/projects")
+          .then((res) => res.json())
+          .then((resData) => {
+            const payload = resData.data || resData;
+            const arr = payload.projects || (Array.isArray(payload) ? payload : []);
+            if (arr.length > 0) setDynamicProjects(arr);
+          })
+          .catch(console.error);
 
-            const startA = a.years.split("-")[0].trim();
-            const startB = b.years.split("-")[0].trim();
-            const dateA = new Date(startA).getTime() || parseInt(startA.match(/\d{4}/)?.[0] || "0");
-            const dateB = new Date(startB).getTime() || parseInt(startB.match(/\d{4}/)?.[0] || "0");
-            return dateB - dateA;
-          });
-          setDynamicWork(arr);
-        }
-      })
-      .catch(console.error);
+        // Fetch Work
+        fetchWithRetry("/api/work")
+          .then((res) => res.json())
+          .then((resData) => {
+            const payload = resData.data || resData;
+            const arr =
+              payload.workExperience ||
+              payload.workExperiences ||
+              (Array.isArray(payload) ? payload : []);
+            if (arr.length > 0) {
+              arr.sort((a: any, b: any) => {
+                const isPresentA = a.years.toLowerCase().includes("present") || a.years.toLowerCase().includes("current") || a.years.toLowerCase().includes("now");
+                const isPresentB = b.years.toLowerCase().includes("present") || b.years.toLowerCase().includes("current") || b.years.toLowerCase().includes("now");
+                
+                if (isPresentA && !isPresentB) return -1;
+                if (!isPresentA && isPresentB) return 1;
+
+                const startA = a.years.split("-")[0].trim();
+                const startB = b.years.split("-")[0].trim();
+                const dateA = new Date(startA).getTime() || parseInt(startA.match(/\d{4}/)?.[0] || "0");
+                const dateB = new Date(startB).getTime() || parseInt(startB.match(/\d{4}/)?.[0] || "0");
+                return dateB - dateA;
+              });
+              setDynamicWork(arr);
+            }
+          })
+          .catch(console.error);
+      } catch (e) {
+        console.error("Failed to warmup DB:", e);
+      }
+    };
+    
+    initializeData();
   }, []);
 
   // Use dynamic if available, fallback to static imports or defaults
