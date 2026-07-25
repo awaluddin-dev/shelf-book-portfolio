@@ -40,6 +40,7 @@ describe('ProjectArchitectureDiagram.tsx', () => {
 
   it('renders node view if no image is provided', async () => {
     mockFetch.mockResolvedValue({
+      ok: true,
       json: () => Promise.resolve({ data: [
         { id: '1', projectId: '1', name: 'Node 1', title: 'Title 1', description: 'Desc 1', order: 1 }
       ]})
@@ -57,6 +58,7 @@ describe('ProjectArchitectureDiagram.tsx', () => {
 
   it('renders empty state if no nodes and no image', async () => {
     mockFetch.mockResolvedValue({
+      ok: true,
       json: () => Promise.resolve({ data: [] })
     });
 
