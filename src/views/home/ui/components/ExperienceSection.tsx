@@ -621,6 +621,14 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                   >
                     <div
                       onClick={() => setActiveExpIdx(isActive ? null : idx)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setActiveExpIdx(isActive ? null : idx);
+                        }
+                      }}
+                      role="button"
+                      tabIndex={0}
                       className={cn(
                         "grid grid-cols-1 md:grid-cols-12 gap-4 items-center py-6 px-6 rounded-2xl cursor-pointer transition-all duration-300 group relative border-b border-gray-300/10 dark:border-zinc-800/10 last:border-0",
                         isActive

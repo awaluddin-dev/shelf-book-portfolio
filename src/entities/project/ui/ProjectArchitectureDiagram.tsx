@@ -66,11 +66,20 @@ function FullscreenViewer({
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex flex-col"
       onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+          onClose();
+        }
+      }}
+      role="button"
+      tabIndex={0}
     >
       {/* Header bar */}
       <div
         className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+        role="presentation"
       >
         <span className="text-xs font-mono text-white/60 flex items-center gap-2">
           <Move size={12} /> Drag to pan • Scroll / Pinch to zoom • Click
@@ -88,6 +97,8 @@ function FullscreenViewer({
       <div
         className="flex-1 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+        role="presentation"
       >
         <TransformWrapper
           initialScale={1}
