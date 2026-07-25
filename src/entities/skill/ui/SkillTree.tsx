@@ -89,7 +89,7 @@ const SkillTreeNode = memo(function SkillTreeNode({
         textAnchor="middle"
         className={cn(
           "font-mono font-bold tracking-tight select-none pointer-events-none transition-all duration-300",
-          isMobile ? "text-xs" : "text-xs",
+          "text-xs",
           active
             ? "fill-current " + colors.text
             : anyActive && !connectedToActive
