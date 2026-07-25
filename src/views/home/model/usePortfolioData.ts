@@ -100,9 +100,9 @@ export function usePortfolioData() {
             const sA = a.years?.split("-")[0]?.trim() || "";
             const sB = b.years?.split("-")[0]?.trim() || "";
             const dA =
-              new Date(sA).getTime() || parseInt(sA.match(/\d{4}/)?.[0] || "0");
+              new Date(sA).getTime() || Number.parseInt(sA.match(/\d{4}/)?.[0] || "0");
             const dB =
-              new Date(sB).getTime() || parseInt(sB.match(/\d{4}/)?.[0] || "0");
+              new Date(sB).getTime() || Number.parseInt(sB.match(/\d{4}/)?.[0] || "0");
             return dB - dA;
           });
         }

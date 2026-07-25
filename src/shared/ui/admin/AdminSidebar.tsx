@@ -35,7 +35,7 @@ export function AdminSidebar({ activePath }: { activePath: string }) {
         className="relative h-full flex flex-col p-1.5 rounded-2xl overflow-hidden z-10"
       >
         <div className="flex-1 flex flex-col p-1 overflow-hidden">
-          <button 
+          <button type="button" 
             onClick={() => setIsExpanded(!isExpanded)}
             className="h-10 rounded-xl flex items-center gap-3 px-2 text-neu-text hover:bg-black/5 dark:hover:bg-white/5 transition-colors overflow-hidden whitespace-nowrap"
           >
@@ -54,7 +54,7 @@ export function AdminSidebar({ activePath }: { activePath: string }) {
             const isActive = activePath === item.path;
             const Icon = item.icon;
             return (
-              <button 
+              <button type="button" 
                 key={item.path}
                 onClick={() => router.push(item.path)} 
                 className={cn(
@@ -73,12 +73,12 @@ export function AdminSidebar({ activePath }: { activePath: string }) {
 
           <div className="mt-auto pt-2 space-y-2 border-t border-black/10 dark:border-white/10 shrink-0">
             {activePath === '/admin/dashboard' && (
-              <button onClick={() => router.push('/')} className="w-full h-10 rounded-xl flex items-center gap-3 px-2 hover:bg-black/5 dark:hover:bg-white/5 text-neu-text transition-colors overflow-hidden whitespace-nowrap">
+              <button type="button" onClick={() => router.push('/')} className="w-full h-10 rounded-xl flex items-center gap-3 px-2 hover:bg-black/5 dark:hover:bg-white/5 text-neu-text transition-colors overflow-hidden whitespace-nowrap">
                 <div className="min-w-6 flex justify-center"><ArrowLeft size={18} /></div>
                 <AnimatePresence>{isExpanded && <motion.span initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="font-bold text-sm">Back to Portfolio</motion.span>}</AnimatePresence>
               </button>
             )}
-            <button onClick={handleLogout} className="w-full h-10 rounded-xl flex items-center gap-3 px-2 hover:bg-red-500/10 text-neu-text-muted hover:text-red-500 transition-colors overflow-hidden whitespace-nowrap">
+            <button type="button" onClick={handleLogout} className="w-full h-10 rounded-xl flex items-center gap-3 px-2 hover:bg-red-500/10 text-neu-text-muted hover:text-red-500 transition-colors overflow-hidden whitespace-nowrap">
               <div className="min-w-6 flex justify-center"><LogOut size={18} /></div>
               <AnimatePresence>{isExpanded && <motion.span initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="font-bold text-sm">Logout</motion.span>}</AnimatePresence>
             </button>

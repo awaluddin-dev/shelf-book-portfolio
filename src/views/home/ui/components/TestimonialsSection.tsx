@@ -60,7 +60,7 @@ export function TestimonialsSection({ testimonialsList, _isLoading, setSelectedT
                       &ldquo;{t.testimonial}&rdquo;
                     </div>
                     {t.testimonial?.length > 150 && (
-                      <button
+                      <button type="button"
                         onClick={() => setSelectedTestimonial(t)}
                         className="mt-3 text-xs font-bold text-neu-accent hover:underline relative z-20 flex items-center gap-1 self-start"
                       >

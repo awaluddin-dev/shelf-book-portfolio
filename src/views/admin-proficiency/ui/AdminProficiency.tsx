@@ -46,8 +46,8 @@ export default function AdminProficiency() {
   const formContent = (
     <form onSubmit={(e) => { e.preventDefault(); handleSave(formData); }} className="space-y-6">
         <div className="space-y-1">
-            <label className="text-xs font-mono text-neu-text-muted">Category Title (e.g., CORE BACKEND)</label>
-            <input required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none uppercase" placeholder="CORE BACKEND" />
+            <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminproficiency-1">Category Title (e.g., CORE BACKEND)</label>
+            <input id="field-adminproficiency-1" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none uppercase" placeholder="CORE BACKEND" />
         </div>
         
         <div className="space-y-3">
@@ -66,12 +66,12 @@ export default function AdminProficiency() {
                         </button>
                         <div className="grid grid-cols-2 gap-3 mb-3">
                             <div className="space-y-1">
-                                <label className="text-xs font-mono text-neu-text-muted">Skill Name</label>
-                                <input required value={skill.name} onChange={e => handleUpdateSkill(index, 'name', e.target.value)} className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50" placeholder="Node.js" />
+                                <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminproficiency-2">Skill Name</label>
+                                <input id="field-adminproficiency-2" required value={skill.name} onChange={e => handleUpdateSkill(index, 'name', e.target.value)} className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50" placeholder="Node.js" />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-mono text-neu-text-muted">Status</label>
-                                <select value={skill.status} onChange={e => handleUpdateSkill(index, 'status', e.target.value)} className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50">
+                                <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminproficiency-3">Status</label>
+                                <select id="field-adminproficiency-3" value={skill.status} onChange={e => handleUpdateSkill(index, 'status', e.target.value)} className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50">
                                     <option value="Production-ready">Production-ready</option>
                                     <option value="In Use">In Use</option>
                                     <option value="Building">Building</option>
@@ -79,8 +79,8 @@ export default function AdminProficiency() {
                             </div>
                         </div>
                         <div className="space-y-1">
-                            <label className="text-xs font-mono text-neu-text-muted">Subtext (Experience / Context)</label>
-                            <input required value={skill.subtext} onChange={e => handleUpdateSkill(index, 'subtext', e.target.value)} className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50" placeholder="Production · 3+ yrs · ..." />
+                            <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-adminproficiency-4">Subtext (Experience / Context)</label>
+                            <input id="field-adminproficiency-4" required value={skill.subtext} onChange={e => handleUpdateSkill(index, 'subtext', e.target.value)} className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50" placeholder="Production · 3+ yrs · ..." />
                         </div>
                     </div>
                 ))}

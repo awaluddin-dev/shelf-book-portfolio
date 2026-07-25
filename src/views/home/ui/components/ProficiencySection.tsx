@@ -191,7 +191,7 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
                   const isSelected = selectedRoadmapIndex === index;
                   const isPast = index <= selectedRoadmapIndex;
                   return (
-                    <button
+                    <button type="button"
                       key={index}
                       onClick={() => setSelectedRoadmapIndex(index)}
                       className="flex flex-col items-center group cursor-pointer relative z-10 focus:outline-none"
@@ -257,7 +257,7 @@ export function ProficiencySection({ renderIcon, activeRoadmap, activeCurrentFoc
             </div>
             <div className="flex md:hidden flex-wrap gap-2 justify-center mb-6">
               {(activeRoadmap || []).map((item: any, index: number) => (
-                <button
+                <button type="button"
                   key={index}
                   onClick={() => setSelectedRoadmapIndex(index)}
                   className={cn(

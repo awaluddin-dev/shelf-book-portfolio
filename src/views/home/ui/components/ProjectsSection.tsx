@@ -89,7 +89,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
 
             <div className="flex gap-3 items-center justify-between md:justify-end w-full md:w-auto">
               <div className="hidden md:flex flex-wrap gap-3 bg-neu-bg p-1.5 rounded-2xl shadow-neu-inset">
-                <button
+                <button type="button"
                   onClick={() => setSelectedCategory(null)}
                   className={cn(
                     "px-5 py-2.5 text-xs font-mono uppercase tracking-wider rounded-xl transition-all relative",
@@ -112,7 +112,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                   <span className="relative z-10">All</span>
                 </button>
                 {(categories || []).map((cat) => (
-                  <button
+                  <button type="button"
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
                     className={cn(
@@ -169,7 +169,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                 </div>
               </div>
 
-              <button
+              <button type="button"
                 onClick={() => setIsFilterModalOpen(true)}
                 className="md:hidden flex items-center justify-center p-3 rounded-xl glass-card text-neu-text-muted hover:text-neu-accent transition-colors"
               >
@@ -197,7 +197,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                 >
                   <div className="flex justify-between items-center mb-6">
                     <h3 className="text-lg font-bold">Filter Projects</h3>
-                    <button
+                    <button type="button"
                       onClick={() => setIsFilterModalOpen(false)}
                       className="p-2 rounded-full glass-card-inset text-neu-text-muted hover:text-neu-accent"
                     >
@@ -205,7 +205,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                     </button>
                   </div>
                   <div className="flex flex-col gap-3">
-                    <button
+                    <button type="button"
                       onClick={() => {
                         setSelectedCategory(null);
                         setIsFilterModalOpen(false);
@@ -220,7 +220,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                       All Projects
                     </button>
                     {(categories || []).map((cat) => (
-                      <button
+                      <button type="button"
                         key={cat}
                         onClick={() => {
                           setSelectedCategory(cat);
@@ -256,14 +256,14 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
 
               {!isLoading && !focusedProject && filteredProjects.length > 0 && (
                 <>
-                  <button
+                  <button type="button"
                     onClick={() => scrollShelf("left")}
                     className="absolute left-4 top-[45%] -translate-y-1/2 z-20 p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5"
                     aria-label="Scroll Left"
                   >
                     <ChevronLeft size={20} />
                   </button>
-                  <button
+                  <button type="button"
                     onClick={() => scrollShelf("right")}
                     className="absolute right-4 top-[45%] -translate-y-1/2 z-20 p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5"
                     aria-label="Scroll Right"
@@ -446,7 +446,7 @@ export function ProjectsSection({ pd, triggerToast, activeProjects, isLoading, i
                       : ""}
                     . Try checking for typos or simplifying your search query.
                   </p>
-                  <button
+                  <button type="button"
                     onClick={() => {
                       setSearchQuery("");
                       setSelectedCategory(null);

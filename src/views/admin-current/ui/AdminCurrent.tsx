@@ -25,26 +25,26 @@ export default function AdminCurrent() {
     <form onSubmit={(e) => { e.preventDefault(); handleSave(formData); }} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-                <label className="text-xs font-mono text-neu-text-muted">Title</label>
-                <input required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Writing" />
+                <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-admincurrent-1">Title</label>
+                <input id="field-admincurrent-1" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Writing" />
             </div>
             <div className="space-y-1">
-                <label className="text-xs font-mono text-neu-text-muted">Icon (Lucide name)</label>
-                <input required value={formData.icon} onChange={e => setFormData({...formData, icon: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="PenTool" />
+                <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-admincurrent-2">Icon (Lucide name)</label>
+                <input id="field-admincurrent-2" required value={formData.icon} onChange={e => setFormData({...formData, icon: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="PenTool" />
             </div>
         </div>
         <div className="space-y-1">
-            <label className="text-xs font-mono text-neu-text-muted">Description (1-2 sentences)</label>
-            <textarea required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} rows={2} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none resize-none" placeholder="What I'm doing right now..." />
+            <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-admincurrent-3">Description (1-2 sentences)</label>
+            <textarea id="field-admincurrent-3" required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} rows={2} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none resize-none" placeholder="What I'm doing right now..." />
         </div>
         <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-                <label className="text-xs font-mono text-neu-text-muted">Link URL</label>
-                <input required value={formData.link} onChange={e => setFormData({...formData, link: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="https://..." />
+                <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-admincurrent-4">Link URL</label>
+                <input id="field-admincurrent-4" required value={formData.link} onChange={e => setFormData({...formData, link: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="https://..." />
             </div>
             <div className="space-y-1">
-                <label className="text-xs font-mono text-neu-text-muted">Link Text</label>
-                <input required value={formData.linkText} onChange={e => setFormData({...formData, linkText: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Read on dev.to" />
+                <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-admincurrent-5">Link Text</label>
+                <input id="field-admincurrent-5" required value={formData.linkText} onChange={e => setFormData({...formData, linkText: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Read on dev.to" />
             </div>
         </div>
         

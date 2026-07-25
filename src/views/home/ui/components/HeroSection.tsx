@@ -87,7 +87,7 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                       transition={{ delay: 0.25 }}
                       className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mt-2 md:mt-4"
                     >
-                      <button
+                      <button type="button"
                         onClick={() =>
                           document
                             .getElementById("projects")
@@ -185,7 +185,7 @@ export function HeroSection({ pd, _gh, isLoading, _isDark, activeMetrics, render
                           />
                         </div>
                       </a>
-                      <button
+                      <button type="button"
                         onClick={() => setShowInquiryModal(true)}
                         className="w-full flex items-center justify-between p-2.5 rounded-xl glass-card-inset hover:text-neu-accent transition-all group text-left cursor-pointer border-none outline-none"
                       >

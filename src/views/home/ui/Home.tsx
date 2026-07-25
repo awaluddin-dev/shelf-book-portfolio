@@ -363,7 +363,7 @@ export default function Portfolio() {
                 transition={{ type: "spring", stiffness: 350, damping: 25 }}
                 className="flex items-center gap-1 sm:gap-2 overflow-visible flex-shrink-0"
               >
-                <button
+                <button type="button"
                   onClick={() =>
                     window.scrollTo({ top: 0, behavior: "smooth" })
                   }
@@ -416,7 +416,7 @@ export default function Portfolio() {
           ].map((sec) => {
             const active = activeSection === sec.id;
             return (
-              <button
+              <button type="button"
                 key={sec.id}
                 onClick={() =>
                   document
@@ -468,7 +468,7 @@ export default function Portfolio() {
 
           <div className="w-[1px] h-6 bg-neu-text/10 dark:bg-neu-text/15 mx-1 flex-shrink-0" />
 
-          <button
+          <button type="button"
             onClick={toggleTheme}
             onMouseEnter={() => setHoveredDockId("theme")}
             onMouseLeave={() => setHoveredDockId(null)}

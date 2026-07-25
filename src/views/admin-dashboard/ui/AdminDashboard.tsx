@@ -190,7 +190,7 @@ export default function AdminDashboard() {
                     ? "Open to Opportunities"
                     : "Closed to Opportunities"}
                 </div>
-                <button
+                <button type="button"
                   onClick={() => setHeroConfig({ ...heroConfig, openForWork: !heroConfig.openForWork })}
                   className="relative inline-flex h-8 w-16 items-center rounded-full bg-gray-200 dark:bg-zinc-850 shadow-inner transition-colors duration-200 focus:outline-none cursor-pointer"
                 >
@@ -232,7 +232,7 @@ export default function AdminDashboard() {
                   Manage your display name, role, and metric strip.
                 </p>
               </div>
-              <button
+              <button type="button"
                 onClick={saveHeroConfig}
                 className="flex items-center gap-2 px-4 py-2 bg-neu-accent text-white rounded-xl hover:bg-neu-accent/90 transition-colors font-bold text-sm shadow-neu-sm"
               >
@@ -244,8 +244,8 @@ export default function AdminDashboard() {
               {/* Name & Role */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-mono text-neu-text-muted">Display Name</label>
-                  <input
+                  <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-admindashboard-1">Display Name</label>
+                  <input id="field-admindashboard-1"
                     value={heroConfig.name || ''}
                     onChange={(e) => setHeroConfig({ ...heroConfig, name: e.target.value })}
                     placeholder="Your full name"
@@ -253,8 +253,8 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-mono text-neu-text-muted">Role / Title</label>
-                  <input
+                  <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-admindashboard-2">Role / Title</label>
+                  <input id="field-admindashboard-2"
                     value={heroConfig.role || ''}
                     onChange={(e) => setHeroConfig({ ...heroConfig, role: e.target.value })}
                     placeholder="e.g. Backend Engineer"
@@ -262,8 +262,8 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-mono text-neu-text-muted">Available From</label>
-                  <input
+                  <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-admindashboard-3">Available From</label>
+                  <input id="field-admindashboard-3"
                     value={heroConfig.availableFrom || ''}
                     onChange={(e) => setHeroConfig({ ...heroConfig, availableFrom: e.target.value })}
                     placeholder="e.g. Now, Jan 2027"
@@ -302,10 +302,10 @@ export default function AdminDashboard() {
                       <div className="space-y-3">
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-1">
-                            <label className="text-xs font-mono text-neu-text-muted">
+                            <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-admindashboard-4">
                               Value (e.g. 5+ Years)
                             </label>
-                            <input
+                            <input id="field-admindashboard-4"
                               value={m.value || ""}
                               onChange={(e) =>
                                 handleMetricChange(idx, "value", e.target.value)
@@ -314,10 +314,10 @@ export default function AdminDashboard() {
                             />
                           </div>
                           <div className="space-y-1">
-                            <label className="text-xs font-mono text-neu-text-muted">
+                            <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-admindashboard-5">
                               Label (e.g. EXPERIENCE)
                             </label>
-                            <input
+                            <input id="field-admindashboard-5"
                               value={m.label}
                               onChange={(e) =>
                                 handleMetricChange(idx, "label", e.target.value)
@@ -328,10 +328,10 @@ export default function AdminDashboard() {
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-1">
-                            <label className="text-xs font-mono text-neu-text-muted">
+                            <label className="text-xs font-mono text-neu-text-muted" htmlFor="field-admindashboard-6">
                               Icon Name
                             </label>
-                            <select
+                            <select id="field-admindashboard-6"
                               value={m.icon}
                               onChange={(e) =>
                                 handleMetricChange(idx, "icon", e.target.value)

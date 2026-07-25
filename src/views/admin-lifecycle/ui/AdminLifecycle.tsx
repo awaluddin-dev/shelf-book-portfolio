@@ -52,7 +52,7 @@ export default function AdminLifecycle() {
           <option value="Testing & Launch">Testing & Launch</option>
         </select>
         <input placeholder="Date (e.g. Jan 2026)" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-1/3 px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
-        <input placeholder="Order (e.g. 0)" type="number" value={formData.order} onChange={e => setFormData({...formData, order: parseInt(e.target.value) || 0})} className="w-20 px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
+        <input placeholder="Order (e.g. 0)" type="number" value={formData.order} onChange={e => setFormData({...formData, order: Number.parseInt(e.target.value) || 0})} className="w-20 px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
       </div>
       <input placeholder="Title (e.g. Initial Architecture Design)" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
       <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none min-h-20" />
@@ -68,8 +68,8 @@ export default function AdminLifecycle() {
       toastMessage={toastMessage}
     >
       <div className="mb-8">
-        <label className="text-sm font-bold text-neu-text-muted mb-2 block">Select Project</label>
-        <select 
+        <label className="text-sm font-bold text-neu-text-muted mb-2 block" htmlFor="field-adminlifecycle-1">Select Project</label>
+        <select id="field-adminlifecycle-1" 
           value={selectedProjectId} 
           onChange={(e) => setSelectedProjectId(e.target.value)}
           className="w-full max-w-md px-4 py-2 rounded-xl glass-card-inset text-sm font-bold outline-none focus:border-neu-accent"
@@ -87,8 +87,8 @@ export default function AdminLifecycle() {
               <div className="space-y-4">
                 {formFields}
                 <div className="flex gap-2">
-                  <button onClick={() => onSave(item.id)} className="px-4 py-2 rounded-lg bg-neu-accent text-white font-bold text-sm flex items-center gap-2"><Save size={14}/> Save</button>
-                  <button onClick={() => setIsEditing(null)} className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-zinc-800 text-neu-text font-bold text-sm"><X size={14}/></button>
+                  <button type="button" onClick={() => onSave(item.id)} className="px-4 py-2 rounded-lg bg-neu-accent text-white font-bold text-sm flex items-center gap-2"><Save size={14}/> Save</button>
+                  <button type="button" onClick={() => setIsEditing(null)} className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-zinc-800 text-neu-text font-bold text-sm"><X size={14}/></button>
                 </div>
               </div>
             ) : (
@@ -113,7 +113,7 @@ export default function AdminLifecycle() {
                   </div>
                 </div>
                 <div className="flex gap-2 shrink-0">
-                  <button onClick={() => {
+                  <button type="button" onClick={() => {
                     setIsEditing(item); 
                     setFormData({
                       stage: item.stage || 'Planning & Spec', 
@@ -124,7 +124,7 @@ export default function AdminLifecycle() {
                       order: item.order || 0
                     });
                   }} className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-neu-accent"><Edit2 size={16}/></button>
-                  <button onClick={() => handleDelete(item.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-red-500"><Trash2 size={16}/></button>
+                  <button type="button" onClick={() => handleDelete(item.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-red-500"><Trash2 size={16}/></button>
                 </div>
               </div>
             )}
@@ -135,12 +135,12 @@ export default function AdminLifecycle() {
           <div className="p-6 rounded-2xl glass-card border border-neu-accent space-y-4">
             {formFields}
             <div className="flex gap-2">
-              <button onClick={() => onSave()} className="px-4 py-2 rounded-lg bg-neu-accent text-white font-bold text-sm flex items-center gap-2"><Save size={14}/> Save</button>
-              <button onClick={() => setIsEditing(null)} className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-zinc-800 text-neu-text font-bold text-sm"><X size={14}/></button>
+              <button type="button" onClick={() => onSave()} className="px-4 py-2 rounded-lg bg-neu-accent text-white font-bold text-sm flex items-center gap-2"><Save size={14}/> Save</button>
+              <button type="button" onClick={() => setIsEditing(null)} className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-zinc-800 text-neu-text font-bold text-sm"><X size={14}/></button>
             </div>
           </div>
         ) : (
-          <button onClick={() => {
+          <button type="button" onClick={() => {
             setIsEditing({ id: 'new' }); 
             setFormData({
               stage: 'Planning & Spec', 

@@ -61,7 +61,7 @@ export function AdminTable<T>({
             Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, items.length)} of {items.length} entries
           </span>
           <div className="flex items-center gap-2">
-            <button
+            <button type="button"
               disabled={currentPage === 1}
               onClick={() => onPageChange(Math.max(1, currentPage - 1))}
               className="p-2 rounded-xl glass-card text-neu-text hover:bg-black/5 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
@@ -71,7 +71,7 @@ export function AdminTable<T>({
             <div className="text-sm font-bold font-mono px-2">
               {currentPage} / {totalPages}
             </div>
-            <button
+            <button type="button"
               disabled={currentPage === totalPages}
               onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
               className="p-2 rounded-xl glass-card text-neu-text hover:bg-black/5 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
@@ -88,10 +88,10 @@ export function AdminTable<T>({
 export function AdminTableActions({ onEdit, onDelete }: { onEdit: () => void, onDelete: () => void }) {
   return (
     <td className="px-6 py-4 flex justify-end gap-2">
-      <button onClick={onEdit} className="p-2 rounded-xl glass-card text-neu-accent hover:scale-105 active:scale-95 transition-all" title="Edit">
+      <button type="button" onClick={onEdit} className="p-2 rounded-xl glass-card text-neu-accent hover:scale-105 active:scale-95 transition-all" title="Edit">
         <Edit size={16} />
       </button>
-      <button onClick={onDelete} className="p-2 rounded-xl glass-card text-red-500 hover:scale-105 active:scale-95 transition-all" title="Delete">
+      <button type="button" onClick={onDelete} className="p-2 rounded-xl glass-card text-red-500 hover:scale-105 active:scale-95 transition-all" title="Delete">
         <Trash2 size={16} />
       </button>
     </td>

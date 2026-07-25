@@ -74,7 +74,7 @@ export default function SubmitTestimonial({ params }: { params: Promise<{ token:
           <p className="text-sm text-neu-text-muted font-mono leading-relaxed mb-8">
             Your endorsement has been submitted successfully and will appear on the portfolio.
           </p>
-          <button 
+          <button type="button" 
             onClick={() => router.push('/')}
             className="px-6 py-3 glass-card rounded-xl text-sm font-bold text-neu-accent hover:scale-[1.02] transition-all"
           >
@@ -99,27 +99,27 @@ export default function SubmitTestimonial({ params }: { params: Promise<{ token:
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2">Full Name</label>
-              <input required type="text" className="w-full px-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-neu-accent text-sm" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="e.g. John Doe" />
+              <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2" htmlFor="field-testimonipage-1">Full Name</label>
+              <input id="field-testimonipage-1" required type="text" className="w-full px-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-neu-accent text-sm" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="e.g. John Doe" />
             </div>
             <div>
-              <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2">Role / Title</label>
-              <input required type="text" className="w-full px-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-neu-accent text-sm" value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})} placeholder="e.g. Lead Engineer" />
+              <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2" htmlFor="field-testimonipage-2">Role / Title</label>
+              <input id="field-testimonipage-2" required type="text" className="w-full px-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-neu-accent text-sm" value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})} placeholder="e.g. Lead Engineer" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2">Company</label>
-              <input required type="text" className="w-full px-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-neu-accent text-sm" value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} placeholder="e.g. Acme Corp" />
+              <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2" htmlFor="field-testimonipage-3">Company</label>
+              <input id="field-testimonipage-3" required type="text" className="w-full px-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-neu-accent text-sm" value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} placeholder="e.g. Acme Corp" />
             </div>
             <div>
-              <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2">LinkedIn / Website URL (Optional)</label>
-              <input type="url" className="w-full px-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-neu-accent text-sm" value={formData.url} onChange={e => setFormData({...formData, url: e.target.value})} placeholder="https://linkedin.com/in/..." />
+              <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2" htmlFor="field-testimonipage-4">LinkedIn / Website URL (Optional)</label>
+              <input id="field-testimonipage-4" type="url" className="w-full px-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-neu-accent text-sm" value={formData.url} onChange={e => setFormData({...formData, url: e.target.value})} placeholder="https://linkedin.com/in/..." />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2">Endorsement</label>
-            <textarea required rows={4} className="w-full px-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-neu-accent text-sm resize-none" value={formData.testimonial} onChange={e => setFormData({...formData, testimonial: e.target.value})} placeholder="Write your testimonial here..." />
+            <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2" htmlFor="field-testimonipage-5">Endorsement</label>
+            <textarea id="field-testimonipage-5" required rows={4} className="w-full px-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-neu-accent text-sm resize-none" value={formData.testimonial} onChange={e => setFormData({...formData, testimonial: e.target.value})} placeholder="Write your testimonial here..." />
           </div>
           {errorMsg && (
             <div className="text-red-500 text-sm font-mono p-3 glass-card-inset rounded-xl border border-red-500/20">

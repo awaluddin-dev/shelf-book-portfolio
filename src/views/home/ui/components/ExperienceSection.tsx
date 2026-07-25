@@ -76,7 +76,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                   </h3>
                 </div>
                 <div className="flex bg-neu-bg p-1.5 rounded-2xl shadow-neu-inset gap-1">
-                  <button
+                  <button type="button"
                     onClick={() => setChartType("temporal")}
                     className={cn(
                       "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
@@ -87,7 +87,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                   >
                     <GitCommit size={14} /> Commit Timeline
                   </button>
-                  <button
+                  <button type="button"
                     onClick={() => setChartType("repository")}
                     className={cn(
                       "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
@@ -446,7 +446,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mt-6 pt-4 border-t border-gray-300/10 dark:border-gray-700/10 select-none">
                   <div className="flex flex-wrap items-center gap-1.5 lg:ml-auto text-xs font-mono text-neu-text-muted bg-neu-bg/50 shadow-neu-inset p-2 rounded-xl border border-white/5 w-fit">
                     {selectedLevelFilter !== null ? (
-                      <button
+                      <button type="button"
                         onClick={() => setSelectedLevelFilter(null)}
                         className="text-xs font-mono text-neu-accent hover:underline cursor-pointer flex items-center gap-1 active:scale-95 transition-transform mr-2"
                       >
@@ -459,7 +459,7 @@ export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLev
                     {legendLevels.map((lvl: any) => {
                       const active = selectedLevelFilter === lvl.level;
                       return (
-                        <button
+                        <button type="button"
                           key={lvl.level}
                           onClick={() =>
                             setSelectedLevelFilter(

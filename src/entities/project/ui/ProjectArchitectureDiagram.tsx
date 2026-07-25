@@ -26,21 +26,21 @@ function ZoomControls() {
   const { zoomIn, zoomOut, resetTransform } = useControls();
   return (
     <div className="absolute bottom-4 right-4 z-20 flex gap-2">
-      <button
+      <button type="button"
         onClick={() => zoomIn()}
         title="Zoom In"
         className="p-2 rounded-xl bg-neu-bg/80 backdrop-blur-md border border-white/10 text-neu-text hover:text-neu-accent hover:border-neu-accent/40 transition-all duration-200 shadow-neu-sm"
       >
         <ZoomIn size={14} />
       </button>
-      <button
+      <button type="button"
         onClick={() => zoomOut()}
         title="Zoom Out"
         className="p-2 rounded-xl bg-neu-bg/80 backdrop-blur-md border border-white/10 text-neu-text hover:text-neu-accent hover:border-neu-accent/40 transition-all duration-200 shadow-neu-sm"
       >
         <ZoomOut size={14} />
       </button>
-      <button
+      <button type="button"
         onClick={() => resetTransform()}
         title="Reset View"
         className="p-2 rounded-xl bg-neu-bg/80 backdrop-blur-md border border-white/10 text-neu-text hover:text-neu-accent hover:border-neu-accent/40 transition-all duration-200 shadow-neu-sm"
@@ -85,7 +85,7 @@ function FullscreenViewer({
           <Move size={12} /> Drag to pan • Scroll / Pinch to zoom • Click
           outside to close
         </span>
-        <button
+        <button type="button"
           onClick={onClose}
           className="p-2 rounded-full bg-white/10 text-white hover:bg-white/25 transition-colors border border-white/10"
         >
@@ -142,7 +142,7 @@ function ImageView({ imageUrl }: { imageUrl: string }) {
         </div>
 
         {/* Fullscreen button */}
-        <button
+        <button type="button"
           onClick={() => setIsFullscreen(true)}
           title="Open Fullscreen"
           className="absolute top-3 right-3 z-10 p-2 rounded-xl bg-black/60 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:border-white/30 transition-all duration-200 opacity-0 group-hover:opacity-100"
