@@ -239,13 +239,11 @@ export default function ProficiencySection({
                 <strong className="text-neu-text font-medium">
                   At Astra Group
                 </strong>
-                , shipping Node.js microservices for enterprise fleet and driver
-                management.
+                {", shipping Node.js microservices for enterprise fleet and driver management. "}
                 <strong className="text-neu-text font-medium">
                   Parallel focus:
-                </strong>{" "}
-                building AuraFlow AI as primary portfolio project for remote
-                backend roles.
+                </strong>
+                {" building AuraFlow AI as primary portfolio project for remote backend roles."}
               </p>
             </div>
 

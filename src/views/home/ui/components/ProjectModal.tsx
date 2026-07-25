@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Globe, Github, 
-  Terminal, Lightbulb, Target, FileText, Network, Layers, Sparkles 
+  Terminal, Lightbulb, Target, FileText, Network, Layers, Sparkles, Code2, Check, Copy 
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import ReactMarkdown from 'react-markdown';
@@ -39,6 +39,8 @@ export default function ProjectModal({
   getTagProjectCount,
   TECHNICAL_IMAGERY
 }: ProjectModalProps) {
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
+
   return (
     <AnimatePresence>
       {selectedProject && (
@@ -49,6 +51,9 @@ export default function ProjectModal({
           transition={{ type: "spring", stiffness: 100, damping: 15 }}
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
           onClick={onClose}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') onClose();
+          }}
         >
           {/* Left Desktop Arrow Button */}
           <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden lg:block z-50">
@@ -96,6 +101,9 @@ export default function ProjectModal({
             exit={{ opacity: 0, y: 40 }}
             transition={{ type: "spring", stiffness: 160, damping: 22 }}
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') e.stopPropagation();
+            }}
             className="bg-neu-bg rounded-3xl shadow-neu-modal w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col relative cursor-grab active:cursor-grabbing"
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -368,11 +376,11 @@ export default function ProjectModal({
                                 if (!code) return "";
                                 // Escape HTML tags to prevent rendering issues
                                 let html = code
-                                  .replace(/&/g, "&amp;")
-                                  .replace(/</g, "&lt;")
-                                  .replace(/>/g, "&gt;")
-                                  .replace(/"/g, "&quot;")
-                                  .replace(/'/g, "&#039;");
+                                  .replaceAll(/&/g, "&amp;")
+                                  .replaceAll(/</g, "&lt;")
+                                  .replaceAll(/>/g, "&gt;")
+                                  .replaceAll(/"/g, "&quot;")
+                                  .replaceAll(/'/g, "&#039;");
 
                                 // Apply custom theme colors to the code block tokens
                                 const keywordList = [
@@ -383,35 +391,7 @@ export default function ProjectModal({
                                   "number", "boolean", "any", "type", "implements"
                                 ];
                                 const keywords = new RegExp(`\\b(${keywordList.join('|')})\\b`, "g");
-                                html = html.replace(
-                                  keywords,
-                                  '<span class="text-purple-400 dark:text-purple-400 font-medium">$1</span>',
-                                );
-
-                                const strings = /(["'`])(.*?)\1/g;
-                                html = html.replace(
-                                  strings,
-                                  '<span class="text-emerald-400 dark:text-emerald-400">$1$2$1</span>',
-                                );
-
-                                const comments = /(\/\/.*|#.*)/g;
-                                html = html.replace(
-                                  comments,
-                                  '<span class="text-zinc-500 italic">$1</span>',
-                                );
-
-                                const numbers = /\b(\d+)\b/g;
-                                html = html.replace(
-                                  numbers,
-                                  '<span class="text-amber-400 dark:text-amber-400">$1</span>',
-                                );
-
-                                const builtins =
-                                  /\b(console|log|error|window|document|process|env|true|false|null|undefined)\b/g;
-                                html = html.replace(
-                                  builtins,
                                 html = html.replace(keywords, '<span class="text-purple-400 dark:text-purple-400 font-medium">$1</span>');
-
                                 html = html.replace(/(["'`])(.*?)\1/g, '<span class="text-emerald-400 dark:text-emerald-400">$1$2$1</span>');
                                 html = html.replace(/(\/\/.*|#.*)/g, '<span class="text-zinc-500 italic">$1</span>');
                                 html = html.replace(/\b(\d+)\b/g, '<span class="text-amber-400 dark:text-amber-400">$1</span>');
@@ -473,7 +453,7 @@ export default function ProjectModal({
                                         className,
                                       )}
                                       dangerouslySetInnerHTML={{
-                                        __html: highlightCode(String(children)),
+                                        __html: highlightCode(String(children).replace(/\n$/, ""), match[1]),
                                       }}
                                       {...props}
                                     />
@@ -526,9 +506,18 @@ export default function ProjectModal({
                       {getRelatedProjects(selectedProject).map((proj) => (
                         <div
                           key={proj.id}
+                          role="button"
+                          tabIndex={0}
                           onClick={(e) => {
                             e.stopPropagation();
                             onSelectProject(proj);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              onSelectProject(proj);
+                            }
                           }}
                           className="p-5 rounded-2xl glass-card hover:shadow-neu-sm border border-gray-300/10 dark:border-zinc-800 cursor-pointer group hover:scale-[1.01] active:scale-95 transition-all flex items-center gap-4 text-left"
                         >

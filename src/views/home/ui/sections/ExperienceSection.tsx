@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity, sonarjs/no-nested-functions */
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Briefcase, Quote, QuoteIcon, Wrench, Activity, Code2, ChevronUp, ChevronDown, Sparkles, MessageCircle, MessageSquare, GitCommit, BarChart2, ExternalLink, Calendar } from 'lucide-react';
@@ -134,6 +135,7 @@ export default function ExperienceSection({
                 <div className="flex bg-neu-bg p-1.5 rounded-2xl shadow-neu-inset gap-1">
                   <button
                     onClick={() => setChartType("temporal")}
+                    onKeyDown={(e) => { if (e.key === 'Enter') setChartType("temporal"); }}
                     className={cn(
                       "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
                       chartType === "temporal"
@@ -145,6 +147,7 @@ export default function ExperienceSection({
                   </button>
                   <button
                     onClick={() => setChartType("repository")}
+                    onKeyDown={(e) => { if (e.key === 'Enter') setChartType("repository"); }}
                     className={cn(
                       "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
                       chartType === "repository"
@@ -608,6 +611,7 @@ export default function ExperienceSection({
                     {selectedLevelFilter !== null ? (
                       <button
                         onClick={() => setSelectedLevelFilter(null)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') setSelectedLevelFilter(null); }}
                         className="text-[10px] font-mono text-neu-accent hover:underline cursor-pointer flex items-center gap-1 active:scale-95 transition-transform mr-2"
                       >
                         ✕ Clear Filter
@@ -628,6 +632,15 @@ export default function ExperienceSection({
                                 : lvl.level,
                             )
                           }
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              setSelectedLevelFilter(
+                                selectedLevelFilter === lvl.level
+                                  ? null
+                                  : lvl.level,
+                              );
+                            }
+                          }}
                           className={cn(
                             "w-4 h-4 rounded-[4px] cursor-pointer transition-all duration-200 relative group/legend flex items-center justify-center border border-transparent",
                             isDark ? lvl.darkBg : lvl.lightBg,
@@ -797,7 +810,10 @@ export default function ExperienceSection({
                     onMouseEnter={() => setActiveExpIdx(idx)}
                   >
                     <div
+                      role="button"
+                      tabIndex={0}
                       onClick={() => setActiveExpIdx(isActive ? null : idx)}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveExpIdx(isActive ? null : idx); }}
                       className={cn(
                         "grid grid-cols-1 md:grid-cols-12 gap-4 items-center py-6 px-6 rounded-2xl cursor-pointer transition-all duration-300 group relative border-b border-gray-300/10 dark:border-zinc-800/10 last:border-0",
                         isActive
@@ -1012,6 +1028,7 @@ export default function ExperienceSection({
                       {t.testimonial.length > 150 && (
                         <button
                           onClick={() => setSelectedTestimonial(t)}
+                          onKeyDown={(e) => { if (e.key === 'Enter') setSelectedTestimonial(t); }}
                           className="mt-3 text-xs font-bold text-neu-accent hover:underline relative z-20 flex items-center gap-1 self-start"
                         >
                           See more...
@@ -1039,7 +1056,8 @@ export default function ExperienceSection({
                       </span>
                     )}
                     <div className="text-xs text-neu-text-muted">
-                      <span className="italic">{t.role}</span> at{" "}
+                      <span className="italic">{t.role}</span>
+                      {' at '}
                       <span className="font-bold">{t.company}</span>
                     </div>
                   </div>

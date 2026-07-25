@@ -16,7 +16,7 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
   
   const reactId = useId();
   // Ensure the ID is valid for Mermaid (starts with letter, no colons)
-  const idRef = useRef(`mermaid-${reactId.replace(/:/g, '')}`);
+  const idRef = useRef(`mermaid-${reactId.replaceAll(':', '')}`);
 
   useEffect(() => {
     let cancelled = false;

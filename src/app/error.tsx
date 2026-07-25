@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 
-export default function Error({
+export default function AppError({
   error,
   reset,
 }: {

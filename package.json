@@ -9,6 +9,7 @@
     "start": "next start",
     "start:prod": "dotenv -e .env.prod.local -- next start",
     "lint": "eslint .",
+    "lint:css": "stylelint 'src/**/*.css'",
     "clean": "next clean",
     "sonar": "dotenv -e .env.local -- sonar-scanner-npm"
   },
@@ -46,6 +47,8 @@
     "eslint": "9.39.1",
     "eslint-config-next": "16.0.8",
     "eslint-plugin-sonarjs": "^4.2.0",
-    "sonarqube-scanner": "^5.0.0"
+    "sonarqube-scanner": "^5.0.0",
+    "stylelint": "^17.14.1",
+    "stylelint-config-standard": "^40.0.0"
   }
 }
