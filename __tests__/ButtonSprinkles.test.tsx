@@ -10,6 +10,7 @@ describe('ButtonSprinkles.tsx', () => {
   });
 
   it('triggers sprinkle creation on button click', () => {
+    jest.useFakeTimers();
     render(
       <div>
         <ButtonSprinkles />
@@ -41,5 +42,25 @@ describe('ButtonSprinkles.tsx', () => {
     
     // Assert that animate was called (sprinkles were created)
     expect(Element.prototype.animate).toHaveBeenCalled();
+
+    // Fast-forward time to trigger cleanup timeout
+    jest.runAllTimers();
+    jest.useRealTimers();
+  });
+
+  it('ignores clicks on non-button elements', () => {
+    render(
+      <div>
+        <ButtonSprinkles />
+        <div id="not-a-button">Just text</div>
+      </div>
+    );
+
+    const div = document.getElementById('not-a-button');
+    Element.prototype.animate = jest.fn();
+    
+    fireEvent.click(div!);
+    
+    expect(Element.prototype.animate).not.toHaveBeenCalled();
   });
 });

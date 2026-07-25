@@ -55,7 +55,7 @@ export function ButtonSprinkles() {
       sprinkle.style.width = `${size}px`;
       sprinkle.style.height = `${size}px`;
       sprinkle.style.backgroundColor = color;
-      sprinkle.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+      sprinkle.style.borderRadius = random() > 0.5 ? "50%" : "2px";
       sprinkle.style.pointerEvents = "none";
       sprinkle.style.zIndex = "99999";
       
