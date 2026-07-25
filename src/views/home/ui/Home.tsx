@@ -657,6 +657,12 @@ export default function Portfolio() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
+      const getSecureRandom = () => {
+        const array = new Uint32Array(1);
+        window.crypto.getRandomValues(array);
+        return array[0] / (0xFFFFFFFF + 1);
+      };
+
       const calculateTime = () => {
         const timing = window.performance.timing;
         if (timing) {
@@ -667,11 +673,11 @@ export default function Portfolio() {
             Date.now();
           let diff = loadEventEnd - navStart;
           if (diff <= 0 || diff > 4000) {
-            diff = Math.floor(120 + Math.random() * 80);
+            diff = Math.floor(120 + getSecureRandom() * 80);
           }
           setLoadTime(diff);
         } else {
-          setLoadTime(Math.floor(120 + Math.random() * 80));
+          setLoadTime(Math.floor(120 + getSecureRandom() * 80));
         }
       };
 

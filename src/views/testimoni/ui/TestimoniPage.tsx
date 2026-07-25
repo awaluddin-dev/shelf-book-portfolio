@@ -15,6 +15,7 @@ export default function SubmitTestimonial({ params }: { params: Promise<{ token:
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Hardcoded simple check for encoded endpoint concept
   if (resolvedParams.token !== 'submit-2026') {
@@ -27,8 +28,6 @@ export default function SubmitTestimonial({ params }: { params: Promise<{ token:
       </div>
     );
   }
-
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

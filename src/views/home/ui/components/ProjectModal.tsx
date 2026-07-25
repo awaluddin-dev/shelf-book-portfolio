@@ -111,7 +111,7 @@ export default function ProjectModal({
                 <motion.div
                   animate={{
                     padding: isBannerMinimized ? "1.5rem 2rem" : "2rem 3rem",
-                    height: isBannerMinimized ? "auto" : "auto",
+                    height: "auto",
                   }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   className={cn(
@@ -375,8 +375,14 @@ export default function ProjectModal({
                                   .replace(/'/g, "&#039;");
 
                                 // Apply custom theme colors to the code block tokens
-                                const keywords =
-                                  /\b(const|let|var|function|return|import|export|from|class|extends|if|else|for|while|async|await|try|catch|def|elif|print|public|private|protected|interface|new|this|package|void|string|number|boolean|any|type|implements)\b/g;
+                                const keywordList = [
+                                  "const", "let", "var", "function", "return", "import", "export", 
+                                  "from", "class", "extends", "if", "else", "for", "while", "async", 
+                                  "await", "try", "catch", "def", "elif", "print", "public", "private", 
+                                  "protected", "interface", "new", "this", "package", "void", "string", 
+                                  "number", "boolean", "any", "type", "implements"
+                                ];
+                                const keywords = new RegExp(`\\b(${keywordList.join('|')})\\b`, "g");
                                 html = html.replace(
                                   keywords,
                                   '<span class="text-purple-400 dark:text-purple-400 font-medium">$1</span>',
@@ -404,63 +410,75 @@ export default function ProjectModal({
                                   /\b(console|log|error|window|document|process|env|true|false|null|undefined)\b/g;
                                 html = html.replace(
                                   builtins,
-                                  '<span class="text-rose-400 dark:text-rose-400 font-medium">$1</span>',
-                                );
+                                html = html.replace(keywords, '<span class="text-purple-400 dark:text-purple-400 font-medium">$1</span>');
+
+                                html = html.replace(/(["'`])(.*?)\1/g, '<span class="text-emerald-400 dark:text-emerald-400">$1$2$1</span>');
+                                html = html.replace(/(\/\/.*|#.*)/g, '<span class="text-zinc-500 italic">$1</span>');
+                                html = html.replace(/\b(\d+)\b/g, '<span class="text-amber-400 dark:text-amber-400">$1</span>');
+                                html = html.replace(/\b(console|log|error|window|document|process|env|true|false|null|undefined)\b/g, '<span class="text-rose-400 dark:text-rose-400 font-medium">$1</span>');
 
                                 return html;
                               };
 
-                              return match ? (
-                                // Mermaid diagram — rendered as interactive SVG
-                                match[1] === "mermaid" ? (
+                              if (!match) {
+                                return (
+                                  <code
+                                    className={cn(
+                                      "bg-black/5 dark:bg-white/10 px-1.5 py-0.5 rounded text-[0.85em] font-mono text-pink-600 dark:text-pink-400 break-words",
+                                      className,
+                                    )}
+                                    {...props}
+                                  >
+                                    {children}
+                                  </code>
+                                );
+                              }
+
+                              if (match[1] === "mermaid") {
+                                return (
                                   <MermaidDiagram
                                     key={String(children)}
-                                    chart={String(children).replace(
-                                      /\n$/,
-                                      "",
-                                    )}
+                                    chart={String(children).replace(/\n$/, "")}
                                   />
-                                ) : (
-                                  <div className="relative group/code my-6 rounded-2xl overflow-hidden border border-black/5 dark:border-white/5 bg-zinc-950 dark:bg-black/40">
-                                    <div className="flex items-center justify-between px-4 py-2 bg-zinc-900/50 dark:bg-zinc-900/20 border-b border-white/5 text-[10px] font-mono uppercase tracking-wider text-neutral-400">
-                                      <span>{match[1]}</span>
-                                      <button
-                                        onClick={() => {
-                                          navigator.clipboard.writeText(
-                                            String(children),
-                                          );
-                                        }}
-                                        className="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer"
-                                      >
-                                        Copy
-                                      </button>
-                                    </div>
-                                    <pre className="p-5 overflow-x-auto font-mono text-sm leading-relaxed text-zinc-300 select-text bg-transparent m-0">
-                                      <code
-                                        className={`language-${match[1]}`}
-                                        dangerouslySetInnerHTML={{
-                                          __html: highlightCode(
-                                            String(children).replace(
-                                              /\n$/,
-                                              "",
-                                            ),
-                                            match[1],
-                                          ),
-                                        }}
-                                      />
-                                    </pre>
+                                );
+                              }
+
+                              return (
+                                <div className="relative group/code my-6 rounded-2xl overflow-hidden border border-black/5 dark:border-white/5 bg-zinc-950 dark:bg-black/40">
+                                  <div className="flex items-center justify-between px-4 py-2 bg-zinc-900/50 dark:bg-zinc-900/20 border-b border-white/5 text-[10px] font-mono uppercase tracking-wider text-neutral-400">
+                                    <span className="flex items-center gap-1.5">
+                                      <Code2 size={12} className="text-neu-accent" />
+                                      {match[1]}
+                                    </span>
+                                    <button
+                                      onClick={() => {
+                                        navigator.clipboard.writeText(String(children));
+                                        setCopiedCode(String(children));
+                                        setTimeout(() => setCopiedCode(null), 2000);
+                                      }}
+                                      className="flex items-center gap-1 text-neu-accent hover:text-white transition-colors"
+                                    >
+                                      {copiedCode === String(children) ? (
+                                        <Check size={12} className="text-green-400" />
+                                      ) : (
+                                        <Copy size={12} />
+                                      )}
+                                      {copiedCode === String(children) ? "Copied" : "Copy"}
+                                    </button>
                                   </div>
-                                )
-                              ) : (
-                                <code
-                                  className={cn(
-                                    "bg-neutral-200 dark:bg-zinc-850 text-neu-text px-1.5 py-0.5 rounded text-xs font-mono font-medium",
-                                    className,
-                                  )}
-                                  {...props}
-                                >
-                                  {children}
-                                </code>
+                                  <div className="p-4 overflow-x-auto">
+                                    <code
+                                      className={cn(
+                                        "block text-sm font-mono text-zinc-300 leading-relaxed whitespace-pre font-light",
+                                        className,
+                                      )}
+                                      dangerouslySetInnerHTML={{
+                                        __html: highlightCode(String(children)),
+                                      }}
+                                      {...props}
+                                    />
+                                  </div>
+                                </div>
                               );
                             },
                           }}

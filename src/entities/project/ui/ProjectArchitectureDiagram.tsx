@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Network, Layers, Activity, ZoomIn, ZoomOut, RotateCcw, Maximize2, X, Move, Image as ImageIcon } from 'lucide-react';
+import { Network, Layers, Activity, ZoomIn, ZoomOut, RotateCcw, Maximize2, X, Move, Image as ImageIcon, Plus, Info, LayoutTemplate, Link2, ExternalLink, Settings2 } from 'lucide-react';
 import { TransformWrapper, TransformComponent, useControls } from 'react-zoom-pan-pinch';
 import EmptyState from '@/shared/ui/EmptyState';
 
@@ -207,15 +207,12 @@ function NodeView({ nodes, projectId }: { nodes: any[]; projectId: string }) {
 // --- Main Component ---
 export default function ProjectArchitectureDiagram({ project, isDark }: { project: any; isDark: boolean }) {
   const [nodes, setNodes] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
   const hasImage = !!(project?.architectureImage);
+  const [loading, setLoading] = useState(!hasImage);
 
   useEffect(() => {
-    if (hasImage) {
-      setLoading(false);
-      return;
-    }
+    if (hasImage) return;
+    
     fetch('/api/architecture')
       .then(res => res.json())
       .then(data => {
@@ -258,13 +255,15 @@ export default function ProjectArchitectureDiagram({ project, isDark }: { projec
         )}
       </div>
 
-      {showEmptyState ? (
-        <EmptyState message="No architecture diagram defined for this project. Upload an Excalidraw export or add architecture nodes via the Admin panel." />
-      ) : hasImage ? (
-        <ImageView imageUrl={project.architectureImage} />
-      ) : (
-        <NodeView nodes={nodes} projectId={project?.id} />
-      )}
+      {(() => {
+        if (showEmptyState) {
+          return <EmptyState message="No architecture diagram defined for this project. Upload an Excalidraw export or add architecture nodes via the Admin panel." />;
+        }
+        if (hasImage) {
+          return <ImageView imageUrl={project.architectureImage!} />;
+        }
+        return <NodeView nodes={nodes} projectId={project?.id} />;
+      })()}
     </div>
   );
 }

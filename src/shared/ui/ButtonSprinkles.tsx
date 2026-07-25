@@ -24,42 +24,49 @@ export function ButtonSprinkles() {
 
     const perimeter = 2 * rect.width + 2 * rect.height;
 
+    // Secure random number generator (0 to 1)
+    const getSecureRandom = () => {
+      const array = new Uint32Array(1);
+      window.crypto.getRandomValues(array);
+      return array[0] / (0xFFFFFFFF + 1);
+    };
+
     for (let i = 0; i < numSprinkles; i++) {
       const sprinkle = document.createElement("div");
       
-      const size = Math.random() * 5 + 3; // 3px to 8px
-      const color = colors[Math.floor(Math.random() * colors.length)];
+      const size = getSecureRandom() * 5 + 3; // 3px to 8px
+      const color = colors[Math.floor(getSecureRandom() * colors.length)];
       
       // Calculate random position on the perimeter
-      const p = Math.random() * perimeter;
+      const p = getSecureRandom() * perimeter;
       let px, py, tx, ty;
       
-      const velocity = Math.random() * 40 + 30;
+      const velocity = getSecureRandom() * 40 + 30;
 
       if (p < rect.width) {
         // Top edge
         px = rect.left + p;
         py = rect.top;
-        tx = (Math.random() - 0.5) * velocity;
-        ty = -(Math.random() * velocity + 10);
+        tx = (getSecureRandom() - 0.5) * velocity;
+        ty = -(getSecureRandom() * velocity + 10);
       } else if (p < rect.width + rect.height) {
         // Right edge
         px = rect.right;
         py = rect.top + (p - rect.width);
-        tx = Math.random() * velocity + 10;
-        ty = (Math.random() - 0.5) * velocity;
+        tx = getSecureRandom() * velocity + 10;
+        ty = (getSecureRandom() - 0.5) * velocity;
       } else if (p < 2 * rect.width + rect.height) {
         // Bottom edge
         px = rect.right - (p - rect.width - rect.height);
         py = rect.bottom;
-        tx = (Math.random() - 0.5) * velocity;
-        ty = Math.random() * velocity + 10;
+        tx = (getSecureRandom() - 0.5) * velocity;
+        ty = getSecureRandom() * velocity + 10;
       } else {
         // Left edge
         px = rect.left;
         py = rect.bottom - (p - 2 * rect.width - rect.height);
-        tx = -(Math.random() * velocity + 10);
-        ty = (Math.random() - 0.5) * velocity;
+        tx = -(getSecureRandom() * velocity + 10);
+        ty = (getSecureRandom() - 0.5) * velocity;
       }
 
       sprinkle.style.position = "fixed";
@@ -68,7 +75,7 @@ export function ButtonSprinkles() {
       sprinkle.style.width = `${size}px`;
       sprinkle.style.height = `${size}px`;
       sprinkle.style.backgroundColor = color;
-      sprinkle.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+      sprinkle.style.borderRadius = getSecureRandom() > 0.5 ? "50%" : "2px";
       sprinkle.style.pointerEvents = "none";
       sprinkle.style.zIndex = "99999";
       
@@ -78,7 +85,7 @@ export function ButtonSprinkles() {
         { transform: "translate(-50%, -50%) scale(1)", opacity: 1 },
         { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
       ], {
-        duration: Math.random() * 400 + 400, // 400ms to 800ms
+        duration: getSecureRandom() * 400 + 400, // 400ms to 800ms
         easing: "cubic-bezier(0.25, 1, 0.5, 1)",
         fill: "forwards"
       });
