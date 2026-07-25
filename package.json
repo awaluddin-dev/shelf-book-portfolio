@@ -13,7 +13,8 @@
     "clean": "next clean",
     "sonar": "dotenv -e .env.local -- sonar-scanner-npm",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage"
   },
   "dependencies": {
     "@marsidev/react-turnstile": "^1.5.3",

@@ -1,0 +1,164 @@
+$ jest
+FAIL __tests__/fetchUtils.test.ts
+  ● fetchUtils › fetchWithRetry › throws error if max retries are exceeded
+
+    Server responded with 500
+
+      18 |       // If the database is waking up, the API might timeout (408) or throw a 5xx error
+      19 |       if (response.status === 408 || response.status >= 500) {
+    > 20 |         throw new Error(`Server responded with ${response.status}`);
+         |               ^
+      21 |       }
+      22 |       
+      23 |       return response;
+
+      at fetchWithRetry (src/shared/lib/fetchUtils.ts:20:15)
+
+  ● fetchUtils › fetchWithRetry › throws error if max retries are exceeded
+
+    Server responded with 500
+
+      18 |       // If the database is waking up, the API might timeout (408) or throw a 5xx error
+      19 |       if (response.status === 408 || response.status >= 500) {
+    > 20 |         throw new Error(`Server responded with ${response.status}`);
+         |               ^
+      21 |       }
+      22 |       
+      23 |       return response;
+
+      at fetchWithRetry (src/shared/lib/fetchUtils.ts:20:15)
+
+FAIL __tests__/helpers.test.ts
+  ● helpers › getRelatedProjects › returns up to 2 related projects sorted by tag overlap
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 1
+    Received length: 2
+    Received array:  [{"date": "2023", "description": "Desc 2", "gallery": [], "id": "2", "metrics": [], "tags": ["React", "Tailwind", "Node.js"], "title": "Project 2"}, {"date": "2024", "description": "Desc 3", "gallery": [], "id": "3", "metrics": [], "tags": ["Vue", "JavaScript", "CSS"], "title": "Project 3"}]
+
+      65 |       const related = getRelatedProjects(currentProj, mockProjects)
+      66 |       
+    > 67 |       expect(related).toHaveLength(1) // Only one other project has overlapping tags (Project 2)
+         |                       ^
+      68 |       expect(related[0].id).toBe('2')
+      69 |     })
+      70 |
+
+      at Object.toHaveLength (__tests__/helpers.test.ts:67:23)
+
+PASS __tests__/homeReducer.test.ts
+PASS __tests__/Home.test.tsx
+PASS __tests__/utils.test.ts
+PASS __tests__/use-mobile.test.ts
+---------------------------------|---------|----------|---------|---------|-------------------
+File                             | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+---------------------------------|---------|----------|---------|---------|-------------------
+All files                        |     2.3 |    38.94 |   11.11 |     2.3 |                   
+ app                             |       0 |        0 |       0 |       0 |                   
+  error.tsx                      |       0 |        0 |       0 |       0 | 1-47              
+  not-found.tsx                  |       0 |        0 |       0 |       0 | 1-34              
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-5               
+  sitemap.ts                     |       0 |        0 |       0 |       0 | 1-20              
+ app/admin/architecture          |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-2               
+ app/admin/current               |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-10              
+ app/admin/dashboard             |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-5               
+ app/admin/learning              |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-10              
+ app/admin/lifecycle             |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-2               
+ app/admin/login                 |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-5               
+ app/admin/playground            |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-9               
+ app/admin/proficiency           |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-10              
+ app/admin/projects              |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-9               
+ app/admin/skill                 |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-10              
+ app/admin/testimoni             |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-10              
+ app/admin/work                  |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-10              
+ app/testimoni/[token]           |       0 |        0 |       0 |       0 |                   
+  page.tsx                       |       0 |        0 |       0 |       0 | 1-5               
+ entities/project/ui             |       0 |        0 |       0 |       0 |                   
+  BookItem.tsx                   |       0 |        0 |       0 |       0 | 1-104             
+  ProjectArchitectureDiagram.tsx |       0 |        0 |       0 |       0 | 1-277             
+  ProjectLifecycleTracker.tsx    |       0 |        0 |       0 |       0 | 1-161             
+ entities/skill/ui               |       0 |        0 |       0 |       0 |                   
+  SkillTree.tsx                  |       0 |        0 |       0 |       0 | 1-868             
+ features/contact/ui             |       0 |        0 |       0 |       0 |                   
+  ContactModal.tsx               |       0 |        0 |       0 |       0 | 1-159             
+ shared/lib                      |   42.68 |     90.9 |   83.33 |   42.68 |                   
+  fetchUtils.ts                  |   92.42 |     90.9 |     100 |   92.42 | 33-35,65-66       
+  helpers.tsx                    |     100 |      100 |     100 |     100 |                   
+  tech-icons.tsx                 |       0 |        0 |       0 |       0 | 1-187             
+  utils.ts                       |     100 |      100 |     100 |     100 |                   
+ shared/lib/hooks                |     100 |      100 |     100 |     100 |                   
+  use-mobile.ts                  |     100 |      100 |     100 |     100 |                   
+ shared/ui                       |       0 |        0 |       0 |       0 |                   
+  AnimatedDivider.tsx            |       0 |        0 |       0 |       0 | 1-46              
+  ButtonSprinkles.tsx            |       0 |        0 |       0 |       0 | 1-103             
+  CircuitBoardBg.tsx             |       0 |        0 |       0 |       0 | 1-151             
+  EmptyState.tsx                 |       0 |        0 |       0 |       0 | 1-19              
+  Loader.tsx                     |       0 |        0 |       0 |       0 | 1-35              
+  MermaidDiagram.tsx             |       0 |        0 |       0 |       0 | 1-130             
+  P5Background.tsx               |       0 |        0 |       0 |       0 | 1-127             
+  ThemeProvider.tsx              |       0 |        0 |       0 |       0 | 1-45              
+ shared/ui/admin                 |       0 |        0 |       0 |       0 |                   
+  AdminCrudTable.tsx             |       0 |        0 |       0 |       0 | 1-274             
+  AdminPageSkeleton.tsx          |       0 |        0 |       0 |       0 | 1-12              
+  AdminProjectLinkedCards.tsx    |       0 |        0 |       0 |       0 | 1-181             
+  AdminSidebar.tsx               |       0 |        0 |       0 |       0 | 1-90              
+ views/admin-architecture/ui     |       0 |        0 |       0 |       0 |                   
+  AdminArchitecture.tsx          |       0 |        0 |       0 |       0 | 1-48              
+ views/admin-current/ui          |       0 |        0 |       0 |       0 |                   
+  AdminCurrent.tsx               |       0 |        0 |       0 |       0 | 1-65              
+ views/admin-dashboard/ui        |       0 |        0 |       0 |       0 |                   
+  AdminDashboard.tsx             |       0 |        0 |       0 |       0 | 1-432             
+ views/admin-learning/ui         |       0 |        0 |       0 |       0 |                   
+  AdminLearning.tsx              |       0 |        0 |       0 |       0 | 1-86              
+ views/admin-lifecycle/ui        |       0 |        0 |       0 |       0 |                   
+  AdminLifecycle.tsx             |       0 |        0 |       0 |       0 | 1-64              
+ views/admin-login/ui            |       0 |        0 |       0 |       0 |                   
+  AdminLogin.tsx                 |       0 |        0 |       0 |       0 | 1-125             
+ views/admin-playground/ui       |       0 |        0 |       0 |       0 |                   
+  AdminPlayground.tsx            |       0 |        0 |       0 |       0 | 1-273             
+ views/admin-proficiency/ui      |       0 |        0 |       0 |       0 |                   
+  AdminProficiency.tsx           |       0 |        0 |       0 |       0 | 1-101             
+ views/admin-projects/ui         |       0 |        0 |       0 |       0 |                   
+  AdminProjects.tsx              |       0 |        0 |       0 |       0 | 1-195             
+ views/admin-skill/ui            |       0 |        0 |       0 |       0 |                   
+  AdminSkill.tsx                 |       0 |        0 |       0 |       0 | 1-82              
+ views/admin-testimoni/ui        |       0 |        0 |       0 |       0 |                   
+  AdminTestimoni.tsx             |       0 |        0 |       0 |       0 | 1-280             
+ views/admin-work/ui             |       0 |        0 |       0 |       0 |                   
+  AdminWork.tsx                  |       0 |        0 |       0 |       0 | 1-160             
+ views/home/model                |     100 |      100 |     100 |     100 |                   
+  homeReducer.ts                 |     100 |      100 |     100 |     100 |                   
+ views/home/ui                   |       0 |        0 |       0 |       0 |                   
+  Home.tsx                       |       0 |        0 |       0 |       0 | 1-1033            
+ views/home/ui/components        |       0 |        0 |       0 |       0 |                   
+  MobileFilterModal.tsx          |       0 |        0 |       0 |       0 | 1-86              
+  ProjectModal.tsx               |       0 |        0 |       0 |       0 | 1-557             
+  TestimonialModal.tsx           |       0 |        0 |       0 |       0 | 1-79              
+ views/home/ui/sections          |       0 |        0 |       0 |       0 |                   
+  ExperienceSection.tsx          |       0 |        0 |       0 |       0 | 1-1084            
+  HeroSection.tsx                |       0 |        0 |       0 |       0 | 1-365             
+  ProficiencySection.tsx         |       0 |        0 |       0 |       0 | 1-532             
+  ProjectsSection.tsx            |       0 |        0 |       0 |       0 | 1-547             
+ views/testimoni/ui              |       0 |        0 |       0 |       0 |                   
+  TestimoniPage.tsx              |       0 |        0 |       0 |       0 | 1-136             
+---------------------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 2 failed, 4 passed, 6 total
+Tests:       2 failed, 20 passed, 22 total
+Snapshots:   0 total
+Time:        4.17 s
+Ran all test suites.
+[ELIFECYCLE] Test failed. See above for more details.
