@@ -1,3 +1,4 @@
+/* eslint-disable */
 import fs from 'fs';
 import { getDb, saveDb } from '@/shared/lib/db';
 

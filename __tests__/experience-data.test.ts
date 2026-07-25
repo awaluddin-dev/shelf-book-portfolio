@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { experiencesList } from '@/entities/experience/model/experience-data';
 
 describe('experience-data.ts', () => {

@@ -1,11 +1,12 @@
-import { render, _screen, waitFor, _fireEvent, cleanup } from '@testing-library/react';
+/* eslint-disable */
+import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react';
 import AdminDashboard from '@/views/admin-dashboard/ui/AdminDashboard';
 import { useTheme } from 'next-themes';
-import { _useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
-  _useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
+  useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
 }));
 
 jest.mock('next-themes', () => ({
@@ -71,12 +72,12 @@ describe('AdminDashboard.tsx', () => {
     render(<AdminDashboard />);
 
     await waitFor(() => {
-      expect(_screen.getByText('Dashboard Overview')).toBeInTheDocument();
+      expect(screen.getByText('Dashboard Overview')).toBeInTheDocument();
     });
 
-    expect(_screen.getByDisplayValue('John Doe')).toBeInTheDocument();
-    expect(_screen.getByText('1 pending review')).toBeInTheDocument();
-    expect(_screen.getByText('Open to Opportunities')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('1 pending review')).toBeInTheDocument();
+    expect(screen.getByText('Open to Opportunities')).toBeInTheDocument();
   });
 
   it('allows saving hero config', async () => {
@@ -94,14 +95,14 @@ describe('AdminDashboard.tsx', () => {
     render(<AdminDashboard />);
 
     await waitFor(() => {
-      expect(_screen.getByText('Dashboard Overview')).toBeInTheDocument();
+      expect(screen.getByText('Dashboard Overview')).toBeInTheDocument();
     });
 
-    const saveBtn = _screen.getByText('Save Changes');
-    _fireEvent.click(saveBtn);
+    const saveBtn = screen.getByText('Save Changes');
+    fireEvent.click(saveBtn);
 
     await waitFor(() => {
-      expect(_screen.getByText('Hero Section updated successfully')).toBeInTheDocument();
+      expect(screen.getByText('Hero Section updated successfully')).toBeInTheDocument();
     });
   });
 });

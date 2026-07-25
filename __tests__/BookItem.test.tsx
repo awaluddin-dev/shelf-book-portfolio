@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { render, screen, fireEvent } from '@testing-library/react';
 import BookItem from '@/entities/project/ui/BookItem';
 import { projects } from '@/entities/testimonial/model/data';

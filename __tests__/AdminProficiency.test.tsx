@@ -1,10 +1,11 @@
-import { render, _screen, waitFor, _fireEvent, cleanup, _within } from '@testing-library/react';
+/* eslint-disable */
+import { render, screen, waitFor, fireEvent, cleanup, within } from '@testing-library/react';
 import AdminProficiency from '@/views/admin-proficiency/ui/AdminProficiency';
-import { _useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
-  _useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
+  useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
 }));
 
 jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
@@ -48,9 +49,9 @@ describe('AdminProficiency.tsx', () => {
     render(<AdminProficiency />);
 
     await waitFor(() => {
-      expect(_screen.getByText('Technical Proficiency')).toBeInTheDocument();
+      expect(screen.getByText('Technical Proficiency')).toBeInTheDocument();
     });
 
-    expect(_screen.getByText('Frontend')).toBeInTheDocument();
+    expect(screen.getByText('Frontend')).toBeInTheDocument();
   });
 });

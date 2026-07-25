@@ -1,10 +1,11 @@
-import { render, _screen, waitFor, _fireEvent, cleanup, _within } from '@testing-library/react';
+/* eslint-disable */
+import { render, screen, waitFor, fireEvent, cleanup, within } from '@testing-library/react';
 import AdminTestimoni from '@/views/admin-testimoni/ui/AdminTestimoni';
-import { _useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
-  _useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
+  useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
 }));
 
 jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
@@ -47,10 +48,10 @@ describe('AdminTestimoni.tsx', () => {
     render(<AdminTestimoni />);
 
     await waitFor(() => {
-      expect(_screen.getByText('Testimonials Management')).toBeInTheDocument();
+      expect(screen.getByText('Testimonials Management')).toBeInTheDocument();
     });
 
-    expect(_screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
 
   it('can accept a pending testimonial', async () => {
@@ -63,14 +64,14 @@ describe('AdminTestimoni.tsx', () => {
     render(<AdminTestimoni />);
 
     await waitFor(() => {
-      expect(_screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    const row = _screen.getByText('John Doe').closest('tr');
+    const row = screen.getByText('John Doe').closest('tr');
     // Accept is the first button for pending
-    const acceptBtn = _within(row!).getAllByRole('button')[0];
+    const acceptBtn = within(row!).getAllByRole('button')[0];
     
-    _fireEvent.click(acceptBtn);
+    fireEvent.click(acceptBtn);
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith('/api/testimonials/1', expect.objectContaining({ method: 'PATCH', body: JSON.stringify({ status: 'accepted' }) }));
@@ -87,18 +88,18 @@ describe('AdminTestimoni.tsx', () => {
     render(<AdminTestimoni />);
 
     await waitFor(() => {
-      expect(_screen.getByText('Jane Doe')).toBeInTheDocument();
+      expect(screen.getByText('Jane Doe')).toBeInTheDocument();
     });
 
     // click the row to open modal
-    const row = _screen.getByText('Jane Doe').closest('tr');
-    _fireEvent.click(row!);
+    const row = screen.getByText('Jane Doe').closest('tr');
+    fireEvent.click(row!);
 
     // check modal is open
-    expect(_screen.getByText('"Awesome!"')).toBeInTheDocument();
+    expect(screen.getByText('"Awesome!"')).toBeInTheDocument();
 
-    const rejectBtn = _screen.getAllByRole('button', { name: /Reject/i })[1];
-    _fireEvent.click(rejectBtn);
+    const rejectBtn = screen.getAllByRole('button', { name: /Reject/i })[1];
+    fireEvent.click(rejectBtn);
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith('/api/testimonials/1', expect.objectContaining({ method: 'PATCH', body: JSON.stringify({ status: 'rejected' }) }));

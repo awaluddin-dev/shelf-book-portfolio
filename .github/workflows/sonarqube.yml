@@ -27,9 +27,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
         
-      # Uncomment the following step if you have tests to run before analysis
-      # - name: Test and generate coverage
-      #   run: npm run test:coverage
+      - name: Test and generate coverage
+        run: pnpm run test:coverage
         
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master

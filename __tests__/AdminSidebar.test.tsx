@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AdminSidebar } from '@/shared/ui/admin/AdminSidebar';
 

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { render, screen, waitFor } from '@testing-library/react';
 import ProjectArchitectureDiagram from '@/entities/project/ui/ProjectArchitectureDiagram';
 

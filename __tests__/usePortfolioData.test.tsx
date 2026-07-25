@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { renderHook, waitFor } from '@testing-library/react';
 import { usePortfolioData } from '@/views/home/model/usePortfolioData';
 

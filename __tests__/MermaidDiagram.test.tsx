@@ -1,4 +1,5 @@
-import { render, _screen, act, waitFor } from '@testing-library/react';
+/* eslint-disable */
+import { render, screen, act, waitFor } from '@testing-library/react';
 import MermaidDiagram from '@/shared/ui/MermaidDiagram';
 
 // Mock mermaid
@@ -15,13 +16,13 @@ jest.mock('mermaid', () => {
 
 describe('MermaidDiagram.tsx', () => {
   it('renders loading state initially and then svg', async () => {
-    let _resolveMermaid: any;
+    let resolveMermaid: any;
     
     // We can just rely on the mock above which returns immediately.
-    const { _container } = render(<MermaidDiagram chart="graph TD; A-->B;" />);
+    const { container } = render(<MermaidDiagram chart="graph TD; A-->B;" />);
 
     // Check if the title exists
-    expect(_screen.getByText('Mermaid Diagram')).toBeInTheDocument();
+    expect(screen.getByText('Mermaid Diagram')).toBeInTheDocument();
 
     // wait for async render to finish
     await act(async () => {
@@ -29,7 +30,7 @@ describe('MermaidDiagram.tsx', () => {
     });
 
     // The SVG should be injected
-    expect(_container.innerHTML).toContain('<svg data-testid="mock-svg"');
+    expect(container.innerHTML).toContain('<svg data-testid="mock-svg"');
   });
 
   it('renders error state if chart is invalid', async () => {
@@ -38,17 +39,17 @@ describe('MermaidDiagram.tsx', () => {
     const mermaid = require('mermaid').default;
     mermaid.render.mockRejectedValueOnce(new Error('Parse error'));
 
-    let _container: any;
+    let container: any;
     await act(async () => {
-      _container = render(<MermaidDiagram chart="invalid chart" />);
+      container = render(<MermaidDiagram chart="invalid chart" />);
       // await internal microtasks
       await new Promise(resolve => setTimeout(resolve, 0));
     });
 
     await waitFor(() => {
-      expect(_screen.getByText('Mermaid Error:')).toBeInTheDocument();
+      expect(screen.getByText('Mermaid Error:')).toBeInTheDocument();
     });
     
-    expect(_screen.getByText('Parse error')).toBeInTheDocument();
+    expect(screen.getByText('Parse error')).toBeInTheDocument();
   });
 });

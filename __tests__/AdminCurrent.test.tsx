@@ -1,10 +1,11 @@
-import { render, _screen, waitFor, _fireEvent, cleanup, _within } from '@testing-library/react';
+/* eslint-disable */
+import { render, screen, waitFor, fireEvent, cleanup, within } from '@testing-library/react';
 import AdminCurrent from '@/views/admin-current/ui/AdminCurrent';
-import { _useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
-  _useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
+  useRouter: jest.fn().mockImplementation(() => ({ push: mockPush }))
 }));
 
 jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
@@ -44,10 +45,10 @@ describe('AdminCurrent.tsx', () => {
     render(<AdminCurrent />);
 
     await waitFor(() => {
-      expect(_screen.getByText('Right Now Focus')).toBeInTheDocument();
+      expect(screen.getByText('Right Now Focus')).toBeInTheDocument();
     });
 
-    expect(_screen.getByText('Building Shelf')).toBeInTheDocument();
+    expect(screen.getByText('Building Shelf')).toBeInTheDocument();
   });
 
   it('can open add modal, fill form, and submit', async () => {
@@ -61,16 +62,16 @@ describe('AdminCurrent.tsx', () => {
     render(<AdminCurrent />);
 
     await waitFor(() => {
-      expect(_screen.getByText('Right Now Focus')).toBeInTheDocument();
+      expect(screen.getByText('Right Now Focus')).toBeInTheDocument();
     });
 
-    _fireEvent.click(_screen.getByText('Add Focus'));
-    expect(_screen.getAllByText('Add Focus').length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByText('Add Focus'));
+    expect(screen.getAllByText('Add Focus').length).toBeGreaterThan(0);
 
-    const titleInput = _screen.getAllByRole('textbox')[0];
-    _fireEvent.change(titleInput, { target: { value: 'New Focus' } });
+    const titleInput = screen.getAllByRole('textbox')[0];
+    fireEvent.change(titleInput, { target: { value: 'New Focus' } });
 
-    _fireEvent.submit(_screen.getByText('Create Focus Item').closest('form')!);
+    fireEvent.submit(screen.getByText('Create Focus Item').closest('form')!);
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith('/api/current', expect.objectContaining({ method: 'POST' }));
@@ -88,17 +89,17 @@ describe('AdminCurrent.tsx', () => {
     render(<AdminCurrent />);
 
     await waitFor(() => {
-      expect(_screen.getByText('Old Focus')).toBeInTheDocument();
+      expect(screen.getByText('Old Focus')).toBeInTheDocument();
     });
 
-    const row = _screen.getByText('Old Focus').closest('tr');
+    const row = screen.getByText('Old Focus').closest('tr');
     // buttons: Edit, Delete
-    const editBtn = _within(row!).getAllByRole('button')[0];
-    _fireEvent.click(editBtn);
+    const editBtn = within(row!).getAllByRole('button')[0];
+    fireEvent.click(editBtn);
 
-    expect(_screen.getByText('Edit Focus')).toBeInTheDocument();
+    expect(screen.getByText('Edit Focus')).toBeInTheDocument();
 
-    _fireEvent.submit(_screen.getByText('Save Changes').closest('form')!);
+    fireEvent.submit(screen.getByText('Save Changes').closest('form')!);
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith('/api/current/1', expect.objectContaining({ method: 'PATCH' }));
@@ -116,13 +117,13 @@ describe('AdminCurrent.tsx', () => {
     render(<AdminCurrent />);
 
     await waitFor(() => {
-      expect(_screen.getByText('Delete Me')).toBeInTheDocument();
+      expect(screen.getByText('Delete Me')).toBeInTheDocument();
     });
 
-    const row = _screen.getByText('Delete Me').closest('tr');
-    const deleteBtn = _within(row!).getAllByRole('button')[1];
+    const row = screen.getByText('Delete Me').closest('tr');
+    const deleteBtn = within(row!).getAllByRole('button')[1];
 
-    _fireEvent.click(deleteBtn);
+    fireEvent.click(deleteBtn);
 
     expect(window.confirm).toHaveBeenCalled();
 
