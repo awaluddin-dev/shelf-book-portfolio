@@ -5,7 +5,7 @@ import { cn } from "@/shared/lib/utils";
 import { Briefcase, GitCommit, Code, Activity, ChevronUp, ChevronDown, Sparkles, BarChart2 } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend, PieChart, Pie, Cell } from "recharts";
 
-export function ExperienceSection({ activeWork, _activeRoadmap, gh, isLoading, isDark, _renderIcon, legendLevels }: any) {
+export function ExperienceSection({ activeWork, gh, isLoading, isDark, legendLevels }: any) {
     const [chartType, setChartType] = useState<"temporal" | "repository">("temporal");
     const { timelineData = [], repoData = [], languageData = [], heatmapStats = { total: 0, maxStreak: 0, avgIntensity: 0 }, monthsData = [] } = gh || {};
     
@@ -37,7 +37,7 @@ export function ExperienceSection({ activeWork, _activeRoadmap, gh, isLoading, i
     
     const [selectedLevelFilter, setSelectedLevelFilter] = React.useState<number | null>(null);
 
-    const [_expandedRoadmapId, _setExpandedRoadmapId] = useState<string | null>(null);
+
     const [hoveredMonth, setHoveredMonth] = useState<number | null>(null);
     const [hoveredLang, setHoveredLang] = useState<string | null>(null);
     const [activeExpIdx, setActiveExpIdx] = useState<number | null>(null);

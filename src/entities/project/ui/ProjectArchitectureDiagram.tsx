@@ -188,10 +188,8 @@ function ImageView({ imageUrl }: { imageUrl: string }) {
 // --- Legacy Node View Mode ---
 function NodeView({
   nodes,
-  projectId: _projectId,
 }: {
   nodes: any[];
-  projectId: string;
 }) {
   const [hoveredNode, setHoveredNode] = useState<any | null>(null);
 
@@ -278,10 +276,8 @@ function NodeView({
 // --- Main Component ---
 export default function ProjectArchitectureDiagram({
   project,
-  isDark: _isDark,
 }: {
   project: any;
-  isDark: boolean;
 }) {
   const [nodes, setNodes] = useState<any[]>([]);
   const hasImage = !!project?.architectureImage;
@@ -290,7 +286,10 @@ export default function ProjectArchitectureDiagram({
   useEffect(() => {
     if (hasImage) return;
     fetch("/api/architecture")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
       .then((data) => {
         const arr = data.data || data;
         const projectNodes = (Array.isArray(arr) ? arr : [])
@@ -340,7 +339,7 @@ export default function ProjectArchitectureDiagram({
       ) : hasImage ? (
         <ImageView imageUrl={project.architectureImage} />
       ) : (
-        <NodeView nodes={nodes} projectId={project?.id} />
+        <NodeView nodes={nodes} />
       )}
     </div>
   );
