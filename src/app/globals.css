@@ -1,20 +1,13 @@
-@import url("tailwindcss");
-@import url("tw-animate-css");
+@import "tailwindcss";
+@source "../views";
+@source "../shared";
+@source "../entities";
+@source "../widgets";
+@source "../features";
+@import "tw-animate-css";
 
 @variant dark (&:where(.dark, .dark *));
 @plugin "@tailwindcss/typography";
-
-:root {
-  --color-neu-bg: #F9F7F7;
-  --color-neu-secondary: #DBE2EF;
-  --color-neu-text: #112D4E;
-  --color-neu-text-muted: rgb(17 45 78 / 65%);
-  --color-neu-accent: #3F72AF;
-  --shadow-neu: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
-  --shadow-neu-inset: inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
-  --shadow-neu-sm: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
-  --shadow-neu-modal: 16px 16px 32px rgb(17 45 78 / 12%), -16px -16px 32px #fff;
-}
 
 .dark {
   --color-neu-bg: #222831;
@@ -29,15 +22,16 @@
 }
 
 @theme {
-  --color-neu-bg: var(--color-neu-bg);
-  --color-neu-secondary: var(--color-neu-secondary);
-  --color-neu-text: var(--color-neu-text);
-  --color-neu-text-muted: var(--color-neu-text-muted);
-  --color-neu-accent: var(--color-neu-accent);
-  --shadow-neu: var(--shadow-neu);
-  --shadow-neu-inset: var(--shadow-neu-inset);
-  --shadow-neu-sm: var(--shadow-neu-sm);
-  --shadow-neu-modal: var(--shadow-neu-modal);
+  --color-test-1: #123456;
+  --color-neu-bg: #F9F7F7;
+  --color-neu-secondary: #DBE2EF;
+  --color-neu-text: #112D4E;
+  --color-neu-text-muted: rgb(17 45 78 / 65%);
+  --color-neu-accent: #3F72AF;
+  --shadow-neu: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
+  --shadow-neu-inset: inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
+  --shadow-neu-sm: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
+  --shadow-neu-modal: 16px 16px 32px rgb(17 45 78 / 12%), -16px -16px 32px #fff;
 }
 
 body {
@@ -159,7 +153,7 @@ body *,
     color: #4b5563 !important;
   }
 
-  .text-neu-accent {
+  .print-text-neu-accent {
     color: #3b82f6 !important;
   }
 }
@@ -291,7 +285,7 @@ body *,
     color: #4b5563 !important;
   }
 
-  .text-neu-accent {
+  .print-text-neu-accent {
     color: #3b82f6 !important;
   }
 }

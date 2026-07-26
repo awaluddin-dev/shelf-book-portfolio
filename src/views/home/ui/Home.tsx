@@ -611,26 +611,26 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen bg-neu-bg text-neu-text px-6 pb-6 md:px-12 md:pb-12 lg:px-24 lg:pb-24 pt-[2.7rem] font-sans transition-colors duration-300 relative">
       {/* Animated Scroll Progress Bar */}
-      {mounted && (
-        <motion.div
-          id="scroll-progress"
-          role="progressbar"
-          aria-hidden="true"
-          className="fixed top-0 left-0 right-0 h-[4px] bg-neu-accent z-[9999]"
-          style={{ scaleX, transformOrigin: "0%" }}
-        />
-      )}
+      <motion.div
+        id="scroll-progress"
+        role="progressbar"
+        aria-label="Scroll Progress"
+        className="fixed top-0 left-0 right-0 h-[4px] bg-neu-accent z-[100] origin-left"
+        style={{ scaleX }}
+      />
       {/* Sticky bottom dock navigation with rotating dynamic border glow */}
-      {mounted && (
-        <motion.nav
-          aria-label="Bottom Dock Navigation"
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] w-auto max-w-[95vw] sm:max-w-lg md:max-w-none p-1.5 rounded-2xl flex flex-nowrap items-center transition-all duration-300 group"
+      <motion.div
+        role="navigation"
+        aria-label="Bottom Dock Navigation"
+        initial={{ y: 100, x: "-50%", opacity: 0 }}
+        animate={{ y: 0, x: "-50%", opacity: 1 }}
+        transition={{ type: "spring", stiffness: 260, damping: 20 }}
+        className="fixed bottom-6 left-1/2 z-50 w-auto max-w-[95vw] sm:max-w-lg md:max-w-none p-1.5 rounded-2xl flex flex-nowrap items-center transition-all duration-300 group"
         style={{
-          boxShadow: isDark
-            ? "0 8px 30px rgba(0, 173, 181, 0.12), inset 0 0 12px rgba(0, 173, 181, 0.04)"
+          boxShadow: mounted
+            ? (isDark
+              ? "0 8px 30px rgba(0, 173, 181, 0.12), inset 0 0 12px rgba(0, 173, 181, 0.04)"
+              : "0 8px 30px rgba(63, 114, 175, 0.08), inset 0 0 12px rgba(63, 114, 175, 0.02)")
             : "0 8px 30px rgba(63, 114, 175, 0.08), inset 0 0 12px rgba(63, 114, 175, 0.02)",
         }}
       >
@@ -785,7 +785,7 @@ export default function Portfolio() {
                 "text-neu-text-muted group-hover:text-neu-accent",
               )}
             >
-              {isDark ? (
+              {mounted && isDark ? (
                 <Sun size={16} className="sm:w-[18px] sm:h-[18px]" />
               ) : (
                 <Moon size={16} className="sm:w-[18px] sm:h-[18px]" />
@@ -800,15 +800,14 @@ export default function Portfolio() {
                   transition={{ type: "spring", stiffness: 450, damping: 24 }}
                   className="absolute bottom-full mb-3 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none left-1/2"
                 >
-                  {isDark ? "Light Mode" : "Dark Mode"}
+                  {mounted && isDark ? "Light Mode" : "Dark Mode"}
                   <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[5px] w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-r border-b border-neu-accent/20"></div>
                 </motion.div>
               )}
             </AnimatePresence>
           </button>
         </div>
-        </motion.nav>
-      )}
+      </motion.div>
       {/* Extracted Sections */}
       <HeroSection
         isLoading={isLoading}
