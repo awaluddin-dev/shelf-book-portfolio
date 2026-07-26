@@ -10,7 +10,13 @@ export default function AdminSkill() {
       itemName="Skill Node"
       activePath="/admin/skill"
       apiEndpoint="/api/skills"
-      dataExtractor={(data) => data.data?.skills || data.skills || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []))}
+      dataExtractor={(data) => {
+        if (data.data?.skills) return data.data.skills;
+        if (data.skills) return data.skills;
+        if (Array.isArray(data.data)) return data.data;
+        if (Array.isArray(data)) return data;
+        return [];
+      }}
       defaultFormData={{ id: '', title: '', category: 'Core Backend', level: '', details: '', x: 0, y: 0, connections: '' }}
       onBeforeSave={(formData) => ({
         ...formData,

@@ -11,7 +11,13 @@ export default function AdminProficiency() {
       itemName="Category"
       activePath="/admin/proficiency"
       apiEndpoint="/api/proficiency"
-      dataExtractor={(data) => data.data?.proficiency || data.proficiency || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []))}
+      dataExtractor={(data) => {
+        if (data.data?.proficiency) return data.data.proficiency;
+        if (data.proficiency) return data.proficiency;
+        if (Array.isArray(data.data)) return data.data;
+        if (Array.isArray(data)) return data;
+        return [];
+      }}
       defaultFormData={{ title: '', skills: [] }}
       columns={[
         {

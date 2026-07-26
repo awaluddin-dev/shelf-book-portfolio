@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import { render, screen, fireEvent } from '@testing-library/react'
 import ProjectModal from '@/views/home/ui/components/ProjectModal'
 

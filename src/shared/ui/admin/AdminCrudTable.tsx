@@ -54,7 +54,6 @@ export function AdminCrudTable<T extends { id?: string }>({
 
   const fetchData = async () => {
     try {
-      setLoading(true);
       const res = await fetch(apiEndpoint);
       const data = await res.json();
       if (dataExtractor) {
@@ -73,7 +72,9 @@ export function AdminCrudTable<T extends { id?: string }>({
       router.push('/admin/login');
       return;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
   const handleSave = async (e: React.FormEvent) => {
@@ -99,6 +100,7 @@ export function AdminCrudTable<T extends { id?: string }>({
       fetchData();
     } catch (err) {
       setToastMessage({ message: `Failed to save ${itemName}`, type: 'error' });
+      console.error(err);
     }
     setIsProcessing(false);
     setTimeout(() => setToastMessage(null), 3000);
@@ -123,6 +125,7 @@ export function AdminCrudTable<T extends { id?: string }>({
       fetchData();
     } catch (err) {
       setToastMessage({ message: `Failed to delete ${itemName}`, type: 'error' });
+      console.error(err);
     }
     setIsProcessing(false);
     setTimeout(() => setToastMessage(null), 3000);
@@ -253,7 +256,11 @@ export function AdminCrudTable<T extends { id?: string }>({
                   disabled={isProcessing}
                   className="w-full py-3 rounded-xl font-bold text-white bg-neu-accent shadow-neu hover:shadow-neu-sm active:scale-95 transition-all text-sm mt-4 disabled:opacity-50"
                 >
-                    {isProcessing ? 'Processing...' : (editingItem ? 'Save Changes' : `Create ${itemName}`)}
+                    {(() => {
+                      if (isProcessing) return 'Processing...';
+                      if (editingItem) return 'Save Changes';
+                      return `Create ${itemName}`;
+                    })()}
                 </button>
             </form>
           </div>

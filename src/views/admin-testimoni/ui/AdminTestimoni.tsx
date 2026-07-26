@@ -1,21 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Loader } from '@/shared/ui/Loader';
 import { AdminSidebar } from '@/shared/ui/admin/AdminSidebar';
 import { AdminPageSkeleton } from '@/shared/ui/admin/AdminPageSkeleton';
 import { useRouter } from 'next/navigation';
-import { Briefcase, LogOut, LayoutDashboard, Check, X, MessageSquare, ChevronRight, ChevronLeft, CheckCircle, AlertCircle } from 'lucide-react';
+import { Check, X, MessageSquare, ChevronRight, ChevronLeft, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useTheme } from 'next-themes';
 import { cn } from '@/shared/lib/utils';
 import { Testimonial } from '@/shared/types';
 
 export default function AdminTestimoni() {
-  const [status, setStatus] = useState<'available' | 'busy'>('available');
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
   
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,9 +20,6 @@ export default function AdminTestimoni() {
   const paginatedItems = testimonials.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const router = useRouter();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
   const [toastMessage, setToastMessage] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
@@ -39,21 +32,20 @@ export default function AdminTestimoni() {
       fetch('/api/status').then(res => res.json()),
       fetch('/api/testimonials?all=true').then(res => res.json())
     ]).then(([statusData, testData]) => {
-      setStatus((statusData.data?.status || statusData.status));
-      setTestimonials(testData.data?.testimonials || testData.testimonials || (Array.isArray(testData.data) ? testData.data : (Array.isArray(testData) ? testData : [])));
+      let extractedData = [];
+      if (testData.data?.testimonials) {
+        extractedData = testData.data.testimonials;
+      } else if (testData.testimonials) {
+        extractedData = testData.testimonials;
+      } else if (Array.isArray(testData.data)) {
+        extractedData = testData.data;
+      } else if (Array.isArray(testData)) {
+        extractedData = testData;
+      }
+      setTestimonials(extractedData);
       setLoading(false);
     });
   }, [router]);
-
-  const toggleStatus = async () => {
-    const nextStatus = status === 'available' ? 'busy' : 'available';
-    setStatus(nextStatus);
-    await fetch('/api/status', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-      body: JSON.stringify({ status: nextStatus })
-    });
-  };
 
   const handleTestimonialAction = async (e: React.MouseEvent, id: string, newStatus: 'accepted' | 'rejected') => {
     e.stopPropagation();
@@ -75,19 +67,14 @@ export default function AdminTestimoni() {
     } catch (err) {
       setTestimonials(previousTestimonials);
       setToastMessage({ message: 'Failed to update testimonial', type: 'error' });
-      setIsProcessing(false);
-}
+      console.error(err);
+    }
 
     setTimeout(() => setToastMessage(null), 3000);
     
     if (selectedTestimonial?.id === id) {
       setSelectedTestimonial(null);
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('isAdmin');
-    router.push('/admin/login');
   };
 
   return (
@@ -137,9 +124,11 @@ export default function AdminTestimoni() {
                       <td className="px-6 py-4">
                         <span className={cn(
                           "px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider font-bold",
-                          t.status === 'pending' ? "bg-amber-500/20 text-amber-600 dark:text-amber-400" :
-                          t.status === 'accepted' || !t.status ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400" :
-                          "bg-red-500/20 text-red-600 dark:text-red-400"
+                          (() => {
+                            if (t.status === 'pending') return "bg-amber-500/20 text-amber-600 dark:text-amber-400";
+                            if (t.status === 'accepted' || !t.status) return "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400";
+                            return "bg-red-500/20 text-red-600 dark:text-red-400";
+                          })()
                         )}>
                           {t.status || 'accepted'}
                         </span>

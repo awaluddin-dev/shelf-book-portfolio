@@ -33,7 +33,7 @@ describe('AdminProjects', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url) => {
-      if (url.includes('/api/projects')) {
+      if (url.toString().includes('/api/projects')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
@@ -87,7 +87,7 @@ describe('AdminProjects', () => {
     fireEvent.click(addBtn)
 
     // Form should be open
-    expect(screen.getByText('Add Project')).toBeInTheDocument()
+    expect(screen.getAllByText('Add Project')[0]).toBeInTheDocument()
 
     // Add Stat
     const addStatBtn = screen.getByRole('button', { name: /Add Stat/i })
@@ -109,9 +109,9 @@ describe('AdminProjects', () => {
     expect(screen.getByDisplayValue('Design Phase')).toBeInTheDocument()
     
     // Remove Stat
-    const trashBtns = screen.getAllByRole('button').filter(btn => btn.querySelector('svg.lucide-trash-2'))
-    // 1 stat trash btn + 1 phase trash btn = 2
-    fireEvent.click(trashBtns[0]) // delete stat
+    // The stat trash button is in the form. There might be trash buttons in the table too, so we grab the last trash buttons.
+    const formTrashBtns = screen.getAllByRole('button').filter(btn => btn.className.includes('text-red-500 hover:bg-red-500/10'))
+    fireEvent.click(formTrashBtns[0]) // delete stat
 
     await waitFor(() => {
       expect(screen.queryByDisplayValue('Users')).not.toBeInTheDocument()

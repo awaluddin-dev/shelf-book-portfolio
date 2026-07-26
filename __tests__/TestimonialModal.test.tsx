@@ -22,7 +22,9 @@ describe('TestimonialModal', () => {
     role: 'CEO',
     testimonial: 'Great work!',
     url: 'https://johndoe.com',
-    image: 'john.jpg'
+    image: 'john.jpg',
+    company: 'Acme',
+    tags: []
   }
 
   beforeEach(() => {

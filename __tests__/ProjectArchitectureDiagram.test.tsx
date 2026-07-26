@@ -111,7 +111,7 @@ describe('ProjectArchitectureDiagram', () => {
       json: async () => mockNodes // checking the non-data wrapper array logic
     })
 
-    const { container } = render(<ProjectArchitectureDiagram project={project} isDark={true} />)
+    render(<ProjectArchitectureDiagram project={project} isDark={true} />)
     
     await waitFor(() => {
       expect(screen.getByText('Node 1')).toBeInTheDocument()

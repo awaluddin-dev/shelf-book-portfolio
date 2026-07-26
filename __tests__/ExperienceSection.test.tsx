@@ -77,7 +77,7 @@ describe('ExperienceSection', () => {
     ],
     activeExpIdx: null,
     setActiveExpIdx: mockSetActiveExpIdx,
-    testimonialsList: [{ id: '1', name: 'Test Author', role: 'Tester', testimonial: 'Test text' }],
+    testimonialsList: [{ id: '1', name: 'Test Author', role: 'Tester', testimonial: 'Test text', company: 'Acme', tags: [] }],
     setSelectedTestimonial: mockSetSelectedTestimonial,
     contributionData: {},
     chartType: 'temporal' as const,

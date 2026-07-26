@@ -33,7 +33,7 @@ describe('AdminWork', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url) => {
-      if (url.includes('/api/work')) {
+      if (url.toString().includes('/api/work')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
@@ -88,7 +88,7 @@ describe('AdminWork', () => {
     fireEvent.click(addBtn)
 
     // Form should be open
-    expect(screen.getByText('Add Experience')).toBeInTheDocument()
+    expect(screen.getAllByText('Add Experience')[0]).toBeInTheDocument()
 
     // Fill fields
     const companyInput = screen.getByPlaceholderText('e.g. Acme Corp')

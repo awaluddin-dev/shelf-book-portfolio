@@ -1,120 +1,48 @@
 "use client";
 
-
-import { useState, useEffect, useRef, useMemo, memo, useCallback } from "react";
-import Image from "next/image";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import {
-  ArrowLeft,
-  ArrowRight,
   ArrowUp,
   Award,
-  BarChart2,
-  Book,
-  BookOpen,
   Box,
   BrainCircuit,
   Briefcase,
-  Calendar,
-  CheckCircle,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  ChevronUp,
-  Clock,
   Cloud,
   Code2,
-  Compass,
   Cpu,
   Database,
-  Download,
-  Eye,
-  FileText,
-  Filter,
-  GitCommit,
-  GitFork,
-  Github,
-  Globe,
-  HandFist,
-  Heart,
   Layers,
-  Leaf,
-  Linkedin,
-  Mail,
   MapPin,
   MessageSquare,
-  Milestone,
   Moon,
-  Network,
-  PenTool,
-  Quote,
-  Search,
   Server,
-  Smile,
   Sparkles,
   Sun,
   Terminal,
   TrendingUp,
-  Wrench,
-  X,
   Zap,
   Activity,
-  Lightbulb,
-  Target,
-  BicepsFlexed,
-  BriefcaseBusiness,
-  MessageCircle,
 } from "lucide-react";
 
-import { CircuitBoardBg } from "@/shared/ui/CircuitBoardBg";
 import { useTheme } from "@/shared/ui/ThemeProvider";
-import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useTransform,
-  useSpring,
-  useScroll,
-} from "motion/react";
-
-import ReactMarkdown from "react-markdown";
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  Legend,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
-import { Testimonial } from "@/shared/types";
 import { cn } from "@/shared/lib/utils";
-
 import { getTechIconAndColor } from "@/shared/lib/tech-icons";
-import SkillTree from "@/entities/skill/ui/SkillTree";
-import P5Background from "@/shared/ui/P5Background";
-import ProjectArchitectureDiagram from "@/entities/project/ui/ProjectArchitectureDiagram";
 import {
   getTagProjectCount,
+  legendLevels,
   getRelatedProjects,
   TECHNICAL_IMAGERY,
-  legendLevels,
 } from "@/shared/lib/helpers";
+import { motion, AnimatePresence, useSpring, useScroll } from "motion/react";
+
+import { Testimonial } from "@/shared/types";
+
 import { fetchWithRetry, warmupDatabase } from "@/shared/lib/fetchUtils";
-import MermaidDiagram from "@/shared/ui/MermaidDiagram";
-import ProjectLifecycleTracker from "@/entities/project/ui/ProjectLifecycleTracker";
-import BookItem from "@/entities/project/ui/BookItem";
-import HeroSection from './sections/HeroSection';
-import ProjectsSection from './sections/ProjectsSection';
-import ProficiencySection from './sections/ProficiencySection';
-import ExperienceSection from './sections/ExperienceSection';
+import HeroSection from "./sections/HeroSection";
+import ProjectsSection from "./sections/ProjectsSection";
+import ProficiencySection from "./sections/ProficiencySection";
+import ExperienceSection from "./sections/ExperienceSection";
 import ContactModal from "@/features/contact/ui/ContactModal";
-import MobileFilterModal from "./components/MobileFilterModal";
 import ProjectModal from "./components/ProjectModal";
 import TestimonialModal from "./components/TestimonialModal";
 
@@ -125,114 +53,129 @@ export default function Portfolio() {
   const [selectedTestimonial, setSelectedTestimonial] = useState<any>(null);
   const [isBannerMinimized, setIsBannerMinimized] = useState(false);
   const [focusedProject, setFocusedProject] = useState<any>(null);
-  const [hoveredSkillNode, setHoveredSkillNode] = useState<any>(null);
   const { isDark, toggleTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Dynamic API Data States
   const [dynamicRoadmap, setDynamicRoadmap] = useState<any[]>([]);
   const [dynamicProficiency, setDynamicProficiency] = useState<any[]>([]);
-  const [dynamicCurrentFocus, setDynamicCurrentFocus] = useState<any[]>([]);
   const [dynamicHeroConfig, setDynamicHeroConfig] = useState<any>(null);
   const [dynamicMetrics, setDynamicMetrics] = useState<any[]>([]);
   const [dynamicProjects, setDynamicProjects] = useState<any[]>([]);
   const [dynamicWork, setDynamicWork] = useState<any[]>([]);
 
   useEffect(() => {
+    const fetchRoadmap = async () => {
+      try {
+        const res = await fetchWithRetry("/api/learning");
+        const resData = await res.json();
+        const payload = resData.data || resData;
+        const arr = payload.roadmap || (Array.isArray(payload) ? payload : []);
+        if (arr.length > 0) setDynamicRoadmap(arr);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    const fetchProficiency = async () => {
+      try {
+        const res = await fetchWithRetry("/api/proficiency");
+        const resData = await res.json();
+        const payload = resData.data || resData;
+        const arr =
+          payload.proficiency || (Array.isArray(payload) ? payload : []);
+        if (arr.length > 0) setDynamicProficiency(arr);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    const fetchHero = async () => {
+      try {
+        const res = await fetchWithRetry("/api/hero", { cache: "no-store" });
+        const resData = await res.json();
+        const payload = resData.data || resData;
+        if (payload.heroConfig) setDynamicHeroConfig(payload.heroConfig);
+        const metricsArr =
+          payload.metrics || (Array.isArray(payload) ? payload : []);
+        if (metricsArr.length > 0) setDynamicMetrics(metricsArr);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    const fetchProjects = async () => {
+      try {
+        const res = await fetchWithRetry("/api/projects");
+        const resData = await res.json();
+        const payload = resData.data || resData;
+        const arr = payload.projects || (Array.isArray(payload) ? payload : []);
+        if (arr.length > 0) setDynamicProjects(arr);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    const sortWorkExp = (a: any, b: any) => {
+      const isPresentA =
+        a.years.toLowerCase().includes("present") ||
+        a.years.toLowerCase().includes("current") ||
+        a.years.toLowerCase().includes("now");
+      const isPresentB =
+        b.years.toLowerCase().includes("present") ||
+        b.years.toLowerCase().includes("current") ||
+        b.years.toLowerCase().includes("now");
+      if (isPresentA && !isPresentB) return -1;
+      if (!isPresentA && isPresentB) return 1;
+      const startA = a.years.split("-")[0].trim();
+      const startB = b.years.split("-")[0].trim();
+      const dateA =
+        new Date(startA).getTime() ||
+        Number.parseInt(startA.match(/\d{4}/)?.[0] || "0");
+      const dateB =
+        new Date(startB).getTime() ||
+        Number.parseInt(startB.match(/\d{4}/)?.[0] || "0");
+      return dateB - dateA;
+    };
+
+    const fetchWork = async () => {
+      try {
+        const res = await fetchWithRetry("/api/work");
+        const resData = await res.json();
+        const payload = resData.data || resData;
+        const arr =
+          payload.workExperience ||
+          payload.workExperiences ||
+          (Array.isArray(payload) ? payload : []);
+        if (arr.length > 0) {
+          arr.sort(sortWorkExp);
+          setDynamicWork(arr);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
     const initializeData = async () => {
       try {
         await warmupDatabase((attempt) => {
-          if (attempt === 1) {
+          if (attempt === 1)
             setToastMessage("Waking up database (cold start)... Please wait.");
-          }
         });
 
-        // Fetch Roadmap
-        fetchWithRetry("/api/learning")
-          .then((res) => res.json())
-          .then((resData) => {
-            const payload = resData.data || resData;
-            const arr = payload.roadmap || (Array.isArray(payload) ? payload : []);
-            if (arr.length > 0) setDynamicRoadmap(arr);
-          })
-          .catch(console.error);
-
-        // Fetch Proficiency
-        fetchWithRetry("/api/proficiency")
-          .then((res) => res.json())
-          .then((resData) => {
-            const payload = resData.data || resData;
-            const arr =
-              payload.proficiency || (Array.isArray(payload) ? payload : []);
-            if (arr.length > 0) setDynamicProficiency(arr);
-          })
-          .catch(console.error);
-
-        // Fetch Current Focus
-        fetchWithRetry("/api/current")
-          .then((res) => res.json())
-          .then((resData) => {
-            const payload = resData.data || resData;
-            const arr =
-              payload.currentFocus || (Array.isArray(payload) ? payload : []);
-            if (arr.length > 0) setDynamicCurrentFocus(arr);
-          })
-          .catch(console.error);
-
-        // Fetch Hero without manual localStorage caching to ensure latest data
-        fetchWithRetry("/api/hero", { cache: "no-store" })
-          .then((res) => res.json())
-          .then((resData) => {
-            const payload = resData.data || resData;
-            if (payload.heroConfig) setDynamicHeroConfig(payload.heroConfig);
-            const metricsArr =
-              payload.metrics || (Array.isArray(payload) ? payload : []);
-            if (metricsArr.length > 0) setDynamicMetrics(metricsArr);
-          })
-          .catch(console.error);
-
-        // Fetch Projects
-        fetchWithRetry("/api/projects")
-          .then((res) => res.json())
-          .then((resData) => {
-            const payload = resData.data || resData;
-            const arr = payload.projects || (Array.isArray(payload) ? payload : []);
-            if (arr.length > 0) setDynamicProjects(arr);
-          })
-          .catch(console.error);
-
-        // Fetch Work
-        fetchWithRetry("/api/work")
-          .then((res) => res.json())
-          .then((resData) => {
-            const payload = resData.data || resData;
-            const arr =
-              payload.workExperience ||
-              payload.workExperiences ||
-              (Array.isArray(payload) ? payload : []);
-            if (arr.length > 0) {
-              arr.sort((a: any, b: any) => {
-                const isPresentA = a.years.toLowerCase().includes("present") || a.years.toLowerCase().includes("current") || a.years.toLowerCase().includes("now");
-                const isPresentB = b.years.toLowerCase().includes("present") || b.years.toLowerCase().includes("current") || b.years.toLowerCase().includes("now");
-                
-                if (isPresentA && !isPresentB) return -1;
-                if (!isPresentA && isPresentB) return 1;
-
-                const startA = a.years.split("-")[0].trim();
-                const startB = b.years.split("-")[0].trim();
-                const dateA = new Date(startA).getTime() || parseInt(startA.match(/\d{4}/)?.[0] || "0");
-                const dateB = new Date(startB).getTime() || parseInt(startB.match(/\d{4}/)?.[0] || "0");
-                return dateB - dateA;
-              });
-              setDynamicWork(arr);
-            }
-          })
-          .catch(console.error);
+        await Promise.all([
+          fetchRoadmap(),
+          fetchProficiency(),
+          fetchHero(),
+          fetchProjects(),
+          fetchWork(),
+        ]);
       } catch (e) {
         console.error("Failed to warmup DB:", e);
       }
     };
-    
+
     initializeData();
   }, []);
 
@@ -240,8 +183,6 @@ export default function Portfolio() {
   const activeRoadmap = dynamicRoadmap;
   const activeProficiency = dynamicProficiency;
   const activeWork = dynamicWork;
-  const activeCurrentFocus = dynamicCurrentFocus;
-
   const activeMetrics = dynamicMetrics;
 
   const renderIcon = (
@@ -296,7 +237,7 @@ export default function Portfolio() {
   const [selectedLevelFilter, setSelectedLevelFilter] = useState<number | null>(
     null,
   );
-  const [loadTime, setLoadTime] = useState<number | null>(null);
+
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "alphabetical">(
     "newest",
@@ -314,7 +255,9 @@ export default function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("hero");
   const [hoveredDockId, setHoveredDockId] = useState<string | null>(null);
-  const [selectedRoadmapIndex, setSelectedRoadmapIndex] = useState<number | null>(0);
+  const [selectedRoadmapIndex, setSelectedRoadmapIndex] = useState<
+    number | null
+  >(0);
   const [activeExpIdx, setActiveExpIdx] = useState<number | null>(0);
   const [activeTooltipDate, setActiveTooltipDate] = useState<string | null>(
     null,
@@ -349,7 +292,6 @@ export default function Portfolio() {
     }
   }, []);
 
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [testimonialsList, setTestimonialsList] = useState<Testimonial[]>([]);
   useEffect(() => {
     fetch("/api/testimonials")
@@ -440,7 +382,7 @@ export default function Portfolio() {
       .then((res) => res.json())
       .then((data) => {
         const payload = data.data || data;
-        if (payload && payload.calendar) {
+        if (payload?.calendar) {
           setContributionData(payload.calendar);
           setTimelineData(payload.timeline || []);
           setRepoData(payload.repositories || []);
@@ -517,7 +459,7 @@ export default function Portfolio() {
     let currentMonthNum = -1;
 
     weeks.forEach((week, index) => {
-      const monthLabel = monthLabels.find((lbl) => lbl.index === index);
+      const monthLabel = monthLabels.find((lbl: any) => lbl.index === index);
       if (monthLabel) {
         if (currentMonthWeeks.length > 0) {
           months.push({
@@ -605,7 +547,7 @@ export default function Portfolio() {
     if (currentIndex > 0) {
       setSelectedProject(filteredProjects[currentIndex - 1]);
     } else {
-      setSelectedProject(filteredProjects[filteredProjects.length - 1]);
+      setSelectedProject(filteredProjects.at(-1));
     }
   };
 
@@ -656,41 +598,6 @@ export default function Portfolio() {
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const getSecureRandom = () => {
-        const array = new Uint32Array(1);
-        window.crypto.getRandomValues(array);
-        return array[0] / (0xFFFFFFFF + 1);
-      };
-
-      const calculateTime = () => {
-        const timing = window.performance.timing;
-        if (timing) {
-          const navStart = timing.navigationStart;
-          const loadEventEnd =
-            timing.loadEventEnd ||
-            timing.domContentLoadedEventEnd ||
-            Date.now();
-          let diff = loadEventEnd - navStart;
-          if (diff <= 0 || diff > 4000) {
-            diff = Math.floor(120 + getSecureRandom() * 80);
-          }
-          setLoadTime(diff);
-        } else {
-          setLoadTime(Math.floor(120 + getSecureRandom() * 80));
-        }
-      };
-
-      if (document.readyState === "complete") {
-        calculateTime();
-      } else {
-        window.addEventListener("load", calculateTime);
-        return () => window.removeEventListener("load", calculateTime);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
     if (selectedProject || showInquiryModal || isFilterModalOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -704,18 +611,23 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen bg-neu-bg text-neu-text px-6 pb-6 md:px-12 md:pb-12 lg:px-24 lg:pb-24 pt-[2.7rem] font-sans transition-colors duration-300 relative">
       {/* Animated Scroll Progress Bar */}
-      <motion.div
-        id="scroll-progress"
-        className="fixed top-0 left-0 right-0 h-[4px] bg-neu-accent z-[100] origin-left"
-        style={{ scaleX }}
-      />
-
+      {mounted && (
+        <motion.div
+          id="scroll-progress"
+          role="progressbar"
+          aria-hidden="true"
+          className="fixed top-0 left-0 right-0 h-[4px] bg-neu-accent z-[9999]"
+          style={{ scaleX, transformOrigin: "0%" }}
+        />
+      )}
       {/* Sticky bottom dock navigation with rotating dynamic border glow */}
-      <motion.div
-        initial={{ y: 100, x: "-50%", opacity: 0 }}
-        animate={{ y: 0, x: "-50%", opacity: 1 }}
-        transition={{ type: "spring", stiffness: 260, damping: 20 }}
-        className="fixed bottom-6 left-1/2 z-50 w-auto max-w-[95vw] sm:max-w-lg md:max-w-none p-1.5 rounded-2xl flex flex-nowrap items-center transition-all duration-300 group"
+      {mounted && (
+        <motion.nav
+          aria-label="Bottom Dock Navigation"
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] w-auto max-w-[95vw] sm:max-w-lg md:max-w-none p-1.5 rounded-2xl flex flex-nowrap items-center transition-all duration-300 group"
         style={{
           boxShadow: isDark
             ? "0 8px 30px rgba(0, 173, 181, 0.12), inset 0 0 12px rgba(0, 173, 181, 0.04)"
@@ -895,11 +807,10 @@ export default function Portfolio() {
             </AnimatePresence>
           </button>
         </div>
-      </motion.div>
-
-
+        </motion.nav>
+      )}
       {/* Extracted Sections */}
-      <HeroSection 
+      <HeroSection
         isLoading={isLoading}
         isDark={isDark}
         dynamicHeroConfig={dynamicHeroConfig}
@@ -908,7 +819,7 @@ export default function Portfolio() {
         triggerToast={triggerToast}
         setShowInquiryModal={setShowInquiryModal}
       />
-      <ProjectsSection 
+      <ProjectsSection
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         selectedCategory={selectedCategory}
@@ -935,7 +846,7 @@ export default function Portfolio() {
         isLoading={isLoading}
         scrollShelf={scrollShelf}
       />
-      <ProficiencySection 
+      <ProficiencySection
         dynamicProficiency={dynamicProficiency}
         activeRoadmap={activeRoadmap}
         activeCurrentFocus={!!dynamicProficiency[1]}
@@ -946,7 +857,7 @@ export default function Portfolio() {
         activeProficiency={activeProficiency}
         isLoading={isLoading}
       />
-      <ExperienceSection 
+      <ExperienceSection
         dynamicWork={dynamicWork}
         activeExpIdx={activeExpIdx}
         setActiveExpIdx={setActiveExpIdx}
@@ -977,7 +888,6 @@ export default function Portfolio() {
         isDark={isDark}
         heatmapStats={heatmapStats}
       />
-
       {/* Footer */}
       <footer className="max-w-7xl mx-auto py-12 border-t border-gray-300/50 dark:border-gray-700/50 text-center text-xs font-mono text-neu-text-muted">
         <p>
@@ -985,29 +895,30 @@ export default function Portfolio() {
           All rights reserved.
         </p>
       </footer>
-
       {/* Project Modal */}
-      <ProjectModal 
-        selectedProject={selectedProject} 
-        onClose={() => setSelectedProject(null)} 
-        onPrevProject={handlePrevProject} 
-        onNextProject={handleNextProject} 
+      <ProjectModal
+        selectedProject={selectedProject}
+        onClose={() => setSelectedProject(null)}
+        onPrevProject={handlePrevProject}
+        onNextProject={handleNextProject}
         onSelectProject={setSelectedProject}
-        isBannerMinimized={isBannerMinimized} 
-        setIsBannerMinimized={setIsBannerMinimized} 
+        isBannerMinimized={isBannerMinimized}
+        setIsBannerMinimized={setIsBannerMinimized}
         isDark={isDark}
-        getRelatedProjects={(p: any) => getRelatedProjects(p, activeProjects)} 
-        getTechIconAndColor={getTechIconAndColor} 
-        getTagProjectCount={(t: string) => getTagProjectCount(t, activeProjects)} 
-        TECHNICAL_IMAGERY={TECHNICAL_IMAGERY} 
-      />      {/* Quick-Send Availability Inquiry Modal */}
+        getRelatedProjects={(p: any) => getRelatedProjects(p, activeProjects)}
+        getTechIconAndColor={getTechIconAndColor}
+        getTagProjectCount={(t: string) =>
+          getTagProjectCount(t, activeProjects)
+        }
+        TECHNICAL_IMAGERY={TECHNICAL_IMAGERY}
+      />{" "}
+      {/* Quick-Send Availability Inquiry Modal */}
       <ContactModal
         isOpen={showInquiryModal}
         onClose={() => setShowInquiryModal(false)}
         portfolioStatus={portfolioStatus}
         triggerToast={triggerToast}
       />
-
       {/* Premium Toast Notification */}
       <AnimatePresence>
         {toastMessage && (
@@ -1022,11 +933,10 @@ export default function Portfolio() {
           </motion.div>
         )}
       </AnimatePresence>
-
       {/* Testimonial Modal */}
-      <TestimonialModal 
-        selectedTestimonial={selectedTestimonial} 
-        onClose={() => setSelectedTestimonial(null)} 
+      <TestimonialModal
+        selectedTestimonial={selectedTestimonial}
+        onClose={() => setSelectedTestimonial(null)}
       />
     </div>
   );

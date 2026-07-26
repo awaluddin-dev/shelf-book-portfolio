@@ -10,7 +10,11 @@ export default function AdminLifecycle() {
       title="Project Lifecycle Tracker"
       activePath="/admin/lifecycle"
       apiEndpoint="/api/lifecycle"
-      itemDataExtractor={(data) => Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : [])}
+      itemDataExtractor={(data) => {
+        if (Array.isArray(data.data)) return data.data;
+        if (Array.isArray(data)) return data;
+        return [];
+      }}
       defaultFormData={{ stage: 'Planning & Spec', date: '', title: '', description: '', evidentUrl: '', order: 0 }}
       onBeforeSave={(formData) => {
         const payload = { ...formData, order: Number(formData.order) };

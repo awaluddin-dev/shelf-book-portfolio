@@ -90,7 +90,7 @@ describe('ProjectLifecycleTracker', () => {
       json: async () => mockPhases
     })
 
-    const { container } = render(<ProjectLifecycleTracker projectId="p1" spineColor="bg-blue-500" />)
+    render(<ProjectLifecycleTracker projectId="p1" spineColor="bg-blue-500" />)
     
     await waitFor(() => {
       expect(screen.getByText('Initial Plan')).toBeInTheDocument()

@@ -1,12 +1,12 @@
 "use client";
 
-import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 
 export function CircuitBoardBg() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 

@@ -33,7 +33,7 @@ describe('AdminLifecycle', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url) => {
-      if (url.includes('/api/lifecycle')) {
+      if (url.toString().includes('/api/lifecycle')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
@@ -52,7 +52,7 @@ describe('AdminLifecycle', () => {
           })
         } as any)
       }
-      if (url.includes('/api/projects')) {
+      if (url.toString().includes('/api/projects')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
@@ -110,7 +110,7 @@ describe('AdminLifecycle', () => {
     fireEvent.click(addBtn)
 
     // Form should be open
-    expect(screen.getByText('Add New Item')).toBeInTheDocument()
+    expect(screen.getAllByText('Add New Item')[0]).toBeInTheDocument()
 
     // Fill fields
     const titleInput = screen.getByPlaceholderText('Title (e.g. Initial Architecture Design)')

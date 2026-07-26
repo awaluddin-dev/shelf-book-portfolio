@@ -33,7 +33,7 @@ describe('AdminArchitecture', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url) => {
-      if (url.includes('/api/architecture')) {
+      if (url.toString().includes('/api/architecture')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
@@ -51,7 +51,7 @@ describe('AdminArchitecture', () => {
           })
         } as any)
       }
-      if (url.includes('/api/projects')) {
+      if (url.toString().includes('/api/projects')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
@@ -108,7 +108,7 @@ describe('AdminArchitecture', () => {
     fireEvent.click(addBtn)
 
     // Form should be open
-    expect(screen.getByText('Add New Item')).toBeInTheDocument()
+    expect(screen.getAllByText('Add New Item')[0]).toBeInTheDocument()
 
     // Fill fields
     const nameInput = screen.getByPlaceholderText('Node ID (e.g. gateway)')

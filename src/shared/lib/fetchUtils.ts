@@ -54,6 +54,7 @@ export async function warmupDatabase(onRetry?: (attempt: number) => void): Promi
       }
       return true; // Any other response means API is up
     } catch (error) {
+      console.warn("DB warmup attempt failed:", error);
       attempt++;
       if (attempt >= maxRetries) {
         return false;

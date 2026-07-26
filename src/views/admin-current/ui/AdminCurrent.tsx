@@ -10,7 +10,13 @@ export default function AdminCurrent() {
       itemName="Focus Item"
       activePath="/admin/current"
       apiEndpoint="/api/current"
-      dataExtractor={(data) => data.data?.currentFocus || data.currentFocus || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []))}
+      dataExtractor={(data) => {
+        if (data.data?.currentFocus) return data.data.currentFocus;
+        if (data.currentFocus) return data.currentFocus;
+        if (Array.isArray(data.data)) return data.data;
+        if (Array.isArray(data)) return data;
+        return [];
+      }}
       defaultFormData={{ title: '', icon: 'PenTool', description: '', link: '', linkText: '' }}
       columns={[
         {

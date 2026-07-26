@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import AdminPlayground from '@/views/admin-playground/ui/AdminPlayground'
 
@@ -74,6 +74,6 @@ describe('AdminPlayground', () => {
     fireEvent.change(colorInputs[0], { target: { value: '#ffffff' } })
     
     // The text showing the color should update, rendering twice (span and div)
-    expect(screen.getAllByText('#ffffff').length).toBe(2)
+    expect(screen.getAllByText('#ffffff')).toHaveLength(2)
   })
 })

@@ -27,14 +27,12 @@ jest.mock('motion/react', () => {
 })
 
 describe('BookItem', () => {
-  const mockProject: Project = {
+  const mockProject: any = {
     id: 'test-1',
     title: 'Test Project',
-    description: 'A test project',
+    subtitle: 'A test project',
     date: '2024',
     tags: ['React'],
-    metrics: [],
-    gallery: [],
     spineText: 'Test Project Spine',
     spineColor: 'bg-blue-500' // tailwind class
   }
@@ -111,5 +109,6 @@ describe('BookItem', () => {
     // Just verifying it doesn't crash, since motion values are mocked
     fireEvent.mouseMove(innerDiv, { clientX: 50, clientY: 50 })
     fireEvent.mouseLeave(innerDiv)
+    expect(innerDiv).toBeDefined()
   })
 })

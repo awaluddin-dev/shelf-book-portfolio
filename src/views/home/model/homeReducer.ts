@@ -55,10 +55,8 @@ export const initialHomeState: HomeState = {
 export type HomeAction = { type: 'SET_STATE'; payload: Partial<HomeState> };
 
 export function homeReducer(state: HomeState, action: HomeAction): HomeState {
-  switch (action.type) {
-    case 'SET_STATE':
-      return { ...state, ...action.payload };
-    default:
-      return state;
+  if (action.type === 'SET_STATE') {
+    return { ...state, ...action.payload };
   }
+  return state;
 }

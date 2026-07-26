@@ -19,7 +19,13 @@ export default function AdminProjects() {
       itemName="Project"
       activePath="/admin/projects"
       apiEndpoint="/api/projects"
-      dataExtractor={(data) => data.data?.projects || data.projects || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []))}
+      dataExtractor={(data) => {
+        if (data.data?.projects) return data.data.projects;
+        if (data.projects) return data.projects;
+        if (Array.isArray(data.data)) return data.data;
+        if (Array.isArray(data)) return data;
+        return [];
+      }}
       defaultFormData={defaultForm}
       onBeforeSave={(formData) => ({
         ...formData,

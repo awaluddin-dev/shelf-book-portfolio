@@ -7,13 +7,6 @@ import { AdminPageSkeleton } from "@/shared/ui/admin/AdminPageSkeleton";
 import { useRouter } from "next/navigation";
 import {
   Briefcase,
-  LogOut,
-  LayoutDashboard,
-  Check,
-  X,
-  MessageSquare,
-  ChevronRight,
-  ChevronLeft,
   CheckCircle,
   AlertCircle,
   Save,
@@ -21,12 +14,10 @@ import {
   Trash2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { useTheme } from "next-themes";
 import { cn } from "@/shared/lib/utils";
 import { Testimonial } from "@/shared/types";
 
 export default function AdminDashboard() {
-  const [status, setStatus] = useState<"available" | "busy">("available");
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [heroConfig, setHeroConfig] = useState<any>({ name: '', role: '' });
   const [metrics, setMetrics] = useState<any[]>([]);
@@ -34,8 +25,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
+
   const [toastMessage, setToastMessage] = useState<{
     message: string;
     type: "success" | "error";
@@ -57,6 +47,7 @@ export default function AdminDashboard() {
         return;
       }
     } catch (e) {
+      console.error(e);
       localStorage.removeItem("token");
       localStorage.removeItem("isAdmin");
       router.push("/admin/login");
@@ -73,47 +64,27 @@ export default function AdminDashboard() {
       fetch("/api/testimonials?all=true").then((res) => res.json()),
       fetch("/api/hero").then((res) => res.json()),
     ]).then(([statusData, testData, heroData]) => {
-      setStatus(statusData.data?.status || statusData.status);
-      setTestimonials(
-        testData.data?.testimonials ||
-          testData.testimonials ||
-          (Array.isArray(testData.data)
-            ? testData.data
-            : Array.isArray(testData)
-              ? testData
-              : []),
-      );
+      
+      let testExtracted = [];
+      if (testData.data?.testimonials) { testExtracted = testData.data.testimonials; }
+      else if (testData.testimonials) { testExtracted = testData.testimonials; }
+      else if (Array.isArray(testData.data)) { testExtracted = testData.data; }
+      else if (Array.isArray(testData)) { testExtracted = testData; }
+      setTestimonials(testExtracted);
+
       const actualHeroConfig = heroData.data?.heroConfig || heroData.heroConfig;
-      setHeroConfig(
-        actualHeroConfig || {}
-      );
-      setMetrics(
-        heroData.data?.metrics ||
-          heroData.metrics ||
-          (Array.isArray(heroData.data)
-            ? heroData.data
-            : Array.isArray(heroData)
-              ? heroData
-              : []),
-      );
+      setHeroConfig(actualHeroConfig || {});
+
+      let metricsExtracted = [];
+      if (heroData.data?.metrics) { metricsExtracted = heroData.data.metrics; }
+      else if (heroData.metrics) { metricsExtracted = heroData.metrics; }
+      else if (Array.isArray(heroData.data)) { metricsExtracted = heroData.data; }
+      else if (Array.isArray(heroData)) { metricsExtracted = heroData; }
+      setMetrics(metricsExtracted);
+      
       setLoading(false);
     });
   }, [router]);
-
-  const toggleStatus = async () => {
-    setIsProcessing(true);
-    const nextStatus = status === "available" ? "busy" : "available";
-    setStatus(nextStatus);
-    await fetch("/api/status", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({ status: nextStatus }),
-    });
-    setIsProcessing(false);
-  };
 
   const saveHeroConfig = async () => {
     setIsProcessing(true);
@@ -132,6 +103,7 @@ export default function AdminDashboard() {
         type: "success",
       });
     } catch (err) {
+      console.error(err);
       setToastMessage({
         message: "Failed to update hero section",
         type: "error",

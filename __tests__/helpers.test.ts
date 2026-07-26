@@ -1,8 +1,7 @@
 import { getTagProjectCount, getRelatedProjects, legendLevels, TECHNICAL_IMAGERY } from '@/shared/lib/helpers'
-import { Project } from '@/shared/types'
 
 describe('helpers', () => {
-  const mockProjects: Project[] = [
+  const mockProjects: any[] = [
     {
       id: '1',
       title: 'Project 1',
@@ -77,7 +76,7 @@ describe('helpers', () => {
     })
 
     it('sorts projects by overlap count and returns max 2', () => {
-      const extendedMockProjects: Project[] = [
+      const extendedMockProjects: any[] = [
         ...mockProjects,
         {
           id: '4',

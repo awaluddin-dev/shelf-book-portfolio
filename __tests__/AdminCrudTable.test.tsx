@@ -270,6 +270,6 @@ describe('AdminCrudTable', () => {
     render(<AdminCrudTable {...defaultProps} />)
     
     // Test the mock router push
-    // It's tested globally, but let's just make sure it does nothing when rendering without admin
+    expect(localStorage.getItem('isAdmin')).toBeNull()
   })
 })

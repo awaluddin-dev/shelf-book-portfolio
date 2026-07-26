@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import { render, screen, fireEvent } from '@testing-library/react'
 import ProficiencySection from '@/views/home/ui/sections/ProficiencySection'
 
@@ -105,8 +106,6 @@ describe('ProficiencySection', () => {
   it('handles roadmap selection click', () => {
     render(<ProficiencySection {...defaultProps} />)
     // Both desktop and mobile have buttons
-    const buttons = screen.getAllByRole('button')
-    // Click a button to change index (assuming the second one corresponds to the next item)
     // The first two buttons are Q1 and Q2 on desktop
     fireEvent.click(screen.getAllByText('Q2 2024')[0].closest('button')!)
     

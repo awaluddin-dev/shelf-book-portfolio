@@ -3,20 +3,6 @@
 import { useEffect } from "react";
 
 export function ButtonSprinkles() {
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      // Trigger only for elements acting as buttons
-      const button = target.closest("button, [role='button'], a.glass-card, a[download]");
-      if (!button) return;
-
-      createSprinkles(button as HTMLElement);
-    };
-
-    document.addEventListener("click", handleClick);
-    return () => document.removeEventListener("click", handleClick);
-  }, []);
-
   const createSprinkles = (button: HTMLElement) => {
     const rect = button.getBoundingClientRect();
     const numSprinkles = 20;
@@ -98,6 +84,20 @@ export function ButtonSprinkles() {
       }, 1000);
     }
   };
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      // Trigger only for elements acting as buttons
+      const button = target.closest("button, [role='button'], a.glass-card, a[download]");
+      if (!button) return;
+
+      createSprinkles(button as HTMLElement);
+    };
+
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, []);
 
   return null;
 }

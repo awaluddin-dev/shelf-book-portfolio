@@ -1,4 +1,4 @@
-import { memo, useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { memo, useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Network } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
@@ -14,262 +14,6 @@ interface SkillNode {
   details: string;
   connections: string[];
 }
-
-const defaultSkillNodes: SkillNode[] = [
-  // ── ZONA HIJAU: Core Backend ──────────────────────────────────────────────
-  // x: 80 (kolom 1) | 220 (kolom 2) | 360 (kolom 3, hanya dist-systems)
-
-  {
-    id: "nodejs",
-    title: "Node.js",
-    category: "Core Backend",
-    level: "Production · 3+ yrs",
-    x: 80,
-    y: 80,
-    details:
-      "High-concurrency event-driven runtime across SERA, Telkomsel, and HDI — event loop optimization, stream piping, ESM module resolution, and multi-core clustering.",
-    connections: ["typescript", "nestjs"],
-  },
-  {
-    id: "typescript",
-    title: "TypeScript",
-    category: "Core Backend",
-    level: "Production · 3+ yrs",
-    x: 80,
-    y: 210,
-    details:
-      "Strict typing across all Node.js projects at SERA and HDI — DTO validation with class-validator, discriminated unions, generic service patterns, and interface-driven DI.",
-    connections: ["nestjs"],
-  },
-  {
-    id: "nestjs",
-    title: "NestJS",
-    category: "Core Backend",
-    level: "Production · 2+ yrs",
-    x: 80,
-    y: 340,
-    details:
-      "Enterprise backend framework at SERA and HDI — Guards, Interceptors, custom decorators, DI containers, native microservice transporters, and monorepo setups.",
-    connections: ["rest-api"],
-  },
-  {
-    id: "go",
-    title: "Go",
-    category: "Core Backend",
-    level: "Production · 1 yr",
-    x: 220,
-    y: 80,
-    details:
-      "IoT monitoring backend at Telkomsel — goroutine concurrency, channel patterns, lightweight stateless service handlers, gRPC endpoints, and bare-metal deployment.",
-    connections: ["dist-systems"],
-  },
-  {
-    id: "dist-systems",
-    title: "Dist. Systems",
-    category: "Core Backend",
-    level: "Production · Enterprise",
-    x: 220,
-    y: 210,
-    details:
-      "Event-driven microservice architecture at SERA — fault-tolerant messaging, circuit breaker patterns, saga-based payroll data flows, and distributed state management.",
-    connections: ["postgres", "redis"],
-  },
-  {
-    id: "rest-api",
-    title: "REST API",
-    category: "Core Backend",
-    level: "Production · All roles",
-    x: 220,
-    y: 340,
-    details:
-      "REST API design across all engineering roles — versioning strategies, DTO contracts, standardized error responses, pagination patterns, and Swagger/OpenAPI documentation.",
-    connections: ["dist-systems"],
-  },
-
-  // ── ZONA BIRU: Infrastructure ─────────────────────────────────────────────
-  // x: 520 (kolom 4) | 640 (kolom 5) | 760 (kolom 6) | 880 (kolom 7)
-
-  {
-    id: "postgres",
-    title: "PostgreSQL",
-    category: "Infrastructure",
-    level: "Production · 3+ yrs",
-    x: 460,
-    y: 80,
-    details:
-      "Primary database across HDI P2P lending, Maccon, and AuraFlow AI — advanced indexing (B-Tree, GIN), JSONB, recursive CTEs, OCC locking, and TypeORM migrations.",
-    connections: ["redis"],
-  },
-  {
-    id: "redis",
-    title: "Redis",
-    category: "Infrastructure",
-    level: "Production · 2+ yrs",
-    x: 460,
-    y: 210,
-    details:
-      "Distributed caching and queue backbone — BullMQ job management in AuraFlow AI, Redlock distributed locks, Pub/Sub channels, and cache-aside invalidation strategies.",
-    connections: ["bullmq"],
-  },
-  {
-    id: "bullmq",
-    title: "BullMQ",
-    category: "Infrastructure",
-    level: "In Use · AuraFlow",
-    x: 460,
-    y: 340,
-    details:
-      "Async job queue for AuraFlow AI pipeline — job prioritization, configurable retry policies, delayed execution, and concurrency control between Node.js gateway and Python worker.",
-    connections: [],
-  },
-  {
-    id: "docker",
-    title: "Docker",
-    category: "Infrastructure",
-    level: "Production · 2+ yrs",
-    x: 580,
-    y: 80,
-    details:
-      "Containerization at Telkomsel and SERA — multi-stage builds, Compose for local dev environments, image layer optimization, and CI/CD environment parity via Jenkins.",
-    connections: ["k8s"],
-  },
-  {
-    id: "k8s",
-    title: "Kubernetes",
-    category: "Infrastructure",
-    level: "Production · Telkomsel",
-    x: 580,
-    y: 210,
-    details:
-      "Bare-metal K8s cluster at Telkomsel — physical node provisioning, Helm chart management, Ingress routing rules, ConfigMap/Secret management, and ArgoCD GitOps sync.",
-    connections: ["argocd"],
-  },
-  {
-    id: "argocd",
-    title: "ArgoCD",
-    category: "Infrastructure",
-    level: "Production · Telkomsel",
-    x: 580,
-    y: 340,
-    details:
-      "GitOps-based continuous deployment at Telkomsel — automated sync policies, environment-based rollback, promotion pipelines, and real-time application health monitoring.",
-    connections: [],
-  },
-  {
-    id: "azure-servicebus",
-    title: "Azure Svc Bus",
-    category: "Infrastructure",
-    level: "Production · SERA",
-    x: 700,
-    y: 80,
-    details:
-      "Enterprise message broker at SERA — SAP and Mekari Talenta integration via topics/subscriptions, dead-letter queue handling, session-based ordering, and retry policies.",
-    connections: ["azure-apim", "python"],
-  },
-  {
-    id: "azure-apim",
-    title: "Azure APIM",
-    category: "Infrastructure",
-    level: "Production · SERA",
-    x: 700,
-    y: 340,
-    details:
-      "API management layer at SERA — policy-based authentication, rate limiting, request/response transformation, and backend abstraction for SAP and FMS 2.0 integrations.",
-    connections: ["sap-integration"],
-  },
-
-  // ── ZONA UNGU: AI & Integrations ─────────────────────────────────────────
-  // x: 1000 (kolom 8) | 1120 (kolom 9) | 1240 (kolom 10, Mekari saja)
-
-  {
-    id: "python",
-    title: "Python",
-    category: "AI & Integrations",
-    level: "In Use · AuraFlow",
-    x: 880,
-    y: 80,
-    details:
-      "AI worker runtime for AuraFlow — async scripting, Pydantic schema validation, structured logging (grep-friendly, no icons), and multi-threaded LangGraph agent execution.",
-    connections: ["langgraph", "langchain"],
-  },
-  {
-    id: "langchain",
-    title: "LangChain",
-    category: "AI & Integrations",
-    level: "In Use · AuraFlow",
-    x: 880,
-    y: 210,
-    details:
-      "Agent tooling and chain composition for AuraFlow — prompt templates, structured output parsers, memory management, and tool-calling integration with LLM providers.",
-    connections: ["llm-router"],
-  },
-  {
-    id: "sap-integration",
-    title: "SAP Integration",
-    category: "AI & Integrations",
-    level: "Production · SERA",
-    x: 880,
-    y: 340,
-    details:
-      "Enterprise SAP payroll data sync at SERA — integration via Azure Service Bus, idempotent message processing, field mapping to internal driver schemas, and error recovery flows.",
-    connections: ["mekari-talenta"],
-  },
-  {
-    id: "langgraph",
-    title: "LangGraph",
-    category: "AI & Integrations",
-    level: "Building · AuraFlow",
-    x: 1030,
-    y: 80,
-    details:
-      "Stateful multi-agent orchestration for AuraFlow AI — parse-validate loop with conditional branching, human-in-the-loop approval gates, and multi-provider LLM router integration.",
-    connections: ["llm-router"],
-  },
-  {
-    id: "llm-router",
-    title: "LLM Router",
-    category: "AI & Integrations",
-    level: "Building · AuraFlow",
-    x: 1030,
-    y: 210,
-    details:
-      "Custom multi-provider abstraction layer for AuraFlow — sequential fallback across Claude, Gemini, OpenAI, Groq, and Azure OpenAI via environment-configurable LLM_PROVIDER_ORDER.",
-    connections: ["claude-api"],
-  },
-  {
-    id: "mekari-talenta",
-    title: "Mekari Talenta",
-    category: "AI & Integrations",
-    level: "Production · SERA",
-    x: 1030,
-    y: 340,
-    details:
-      "HR and attendance data integration at SERA — webhook consumption, event-driven sync to driver management system, and reconciliation with SAP payroll outputs via Service Bus.",
-    connections: [],
-  },
-  {
-    id: "claude-api",
-    title: "Claude / Gemini",
-    category: "AI & Integrations",
-    level: "In Use · AuraFlow",
-    x: 1180,
-    y: 80,
-    details:
-      "Primary LLM providers in AuraFlow router — structured JSON response parsing, multi-modal ingestion, token budget management, and retry-on-failure fallback to next provider.",
-    connections: ["vectordb"],
-  },
-  {
-    id: "vectordb",
-    title: "pgvector",
-    category: "AI & Integrations",
-    level: "Building · Planned",
-    x: 1180,
-    y: 210,
-    details:
-      "Planned semantic search layer for AuraFlow RAG pipeline — pgvector extension on PostgreSQL, cosine similarity queries, embedding storage, and hybrid keyword+vector search.",
-    connections: [],
-  },
-];
 
 interface SkillNodeProps {
   node: SkillNode;
@@ -301,6 +45,12 @@ const SkillTreeNode = memo(function SkillTreeNode({
   let fillGradient = "url(#emerald-grad)";
   if (node.category === "Infrastructure") fillGradient = "url(#blue-grad)";
   if (node.category === "AI & Integrations") fillGradient = "url(#purple-grad)";
+  let opacityLabel = "opacity-90";
+  if (anyActive && !connectedToActive && !active) {
+    opacityLabel = "opacity-30";
+  } else if (!anyActive && connectedToActive) {
+    opacityLabel = "fill-current opacity-90";
+  }
 
   return (
     <g
@@ -345,11 +95,7 @@ const SkillTreeNode = memo(function SkillTreeNode({
         className={cn(
           "font-mono font-bold tracking-tight select-none pointer-events-none transition-all duration-300",
           isMobile ? "text-[8px]" : "text-[10px]",
-          active
-            ? "fill-current " + colors.text
-            : anyActive && !connectedToActive
-              ? "opacity-30 fill-current"
-              : "fill-current opacity-90",
+          active ? "fill-current " + colors.text : opacityLabel,
         )}
         fill={isDark ? "#EEEEEE" : "#112D4E"}
       >
@@ -367,24 +113,33 @@ export default function SkillTree({
   isLoading?: boolean;
 }) {
   const [nodes, setNodes] = useState<SkillNode[]>([]);
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  const parseConnections = (conns: any) => {
+    if (!conns) return [];
+    if (typeof conns !== "string") return conns;
+    try {
+      return JSON.parse(conns);
+    } catch {
+      return conns
+        .split(",")
+        .map((s: string) => s.trim())
+        .filter(Boolean);
+    }
+  };
 
   useEffect(() => {
-    fetch('/api/skills')
-      .then(res => res.json())
-      .then(data => {
-        const skillsArray = data.data?.skills || data.skills || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []));
-        const parsed = (skillsArray || []).map((n: any) => {
-          let conns = n.connections || [];
-          if (typeof conns === 'string') {
-            try {
-              conns = JSON.parse(conns);
-            } catch {
-              conns = conns.split(',').map((s: string) => s.trim()).filter(Boolean);
-            }
-          }
-          return { ...n, connections: conns };
-        });
+    fetch("/api/skills")
+      .then((res) => res.json())
+      .then((data) => {
+        let skillsArray = [];
+        if (data.data?.skills) { skillsArray = data.data.skills; }
+        else if (data.skills) { skillsArray = data.skills; }
+        else if (Array.isArray(data.data)) { skillsArray = data.data; }
+        else if (Array.isArray(data)) { skillsArray = data; }
+        const parsed = (skillsArray || []).map((n: any) => ({
+          ...n,
+          connections: parseConnections(n.connections),
+        }));
         if (parsed && parsed.length > 0) {
           setNodes(parsed);
         }
@@ -557,31 +312,26 @@ export default function SkillTree({
 
   // Pre-calculate and memoize connection paths to optimize rendering
   const connectionPaths = useMemo(() => {
-    return nodes.flatMap((node) => {
-      const colors = getCategoryColor(node.category);
+    const buildPath = (node: SkillNode, connId: string) => {
+      const target = nodes.find((n) => n.id === connId);
+      if (!target) return null;
+      const targetCoords = getNodeCoords(target);
       const coords = getNodeCoords(node);
-      return node.connections
-        .map((connId) => {
-          const target = nodes.find((n) => n.id === connId);
-          if (!target) return null;
-          const targetCoords = getNodeCoords(target);
-          const path = getBezierPath(
-            coords.x,
-            coords.y,
-            targetCoords.x,
-            targetCoords.y,
-          );
+      const path = getBezierPath(coords.x, coords.y, targetCoords.x, targetCoords.y);
+      return {
+        id: `${node.id}-${connId}`,
+        sourceId: node.id,
+        targetId: connId,
+        colors: getCategoryColor(node.category),
+        path,
+      };
+    };
 
-          return {
-            id: `${node.id}-${connId}`,
-            sourceId: node.id,
-            targetId: connId,
-            colors,
-            path,
-          };
-        })
-        .filter((item): item is NonNullable<typeof item> => item !== null);
-    });
+    return nodes.flatMap((node) =>
+      node.connections
+        .map(connId => buildPath(node, connId))
+        .filter((item): item is NonNullable<typeof item> => item !== null)
+    );
   }, [nodes, getBezierPath, getCategoryColor, getNodeCoords]);
 
   if (isLoading) {
@@ -656,212 +406,215 @@ export default function SkillTree({
       {/* Background decoration elements */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-neu-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
       <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-neu-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
-      
+
       <div className="relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-300/30 dark:border-gray-700/30 pb-6 mb-8">
-        <div>
-          <div className="flex items-center gap-2 text-neu-accent mb-1">
-            <Network size={18} />
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
-              Career Map & Blueprint
-            </span>
+          <div>
+            <div className="flex items-center gap-2 text-neu-accent mb-1">
+              <Network size={18} />
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
+                Career Map & Blueprint
+              </span>
+            </div>
+            <h2 className="text-3xl font-display font-bold text-neu-text tracking-tight">
+              Interactive Skill Tree
+            </h2>
+            <p className="text-xs text-neu-text-muted font-mono mt-1">
+              ✦ Hover over individual nodes to inspect connections, production
+              usages, and metrics.
+            </p>
           </div>
-          <h2 className="text-3xl font-display font-bold text-neu-text tracking-tight">
-            Interactive Skill Tree
-          </h2>
-          <p className="text-xs text-neu-text-muted font-mono mt-1">
-            ✦ Hover over individual nodes to inspect connections, production
-            usages, and metrics.
-          </p>
+
+          {/* Legend */}
+          <div className="flex flex-wrap gap-4 text-xs font-mono">
+            <div className="flex items-center gap-2">
+              <span className="w-3.5 h-3.5 rounded-full shadow-sm bg-emerald-500"></span>
+              <span className="text-neu-text font-medium">Core Backend</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-3.5 h-3.5 rounded-full shadow-sm bg-blue-500"></span>
+              <span className="text-neu-text font-medium">Infrastructure</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-3.5 h-3.5 rounded-full shadow-sm bg-purple-500"></span>
+              <span className="text-neu-text font-medium">
+                AI & Integrations
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* Legend */}
-        <div className="flex flex-wrap gap-4 text-xs font-mono">
-          <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded-full shadow-sm bg-emerald-500"></span>
-            <span className="text-neu-text font-medium">Core Backend</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded-full shadow-sm bg-blue-500"></span>
-            <span className="text-neu-text font-medium">Infrastructure</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded-full shadow-sm bg-purple-500"></span>
-            <span className="text-neu-text font-medium">AI & Integrations</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Responsive SVG Container wrapping the interactive map */}
-      <div className="relative w-full select-none py-4 flex justify-center">
-        <div
-          className={cn(
-            "relative",
-            isMobile ? "w-full max-w-[320px] h-[940px]" : "w-full h-[420px]",
-          )}
-        >
-          <svg
-            viewBox={isMobile ? "0 0 320 940" : "0 0 1260 400"}
-            className="w-full h-full absolute inset-0 z-0 overflow-visible"
+        {/* Responsive SVG Container wrapping the interactive map */}
+        <div className="relative w-full select-none py-4 flex justify-center">
+          <div
+            className={cn(
+              "relative",
+              isMobile ? "w-full max-w-[320px] h-[940px]" : "w-full h-[420px]",
+            )}
           >
-            <defs>
-              <linearGradient
-                id="emerald-grad"
-                x1="0%"
-                y1="0%"
-                x2="100%"
-                y2="100%"
-              >
-                <stop offset="0%" stopColor="#10B981" />
-                <stop
-                  offset="100%"
-                  stopColor={isDark ? "#064E3B" : "#A7F3D0"}
-                />
-              </linearGradient>
-              <linearGradient
-                id="blue-grad"
-                x1="0%"
-                y1="0%"
-                x2="100%"
-                y2="100%"
-              >
-                <stop offset="0%" stopColor="#3B82F6" />
-                <stop
-                  offset="100%"
-                  stopColor={isDark ? "#1E3A8A" : "#BFDBFE"}
-                />
-              </linearGradient>
-              <linearGradient
-                id="purple-grad"
-                x1="0%"
-                y1="0%"
-                x2="100%"
-                y2="100%"
-              >
-                <stop offset="0%" stopColor="#A855F7" />
-                <stop
-                  offset="100%"
-                  stopColor={isDark ? "#581C87" : "#E9D5FF"}
-                />
-              </linearGradient>
-            </defs>
-
-            {/* Render all curved connection paths */}
-            {connectionPaths.map((conn) => {
-              const active = isConnected(conn.sourceId, conn.targetId);
-              return (
-                <g key={conn.id}>
-                  {/* Shadow / Base track path */}
-                  <path
-                    d={conn.path}
-                    fill="none"
-                    stroke={isDark ? "#393E46" : "#DBE2EF"}
-                    strokeWidth={3}
-                    className="transition-colors duration-300"
-                  />
-                  {/* Glowing active path overlay */}
-                  <path
-                    d={conn.path}
-                    fill="none"
-                    stroke={conn.colors.stroke}
-                    strokeWidth={active ? 4 : 1.5}
-                    className={cn(
-                      "transition-all duration-300",
-                      active ? "opacity-100" : "opacity-30 dark:opacity-40",
-                    )}
-                  />
-                </g>
-              );
-            })}
-
-            {/* Render all interactive nodes */}
-            {nodes.map((node) => {
-              const active = hoveredNode?.id === node.id;
-              const anyActive = hoveredNode !== null;
-              const connectedToActive = hoveredNode
-                ? hoveredNode.connections.includes(node.id) ||
-                  node.connections.includes(hoveredNode.id) ||
-                  hoveredNode.id === node.id
-                : false;
-
-              const colors = getCategoryColor(node.category);
-              const coords = getNodeCoords(node);
-              const shortTitle = getShortTitle(node);
-
-              return (
-                <SkillTreeNode
-                  key={node.id}
-                  node={node}
-                  active={active}
-                  anyActive={anyActive}
-                  connectedToActive={connectedToActive}
-                  isDark={isDark}
-                  isMobile={isMobile}
-                  coords={coords}
-                  colors={colors}
-                  shortTitle={shortTitle}
-                  onMouseEnter={() => handleNodeMouseEnter(node)}
-                  onMouseLeave={handleNodeMouseLeave}
-                />
-              );
-            })}
-          </svg>
-        </div>
-      </div>
-
-      {/* Dynamic Proficiency Details card below tree */}
-      <div className="mt-6 p-5 rounded-2xl glass-card-inset relative min-h-[110px] flex flex-col justify-center border border-white/5">
-        <AnimatePresence mode="wait">
-          {hoveredNode ? (
-            <motion.div
-              key={hoveredNode.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.15 }}
-              className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center animate-fade-in"
+            <svg
+              viewBox={isMobile ? "0 0 320 940" : "0 0 1260 400"}
+              className="w-full h-full absolute inset-0 z-0 overflow-visible"
             >
-              <div className="md:col-span-1 border-r border-gray-300/30 dark:border-gray-700/30 pr-4">
-                <span
-                  className={cn(
-                    "text-[10px] font-mono font-bold uppercase tracking-wider block mb-1",
-                    getCategoryColor(hoveredNode.category).text,
-                  )}
+              <defs>
+                <linearGradient
+                  id="emerald-grad"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
                 >
-                  {hoveredNode.category}
-                </span>
-                <h4 className="text-lg font-bold text-neu-text tracking-tight leading-tight mb-1">
-                  {hoveredNode.title}
-                </h4>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 glass-card rounded-xl text-[10px] font-mono font-bold text-neu-accent mt-1">
-                  Proficiency: {hoveredNode.level}
+                  <stop offset="0%" stopColor="#10B981" />
+                  <stop
+                    offset="100%"
+                    stopColor={isDark ? "#064E3B" : "#A7F3D0"}
+                  />
+                </linearGradient>
+                <linearGradient
+                  id="blue-grad"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stopColor="#3B82F6" />
+                  <stop
+                    offset="100%"
+                    stopColor={isDark ? "#1E3A8A" : "#BFDBFE"}
+                  />
+                </linearGradient>
+                <linearGradient
+                  id="purple-grad"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stopColor="#A855F7" />
+                  <stop
+                    offset="100%"
+                    stopColor={isDark ? "#581C87" : "#E9D5FF"}
+                  />
+                </linearGradient>
+              </defs>
+
+              {/* Render all curved connection paths */}
+              {connectionPaths.map((conn) => {
+                const active = isConnected(conn.sourceId, conn.targetId);
+                return (
+                  <g key={conn.id}>
+                    {/* Shadow / Base track path */}
+                    <path
+                      d={conn.path}
+                      fill="none"
+                      stroke={isDark ? "#393E46" : "#DBE2EF"}
+                      strokeWidth={3}
+                      className="transition-colors duration-300"
+                    />
+                    {/* Glowing active path overlay */}
+                    <path
+                      d={conn.path}
+                      fill="none"
+                      stroke={conn.colors.stroke}
+                      strokeWidth={active ? 4 : 1.5}
+                      className={cn(
+                        "transition-all duration-300",
+                        active ? "opacity-100" : "opacity-30 dark:opacity-40",
+                      )}
+                    />
+                  </g>
+                );
+              })}
+
+              {/* Render all interactive nodes */}
+              {nodes.map((node) => {
+                const active = hoveredNode?.id === node.id;
+                const anyActive = hoveredNode !== null;
+                const connectedToActive = hoveredNode
+                  ? hoveredNode.connections.includes(node.id) ||
+                    node.connections.includes(hoveredNode.id) ||
+                    hoveredNode.id === node.id
+                  : false;
+
+                const colors = getCategoryColor(node.category);
+                const coords = getNodeCoords(node);
+                const shortTitle = getShortTitle(node);
+
+                return (
+                  <SkillTreeNode
+                    key={node.id}
+                    node={node}
+                    active={active}
+                    anyActive={anyActive}
+                    connectedToActive={connectedToActive}
+                    isDark={isDark}
+                    isMobile={isMobile}
+                    coords={coords}
+                    colors={colors}
+                    shortTitle={shortTitle}
+                    onMouseEnter={() => handleNodeMouseEnter(node)}
+                    onMouseLeave={handleNodeMouseLeave}
+                  />
+                );
+              })}
+            </svg>
+          </div>
+        </div>
+
+        {/* Dynamic Proficiency Details card below tree */}
+        <div className="mt-6 p-5 rounded-2xl glass-card-inset relative min-h-[110px] flex flex-col justify-center border border-white/5">
+          <AnimatePresence mode="wait">
+            {hoveredNode ? (
+              <motion.div
+                key={hoveredNode.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.15 }}
+                className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center animate-fade-in"
+              >
+                <div className="md:col-span-1 border-r border-gray-300/30 dark:border-gray-700/30 pr-4">
+                  <span
+                    className={cn(
+                      "text-[10px] font-mono font-bold uppercase tracking-wider block mb-1",
+                      getCategoryColor(hoveredNode.category).text,
+                    )}
+                  >
+                    {hoveredNode.category}
+                  </span>
+                  <h4 className="text-lg font-bold text-neu-text tracking-tight leading-tight mb-1">
+                    {hoveredNode.title}
+                  </h4>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 glass-card rounded-xl text-[10px] font-mono font-bold text-neu-accent mt-1">
+                    Proficiency: {hoveredNode.level}
+                  </div>
                 </div>
-              </div>
-              <div className="md:col-span-3 pl-2">
-                <span className="text-[10px] font-mono text-neu-accent font-bold uppercase tracking-widest block mb-1">
-                  TECHNICAL APPLICATION & DEPLOYED CONCEPTS
-                </span>
-                <p className="text-sm text-neu-text-muted leading-relaxed font-sans font-light">
-                  {hoveredNode.details}
+                <div className="md:col-span-3 pl-2">
+                  <span className="text-[10px] font-mono text-neu-accent font-bold uppercase tracking-widest block mb-1">
+                    TECHNICAL APPLICATION & DEPLOYED CONCEPTS
+                  </span>
+                  <p className="text-sm text-neu-text-muted leading-relaxed font-sans font-light">
+                    {hoveredNode.details}
+                  </p>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-4"
+              >
+                <p className="text-xs font-mono text-neu-text-muted italic flex items-center justify-center gap-2">
+                  <span>
+                    ✦ Hover over any skill node in the progressive blueprint to
+                    reveal technical proficiencies and infrastructure
+                    deployments.
+                  </span>
                 </p>
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-4"
-            >
-              <p className="text-xs font-mono text-neu-text-muted italic flex items-center justify-center gap-2">
-                <span>
-                  ✦ Hover over any skill node in the progressive blueprint to
-                  reveal technical proficiencies and infrastructure deployments.
-                </span>
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

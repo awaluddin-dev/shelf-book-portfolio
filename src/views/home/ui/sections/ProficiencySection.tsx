@@ -1,12 +1,10 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Code2, GitFork, Cpu, Globe, Rocket, ArrowRight, Activity, TrendingUp, Layers, PenTool, ExternalLink, BriefcaseBusiness, Briefcase, BrainCircuit, Milestone, User } from 'lucide-react';
+import { Cpu, ArrowRight, TrendingUp, Layers, PenTool, Briefcase, BrainCircuit, Milestone, User } from 'lucide-react';
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";
 import P5Background from '@/shared/ui/P5Background';
 import SkillTree from '@/entities/skill/ui/SkillTree';
 import { cn } from '@/shared/lib/utils';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
-import { legendLevels } from '@/shared/lib/helpers';
 
 interface ProficiencySectionProps {
   dynamicProficiency: any[];
@@ -346,21 +344,21 @@ export default function ProficiencySection({
                         <div
                           className={cn(
                             "w-4 h-4 rounded-full flex items-center justify-center border-2 transition-all duration-300 relative z-10",
-                            isSelected
-                              ? "bg-neu-accent border-neu-accent scale-110 shadow-lg"
-                              : isPast
-                                ? "bg-neu-bg border-neu-accent"
-                                : "bg-neu-bg border-gray-400 dark:border-zinc-700 group-hover:border-neu-text",
+                            (() => {
+                              if (isSelected) return "bg-neu-accent border-neu-accent scale-110 shadow-lg";
+                              if (isPast) return "bg-neu-bg border-neu-accent";
+                              return "bg-neu-bg border-gray-400 dark:border-zinc-700 group-hover:border-neu-text";
+                            })()
                           )}
                         >
                           <div
                             className={cn(
                               "w-1.5 h-1.5 rounded-full",
-                              isSelected
-                                ? "bg-neu-bg"
-                                : isPast
-                                  ? "bg-neu-accent"
-                                  : "bg-transparent",
+                              (() => {
+                                if (isSelected) return "bg-neu-bg";
+                                if (isPast) return "bg-neu-accent";
+                                return "bg-transparent";
+                              })()
                             )}
                           />
                         </div>

@@ -110,7 +110,7 @@ describe('SkillTree', () => {
       json: async () => mockSkills
     })
 
-    const { container } = render(<SkillTree isDark={true} />)
+    render(<SkillTree isDark={true} />)
     
     await waitFor(() => {
       expect(screen.getByText('Node.js')).toBeInTheDocument()

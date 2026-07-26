@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { BookOpen, Search, Wrench, ChevronDown, Filter, ChevronLeft, ChevronRight, Code2, ArrowLeft } from 'lucide-react';
+import { BookOpen, Search, Filter, ChevronLeft, ChevronRight, Code2, ArrowLeft } from 'lucide-react';
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";
 import { cn } from '@/shared/lib/utils';
 import BookItem from '@/entities/project/ui/BookItem';
@@ -34,6 +34,293 @@ interface ProjectsSectionProps {
   scrollShelf: (dir: "left" | "right") => void;
 }
 
+
+const LoadingState = () => (
+  <div className="relative z-10 flex gap-6 overflow-hidden py-10 px-2 justify-center sm:justify-start">
+    {[1, 2, 3, 4, 5].map((i) => (
+      <div
+        key={i}
+        className="w-16 md:w-20 h-64 md:h-80 rounded-lg bg-gray-300/30 dark:bg-zinc-700/40 animate-pulse border border-white/5 relative shadow-neu flex flex-col justify-between p-3"
+      >
+        <div className="space-y-1.5">
+          <div className="w-full h-1 bg-black/5 rounded-full"></div>
+          <div className="w-full h-1 bg-black/5 rounded-full"></div>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-2.5 h-32 bg-gray-300/40 dark:bg-zinc-700/50 rounded-full"></div>
+        </div>
+        <div className="w-full h-3 bg-gray-300/40 dark:bg-zinc-700/50 rounded-md"></div>
+      </div>
+    ))}
+  </div>
+);
+
+const EmptyState = ({
+  searchQuery,
+  selectedCategory,
+  setSearchQuery,
+  setSelectedCategory,
+  triggerToast
+}: any) => (
+  <div className="py-16 px-4 text-center max-w-md mx-auto relative z-10">
+    <motion.div
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      className="inline-flex items-center justify-center w-16 h-16 rounded-3xl glass-card text-neu-accent/60 mb-6 border border-white/5"
+    >
+      <Search size={28} />
+    </motion.div>
+    <h3 className="text-lg font-display font-bold text-neu-text tracking-tight mb-2">
+      No matching projects found
+    </h3>
+    <p className="text-xs md:text-sm text-neu-text-muted font-light mb-6 leading-relaxed">
+      We couldn&apos;t find any projects matching{" "}
+      <span className="font-mono font-semibold text-neu-accent">
+        &ldquo;{searchQuery}&rdquo;
+      </span>
+      {selectedCategory
+        ? ` in category &ldquo;${selectedCategory}&rdquo;`
+        : ""}
+      . Try checking for typos or simplifying your search query.
+    </p>
+    <button
+      onClick={() => {
+        setSearchQuery("");
+        setSelectedCategory(null);
+        triggerToast("Filters reset: Showing all projects");
+      }}
+      className="px-6 py-3 rounded-xl text-xs font-mono font-bold uppercase tracking-wider text-white bg-neu-accent shadow-neu hover:shadow-neu-sm hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+    >
+      Clear All Filters
+    </button>
+  </div>
+);
+
+const ProjectList = ({
+  filteredProjects,
+  shelfRef,
+  setSelectedProject,
+  setFocusedProject,
+  isDark,
+  getTagProjectCount
+}: any) => (
+  <motion.div
+    layout
+    ref={shelfRef}
+    className="flex overflow-x-auto snap-x snap-mandatory gap-x-8 items-end justify-start min-h-[440px] pb-6 pt-16 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-[12.5vw] md:px-10"
+  >
+    <AnimatePresence mode="popLayout">
+      {filteredProjects.map((project: any) => (
+        <BookItem
+          key={project.id}
+          project={project}
+          setSelectedProject={setSelectedProject}
+          setFocusedProject={setFocusedProject}
+          isDark={isDark}
+          getTagProjectCount={getTagProjectCount}
+        />
+      ))}
+    </AnimatePresence>
+  </motion.div>
+);
+
+const FocusedProject = ({
+  focusedProject,
+  setSelectedProject,
+  setFocusedProject,
+  dynamicHeroConfig,
+  getTechIconAndColor,
+  getTagProjectCount
+}: any) => (
+  <div className="relative py-8 md:py-12 px-4 md:px-8 z-20 flex flex-col lg:flex-row items-center justify-center gap-10 md:gap-16">
+    <div className="absolute inset-0 bg-black/5 dark:bg-black/30 backdrop-blur-md rounded-3xl z-0 pointer-events-none"></div>
+    <div
+      className={cn(
+        "absolute -inset-10 opacity-15 blur-[120px] rounded-full z-0 pointer-events-none transition-all duration-500",
+        !focusedProject.spineColor?.startsWith('#') && !focusedProject.spineColor?.startsWith('rgb') ? focusedProject.spineColor : ""
+      )}
+      style={{
+        ...(focusedProject.spineColor?.startsWith('#') || focusedProject.spineColor?.startsWith('rgb') ? { backgroundColor: focusedProject.spineColor } : {})
+      }}
+    ></div>
+
+    <div
+      className="relative z-10 flex-shrink-0 flex items-center justify-center w-[280px] md:w-[320px] h-[340px] md:h-[400px]"
+      style={{ perspective: "1200px" }}
+    >
+      <motion.div
+        initial={{
+          scale: 0.8,
+          rotateY: -35,
+          rotateX: 12,
+          rotateZ: -6,
+          opacity: 0,
+        }}
+        animate={{
+          scale: 1.05,
+          rotateY: -18,
+          rotateX: 8,
+          rotateZ: -4,
+          opacity: 1,
+        }}
+        whileHover={{
+          rotateY: -8,
+          rotateX: 4,
+          rotateZ: -2,
+          scale: 1.12,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 220,
+          damping: 22,
+        }}
+        className="relative cursor-pointer group flex items-center justify-center"
+        onClick={() => setSelectedProject(focusedProject)}
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        <div className="absolute left-[12px] top-0 bottom-0 w-[4px] bg-gradient-to-r from-black/20 to-transparent z-40 pointer-events-none" />
+
+        <div
+          className="absolute right-[-8px] top-[4px] bottom-[4px] w-[10px] bg-stone-100 dark:bg-zinc-800 border-y border-r border-stone-300 dark:border-zinc-700/60 rounded-r shadow-md z-10"
+          style={{
+            transform: "skewY(6deg)",
+            backgroundImage:
+              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 3px)",
+          }}
+        />
+
+        <div
+          className={cn(
+            "w-[200px] md:w-[240px] h-[280px] md:h-[340px] rounded-r-xl shadow-2xl relative flex flex-col justify-between p-6 border-y border-r border-white/20 overflow-hidden z-20",
+            !(focusedProject.coverColor || focusedProject.spineColor)?.startsWith('#') && !(focusedProject.coverColor || focusedProject.spineColor)?.startsWith('rgb') ? (focusedProject.coverColor || focusedProject.spineColor) : ""
+          )}
+          style={{
+            ...((focusedProject.coverColor || focusedProject.spineColor)?.startsWith('#') || (focusedProject.coverColor || focusedProject.spineColor)?.startsWith('rgb') ? { backgroundColor: focusedProject.coverColor || focusedProject.spineColor } : {})
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-tr from-black/15 via-transparent to-white/10 pointer-events-none z-10" />
+
+          <div className="relative z-20 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between border-b border-white/10 pb-2">
+              <span className="text-[9px] font-mono font-bold tracking-widest text-white/70 uppercase">
+                {focusedProject.category}
+              </span>
+              <span className="text-[8px] font-mono text-white/50">
+                {focusedProject.date}
+              </span>
+            </div>
+
+            <div className="my-auto py-2">
+              <h4 className="text-lg md:text-xl font-display font-black text-white tracking-tight leading-snug drop-shadow-md">
+                {focusedProject.title}
+              </h4>
+              <p className="text-[10px] md:text-xs text-white/80 font-mono mt-1.5 font-medium italic line-clamp-2 leading-relaxed">
+                {focusedProject.subtitle}
+              </p>
+            </div>
+
+            <div className="flex items-center justify-between pt-2 border-t border-white/15">
+              <div className="flex flex-col">
+                <span className="text-[7px] font-mono text-white/40 tracking-wider uppercase">
+                  Author
+                </span>
+                <span className="text-[9px] font-mono font-bold text-white/80 leading-none">
+                  {dynamicHeroConfig?.name?.toUpperCase() || "AWALUDDIN"}
+                </span>
+              </div>
+              <div className="p-1.5 rounded-lg bg-black/20 border border-white/10 text-white/80">
+                <Code2 size={12} />
+              </div>
+            </div>
+          </div>
+
+          <div className="absolute left-[3px] top-0 bottom-0 w-[1px] bg-black/25 z-30" />
+          <div className="absolute left-[4px] top-0 bottom-0 w-[1px] bg-white/10 z-30" />
+          <div className="absolute top-0 right-4 w-3 h-8 bg-red-500 shadow-md origin-top transform translate-y-[-4px] z-10 rounded-b" />
+        </div>
+      </motion.div>
+    </div>
+
+    <motion.div
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ type: "spring", stiffness: 220, damping: 22, delay: 0.15 }}
+      className="relative z-10 flex-1 max-w-xl p-6 md:p-8 rounded-3xl bg-neu-bg/90 dark:bg-zinc-900/80 backdrop-blur-lg border border-gray-300/25 dark:border-zinc-700/30 shadow-neu flex flex-col justify-between"
+    >
+      <div>
+        <div className="flex items-center gap-3 mb-4">
+          <span className="px-3 py-1 glass-card-inset rounded-xl text-xs font-mono font-bold text-neu-accent uppercase tracking-wider">
+            {focusedProject.category}
+          </span>
+          <span className="text-neu-text-muted text-xs font-mono">
+            {focusedProject.date}
+          </span>
+        </div>
+
+        <h3 className="text-2xl md:text-4xl font-display font-bold text-neu-text tracking-tight mb-3">
+          {focusedProject.title}
+        </h3>
+
+        <p className="text-sm md:text-base text-neu-text-muted font-light mb-6">
+          {focusedProject.subtitle}
+        </p>
+
+        <div className="flex flex-wrap gap-2 mb-6">
+          {(focusedProject.tags || []).map((tag: string) => {
+            const { color, icon } = getTechIconAndColor(tag);
+            const count = getTagProjectCount(tag);
+            return (
+              <div
+                key={tag}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-card-inset text-[10px] font-mono font-semibold text-neu-text-muted hover:scale-[1.02] transition-transform"
+              >
+                <span className={cn("flex-shrink-0", color)}>{icon}</span>
+                <span>{tag}</span>
+                <span className="text-neu-accent font-bold text-[9px] ml-1 bg-neu-accent/5 px-1 rounded-md">
+                  +{count} project{count > 1 ? "s" : ""} experience
+                </span>
+              </div>
+            );
+          })}
+        </div>
+
+        {focusedProject.stats && focusedProject.stats.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-6">
+            {(focusedProject.stats || []).map((stat: any, idx: number) => (
+              <div
+                key={idx}
+                className="p-3 rounded-2xl glass-card-inset flex flex-col sm:flex-col justify-center items-center text-center"
+              >
+                <span className="text-base md:text-lg font-bold font-display text-neu-text tracking-tight">
+                  {stat.value}
+                </span>
+                <span className="text-sm sm:text-[9px] font-mono text-neu-text-muted mt-1 leading-none">
+                  {stat.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 mt-2">
+        <button
+          onClick={() => setSelectedProject(focusedProject)}
+          className="w-full sm:flex-1 py-4 sm:py-3.5 px-5 rounded-xl font-bold text-white bg-neu-accent shadow-neu hover:shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2"
+        >
+          <BookOpen size={16} className="sm:w-3.5 sm:h-3.5" /> Open Full Dev Log
+        </button>
+        <button
+          onClick={() => setFocusedProject(null)}
+          className="w-full sm:w-auto py-4 sm:py-3.5 px-6 rounded-xl font-bold text-neu-text glass-card hover:shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2 border border-gray-300/10"
+        >
+          <ArrowLeft size={16} className="sm:w-3.5 sm:h-3.5" /> Exit Spotlight
+        </button>
+      </div>
+    </motion.div>
+  </div>
+);
+
 export default function ProjectsSection({
   searchQuery,
   setSearchQuery,
@@ -54,13 +341,17 @@ export default function ProjectsSection({
   dynamicHeroConfig,
   triggerToast,
   shelfRef,
-  activeProjects,
-  selectedProject,
-  isBannerMinimized,
-  setIsBannerMinimized,
   isLoading,
   scrollShelf
 }: ProjectsSectionProps) {
+
+  const renderContent = () => {
+    if (isLoading) return <LoadingState />;
+    if (focusedProject) return <FocusedProject focusedProject={focusedProject} setSelectedProject={setSelectedProject} setFocusedProject={setFocusedProject} dynamicHeroConfig={dynamicHeroConfig} getTechIconAndColor={getTechIconAndColor} getTagProjectCount={getTagProjectCount} />;
+    if (filteredProjects.length === 0) return <EmptyState searchQuery={searchQuery} selectedCategory={selectedCategory} setSearchQuery={setSearchQuery} setSelectedCategory={setSelectedCategory} triggerToast={triggerToast} />;
+    return <ProjectList filteredProjects={filteredProjects} shelfRef={shelfRef} setSelectedProject={setSelectedProject} setFocusedProject={setFocusedProject} isDark={isDark} getTagProjectCount={getTagProjectCount} />;
+  };
+
   return (
     <>
         {/* Projects Section with Intersection Observer Animations */}
@@ -242,295 +533,8 @@ export default function ProjectsSection({
                 </>
               )}
 
-              {isLoading ? (
-                <div className="relative z-10 flex gap-6 overflow-hidden py-10 px-2 justify-center sm:justify-start">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <div
-                      key={i}
-                      className="w-16 md:w-20 h-64 md:h-80 rounded-lg bg-gray-300/30 dark:bg-zinc-700/40 animate-pulse border border-white/5 relative shadow-neu flex flex-col justify-between p-3"
-                    >
-                      <div className="space-y-1.5">
-                        <div className="w-full h-1 bg-black/5 rounded-full"></div>
-                        <div className="w-full h-1 bg-black/5 rounded-full"></div>
-                      </div>
-                      <div className="flex-1 flex items-center justify-center">
-                        <div className="w-2.5 h-32 bg-gray-300/40 dark:bg-zinc-700/50 rounded-full"></div>
-                      </div>
-                      <div className="w-full h-3 bg-gray-300/40 dark:bg-zinc-700/50 rounded-md"></div>
-                    </div>
-                  ))}
-                </div>
-              ) : focusedProject ? (
-                <div className="relative py-8 md:py-12 px-4 md:px-8 z-20 flex flex-col lg:flex-row items-center justify-center gap-10 md:gap-16">
-                  {/* Blurred atmospheric background glow matching book color */}
-                  <div className="absolute inset-0 bg-black/5 dark:bg-black/30 backdrop-blur-md rounded-3xl z-0 pointer-events-none"></div>
-                  <div
-                    className={cn(
-                      "absolute -inset-10 opacity-15 blur-[120px] rounded-full z-0 pointer-events-none transition-all duration-500",
-                      !focusedProject.spineColor?.startsWith('#') && !focusedProject.spineColor?.startsWith('rgb') ? focusedProject.spineColor : ""
-                    )}
-                    style={{
-                      ...(focusedProject.spineColor?.startsWith('#') || focusedProject.spineColor?.startsWith('rgb') ? { backgroundColor: focusedProject.spineColor } : {})
-                    }}
-                  ></div>
+              {renderContent()}
 
-                  {/* Magnified Centered Book (Cover & Side View with realistic 3D styling) */}
-                  <div
-                    className="relative z-10 flex-shrink-0 flex items-center justify-center w-[280px] md:w-[320px] h-[340px] md:h-[400px]"
-                    style={{ perspective: "1200px" }}
-                  >
-                    <motion.div
-                      initial={{
-                        scale: 0.8,
-                        rotateY: -35,
-                        rotateX: 12,
-                        rotateZ: -6,
-                        opacity: 0,
-                      }}
-                      animate={{
-                        scale: 1.05,
-                        rotateY: -18,
-                        rotateX: 8,
-                        rotateZ: -4,
-                        opacity: 1,
-                      }}
-                      whileHover={{
-                        rotateY: -8,
-                        rotateX: 4,
-                        rotateZ: -2,
-                        scale: 1.12,
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 220,
-                        damping: 22,
-                      }}
-                      className="relative cursor-pointer group flex items-center justify-center"
-                      onClick={() => setSelectedProject(focusedProject)}
-                      style={{ transformStyle: "preserve-3d" }}
-                    >
-                      {/* Spine Crease shadow on Left (runs vertically inside front cover) */}
-                      <div className="absolute left-[12px] top-0 bottom-0 w-[4px] bg-gradient-to-r from-black/20 to-transparent z-40 pointer-events-none" />
-
-                      {/* Right Page Stack Side View (3D paper thickness) */}
-                      <div
-                        className="absolute right-[-8px] top-[4px] bottom-[4px] w-[10px] bg-stone-100 dark:bg-zinc-800 border-y border-r border-stone-300 dark:border-zinc-700/60 rounded-r shadow-md z-10"
-                        style={{
-                          transform: "skewY(6deg)",
-                          backgroundImage:
-                            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 3px)",
-                        }}
-                      />
-
-                      {/* Front Cover */}
-                      <div
-                        className={cn(
-                          "w-[200px] md:w-[240px] h-[280px] md:h-[340px] rounded-r-xl shadow-2xl relative flex flex-col justify-between p-6 border-y border-r border-white/20 overflow-hidden z-20",
-                          !(focusedProject.coverColor || focusedProject.spineColor)?.startsWith('#') && !(focusedProject.coverColor || focusedProject.spineColor)?.startsWith('rgb') ? (focusedProject.coverColor || focusedProject.spineColor) : ""
-                        )}
-                        style={{
-                          ...((focusedProject.coverColor || focusedProject.spineColor)?.startsWith('#') || (focusedProject.coverColor || focusedProject.spineColor)?.startsWith('rgb') ? { backgroundColor: focusedProject.coverColor || focusedProject.spineColor } : {})
-                        }}
-                      >
-                        {/* Glossy overlay sheen */}
-                        <div className="absolute inset-0 bg-gradient-to-tr from-black/15 via-transparent to-white/10 pointer-events-none z-10" />
-
-                        {/* Book Cover Content */}
-                        <div className="relative z-20 flex flex-col h-full justify-between">
-                          {/* Top Header of Cover */}
-                          <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                            <span className="text-[9px] font-mono font-bold tracking-widest text-white/70 uppercase">
-                              {focusedProject.category}
-                            </span>
-                            <span className="text-[8px] font-mono text-white/50">
-                              {focusedProject.date}
-                            </span>
-                          </div>
-
-                          {/* Main Title section (Horizontal, beautifully legible, high-impact) */}
-                          <div className="my-auto py-2">
-                            <h4 className="text-lg md:text-xl font-display font-black text-white tracking-tight leading-snug drop-shadow-md">
-                              {focusedProject.title}
-                            </h4>
-                            <p className="text-[10px] md:text-xs text-white/80 font-mono mt-1.5 font-medium italic line-clamp-2 leading-relaxed">
-                              {focusedProject.subtitle}
-                            </p>
-                          </div>
-
-                          {/* Bottom Footer of Cover */}
-                          <div className="flex items-center justify-between pt-2 border-t border-white/15">
-                            <div className="flex flex-col">
-                              <span className="text-[7px] font-mono text-white/40 tracking-wider uppercase">
-                                Author
-                              </span>
-                              <span className="text-[9px] font-mono font-bold text-white/80 leading-none">
-                                {dynamicHeroConfig?.name?.toUpperCase() ||
-                                  "AWALUDDIN"}
-                              </span>
-                            </div>
-                            <div className="p-1.5 rounded-lg bg-black/20 border border-white/10 text-white/80">
-                              <Code2 size={12} />
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Left Binding Cover Crease line */}
-                        <div className="absolute left-[3px] top-0 bottom-0 w-[1px] bg-black/25 z-30" />
-                        <div className="absolute left-[4px] top-0 bottom-0 w-[1px] bg-white/10 z-30" />
-
-                        {/* Subtle bookmark ribbon hanging from the top */}
-                        <div className="absolute top-0 right-4 w-3 h-8 bg-red-500 shadow-md origin-top transform translate-y-[-4px] z-10 rounded-b" />
-                      </div>
-                    </motion.div>
-                  </div>
-
-                  {/* Enhanced detailed glassmorphism content card */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 220,
-                      damping: 22,
-                      delay: 0.15,
-                    }}
-                    className="relative z-10 flex-1 max-w-xl p-6 md:p-8 rounded-3xl bg-neu-bg/90 dark:bg-zinc-900/80 backdrop-blur-lg border border-gray-300/25 dark:border-zinc-700/30 shadow-neu flex flex-col justify-between"
-                  >
-                    <div>
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className="px-3 py-1 glass-card-inset rounded-xl text-xs font-mono font-bold text-neu-accent uppercase tracking-wider">
-                          {focusedProject.category}
-                        </span>
-                        <span className="text-neu-text-muted text-xs font-mono">
-                          {focusedProject.date}
-                        </span>
-                      </div>
-
-                      <h3 className="text-2xl md:text-4xl font-display font-bold text-neu-text tracking-tight mb-3">
-                        {focusedProject.title}
-                      </h3>
-
-                      <p className="text-sm md:text-base text-neu-text-muted font-light mb-6">
-                        {focusedProject.subtitle}
-                      </p>
-
-                      {/* Horizontal Tech Stack Row */}
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {(focusedProject.tags || []).map((tag: string) => {
-                          const { color, icon } = getTechIconAndColor(tag);
-                          const count = getTagProjectCount(tag);
-                          return (
-                            <div
-                              key={tag}
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-card-inset text-[10px] font-mono font-semibold text-neu-text-muted hover:scale-[1.02] transition-transform"
-                            >
-                              <span className={cn("flex-shrink-0", color)}>
-                                {icon}
-                              </span>
-                              <span>{tag}</span>
-                              <span className="text-neu-accent font-bold text-[9px] ml-1 bg-neu-accent/5 px-1 rounded-md">
-                                +{count} project{count > 1 ? "s" : ""}{" "}
-                                experience
-                              </span>
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      {/* High-Impact Stat Cards */}
-                      {focusedProject.stats &&
-                        focusedProject.stats.length > 0 && (
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-6">
-                            {(focusedProject.stats || []).map(
-                              (stat: any, idx: number) => (
-                                <div
-                                  key={idx}
-                                  className="p-3 rounded-2xl glass-card-inset flex flex-col sm:flex-col justify-center items-center text-center"
-                                >
-                                  <span className="text-base md:text-lg font-bold font-display text-neu-text tracking-tight">
-                                    {stat.value}
-                                  </span>
-                                  <span className="text-sm sm:text-[9px] font-mono text-neu-text-muted mt-1 leading-none">
-                                    {stat.label}
-                                  </span>
-                                </div>
-                              ),
-                            )}
-                          </div>
-                        )}
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 mt-2">
-                      <button
-                        onClick={() => setSelectedProject(focusedProject)}
-                        className="w-full sm:flex-1 py-4 sm:py-3.5 px-5 rounded-xl font-bold text-white bg-neu-accent shadow-neu hover:shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2"
-                      >
-                        <BookOpen size={16} className="sm:w-3.5 sm:h-3.5" />{" "}
-                        Open Full Dev Log
-                      </button>
-                      <button
-                        onClick={() => setFocusedProject(null)}
-                        className="w-full sm:w-auto py-4 sm:py-3.5 px-6 rounded-xl font-bold text-neu-text glass-card hover:shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2 border border-gray-300/10"
-                      >
-                        <ArrowLeft size={16} className="sm:w-3.5 sm:h-3.5" />{" "}
-                        Exit Spotlight
-                      </button>
-                    </div>
-                  </motion.div>
-                </div>
-              ) : filteredProjects.length === 0 ? (
-                <div className="py-16 px-4 text-center max-w-md mx-auto relative z-10">
-                  <motion.div
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="inline-flex items-center justify-center w-16 h-16 rounded-3xl glass-card text-neu-accent/60 mb-6 border border-white/5"
-                  >
-                    <Search size={28} />
-                  </motion.div>
-                  <h3 className="text-lg font-display font-bold text-neu-text tracking-tight mb-2">
-                    No matching projects found
-                  </h3>
-                  <p className="text-xs md:text-sm text-neu-text-muted font-light mb-6 leading-relaxed">
-                    We couldn&apos;t find any projects matching{" "}
-                    <span className="font-mono font-semibold text-neu-accent">
-                      &ldquo;{searchQuery}&rdquo;
-                    </span>
-                    {selectedCategory
-                      ? ` in category &ldquo;${selectedCategory}&rdquo;`
-                      : ""}
-                    . Try checking for typos or simplifying your search query.
-                  </p>
-                  <button
-                    onClick={() => {
-                      setSearchQuery("");
-                      setSelectedCategory(null);
-                      triggerToast("Filters reset: Showing all projects");
-                    }}
-                    className="px-6 py-3 rounded-xl text-xs font-mono font-bold uppercase tracking-wider text-white bg-neu-accent shadow-neu hover:shadow-neu-sm hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
-                  >
-                    Clear All Filters
-                  </button>
-                </div>
-              ) : (
-                <motion.div
-                  layout
-                  ref={shelfRef}
-                  className="flex overflow-x-auto snap-x snap-mandatory gap-x-8 items-end justify-start min-h-[440px] pb-6 pt-16 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-[12.5vw] md:px-10"
-                >
-                  <AnimatePresence mode="popLayout">
-                    {filteredProjects.map((project) => (
-                      <BookItem
-                        key={project.id}
-                        project={project}
-                        setSelectedProject={setSelectedProject}
-                        setFocusedProject={setFocusedProject}
-                        isDark={isDark}
-                        getTagProjectCount={getTagProjectCount}
-                      />
-                    ))}
-                  </AnimatePresence>
-                </motion.div>
-              )}
               {/* The visual "shelf" plank */}
               <div className="w-full h-4 glass-card mt-4 rounded-xl relative z-0"></div>
             </div>

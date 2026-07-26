@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import { render, screen, waitFor } from '@testing-library/react'
 import Home from '@/views/home/ui/Home'
 import { ThemeProvider } from '@/shared/ui/ThemeProvider'

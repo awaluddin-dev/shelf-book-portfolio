@@ -22,7 +22,8 @@ describe('ButtonSprinkles', () => {
     Object.defineProperty(window, 'crypto', {
       value: {
         getRandomValues: (arr: Uint32Array) => {
-          arr[0] = Math.floor(Math.random() * (0xFFFFFFFF + 1))
+          arr[0] = Math.floor(// eslint-disable-next-line sonarjs/pseudo-random
+      Math.random() * (0xFFFFFFFF + 1))
           return arr
         }
       }
@@ -56,14 +57,14 @@ describe('ButtonSprinkles', () => {
 
     // It should create 20 sprinkles appended to document.body
     const sprinkles = document.body.querySelectorAll('div[style*="position: fixed"]')
-    expect(sprinkles.length).toBe(20)
+    expect(sprinkles).toHaveLength(20)
 
     // Fast-forward to cleanup
     jest.runAllTimers()
 
     // Sprinkles should be removed
     const sprinklesAfter = document.body.querySelectorAll('div[style*="position: fixed"]')
-    expect(sprinklesAfter.length).toBe(0)
+    expect(sprinklesAfter).toHaveLength(0)
   })
 
   it('creates sprinkles when a role="button" element is clicked', () => {
@@ -78,7 +79,7 @@ describe('ButtonSprinkles', () => {
     fireEvent.click(button)
 
     const sprinkles = document.body.querySelectorAll('div[style*="position: fixed"]')
-    expect(sprinkles.length).toBe(20)
+    expect(sprinkles).toHaveLength(20)
   })
 
   it('does not create sprinkles for non-button elements', () => {
@@ -93,6 +94,6 @@ describe('ButtonSprinkles', () => {
     fireEvent.click(div)
 
     const sprinkles = document.body.querySelectorAll('div[style*="position: fixed"]')
-    expect(sprinkles.length).toBe(0)
+    expect(sprinkles).toHaveLength(0)
   })
 })

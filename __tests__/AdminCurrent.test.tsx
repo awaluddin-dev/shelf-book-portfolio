@@ -33,7 +33,7 @@ describe('AdminCurrent', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url) => {
-      if (url.includes('/api/current')) {
+      if (url.toString().includes('/api/current')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
@@ -86,7 +86,7 @@ describe('AdminCurrent', () => {
     fireEvent.click(addBtn)
 
     // Form should be open
-    expect(screen.getByText('Add Focus Item')).toBeInTheDocument()
+    expect(screen.getAllByText('Add Focus Item')[0]).toBeInTheDocument()
 
     // Fill fields
     const titleInput = screen.getByPlaceholderText('Writing')

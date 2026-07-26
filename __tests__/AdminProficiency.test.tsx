@@ -33,7 +33,7 @@ describe('AdminProficiency', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url) => {
-      if (url.includes('/api/proficiency')) {
+      if (url.toString().includes('/api/proficiency')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
@@ -83,7 +83,7 @@ describe('AdminProficiency', () => {
     fireEvent.click(addBtn)
 
     // Form should be open
-    expect(screen.getByText('Add Category')).toBeInTheDocument()
+    expect(screen.getAllByText('Add Category')[0]).toBeInTheDocument()
 
     // Title field
     const titleInput = screen.getByPlaceholderText('CORE BACKEND')

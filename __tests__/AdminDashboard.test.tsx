@@ -45,19 +45,19 @@ describe('AdminDashboard', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url) => {
-      if (url.includes('/api/status')) {
+      if (url.toString().includes('/api/status')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ data: { status: 'available' } })
         } as any)
       }
-      if (url.includes('/api/testimonials')) {
+      if (url.toString().includes('/api/testimonials')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ data: [{ status: 'pending' }, { status: 'approved' }] })
         } as any)
       }
-      if (url.includes('/api/hero')) {
+      if (url.toString().includes('/api/hero')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
@@ -110,13 +110,13 @@ describe('AdminDashboard', () => {
 
     // Should now have 2 metrics
     const deleteBtns = screen.getAllByRole('button', { name: '' }).filter(btn => btn.querySelector('svg.lucide-trash-2'))
-    expect(deleteBtns.length).toBe(2)
+    expect(deleteBtns).toHaveLength(2)
 
     // Remove the first metric
     fireEvent.click(deleteBtns[0])
 
     const deleteBtnsAfter = screen.getAllByRole('button', { name: '' }).filter(btn => btn.querySelector('svg.lucide-trash-2'))
-    expect(deleteBtnsAfter.length).toBe(1)
+    expect(deleteBtnsAfter).toHaveLength(1)
   })
 
   it('saves hero config and shows toast', async () => {
@@ -128,7 +128,7 @@ describe('AdminDashboard', () => {
     
     // Mock save response
     ;(global.fetch as jest.Mock).mockImplementationOnce((url) => {
-      if (url.includes('/api/hero')) {
+      if (url.toString().includes('/api/hero')) {
         return Promise.resolve({ ok: true } as any)
       }
       return Promise.resolve({ ok: true, json: () => Promise.resolve({}) } as any)

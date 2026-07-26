@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { AdminCrudTable } from '@/shared/ui/admin/AdminCrudTable';
-import { Eye, X, Edit } from 'lucide-react';
+import { Eye, X } from 'lucide-react';
 
 export default function AdminWork() {
   const [viewingWork, setViewingWork] = useState<any | null>(null);
@@ -19,7 +19,13 @@ export default function AdminWork() {
         itemName="Experience"
         activePath="/admin/work"
         apiEndpoint="/api/work"
-        dataExtractor={(data) => data.data?.workExperience || data.workExperience || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []))}
+        dataExtractor={(data) => {
+          if (data.data?.workExperience) return data.data.workExperience;
+          if (data.workExperience) return data.workExperience;
+          if (Array.isArray(data.data)) return data.data;
+          if (Array.isArray(data)) return data;
+          return [];
+        }}
         defaultFormData={{ years: '', duration: '', company: '', role: '', stack: '', teaser: '', fullImpact: '', bullets: '' }}
         onBeforeSave={(formData) => ({
           ...formData,

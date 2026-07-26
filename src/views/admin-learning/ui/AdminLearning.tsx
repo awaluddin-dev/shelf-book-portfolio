@@ -10,7 +10,13 @@ export default function AdminLearning() {
       itemName="Tech Goal"
       activePath="/admin/learning"
       apiEndpoint="/api/learning"
-      dataExtractor={(data) => data.data?.roadmap || data.roadmap || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []))}
+      dataExtractor={(data) => {
+        if (data.data?.roadmap) return data.data.roadmap;
+        if (data.roadmap) return data.roadmap;
+        if (Array.isArray(data.data)) return data.data;
+        if (Array.isArray(data)) return data;
+        return [];
+      }}
       defaultFormData={{ tech: '', quarter: '', status: 'Planned', icon: 'Terminal', description: '', depth: '', topics: '', projects: '' }}
       onBeforeSave={(formData) => ({
         ...formData,

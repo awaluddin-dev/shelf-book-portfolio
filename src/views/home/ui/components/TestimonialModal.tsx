@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Quote, Link as LinkIcon } from 'lucide-react';
+import { X, Quote } from 'lucide-react';
 import { Testimonial } from "@/shared/types";
 
 interface TestimonialModalProps {

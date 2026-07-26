@@ -33,13 +33,13 @@ describe('AdminTestimoni', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url, options) => {
-      if (url.includes('/api/status')) {
+      if (url.toString().includes('/api/status')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ data: { status: 'available' } })
         } as any)
       }
-      if (url.includes('/api/testimonials')) {
+      if (url.toString().includes('/api/testimonials')) {
         if (options && options.method === 'PATCH') {
           return Promise.resolve({
             ok: true,

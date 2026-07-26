@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { cn } from '@/shared/lib/utils';
-import { Code2, Terminal, Cpu, Database, Play, Compass, Layers, Activity, Milestone, ExternalLink } from 'lucide-react';
+import { Code2, Compass, Layers, Activity, Milestone, ExternalLink } from 'lucide-react';
 import EmptyState from '@/shared/ui/EmptyState';
 
 export default function ProjectLifecycleTracker({ projectId, spineColor }: { projectId: string; spineColor: string }) {

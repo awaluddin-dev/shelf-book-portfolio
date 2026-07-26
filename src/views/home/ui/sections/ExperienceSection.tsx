@@ -1,11 +1,37 @@
 /* eslint-disable sonarjs/cognitive-complexity, sonarjs/no-nested-functions */
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Briefcase, Quote, QuoteIcon, Wrench, Activity, Code2, ChevronUp, ChevronDown, Sparkles, MessageCircle, MessageSquare, GitCommit, BarChart2, ExternalLink, Calendar } from 'lucide-react';
+import React from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  Briefcase,
+  Quote,
+  Activity,
+  Code2,
+  ChevronUp,
+  ChevronDown,
+  Sparkles,
+  MessageCircle,
+  MessageSquare,
+  GitCommit,
+  BarChart2,
+} from "lucide-react";
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, AreaChart, Area } from 'recharts';
-import { cn } from '@/shared/lib/utils';
-import { Testimonial } from '@/shared/types';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  Bar,
+  AreaChart,
+  Area,
+} from "recharts";
+import { cn } from "@/shared/lib/utils";
+import { Testimonial } from "@/shared/types";
 
 interface ExperienceSectionProps {
   dynamicWork: any[];
@@ -68,8 +94,8 @@ export default function ExperienceSection({
   handleTouchMove,
   activeTooltipDate,
   legendLevels,
-  activeWork
-}: ExperienceSectionProps) {
+  activeWork,
+}: Readonly<ExperienceSectionProps>) {
   const customTooltipStyle = {
     backgroundColor: isDark ? "#1a1b1e" : "#e0e5ec",
     border: "none",
@@ -81,7 +107,7 @@ export default function ExperienceSection({
     fontFamily: "monospace",
     fontSize: "12px",
   };
-  
+
   const customLegendStyle = {
     fontSize: "11px",
     fontFamily: "monospace",
@@ -135,7 +161,9 @@ export default function ExperienceSection({
                 <div className="flex bg-neu-bg p-1.5 rounded-2xl shadow-neu-inset gap-1">
                   <button
                     onClick={() => setChartType("temporal")}
-                    onKeyDown={(e) => { if (e.key === 'Enter') setChartType("temporal"); }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") setChartType("temporal");
+                    }}
                     className={cn(
                       "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
                       chartType === "temporal"
@@ -147,7 +175,9 @@ export default function ExperienceSection({
                   </button>
                   <button
                     onClick={() => setChartType("repository")}
-                    onKeyDown={(e) => { if (e.key === 'Enter') setChartType("repository"); }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") setChartType("repository");
+                    }}
                     className={cn(
                       "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
                       chartType === "repository"
@@ -162,171 +192,179 @@ export default function ExperienceSection({
 
               {/* Chart Display Area */}
               <div className="h-72 w-full flex items-center justify-center">
-                {isLoading ? (
-                  <div className="w-full h-full flex flex-col justify-between p-4 animate-pulse">
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="h-3 w-24 bg-gray-300/30 dark:bg-zinc-700/40 rounded"></div>
-                      <div className="h-3 w-16 bg-gray-300/30 dark:bg-zinc-700/40 rounded"></div>
-                    </div>
-                    {/* Simulated Chart gridlines and wave path */}
-                    <div className="flex-1 w-full border-b border-l border-gray-300/30 dark:border-zinc-700/30 relative flex items-end">
-                      {/* Gridlines */}
-                      <div className="absolute inset-0 flex flex-col justify-between py-4 pointer-events-none">
-                        <div className="w-full h-[1px] bg-gray-300/10 dark:bg-zinc-700/10"></div>
-                        <div className="w-full h-[1px] bg-gray-300/10 dark:bg-zinc-700/10"></div>
-                        <div className="w-full h-[1px] bg-gray-300/10 dark:bg-zinc-700/10"></div>
-                        <div className="w-full h-[1px] bg-gray-300/10 dark:bg-zinc-700/10"></div>
-                      </div>
-                      {/* Pulsing simulated charts */}
-                      {chartType === "temporal" ? (
-                        <svg
-                          className="absolute inset-0 w-full h-full opacity-20 text-neu-accent"
-                          viewBox="0 0 100 100"
-                          preserveAspectRatio="none"
-                        >
-                          <path
-                            d="M0,80 Q20,40 40,60 T80,20 T100,50 L100,100 L0,100 Z"
-                            fill="currentColor"
-                          />
-                        </svg>
-                      ) : (
-                        <div className="absolute inset-0 flex items-end justify-around px-4 pt-10 gap-2">
-                          <div className="w-8 bg-neu-accent/20 rounded-t h-[40%]"></div>
-                          <div className="w-8 bg-neu-accent/20 rounded-t h-[75%]"></div>
-                          <div className="w-8 bg-neu-accent/20 rounded-t h-[55%]"></div>
-                          <div className="w-8 bg-neu-accent/20 rounded-t h-[90%]"></div>
-                          <div className="w-8 bg-neu-accent/20 rounded-t h-[30%]"></div>
+                {(() => {
+                  if (isLoading) {
+                    return (
+                      <div className="w-full h-full flex flex-col justify-between p-4 animate-pulse">
+                        <div className="flex justify-between items-center mb-2">
+                          <div className="h-3 w-24 bg-gray-300/30 dark:bg-zinc-700/40 rounded"></div>
+                          <div className="h-3 w-16 bg-gray-300/30 dark:bg-zinc-700/40 rounded"></div>
                         </div>
-                      )}
-                    </div>
-                    <div className="flex justify-between mt-2 px-6">
-                      <div className="h-3 w-10 bg-gray-300/20 dark:bg-zinc-700/30 rounded"></div>
-                      <div className="h-3 w-10 bg-gray-300/20 dark:bg-zinc-700/30 rounded"></div>
-                      <div className="h-3 w-10 bg-gray-300/20 dark:bg-zinc-700/30 rounded"></div>
-                      <div className="h-3 w-10 bg-gray-300/20 dark:bg-zinc-700/30 rounded"></div>
-                    </div>
-                  </div>
-                ) : !mounted ? (
-                  <div className="text-neu-text-muted font-mono text-xs">
-                    Initializing chart engine...
-                  </div>
-                ) : chartType === "temporal" ? (
-                  <ResponsiveContainer
-                    width="100%"
-                    height="100%"
-                    minWidth={1}
-                    minHeight={1}
-                  >
-                    <AreaChart
-                      data={timelineData}
-                      margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-                    >
-                      <defs>
-                        <linearGradient
-                          id="colorCommits"
-                          x1="0"
-                          y1="0"
-                          x2="0"
-                          y2="1"
+                        <div className="flex-1 w-full border-b border-l border-gray-300/30 dark:border-zinc-700/30 relative flex items-end">
+                          <div className="absolute inset-0 flex flex-col justify-between py-4 pointer-events-none">
+                            <div className="w-full h-[1px] bg-gray-300/10 dark:bg-zinc-700/10"></div>
+                            <div className="w-full h-[1px] bg-gray-300/10 dark:bg-zinc-700/10"></div>
+                            <div className="w-full h-[1px] bg-gray-300/10 dark:bg-zinc-700/10"></div>
+                            <div className="w-full h-[1px] bg-gray-300/10 dark:bg-zinc-700/10"></div>
+                          </div>
+                          {chartType === "temporal" ? (
+                            <svg
+                              className="absolute inset-0 w-full h-full opacity-20 text-neu-accent"
+                              viewBox="0 0 100 100"
+                              preserveAspectRatio="none"
+                            >
+                              <path
+                                d="M0,80 Q20,40 40,60 T80,20 T100,50 L100,100 L0,100 Z"
+                                fill="currentColor"
+                              />
+                            </svg>
+                          ) : (
+                            <div className="absolute inset-0 flex items-end justify-around px-4 pt-10 gap-2">
+                              <div className="w-8 bg-neu-accent/20 rounded-t h-[40%]"></div>
+                              <div className="w-8 bg-neu-accent/20 rounded-t h-[75%]"></div>
+                              <div className="w-8 bg-neu-accent/20 rounded-t h-[55%]"></div>
+                              <div className="w-8 bg-neu-accent/20 rounded-t h-[90%]"></div>
+                              <div className="w-8 bg-neu-accent/20 rounded-t h-[30%]"></div>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex justify-between mt-2 px-6">
+                          <div className="h-3 w-10 bg-gray-300/20 dark:bg-zinc-700/30 rounded"></div>
+                          <div className="h-3 w-10 bg-gray-300/20 dark:bg-zinc-700/30 rounded"></div>
+                          <div className="h-3 w-10 bg-gray-300/20 dark:bg-zinc-700/30 rounded"></div>
+                          <div className="h-3 w-10 bg-gray-300/20 dark:bg-zinc-700/30 rounded"></div>
+                        </div>
+                      </div>
+                    );
+                  }
+                  if (!mounted) {
+                    return (
+                      <div className="text-neu-text-muted font-mono text-xs">
+                        Initializing chart engine...
+                      </div>
+                    );
+                  }
+                  if (chartType === "temporal") {
+                    return (
+                      <ResponsiveContainer
+                        width="100%"
+                        height="100%"
+                        minWidth={1}
+                        minHeight={1}
+                      >
+                        <AreaChart
+                          data={timelineData}
+                          margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                         >
-                          <stop
-                            offset="5%"
-                            stopColor={isDark ? "#4ade80" : "#4f46e5"}
-                            stopOpacity={0.4}
+                          <defs>
+                            <linearGradient
+                              id="colorCommits"
+                              x1="0"
+                              y1="0"
+                              x2="0"
+                              y2="1"
+                            >
+                              <stop
+                                offset="5%"
+                                stopColor={isDark ? "#4ade80" : "#4f46e5"}
+                                stopOpacity={0.4}
+                              />
+                              <stop
+                                offset="95%"
+                                stopColor={isDark ? "#4ade80" : "#4f46e5"}
+                                stopOpacity={0}
+                              />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke={isDark ? "#2a2b2f" : "#cbd5e1"}
+                            opacity={0.3}
+                            vertical={false}
                           />
-                          <stop
-                            offset="95%"
-                            stopColor={isDark ? "#4ade80" : "#4f46e5"}
-                            stopOpacity={0}
+                          <XAxis
+                            dataKey="month"
+                            stroke={isDark ? "#b2e4bc" : "#4b5563"}
+                            fontSize={11}
+                            tickLine={false}
+                            axisLine={false}
                           />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke={isDark ? "#2a2b2f" : "#cbd5e1"}
-                        opacity={0.3}
-                        vertical={false}
-                      />
-                      <XAxis
-                        dataKey="month"
-                        stroke={isDark ? "#b2e4bc" : "#4b5563"}
-                        fontSize={11}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <YAxis
-                        stroke={isDark ? "#b2e4bc" : "#4b5563"}
-                        fontSize={11}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <Tooltip contentStyle={customTooltipStyle} />
-                      <Legend
-                        iconType="circle"
-                        wrapperStyle={customLegendStyle}
-                      />
-                      <Area
-                        name="Commits"
-                        type="monotone"
-                        dataKey="commits"
-                        stroke={isDark ? "#4ade80" : "#4f46e5"}
-                        strokeWidth={2.5}
-                        fillOpacity={1}
-                        fill="url(#colorCommits)"
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <ResponsiveContainer
-                    width="100%"
-                    height="100%"
-                    minWidth={1}
-                    minHeight={1}
-                  >
-                    <BarChart
-                      data={repoData}
-                      margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                          <YAxis
+                            stroke={isDark ? "#b2e4bc" : "#4b5563"}
+                            fontSize={11}
+                            tickLine={false}
+                            axisLine={false}
+                          />
+                          <Tooltip contentStyle={customTooltipStyle} />
+                          <Legend
+                            iconType="circle"
+                            wrapperStyle={customLegendStyle}
+                          />
+                          <Area
+                            name="Commits"
+                            type="monotone"
+                            dataKey="commits"
+                            stroke={isDark ? "#4ade80" : "#4f46e5"}
+                            strokeWidth={2.5}
+                            fillOpacity={1}
+                            fill="url(#colorCommits)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    );
+                  }
+                  return (
+                    <ResponsiveContainer
+                      width="100%"
+                      height="100%"
+                      minWidth={1}
+                      minHeight={1}
                     >
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke={isDark ? "#2a2b2f" : "#cbd5e1"}
-                        opacity={0.3}
-                        vertical={false}
-                      />
-                      <XAxis
-                        dataKey="name"
-                        stroke={isDark ? "#b2e4bc" : "#4b5563"}
-                        fontSize={10}
-                        tickLine={false}
-                        axisLine={false}
-                        tickFormatter={(value) => value.split(" ")[0]}
-                      />
-                      <YAxis
-                        stroke={isDark ? "#b2e4bc" : "#4b5563"}
-                        fontSize={11}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <Tooltip contentStyle={customTooltipStyle} />
-                      <Legend
-                        iconType="circle"
-                        wrapperStyle={customLegendStyle}
-                      />
-                      <Bar
-                        name="Total Commits"
-                        dataKey="commits"
-                        fill={isDark ? "#4ade80" : "#4f46e5"}
-                        radius={[8, 8, 0, 0]}
-                      />
-                      <Bar
-                        name="Pull Requests"
-                        dataKey="pullRequests"
-                        fill={isDark ? "#22c55e" : "#3b82f6"}
-                        radius={[8, 8, 0, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                )}
+                      <BarChart
+                        data={repoData}
+                        margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                      >
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          stroke={isDark ? "#2a2b2f" : "#cbd5e1"}
+                          opacity={0.3}
+                          vertical={false}
+                        />
+                        <XAxis
+                          dataKey="name"
+                          stroke={isDark ? "#b2e4bc" : "#4b5563"}
+                          fontSize={10}
+                          tickLine={false}
+                          axisLine={false}
+                          tickFormatter={(value) => value.split(" ")[0]}
+                        />
+                        <YAxis
+                          stroke={isDark ? "#b2e4bc" : "#4b5563"}
+                          fontSize={11}
+                          tickLine={false}
+                          axisLine={false}
+                        />
+                        <Tooltip contentStyle={customTooltipStyle} />
+                        <Legend
+                          iconType="circle"
+                          wrapperStyle={customLegendStyle}
+                        />
+                        <Bar
+                          name="Total Commits"
+                          dataKey="commits"
+                          fill={isDark ? "#4ade80" : "#4f46e5"}
+                          radius={[8, 8, 0, 0]}
+                        />
+                        <Bar
+                          name="Pull Requests"
+                          dataKey="pullRequests"
+                          fill={isDark ? "#22c55e" : "#3b82f6"}
+                          radius={[8, 8, 0, 0]}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  );
+                })()}
               </div>
 
               {/* Dynamic summary phrase */}
@@ -394,128 +432,143 @@ export default function ExperienceSection({
 
                       {/* Columns of weeks grouped by month */}
                       <div className="flex-1 flex gap-[3px] justify-between items-stretch">
-                        {(monthsData || []).map((monthGroup: any, mIdx: number) => (
-                          <div key={mIdx} className="flex shrink-0 gap-[3px]">
-                            <div className="flex gap-[3px] shrink-0">
-                              {(monthGroup.weeks || []).map(
-                                (week: any, wIdxInMonth: number) => {
-                                  const isFirstWeekOfMonth = wIdxInMonth === 0;
-                                  const isColInHoveredMonth =
-                                    hoveredMonth !== null &&
-                                    week.some(
-                                      (day: any) => day.month === hoveredMonth,
-                                    );
+                        {(monthsData || []).map(
+                          (monthGroup: any, mIdx: number) => (
+                            <div key={mIdx} className="flex shrink-0 gap-[3px]">
+                              <div className="flex gap-[3px] shrink-0">
+                                {(monthGroup.weeks || []).map(
+                                  (week: any, wIdxInMonth: number) => {
+                                    const isFirstWeekOfMonth =
+                                      wIdxInMonth === 0;
+                                    const isColInHoveredMonth =
+                                      hoveredMonth !== null &&
+                                      week.some(
+                                        (day: any) =>
+                                          day.month === hoveredMonth,
+                                      );
 
-                                  return (
-                                    <div
-                                      key={wIdxInMonth}
-                                      className={cn(
-                                        "flex flex-col gap-[3px] shrink-0 relative pt-10 px-[1px] rounded-md transition-all duration-300",
-                                        isColInHoveredMonth
-                                          ? "bg-neu-accent/[0.04] dark:bg-neu-accent/[0.08] ring-1 ring-neu-accent/15 scale-[1.02] z-10"
-                                          : hoveredMonth !== null
-                                            ? "opacity-30"
-                                            : "",
-                                      )}
-                                    >
-                                      {isFirstWeekOfMonth && (
-                                        <span
-                                          onMouseEnter={() =>
-                                            setHoveredMonth(monthGroup.monthNum)
-                                          }
-                                          onMouseLeave={() =>
-                                            setHoveredMonth(null)
-                                          }
-                                          className={cn(
-                                            "absolute top-0 left-0 text-[10px] sm:text-[10px] font-mono text-neu-text-muted whitespace-nowrap cursor-pointer transition-all duration-200 hover:text-neu-accent select-none",
-                                            hoveredMonth === monthGroup.monthNum
-                                              ? "text-neu-accent font-bold"
-                                              : "",
-                                          )}
-                                        >
-                                          {monthGroup.label}
-                                        </span>
-                                      )}
-                                      {(week || []).map((day: any, dIdx: number) => {
-                                        const levelColors = isDark
-                                          ? [
-                                              "bg-zinc-800/60 hover:bg-zinc-700",
-                                              "bg-emerald-950 hover:bg-emerald-900",
-                                              "bg-emerald-800 hover:bg-emerald-700",
-                                              "bg-emerald-500 hover:bg-emerald-400",
-                                              "bg-emerald-400 hover:bg-emerald-300",
-                                            ]
-                                          : [
-                                              "bg-gray-200 hover:bg-gray-300",
-                                              "bg-indigo-100 hover:bg-indigo-200",
-                                              "bg-indigo-300 hover:bg-indigo-400",
-                                              "bg-indigo-500 hover:bg-indigo-600",
-                                              "bg-indigo-600 hover:bg-indigo-700",
-                                            ];
+                                    const getHoveredColClass = () => {
+                                      if (isColInHoveredMonth)
+                                        return "bg-neu-accent/[0.04] dark:bg-neu-accent/[0.08] ring-1 ring-neu-accent/15 scale-[1.02] z-10";
+                                      if (hoveredMonth !== null)
+                                        return "opacity-30";
+                                      return "";
+                                    };
 
-                                        const isCellFilteredOut =
-                                          selectedLevelFilter !== null &&
-                                          day.level !== selectedLevelFilter;
-                                        const isCellFilteredIn =
-                                          selectedLevelFilter !== null &&
-                                          day.level === selectedLevelFilter;
-
-                                        return day === null ? (
-                                          <div
-                                            key={dIdx}
-                                            className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] opacity-0 pointer-events-none"
-                                          />
-                                        ) : (
-                                          <div
-                                            key={dIdx}
-                                            onTouchStart={() =>
-                                              handleTouchStart(day.date)
+                                    return (
+                                      <div
+                                        key={wIdxInMonth}
+                                        className={cn(
+                                          "flex flex-col gap-[3px] shrink-0 relative pt-10 px-[1px] rounded-md transition-all duration-300",
+                                          getHoveredColClass(),
+                                        )}
+                                      >
+                                        {isFirstWeekOfMonth && (
+                                          <span
+                                            onMouseEnter={() =>
+                                              setHoveredMonth(
+                                                monthGroup.monthNum,
+                                              )
                                             }
-                                            onTouchEnd={handleTouchEnd}
-                                            onTouchCancel={handleTouchEnd}
-                                            onTouchMove={handleTouchMove}
+                                            onMouseLeave={() =>
+                                              setHoveredMonth(null)
+                                            }
                                             className={cn(
-                                              "w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] transition-all duration-150 cursor-pointer relative group/cell",
-                                              levelColors[day.level],
-                                              isCellFilteredOut
-                                                ? "opacity-15 scale-90"
-                                                : "",
-                                              isCellFilteredIn ||
-                                                activeTooltipDate === day.date
-                                                ? "ring-2 ring-neu-accent scale-110 z-10"
+                                              "absolute top-0 left-0 text-[10px] sm:text-[10px] font-mono text-neu-text-muted whitespace-nowrap cursor-pointer transition-all duration-200 hover:text-neu-accent select-none",
+                                              hoveredMonth ===
+                                                monthGroup.monthNum
+                                                ? "text-neu-accent font-bold"
                                                 : "",
                                             )}
                                           >
-                                            {/* Premium Mini Tooltip */}
-                                            <div
-                                              className={cn(
-                                                "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 rounded-lg bg-black/95 dark:bg-neutral-900 text-white text-[9px] font-mono whitespace-nowrap transition-all duration-150 z-50 shadow-lg border border-white/10 pointer-events-none",
-                                                activeTooltipDate === day.date
-                                                  ? "opacity-100 translate-y-0 scale-100"
-                                                  : "opacity-0 translate-y-1 scale-95 group-hover/cell:opacity-100 group-hover/cell:translate-y-0 group-hover/cell:scale-100 group-hover/cell:delay-200",
-                                              )}
-                                            >
-                                              <span className="text-neu-accent font-bold">
-                                                {day.count}{" "}
-                                                {day.count === 1
-                                                  ? "contribution"
-                                                  : "contributions"}
-                                              </span>
-                                              <br />
-                                              <span className="text-gray-400">
-                                                {day.date}
-                                              </span>
-                                            </div>
-                                          </div>
-                                        );
-                                      })}
-                                    </div>
-                                  );
-                                },
-                              )}
+                                            {monthGroup.label}
+                                          </span>
+                                        )}
+                                        {(week || []).map(
+                                          (day: any, dIdx: number) => {
+                                            const levelColors = isDark
+                                              ? [
+                                                  "bg-zinc-800/60 hover:bg-zinc-700",
+                                                  "bg-emerald-950 hover:bg-emerald-900",
+                                                  "bg-emerald-800 hover:bg-emerald-700",
+                                                  "bg-emerald-500 hover:bg-emerald-400",
+                                                  "bg-emerald-400 hover:bg-emerald-300",
+                                                ]
+                                              : [
+                                                  "bg-gray-200 hover:bg-gray-300",
+                                                  "bg-indigo-100 hover:bg-indigo-200",
+                                                  "bg-indigo-300 hover:bg-indigo-400",
+                                                  "bg-indigo-500 hover:bg-indigo-600",
+                                                  "bg-indigo-600 hover:bg-indigo-700",
+                                                ];
+
+                                            const isCellFilteredOut =
+                                              selectedLevelFilter !== null &&
+                                              day.level !== selectedLevelFilter;
+                                            const isCellFilteredIn =
+                                              selectedLevelFilter !== null &&
+                                              day.level === selectedLevelFilter;
+
+                                            return day === null ? (
+                                              <div
+                                                key={dIdx}
+                                                className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] opacity-0 pointer-events-none"
+                                              />
+                                            ) : (
+                                              <div
+                                                key={dIdx}
+                                                onTouchStart={() =>
+                                                  handleTouchStart(day.date)
+                                                }
+                                                onTouchEnd={handleTouchEnd}
+                                                onTouchCancel={handleTouchEnd}
+                                                onTouchMove={handleTouchMove}
+                                                className={cn(
+                                                  "w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] transition-all duration-150 cursor-pointer relative group/cell",
+                                                  levelColors[day.level],
+                                                  isCellFilteredOut
+                                                    ? "opacity-15 scale-90"
+                                                    : "",
+                                                  isCellFilteredIn ||
+                                                    activeTooltipDate ===
+                                                      day.date
+                                                    ? "ring-2 ring-neu-accent scale-110 z-10"
+                                                    : "",
+                                                )}
+                                              >
+                                                {/* Premium Mini Tooltip */}
+                                                <div
+                                                  className={cn(
+                                                    "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 rounded-lg bg-black/95 dark:bg-neutral-900 text-white text-[9px] font-mono whitespace-nowrap transition-all duration-150 z-50 shadow-lg border border-white/10 pointer-events-none",
+                                                    activeTooltipDate ===
+                                                      day.date
+                                                      ? "opacity-100 translate-y-0 scale-100"
+                                                      : "opacity-0 translate-y-1 scale-95 group-hover/cell:opacity-100 group-hover/cell:translate-y-0 group-hover/cell:scale-100 group-hover/cell:delay-200",
+                                                  )}
+                                                >
+                                                  <span className="text-neu-accent font-bold">
+                                                    {day.count}{" "}
+                                                    {day.count === 1
+                                                      ? "contribution"
+                                                      : "contributions"}
+                                                  </span>
+                                                  <br />
+                                                  <span className="text-gray-400">
+                                                    {day.date}
+                                                  </span>
+                                                </div>
+                                              </div>
+                                            );
+                                          },
+                                        )}
+                                      </div>
+                                    );
+                                  },
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ),
+                        )}
                       </div>
                     </div>
                   </div>
@@ -611,7 +664,9 @@ export default function ExperienceSection({
                     {selectedLevelFilter !== null ? (
                       <button
                         onClick={() => setSelectedLevelFilter(null)}
-                        onKeyDown={(e) => { if (e.key === 'Enter') setSelectedLevelFilter(null); }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") setSelectedLevelFilter(null);
+                        }}
                         className="text-[10px] font-mono text-neu-accent hover:underline cursor-pointer flex items-center gap-1 active:scale-95 transition-transform mr-2"
                       >
                         ✕ Clear Filter
@@ -633,7 +688,7 @@ export default function ExperienceSection({
                             )
                           }
                           onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
+                            if (e.key === "Enter") {
                               setSelectedLevelFilter(
                                 selectedLevelFilter === lvl.level
                                   ? null
@@ -813,7 +868,10 @@ export default function ExperienceSection({
                       role="button"
                       tabIndex={0}
                       onClick={() => setActiveExpIdx(isActive ? null : idx)}
-                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveExpIdx(isActive ? null : idx); }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ")
+                          setActiveExpIdx(isActive ? null : idx);
+                      }}
                       className={cn(
                         "grid grid-cols-1 md:grid-cols-12 gap-4 items-center py-6 px-6 rounded-2xl cursor-pointer transition-all duration-300 group relative border-b border-gray-300/10 dark:border-zinc-800/10 last:border-0",
                         isActive
@@ -947,9 +1005,9 @@ export default function ExperienceSection({
         </motion.div>
         {/* Animated divider with a section-specific icon and quote tooltip */}
         {/* Animated divider with a section-specific icon and quote tooltip */}
-        <AnimatedDivider 
-          icon={MessageCircle} 
-          quote="The words of those I've crossed paths with often become the fuel that drives me to keep creating." 
+        <AnimatedDivider
+          icon={MessageCircle}
+          quote="The words of those I've crossed paths with often become the fuel that drives me to keep creating."
         />
       </section>
 
@@ -977,8 +1035,8 @@ export default function ExperienceSection({
 
           <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
             <p className="text-sm font-mono text-neu-text-muted max-w-sm md:text-right">
-              Verifiable recommendations from colleagues, partners, and clients who have
-              worked with me.
+              Verifiable recommendations from colleagues, partners, and clients
+              who have worked with me.
             </p>
           </div>
         </div>
@@ -1028,7 +1086,9 @@ export default function ExperienceSection({
                       {t.testimonial.length > 150 && (
                         <button
                           onClick={() => setSelectedTestimonial(t)}
-                          onKeyDown={(e) => { if (e.key === 'Enter') setSelectedTestimonial(t); }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") setSelectedTestimonial(t);
+                          }}
                           className="mt-3 text-xs font-bold text-neu-accent hover:underline relative z-20 flex items-center gap-1 self-start"
                         >
                           See more...
@@ -1057,7 +1117,7 @@ export default function ExperienceSection({
                     )}
                     <div className="text-xs text-neu-text-muted">
                       <span className="italic">{t.role}</span>
-                      {' at '}
+                      {" at "}
                       <span className="font-bold">{t.company}</span>
                     </div>
                   </div>

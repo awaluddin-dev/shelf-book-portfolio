@@ -9,7 +9,11 @@ export default function AdminArchitecture() {
       title="System Architecture Nodes"
       activePath="/admin/architecture"
       apiEndpoint="/api/architecture"
-      itemDataExtractor={(data) => Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : [])}
+      itemDataExtractor={(data) => {
+        if (Array.isArray(data.data)) return data.data;
+        if (Array.isArray(data)) return data;
+        return [];
+      }}
       defaultFormData={{ name: '', title: '', description: '', metrics: '', order: 0 }}
       onBeforeSave={(formData) => ({
         ...formData,

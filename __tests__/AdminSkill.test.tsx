@@ -33,7 +33,7 @@ describe('AdminSkill', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url) => {
-      if (url.includes('/api/skills')) {
+      if (url.toString().includes('/api/skills')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
@@ -88,7 +88,7 @@ describe('AdminSkill', () => {
     fireEvent.click(addBtn)
 
     // Form should be open
-    expect(screen.getByText('Add Skill Node')).toBeInTheDocument()
+    expect(screen.getAllByText('Add Skill Node')[0]).toBeInTheDocument()
 
     // Fill fields
     const titleInput = screen.getByPlaceholderText('Node.js')

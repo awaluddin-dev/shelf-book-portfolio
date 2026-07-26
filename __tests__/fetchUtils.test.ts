@@ -57,7 +57,7 @@ describe('fetchUtils', () => {
     it('throws error if max retries are exceeded', async () => {
       ;(global.fetch as jest.Mock).mockResolvedValue({ status: 500 })
 
-      let caughtError: Error | null = null
+      let caughtError: any = null
       
       const fetchPromise = fetchWithRetry('/test', { maxRetries: 2, retryDelayMs: 100 })
         .catch(e => { caughtError = e })

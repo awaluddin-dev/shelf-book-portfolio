@@ -33,7 +33,7 @@ describe('AdminLearning', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url) => {
-      if (url.includes('/api/learning')) {
+      if (url.toString().includes('/api/learning')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
@@ -89,7 +89,7 @@ describe('AdminLearning', () => {
     fireEvent.click(addBtn)
 
     // Form should be open
-    expect(screen.getByText('Add Tech Goal')).toBeInTheDocument()
+    expect(screen.getAllByText('Add Tech Goal')[0]).toBeInTheDocument()
 
     // Fill fields
     const techInput = screen.getByPlaceholderText('Agentic AI')

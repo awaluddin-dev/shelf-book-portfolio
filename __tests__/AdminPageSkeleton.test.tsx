@@ -11,7 +11,7 @@ describe('AdminPageSkeleton', () => {
     expect(mainContainer).toHaveClass('animate-pulse')
     
     // Check if it renders the skeleton items (4 divs)
-    expect(mainContainer.children.length).toBe(4)
+    expect(mainContainer.children).toHaveLength(4)
     
     // Verify some classes on the children
     const firstChild = mainContainer.children[0] as HTMLElement
