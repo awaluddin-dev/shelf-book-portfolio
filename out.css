@@ -142,10 +142,6 @@
     --color-neu-text: #112D4E;
     --color-neu-text-muted: rgb(17 45 78 / 65%);
     --color-neu-accent: #3F72AF;
-    --shadow-neu: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
-    --shadow-neu-inset: inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
-    --shadow-neu-sm: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
-    --shadow-neu-modal: 16px 16px 32px rgb(17 45 78 / 12%), -16px -16px 32px #fff;
   }
 }
 @layer base {
@@ -3415,22 +3411,6 @@
     --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
-  .shadow-neu {
-    --tw-shadow: 8px 8px 16px var(--tw-shadow-color, rgb(17 45 78 / 8%)), -8px -8px 16px var(--tw-shadow-color, #fff);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-  .shadow-neu-inset {
-    --tw-shadow: inset 6px 6px 12px var(--tw-shadow-color, rgb(17 45 78 / 8%)), inset -6px -6px 12px var(--tw-shadow-color, #fff);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-  .shadow-neu-modal {
-    --tw-shadow: 16px 16px 32px var(--tw-shadow-color, rgb(17 45 78 / 12%)), -16px -16px 32px var(--tw-shadow-color, #fff);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-  .shadow-neu-sm {
-    --tw-shadow: 4px 4px 8px var(--tw-shadow-color, rgb(17 45 78 / 6%)), -4px -4px 8px var(--tw-shadow-color, #fff);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
   .shadow-sm {
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -3691,10 +3671,6 @@
     }
     .group-hover\:opacity-100:is(:where(.group):hover *) {
       opacity: 100%;
-    }
-    .group-hover\:shadow-neu-modal:is(:where(.group):hover *) {
-      --tw-shadow: 16px 16px 32px var(--tw-shadow-color, rgb(17 45 78 / 12%)), -16px -16px 32px var(--tw-shadow-color, #fff);
-      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
     .group-hover\/cell\:translate-y-0:is(:where(.group\/cell):hover *) {
       --tw-translate-y: 0px;
@@ -4005,10 +3981,6 @@
       --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
-    .hover\:shadow-neu-sm:hover {
-      --tw-shadow: 4px 4px 8px var(--tw-shadow-color, rgb(17 45 78 / 6%)), -4px -4px 8px var(--tw-shadow-color, #fff);
-      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-    }
     .hover\:ring-1:hover {
       --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -4085,10 +4057,6 @@
   }
   .active\:cursor-grabbing:active {
     cursor: grabbing;
-  }
-  .active\:shadow-neu-inset:active {
-    --tw-shadow: inset 6px 6px 12px var(--tw-shadow-color, rgb(17 45 78 / 8%)), inset -6px -6px 12px var(--tw-shadow-color, #fff);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
   .disabled\:cursor-not-allowed:disabled {
     cursor: not-allowed;
@@ -5153,10 +5121,16 @@
   --color-neu-text: #EEE;
   --color-neu-text-muted: rgb(238 238 238 / 60%);
   --color-neu-accent: #00ADB5;
-  --shadow-neu: 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%);
-  --shadow-neu-inset: inset 6px 6px 12px rgb(0 0 0 / 50%), inset -6px -6px 12px rgb(57 62 70 / 25%);
-  --shadow-neu-sm: 4px 4px 8px rgb(0 0 0 / 40%), -4px -4px 8px rgb(57 62 70 / 25%);
-  --shadow-neu-modal: 16px 16px 32px rgb(0 0 0 / 55%), -16px -16px 32px rgb(57 62 70 / 20%);
+  --shadow-neu: 8px 8px 16px rgb(0 0 0 / 60%), -8px -8px 16px rgb(0 0 0 / 40%);
+  --shadow-neu-inset: inset 6px 6px 12px rgb(0 0 0 / 60%), inset -6px -6px 12px rgb(0 0 0 / 40%);
+  --shadow-neu-sm: 4px 4px 8px rgb(0 0 0 / 50%), -4px -4px 8px rgb(0 0 0 / 30%);
+  --shadow-neu-modal: 16px 16px 32px rgb(0 0 0 / 70%), -16px -16px 32px rgb(0 0 0 / 50%);
+}
+:root {
+  --shadow-neu: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
+  --shadow-neu-inset: inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
+  --shadow-neu-sm: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
+  --shadow-neu-modal: 16px 16px 32px rgb(17 45 78 / 12%), -16px -16px 32px #fff;
 }
 body {
   background-color: var(--color-neu-bg);
@@ -5169,25 +5143,20 @@ body {
   }
 }
 .shadow-neu {
-  box-shadow: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
+  box-shadow: var(--shadow-neu);
   transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.dark .shadow-neu {
-  box-shadow: 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%);
 }
 .shadow-neu-inset {
-  box-shadow: inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
+  box-shadow: var(--shadow-neu-inset);
   transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.dark .shadow-neu-inset {
-  box-shadow: inset 6px 6px 12px rgb(0 0 0 / 50%), inset -6px -6px 12px rgb(57 62 70 / 25%);
 }
 .shadow-neu-sm {
-  box-shadow: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
+  box-shadow: var(--shadow-neu-sm);
   transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
-.dark .shadow-neu-sm {
-  box-shadow: 4px 4px 8px rgb(0 0 0 / 40%), -4px -4px 8px rgb(57 62 70 / 25%);
+.shadow-neu-modal {
+  box-shadow: var(--shadow-neu-modal);
+  transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 body, body *, .min-h-screen, .min-h-screen * {
   transition-property: background-color, color, border-color, text-decoration-color, fill, stroke;
@@ -5240,55 +5209,28 @@ body, body *, .min-h-screen, .min-h-screen * {
   }
 }
 .metric-card-normal {
-  box-shadow: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
+  box-shadow: var(--shadow-neu);
   transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.dark .metric-card-normal {
-  box-shadow: 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%);
 }
 .metric-card-normal:hover {
   border-color: var(--color-neu-accent) !important;
-  box-shadow: 0 10px 25px -5px rgb(63 114 175 / 22%), 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff !important;
+  box-shadow: 0 10px 25px -5px rgb(63 114 175 / 22%), var(--shadow-neu) !important;
 }
 .dark .metric-card-normal:hover {
   border-color: var(--color-neu-accent) !important;
-  box-shadow: 0 10px 25px -5px rgb(0 173 181 / 25%), 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%) !important;
+  box-shadow: 0 10px 25px -5px rgb(0 173 181 / 25%), var(--shadow-neu) !important;
 }
 .metric-card-savings {
-  box-shadow: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
+  box-shadow: var(--shadow-neu);
   transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.dark .metric-card-savings {
-  box-shadow: 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%);
 }
 .metric-card-savings:hover {
   border-color: rgb(16 185 129 / 45%) !important;
-  box-shadow: 0 10px 25px -5px rgb(16 185 129 / 25%), 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff !important;
+  box-shadow: 0 10px 25px -5px rgb(16 185 129 / 25%), var(--shadow-neu) !important;
 }
 .dark .metric-card-savings:hover {
   border-color: rgb(16 185 129 / 45%) !important;
-  box-shadow: 0 10px 25px -5px rgb(16 185 129 / 25%), 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%) !important;
-}
-.shadow-neu {
-  box-shadow: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
-  transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.dark .shadow-neu {
-  box-shadow: 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%);
-}
-.shadow-neu-inset {
-  box-shadow: inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
-  transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.dark .shadow-neu-inset {
-  box-shadow: inset 6px 6px 12px rgb(0 0 0 / 50%), inset -6px -6px 12px rgb(57 62 70 / 25%);
-}
-.shadow-neu-sm {
-  box-shadow: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
-  transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.dark .shadow-neu-sm {
-  box-shadow: 4px 4px 8px rgb(0 0 0 / 40%), -4px -4px 8px rgb(57 62 70 / 25%);
+  box-shadow: 0 10px 25px -5px rgb(16 185 129 / 25%), var(--shadow-neu) !important;
 }
 body, body *, .min-h-screen, .min-h-screen * {
   transition-property: background-color, color, border-color, text-decoration-color, fill, stroke;

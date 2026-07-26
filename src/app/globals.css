@@ -9,16 +9,23 @@
 @variant dark (&:where(.dark, .dark *));
 @plugin "@tailwindcss/typography";
 
+:root {
+  --shadow-neu: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
+  --shadow-neu-inset: inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
+  --shadow-neu-sm: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
+  --shadow-neu-modal: 16px 16px 32px rgb(17 45 78 / 12%), -16px -16px 32px #fff;
+}
+
 .dark {
   --color-neu-bg: #222831;
   --color-neu-secondary: #393E46;
   --color-neu-text: #EEE;
   --color-neu-text-muted: rgb(238 238 238 / 60%);
   --color-neu-accent: #00ADB5;
-  --shadow-neu: 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%);
-  --shadow-neu-inset: inset 6px 6px 12px rgb(0 0 0 / 50%), inset -6px -6px 12px rgb(57 62 70 / 25%);
-  --shadow-neu-sm: 4px 4px 8px rgb(0 0 0 / 40%), -4px -4px 8px rgb(57 62 70 / 25%);
-  --shadow-neu-modal: 16px 16px 32px rgb(0 0 0 / 55%), -16px -16px 32px rgb(57 62 70 / 20%);
+  --shadow-neu: 8px 8px 16px rgb(0 0 0 / 60%), -8px -8px 16px rgb(255 255 255 / 5%);
+  --shadow-neu-inset: inset 6px 6px 12px rgb(0 0 0 / 60%), inset -6px -6px 12px rgb(255 255 255 / 5%);
+  --shadow-neu-sm: 4px 4px 8px rgb(0 0 0 / 50%), -4px -4px 8px rgb(255 255 255 / 5%);
+  --shadow-neu-modal: 16px 16px 32px rgb(0 0 0 / 70%), -16px -16px 32px rgb(255 255 255 / 3%);
 }
 
 @theme {
@@ -28,10 +35,6 @@
   --color-neu-text: #112D4E;
   --color-neu-text-muted: rgb(17 45 78 / 65%);
   --color-neu-accent: #3F72AF;
-  --shadow-neu: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
-  --shadow-neu-inset: inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
-  --shadow-neu-sm: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
-  --shadow-neu-modal: 16px 16px 32px rgb(17 45 78 / 12%), -16px -16px 32px #fff;
 }
 
 body {
@@ -49,30 +52,23 @@ body {
 
 /* Explicit neumorphic transitions to prevent jumping on theme change */
 .shadow-neu {
-  box-shadow: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
+  box-shadow: var(--shadow-neu);
   transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dark .shadow-neu {
-  box-shadow: 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%);
 }
 
 .shadow-neu-inset {
-  box-shadow: inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
+  box-shadow: var(--shadow-neu-inset);
   transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dark .shadow-neu-inset {
-  box-shadow: inset 6px 6px 12px rgb(0 0 0 / 50%), inset -6px -6px 12px rgb(57 62 70 / 25%);
 }
 
 .shadow-neu-sm {
-  box-shadow: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
+  box-shadow: var(--shadow-neu-sm);
   transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.dark .shadow-neu-sm {
-  box-shadow: 4px 4px 8px rgb(0 0 0 / 40%), -4px -4px 8px rgb(57 62 70 / 25%);
+.shadow-neu-modal {
+  box-shadow: var(--shadow-neu-modal);
+  transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Smooth global transition for light/dark theme properties */
@@ -165,69 +161,33 @@ body *,
 
 /* Custom smooth metric card transitions */
 .metric-card-normal {
-  box-shadow: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
+  box-shadow: var(--shadow-neu);
   transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dark .metric-card-normal {
-  box-shadow: 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%);
 }
 
 .metric-card-normal:hover {
   border-color: var(--color-neu-accent) !important;
-  box-shadow: 0 10px 25px -5px rgb(63 114 175 / 22%), 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff !important;
+  box-shadow: 0 10px 25px -5px rgb(63 114 175 / 22%), var(--shadow-neu) !important;
 }
 
 .dark .metric-card-normal:hover {
   border-color: var(--color-neu-accent) !important;
-  box-shadow: 0 10px 25px -5px rgb(0 173 181 / 25%), 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%) !important;
+  box-shadow: 0 10px 25px -5px rgb(0 173 181 / 25%), var(--shadow-neu) !important;
 }
 
 .metric-card-savings {
-  box-shadow: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
+  box-shadow: var(--shadow-neu);
   transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dark .metric-card-savings {
-  box-shadow: 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%);
 }
 
 .metric-card-savings:hover {
   border-color: rgb(16 185 129 / 45%) !important;
-  box-shadow: 0 10px 25px -5px rgb(16 185 129 / 25%), 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff !important;
+  box-shadow: 0 10px 25px -5px rgb(16 185 129 / 25%), var(--shadow-neu) !important;
 }
 
 .dark .metric-card-savings:hover {
   border-color: rgb(16 185 129 / 45%) !important;
-  box-shadow: 0 10px 25px -5px rgb(16 185 129 / 25%), 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%) !important;
-}
-
-/* Explicit neumorphic transitions to prevent jumping on theme change */
-.shadow-neu {
-  box-shadow: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
-  transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dark .shadow-neu {
-  box-shadow: 8px 8px 16px rgb(0 0 0 / 50%), -8px -8px 16px rgb(57 62 70 / 25%);
-}
-
-.shadow-neu-inset {
-  box-shadow: inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
-  transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dark .shadow-neu-inset {
-  box-shadow: inset 6px 6px 12px rgb(0 0 0 / 50%), inset -6px -6px 12px rgb(57 62 70 / 25%);
-}
-
-.shadow-neu-sm {
-  box-shadow: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
-  transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dark .shadow-neu-sm {
-  box-shadow: 4px 4px 8px rgb(0 0 0 / 40%), -4px -4px 8px rgb(57 62 70 / 25%);
+  box-shadow: 0 10px 25px -5px rgb(16 185 129 / 25%), var(--shadow-neu) !important;
 }
 
 /* Smooth global transition for light/dark theme properties */
@@ -294,9 +254,14 @@ body *,
 .glass-card {
   background: linear-gradient(135deg, rgb(219 226 239 / 40%) 0%, rgb(249 247 247 / 60%) 100%);
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgb(255 255 255 / 50%);
   box-shadow: 0 8px 32px 0 rgb(17 45 78 / 10%);
   transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .dark .glass-card {
@@ -318,9 +283,14 @@ body *,
 .glass-card-inset {
   background: linear-gradient(135deg, rgb(219 226 239 / 20%) 0%, rgb(249 247 247 / 40%) 100%);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgb(255 255 255 / 20%);
   box-shadow: inset 2px 2px 8px rgb(17 45 78 / 5%);
   transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .dark .glass-card-inset {
@@ -341,9 +311,14 @@ body *,
 .glass-card-highlighted {
   background: linear-gradient(135deg, rgb(219 226 239 / 50%) 0%, rgb(249 247 247 / 70%) 100%);
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgb(255 255 255 / 50%);
   box-shadow: 0 8px 32px 0 rgb(17 45 78 / 10%);
   transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .dark .glass-card-highlighted {

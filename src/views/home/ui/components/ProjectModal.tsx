@@ -524,8 +524,11 @@ export default function ProjectModal({
                           <div
                             className={cn(
                               "w-10 h-14 rounded-md shadow-md flex-shrink-0 flex items-center justify-center relative border border-white/20",
-                              proj.spineColor,
+                              !proj.spineColor?.startsWith('#') && !proj.spineColor?.startsWith('rgb') ? proj.spineColor : ""
                             )}
+                            style={{
+                              ...(proj.spineColor?.startsWith('#') || proj.spineColor?.startsWith('rgb') ? { backgroundColor: proj.spineColor } : {})
+                            }}
                           >
                             <span className="absolute text-[6px] font-mono font-bold text-white/80 whitespace-nowrap overflow-hidden text-ellipsis w-10 text-center transform -rotate-90">
                               {proj.title}
