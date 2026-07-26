@@ -615,6 +615,7 @@ export default function Portfolio() {
         id="scroll-progress"
         role="progressbar"
         aria-label="Scroll Progress"
+        suppressHydrationWarning
         className="fixed top-0 left-0 right-0 h-[4px] bg-neu-accent z-[100] origin-left"
         style={{ scaleX }}
       />
@@ -622,15 +623,14 @@ export default function Portfolio() {
       <motion.div
         role="navigation"
         aria-label="Bottom Dock Navigation"
+        suppressHydrationWarning
         initial={{ y: 100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
         className="fixed bottom-6 left-1/2 z-50 w-auto max-w-[95vw] sm:max-w-lg md:max-w-none p-1.5 rounded-2xl flex flex-nowrap items-center transition-all duration-300 group"
         style={{
-          boxShadow: mounted
-            ? (isDark
-              ? "0 8px 30px rgba(0, 173, 181, 0.12), inset 0 0 12px rgba(0, 173, 181, 0.04)"
-              : "0 8px 30px rgba(63, 114, 175, 0.08), inset 0 0 12px rgba(63, 114, 175, 0.02)")
+          boxShadow: isDark
+            ? "0 8px 30px rgba(0, 173, 181, 0.12), inset 0 0 12px rgba(0, 173, 181, 0.04)"
             : "0 8px 30px rgba(63, 114, 175, 0.08), inset 0 0 12px rgba(63, 114, 175, 0.02)",
         }}
       >
@@ -785,7 +785,7 @@ export default function Portfolio() {
                 "text-neu-text-muted group-hover:text-neu-accent",
               )}
             >
-              {mounted && isDark ? (
+              {isDark ? (
                 <Sun size={16} className="sm:w-[18px] sm:h-[18px]" />
               ) : (
                 <Moon size={16} className="sm:w-[18px] sm:h-[18px]" />
@@ -800,7 +800,7 @@ export default function Portfolio() {
                   transition={{ type: "spring", stiffness: 450, damping: 24 }}
                   className="absolute bottom-full mb-3 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none left-1/2"
                 >
-                  {mounted && isDark ? "Light Mode" : "Dark Mode"}
+                  {isDark ? "Light Mode" : "Dark Mode"}
                   <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[5px] w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-r border-b border-neu-accent/20"></div>
                 </motion.div>
               )}
