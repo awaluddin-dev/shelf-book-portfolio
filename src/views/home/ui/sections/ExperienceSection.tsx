@@ -1004,7 +1004,6 @@ export default function ExperienceSection({
           </div>
         </motion.div>
         {/* Animated divider with a section-specific icon and quote tooltip */}
-        {/* Animated divider with a section-specific icon and quote tooltip */}
         <AnimatedDivider
           icon={MessageCircle}
           quote="The words of those I've crossed paths with often become the fuel that drives me to keep creating."

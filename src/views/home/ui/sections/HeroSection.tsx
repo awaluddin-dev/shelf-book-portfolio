@@ -363,8 +363,8 @@ export default function HeroSection({
 
       <AnimatedDivider
         icon={BookOpen}
-        quote='"A shelf built from real problems, late nights, and systems
-                that had to work."'
+        quote="A shelf built from real problems, late nights, and systems
+                that had to work."
       />
     </>
   );
