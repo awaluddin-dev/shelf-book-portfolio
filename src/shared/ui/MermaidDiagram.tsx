@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useId } from "react";
 import { GitBranch } from "lucide-react";
+import DOMPurify from "dompurify";
 
 interface MermaidDiagramProps {
   chart: string;
@@ -11,7 +12,11 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRendered, setIsRendered] = useState(false);
-  const idRef = useRef(`mermaid-${Math.random().toString(36).slice(2)}`);
+  const [svgContent, setSvgContent] = useState<string>("");
+  
+  const reactId = useId();
+  // Ensure the ID is valid for Mermaid (starts with letter, no colons)
+  const idRef = useRef(`mermaid-${reactId.replaceAll(':', '')}`);
 
   useEffect(() => {
     let cancelled = false;
@@ -50,16 +55,27 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
         const { svg } = await mermaid.render(id, chart.trim());
 
         if (!cancelled && ref.current) {
-          ref.current.innerHTML = svg;
-          // Make SVG responsive
-          const svgEl = ref.current.querySelector("svg");
-          if (svgEl) {
-            svgEl.style.width = "100%";
-            svgEl.style.height = "auto";
-            svgEl.style.maxWidth = "100%";
-            svgEl.removeAttribute("height");
-          }
-          setIsRendered(true);
+          // Sanitize the SVG output using DOMPurify to prevent XSS
+          const cleanSvg = DOMPurify.sanitize(svg, {
+            USE_PROFILES: { svg: true, svgFilters: true },
+          });
+          
+          setSvgContent(cleanSvg);
+          
+          // We need a small delay to allow React to inject the HTML before manipulating it
+          setTimeout(() => {
+            if (!cancelled && ref.current) {
+              // Make SVG responsive
+              const svgEl = ref.current.querySelector("svg");
+              if (svgEl) {
+                svgEl.style.width = "100%";
+                svgEl.style.height = "auto";
+                svgEl.style.maxWidth = "100%";
+                svgEl.removeAttribute("height");
+              }
+              setIsRendered(true);
+            }
+          }, 0);
         }
       } catch (err: any) {
         if (!cancelled) {
@@ -106,6 +122,7 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
       {/* Rendered SVG */}
       <div
         ref={ref}
+        dangerouslySetInnerHTML={{ __html: svgContent }}
         className={`p-5 overflow-x-auto transition-opacity duration-300 ${isRendered ? "opacity-100" : "opacity-0 min-h-[120px]"}`}
       />
     </div>

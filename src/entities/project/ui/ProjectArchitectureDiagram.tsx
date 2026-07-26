@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Network, Layers, Activity, ZoomIn, ZoomOut, RotateCcw, Maximize2, X, Move, Image as ImageIcon } from 'lucide-react';
 import { TransformWrapper, TransformComponent, useControls } from 'react-zoom-pan-pinch';
@@ -45,9 +45,12 @@ function FullscreenViewer({ imageUrl, onClose }: { imageUrl: string; onClose: ()
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex flex-col"
       onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
     >
       {/* Header bar */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0" onClick={e => e.stopPropagation()}>
+      <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0" onClick={e => e.stopPropagation()} onKeyDown={e => { if (e.key === 'Enter') e.stopPropagation(); }}>
         <span className="text-xs font-mono text-white/60 flex items-center gap-2">
           <Move size={12} /> Drag to pan • Scroll / Pinch to zoom • Click outside to close
         </span>
@@ -60,7 +63,7 @@ function FullscreenViewer({ imageUrl, onClose }: { imageUrl: string; onClose: ()
       </div>
 
       {/* Zoomable Canvas */}
-      <div className="flex-1 overflow-hidden" onClick={e => e.stopPropagation()}>
+      <div className="flex-1 overflow-hidden" onClick={e => e.stopPropagation()} onKeyDown={e => { if (e.key === 'Enter') e.stopPropagation(); }}>
         <TransformWrapper
           initialScale={1}
           minScale={0.3}
@@ -98,13 +101,18 @@ function ImageView({ imageUrl }: { imageUrl: string }) {
         </div>
 
         {/* Fullscreen button */}
-        <button
+        <div
+          role="button"
+          tabIndex={0}
           onClick={() => setIsFullscreen(true)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') setIsFullscreen(true);
+          }}
           title="Open Fullscreen"
           className="absolute top-3 right-3 z-10 p-2 rounded-xl bg-black/60 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:border-white/30 transition-all duration-200 opacity-0 group-hover:opacity-100"
         >
           <Maximize2 size={13} />
-        </button>
+        </div>
 
         <TransformWrapper
           initialScale={1}
@@ -207,15 +215,12 @@ function NodeView({ nodes, projectId }: { nodes: any[]; projectId: string }) {
 // --- Main Component ---
 export default function ProjectArchitectureDiagram({ project, isDark }: { project: any; isDark: boolean }) {
   const [nodes, setNodes] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
   const hasImage = !!(project?.architectureImage);
+  const [loading, setLoading] = useState(!hasImage);
 
   useEffect(() => {
-    if (hasImage) {
-      setLoading(false);
-      return;
-    }
+    if (hasImage) return;
+    
     fetch('/api/architecture')
       .then(res => res.json())
       .then(data => {
@@ -258,13 +263,15 @@ export default function ProjectArchitectureDiagram({ project, isDark }: { projec
         )}
       </div>
 
-      {showEmptyState ? (
-        <EmptyState message="No architecture diagram defined for this project. Upload an Excalidraw export or add architecture nodes via the Admin panel." />
-      ) : hasImage ? (
-        <ImageView imageUrl={project.architectureImage} />
-      ) : (
-        <NodeView nodes={nodes} projectId={project?.id} />
-      )}
+      {(() => {
+        if (showEmptyState) {
+          return <EmptyState message="No architecture diagram defined for this project. Upload an Excalidraw export or add architecture nodes via the Admin panel." />;
+        }
+        if (hasImage) {
+          return <ImageView imageUrl={project.architectureImage!} />;
+        }
+        return <NodeView nodes={nodes} projectId={project?.id} />;
+      })()}
     </div>
   );
 }

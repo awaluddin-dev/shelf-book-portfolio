@@ -36,6 +36,7 @@ export default function AdminLogin() {
         setError(true);
       }
     } catch (err) {
+      console.error(err);
       setError(true);
     } finally {
       setIsLoading(false);

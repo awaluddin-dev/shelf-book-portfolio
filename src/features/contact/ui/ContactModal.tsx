@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { X, Sparkles, Send } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 
@@ -12,11 +12,9 @@ interface ContactModalProps {
 
 export default function ContactModal({ isOpen, onClose, portfolioStatus, triggerToast }: ContactModalProps) {
   const [formData, setFormData] = useState({ name: '', email: '', projectType: 'contract', message: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     
     try {
       const etag = localStorage.getItem('inquiryEtag');
@@ -44,7 +42,6 @@ export default function ContactModal({ isOpen, onClose, portfolioStatus, trigger
     } catch (error: any) {
       triggerToast(error.message || 'Failed to send inquiry. Please try again later.');
     } finally {
-      setIsSubmitting(false);
     }
   };
   return (

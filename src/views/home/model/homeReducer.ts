@@ -1,12 +1,11 @@
-import { projects } from '@/entities/testimonial/model/data';
-import { Testimonial } from '@/entities/testimonial/model/data';
+import { Project, Testimonial } from '@/shared/types';
 
 export interface HomeState {
   searchQuery: string;
   selectedCategory: string | null;
-  selectedProject: typeof projects[0] | null;
+  selectedProject: Project | null;
   isBannerMinimized: boolean;
-  focusedProject: typeof projects[0] | null;
+  focusedProject: Project | null;
   hoveredSkillNode: any;
   mounted: boolean;
   chartType: 'temporal' | 'repository';
@@ -56,10 +55,8 @@ export const initialHomeState: HomeState = {
 export type HomeAction = { type: 'SET_STATE'; payload: Partial<HomeState> };
 
 export function homeReducer(state: HomeState, action: HomeAction): HomeState {
-  switch (action.type) {
-    case 'SET_STATE':
-      return { ...state, ...action.payload };
-    default:
-      return state;
+  if (action.type === 'SET_STATE') {
+    return { ...state, ...action.payload };
   }
+  return state;
 }

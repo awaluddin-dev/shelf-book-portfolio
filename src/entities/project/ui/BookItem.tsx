@@ -1,12 +1,12 @@
 import { motion, useMotionValue, useTransform } from 'motion/react';
 import { cn } from '@/shared/lib/utils';
 import { Code2 } from "lucide-react";
-import { projects } from '@/entities/testimonial/model/data';
+import { Project } from '@/shared/types';
 
 interface BookItemProps {
-  project: typeof projects[0];
-  setSelectedProject: (p: typeof projects[0]) => void;
-  setFocusedProject: (p: typeof projects[0] | null) => void;
+  project: Project;
+  setSelectedProject: (p: Project) => void;
+  setFocusedProject: (p: Project | null) => void;
   isDark: boolean;
   getTagProjectCount: (tag: string) => number;
 }

@@ -8,3 +8,6 @@ coverage/
 *.py
 .clinerules
 .clineignore
+.swc
+.scannerwork
+.gemini
