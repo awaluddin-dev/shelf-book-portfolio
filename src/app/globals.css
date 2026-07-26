@@ -1,10 +1,10 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 @source "../views";
 @source "../shared";
 @source "../entities";
 @source "../widgets";
 @source "../features";
-@import "tw-animate-css";
 
 @variant dark (&:where(.dark, .dark *));
 @plugin "@tailwindcss/typography";
