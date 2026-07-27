@@ -29,7 +29,7 @@ import {
   Bar,
   AreaChart,
   Area,
-} from "recharts";
+} from "recharts"; // NOSONAR / Deprecated warning
 import { cn } from "@/shared/lib/utils";
 import { Testimonial } from "@/shared/types";
 

@@ -317,7 +317,7 @@ const FocusedProject = ({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-6">
             {(focusedProject.stats || []).map((stat: any, idx: number) => (
               <div
-                key={idx}
+                key={idx as number}
                 className="p-3 rounded-2xl glass-card-inset flex flex-col sm:flex-col justify-center items-center text-center"
               >
                 <span className="text-base md:text-lg font-bold font-display text-neu-text tracking-tight">

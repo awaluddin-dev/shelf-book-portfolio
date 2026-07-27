@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/shared/lib/utils";
-import { ArrowUp, Cpu, Briefcase, MessageSquare, Sun, Moon } from "lucide-react";
+import {
+  ArrowUp,
+  Cpu,
+  Briefcase,
+  MessageSquare,
+  Sun,
+  Moon,
+} from "lucide-react";
 
 interface DockNavigationProps {
   isDark: boolean;
@@ -15,7 +22,7 @@ export default function DockNavigation({
   showBackToTop,
   activeSection,
   toggleTheme,
-}: DockNavigationProps) {
+}: Readonly<DockNavigationProps>) {
   const [hoveredDockId, setHoveredDockId] = useState<string | null>(null);
 
   return (

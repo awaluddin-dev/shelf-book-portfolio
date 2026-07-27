@@ -8,7 +8,7 @@ import {
   Linkedin,
   PenTool,
   Mail,
-} from "lucide-react";
+} from "lucide-react"; // NOSONAR / Deprecated warning
 import { cn } from "@/shared/lib/utils";
 import { CircuitBoardBg } from "@/shared/ui/CircuitBoardBg";
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";

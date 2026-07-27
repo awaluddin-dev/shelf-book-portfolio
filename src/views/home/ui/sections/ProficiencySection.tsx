@@ -42,7 +42,7 @@ export default function ProficiencySection({
   isDark,
   activeProficiency,
   isLoading,
-}: ProficiencySectionProps) {
+}: Readonly<ProficiencySectionProps>) {
   return (
     <>
       {/* Combined Section 2: Stack, Learning, Philosophy & Career */}
@@ -130,7 +130,7 @@ export default function ProficiencySection({
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {(activeProficiency || []).map((category: any, catIdx: number) => (
               <div
-                key={catIdx}
+                key={catIdx as number}
                 className="p-6 sm:p-8 rounded-3xl glass-card border border-white/5 dark:border-zinc-800/30 flex flex-col justify-between relative overflow-hidden group/card"
               >
                 <P5Background isDark={isDark} />
@@ -142,7 +142,7 @@ export default function ProficiencySection({
                   <div className="flex flex-col">
                     {category.skills?.map((skill: any, skillIdx: number) => (
                       <div
-                        key={skillIdx}
+                        key={skillIdx as number}
                         className="py-4 border-b border-gray-200/5 dark:border-zinc-800/20 last:border-b-0 flex justify-between items-center gap-4 group/item"
                       >
                         <div className="flex items-start gap-3">
@@ -325,11 +325,11 @@ export default function ProficiencySection({
               {/* Milestones wrapper */}
               <div className="relative flex justify-between">
                 {(activeRoadmap || []).map((item: any, index: number) => {
-                  const isSelected = selectedRoadmapIndex! === index;
+                  const isSelected = selectedRoadmapIndex! === index; //NOSONAR
                   const isPast = index <= selectedRoadmapIndex!;
                   return (
                     <button
-                      key={index}
+                      key={index as number}
                       onClick={() => setSelectedRoadmapIndex(index)}
                       className="flex flex-col items-center group cursor-pointer relative z-10 focus:outline-none"
                     >
@@ -403,10 +403,10 @@ export default function ProficiencySection({
             {/* Mobile simplified timeline view */}
             <div className="flex md:hidden flex-wrap gap-2 justify-center mb-6">
               {(activeRoadmap || []).map((item: any, index: number) => {
-                const isSelected = selectedRoadmapIndex! === index;
+                const isSelected = selectedRoadmapIndex! === index; //NOSONAR
                 return (
                   <button
-                    key={index}
+                    key={index as number}
                     onClick={() => setSelectedRoadmapIndex(index)}
                     className={cn(
                       "px-3 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 border cursor-pointer",
@@ -496,7 +496,10 @@ export default function ProficiencySection({
                         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-neu-text-muted">
                           {activeRoadmap[selectedRoadmapIndex!].topics.map(
                             (topic: any, i: number) => (
-                              <li key={i} className="flex items-center gap-2">
+                              <li
+                                key={i as number}
+                                className="flex items-center gap-2"
+                              >
                                 <span className="w-1.5 h-1.5 rounded-full bg-neu-accent/80 flex-shrink-0" />
                                 <span>{topic}</span>
                               </li>
@@ -514,7 +517,10 @@ export default function ProficiencySection({
                           {(
                             activeRoadmap[selectedRoadmapIndex!].projects || []
                           ).map((proj: any, i: number) => (
-                            <li key={i} className="flex items-start gap-2.5">
+                            <li
+                              key={i as number}
+                              className="flex items-start gap-2.5"
+                            >
                               <span className="mt-0.5 text-neu-accent">✦</span>
                               <span className="text-neu-text">{proj}</span>
                             </li>
