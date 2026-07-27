@@ -139,11 +139,6 @@ export default function AdminProjects() {
                 <label className="text-xs font-mono text-neu-text-muted">GitHub URL</label>
                 <input value={formData.github} onChange={e => setFormData({...formData, github: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
               </div>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-[10px] text-neu-text-muted font-mono pl-1">Export your Excalidraw diagrams as SVG/PNG, place them in /public/assets/, then paste the paths here.</p>
-              </div>
               <div className="space-y-1">
                 <label className="text-xs font-mono text-neu-text-muted">Demo URL (Optional)</label>
                 <input value={formData.demoUrl} onChange={e => setFormData({...formData, demoUrl: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
