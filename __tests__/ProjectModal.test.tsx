@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import { render, screen, fireEvent } from '@testing-library/react'
-import ProjectModal from '@/views/home/ui/components/ProjectModal'
+import ProjectModal from '@/widgets/project-modal/ui/ProjectModal'
 
 // Mock dependencies
 jest.mock('react-markdown', () => (props: any) => <div data-testid="react-markdown">{props.children}</div>)

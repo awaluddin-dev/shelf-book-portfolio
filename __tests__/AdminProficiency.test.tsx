@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import AdminProficiency from '@/views/admin-proficiency/ui/AdminProficiency'
+import AdminProficiency from '@/pages/admin-proficiency/ui/AdminProficiency'
 import { ThemeProvider } from '@/shared/ui/ThemeProvider'
 
 // Mock the router

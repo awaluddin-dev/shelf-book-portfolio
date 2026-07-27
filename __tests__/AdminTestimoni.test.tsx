@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import AdminTestimoni from '@/views/admin-testimoni/ui/AdminTestimoni'
+import AdminTestimoni from '@/pages/admin-testimoni/ui/AdminTestimoni'
 import { ThemeProvider } from '@/shared/ui/ThemeProvider'
 
 // Mock the router

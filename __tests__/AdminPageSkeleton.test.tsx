@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react'
-import { AdminPageSkeleton } from '@/shared/ui/admin/AdminPageSkeleton'
+import { AdminPageSkeleton } from '@/widgets/admin-page-skeleton/ui/AdminPageSkeleton'
 
 describe('AdminPageSkeleton', () => {
   it('renders correctly', () => {

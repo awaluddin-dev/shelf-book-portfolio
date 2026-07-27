@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import { render, screen, fireEvent } from '@testing-library/react'
-import ProficiencySection from '@/views/home/ui/sections/ProficiencySection'
+import ProficiencySection from '@/widgets/proficiency/ui/Proficiency'
 
 // Mock sub-components
 jest.mock('@/shared/ui/AnimatedDivider', () => ({

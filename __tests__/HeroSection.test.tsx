@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import HeroSection from '@/views/home/ui/sections/HeroSection'
+import HeroSection from '@/widgets/hero/ui/Hero'
 
 // Mock sub-components
 jest.mock('@/shared/ui/CircuitBoardBg', () => ({

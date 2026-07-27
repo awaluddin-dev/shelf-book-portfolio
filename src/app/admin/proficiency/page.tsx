@@ -1,4 +1,4 @@
-import AdminProficiency from "@/views/admin-proficiency/ui/AdminProficiency";
+import AdminProficiency from "@/pages/admin-proficiency/ui/AdminProficiency";
 
 export const metadata = {
   title: "Technical Proficiency | Admin",

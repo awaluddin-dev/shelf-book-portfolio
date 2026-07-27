@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import { AdminSidebar } from '@/shared/ui/admin/AdminSidebar'
+import { AdminSidebar } from '@/widgets/admin-sidebar/ui/AdminSidebar'
 import { useRouter } from 'next/navigation'
 
 // Mock useRouter

@@ -1,2 +1,2 @@
-import AdminLifecycle from "@/views/admin-lifecycle/ui/AdminLifecycle";
+import AdminLifecycle from "@/pages/admin-lifecycle/ui/AdminLifecycle";
 export default function Page() { return <AdminLifecycle />; }

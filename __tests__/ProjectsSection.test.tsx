@@ -1,13 +1,13 @@
 /* eslint-disable react/display-name */
 import { render, screen, fireEvent } from '@testing-library/react'
-import ProjectsSection from '@/views/home/ui/sections/ProjectsSection'
+import ProjectsSection from '@/widgets/projects-list/ui/ProjectsList'
 
 // Mock sub-components
 jest.mock('@/shared/ui/AnimatedDivider', () => ({
   AnimatedDivider: () => <div data-testid="animated-divider" />
 }))
 jest.mock('@/entities/project/ui/BookItem', () => ({ project }: any) => <div data-testid={`book-item-${project.id}`} />)
-jest.mock('@/views/home/ui/components/MobileFilterModal', () => () => <div data-testid="mobile-filter-modal" />)
+jest.mock('@/widgets/projects-list/ui/MobileFilterModal', () => () => <div data-testid="mobile-filter-modal" />)
 
 // Mock framer-motion
 jest.mock('motion/react', () => ({

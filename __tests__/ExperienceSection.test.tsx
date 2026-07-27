@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import ExperienceSection from '@/views/home/ui/sections/ExperienceSection'
+import ExperienceSection from '@/widgets/experience/ui/Experience'
 
 // Mock sub-components
 jest.mock('@/shared/ui/AnimatedDivider', () => ({

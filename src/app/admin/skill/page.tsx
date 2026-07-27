@@ -1,4 +1,4 @@
-import AdminSkill from "@/views/admin-skill/ui/AdminSkill";
+import AdminSkill from "@/pages/admin-skill/ui/AdminSkill";
 
 export const metadata = {
   title: "Interactive Skill Tree | Admin",

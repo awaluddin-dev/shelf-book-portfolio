@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import MobileFilterModal from '@/views/home/ui/components/MobileFilterModal'
+import MobileFilterModal from '@/widgets/projects-list/ui/MobileFilterModal'
 
 // Mock framer-motion
 jest.mock('motion/react', () => ({

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import AdminLogin from '@/views/admin-login/ui/AdminLogin'
+import AdminLogin from '@/pages/admin-login/ui/AdminLogin'
 
 // Mock next/navigation
 const mockPush = jest.fn()

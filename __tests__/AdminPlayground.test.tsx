@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import AdminPlayground from '@/views/admin-playground/ui/AdminPlayground'
+import AdminPlayground from '@/pages/admin-playground/ui/AdminPlayground'
 
 const mockSetTheme = jest.fn()
 
@@ -18,7 +18,7 @@ jest.mock('next/navigation', () => ({
   }),
 }))
 
-jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
+jest.mock('@/widgets/admin-sidebar/ui/AdminSidebar', () => ({
   AdminSidebar: () => <div data-testid="admin-sidebar" />
 }))
 
