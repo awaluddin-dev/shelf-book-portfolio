@@ -34,7 +34,7 @@ export default function HeroSection({
   renderIcon,
   triggerToast,
   setShowInquiryModal,
-}: HeroSectionProps) {
+}: Readonly<HeroSectionProps>) {
   return (
     <>
       <header className="relative z-10 min-h-[70vh] lg:min-h-[80vh] flex flex-col justify-center pt-6 md:pt-9 lg:pt-12 pb-16 md:pb-20 lg:pb-24 w-full overflow-hidden">

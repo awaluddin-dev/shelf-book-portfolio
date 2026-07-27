@@ -15,7 +15,7 @@ export function CircuitBoardBg() {
 
 
   return (
-    <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[100vw] h-full pointer-events-none z-0 overflow-hidden">
+    <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[100vw] h-[100vh] pointer-events-none z-0 overflow-hidden">
       {/* Circuit Board SVG Background Pattern - Centered, Mirrored, Circular */}
       <svg 
         className="absolute inset-0 w-full h-full opacity-40 text-neu-accent pointer-events-none" 
