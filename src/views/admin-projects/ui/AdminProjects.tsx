@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { AdminCrudTable } from '@/shared/ui/admin/AdminCrudTable';
+import { AdminCrudTable } from '@/widgets/admin-crud-table/ui/AdminCrudTable';
 import { Trash2 } from 'lucide-react';
 
 export default function AdminProjects() {
@@ -17,7 +17,6 @@ export default function AdminProjects() {
     <AdminCrudTable
       title="Portfolio Projects"
       itemName="Project"
-      activePath="/admin/projects"
       apiEndpoint="/api/projects"
       dataExtractor={(data) => {
         if (data.data?.projects) return data.data.projects;

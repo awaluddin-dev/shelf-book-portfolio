@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { AdminProjectLinkedCards } from '@/shared/ui/admin/AdminProjectLinkedCards'
+import { AdminProjectLinkedCards } from '@/widgets/admin-project-linked-cards/ui/AdminProjectLinkedCards'
 
 // Mock the router
 const mockPush = jest.fn()
@@ -9,7 +9,7 @@ jest.mock('next/navigation', () => ({
   useRouter: () => ({ push: mockPush })
 }))
 
-jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
+jest.mock('@/widgets/admin-sidebar/ui/AdminSidebar', () => ({
   AdminSidebar: () => <div data-testid="admin-sidebar" />
 }))
 

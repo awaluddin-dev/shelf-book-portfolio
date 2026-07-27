@@ -5,13 +5,11 @@ import { useRouter } from 'next/navigation';
 import { Plus, Edit, Trash2, ChevronLeft, ChevronRight, X, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/shared/lib/utils';
-import { AdminSidebar } from './AdminSidebar';
-import { AdminPageSkeleton } from './AdminPageSkeleton';
+import { AdminPageSkeleton } from '@/widgets/admin-page-skeleton/ui/AdminPageSkeleton';
 
 export interface AdminCrudTableProps<T = any> {
   title: string;
   itemName: string;
-  activePath: string;
   apiEndpoint: string;
   dataExtractor?: (data: any) => T[];
   columns: {
@@ -28,7 +26,6 @@ export interface AdminCrudTableProps<T = any> {
 export function AdminCrudTable<T extends { id?: string }>({
   title,
   itemName,
-  activePath,
   apiEndpoint,
   dataExtractor,
   columns,
@@ -151,10 +148,7 @@ export function AdminCrudTable<T extends { id?: string }>({
   };
 
   return (
-    <div className="min-h-screen bg-neu-bg flex text-neu-text">
-      <AdminSidebar activePath={activePath} />
-
-      <main className="flex-1 p-8 overflow-y-auto">
+    <>
         {loading ? (
           <AdminPageSkeleton />
         ) : (
@@ -238,7 +232,6 @@ export function AdminCrudTable<T extends { id?: string }>({
             </div>
           </div>
         )}
-      </main>
 
       {/* Add/Edit Modal */}
       {showModal && (
@@ -276,6 +269,6 @@ export function AdminCrudTable<T extends { id?: string }>({
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }

@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X, Quote } from 'lucide-react';
+import React from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { X, Quote } from "lucide-react";
 import { Testimonial } from "@/shared/types";
 
 interface TestimonialModalProps {
@@ -10,8 +10,8 @@ interface TestimonialModalProps {
 
 export default function TestimonialModal({
   selectedTestimonial,
-  onClose
-}: TestimonialModalProps) {
+  onClose,
+}: Readonly<TestimonialModalProps>) {
   return (
     <AnimatePresence>
       {selectedTestimonial && (

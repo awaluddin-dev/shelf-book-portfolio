@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { AdminSidebar } from '@/shared/ui/admin/AdminSidebar';
-import { AdminPageSkeleton } from '@/shared/ui/admin/AdminPageSkeleton';
+import { AdminPageSkeleton } from '@/widgets/admin-page-skeleton/ui/AdminPageSkeleton';
 import { useRouter } from 'next/navigation';
 import { Check, X, MessageSquare, ChevronRight, ChevronLeft, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -78,12 +77,7 @@ export default function AdminTestimoni() {
   };
 
   return (
-    <div className="min-h-screen bg-neu-bg flex text-neu-text">
-      {/* Sidebar */}
-      <AdminSidebar activePath="/admin/testimoni" />
-
-      {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
+    <>
         {loading ? (
           <AdminPageSkeleton />
         ) : (
@@ -195,7 +189,6 @@ export default function AdminTestimoni() {
           </div>
         </div>
       )}
-      </main>
 
       {/* Modal */}
       {selectedTestimonial && (
@@ -264,6 +257,6 @@ export default function AdminTestimoni() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }

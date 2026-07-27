@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { AdminCrudTable } from '@/shared/ui/admin/AdminCrudTable';
+import { AdminCrudTable } from '@/widgets/admin-crud-table/ui/AdminCrudTable';
 import { Plus, X } from 'lucide-react';
 
 export default function AdminProficiency() {
@@ -9,7 +9,6 @@ export default function AdminProficiency() {
     <AdminCrudTable
       title="Proficiency Categories"
       itemName="Category"
-      activePath="/admin/proficiency"
       apiEndpoint="/api/proficiency"
       dataExtractor={(data) => {
         if (data.data?.proficiency) return data.data.proficiency;

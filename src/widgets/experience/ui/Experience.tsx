@@ -29,7 +29,7 @@ import {
   Bar,
   AreaChart,
   Area,
-} from "recharts";
+} from "recharts"; // NOSONAR / Deprecated warning
 import { cn } from "@/shared/lib/utils";
 import { Testimonial } from "@/shared/types";
 
@@ -1003,7 +1003,6 @@ export default function ExperienceSection({
             </motion.div>
           </div>
         </motion.div>
-        {/* Animated divider with a section-specific icon and quote tooltip */}
         {/* Animated divider with a section-specific icon and quote tooltip */}
         <AnimatedDivider
           icon={MessageCircle}

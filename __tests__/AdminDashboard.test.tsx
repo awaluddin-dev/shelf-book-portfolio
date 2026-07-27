@@ -3,10 +3,10 @@ import AdminDashboard from '@/views/admin-dashboard/ui/AdminDashboard'
 import { ThemeProvider } from 'next-themes'
 
 // Mock subcomponents
-jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
+jest.mock('@/widgets/admin-sidebar/ui/AdminSidebar', () => ({
   AdminSidebar: () => <div data-testid="admin-sidebar" />
 }))
-jest.mock('@/shared/ui/admin/AdminPageSkeleton', () => ({
+jest.mock('@/widgets/admin-page-skeleton/ui/AdminPageSkeleton', () => ({
   AdminPageSkeleton: () => <div data-testid="admin-skeleton" />
 }))
 jest.mock('@/shared/ui/Loader', () => ({

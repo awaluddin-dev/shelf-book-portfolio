@@ -1,14 +1,13 @@
 "use client";
 
 import React from 'react';
-import { AdminCrudTable } from '@/shared/ui/admin/AdminCrudTable';
+import { AdminCrudTable } from '@/widgets/admin-crud-table/ui/AdminCrudTable';
 
 export default function AdminLearning() {
   return (
     <AdminCrudTable
       title="Learning Roadmap"
       itemName="Tech Goal"
-      activePath="/admin/learning"
       apiEndpoint="/api/learning"
       dataExtractor={(data) => {
         if (data.data?.roadmap) return data.data.roadmap;

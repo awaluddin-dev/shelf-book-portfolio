@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import TestimonialModal from '@/views/home/ui/components/TestimonialModal'
+import TestimonialModal from '@/widgets/testimonial-modal/ui/TestimonialModal'
 
 // Mock framer-motion
 jest.mock('motion/react', () => ({

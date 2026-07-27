@@ -18,7 +18,7 @@ jest.mock('next/navigation', () => ({
   }),
 }))
 
-jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
+jest.mock('@/widgets/admin-sidebar/ui/AdminSidebar', () => ({
   AdminSidebar: () => <div data-testid="admin-sidebar" />
 }))
 

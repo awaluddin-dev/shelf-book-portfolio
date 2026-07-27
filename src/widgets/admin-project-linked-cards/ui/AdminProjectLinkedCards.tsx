@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit2, Save, X } from 'lucide-react';
-import { AdminSidebar } from './AdminSidebar';
-import { AdminPageSkeleton } from './AdminPageSkeleton';
+import { AdminPageSkeleton } from '@/widgets/admin-page-skeleton/ui/AdminPageSkeleton';
 
 interface AdminProjectLinkedCardsProps<T> {
   title: string;
-  activePath: string;
   apiEndpoint: string;
   itemDataExtractor: (data: any) => T[];
   defaultFormData: any;
@@ -16,7 +14,6 @@ interface AdminProjectLinkedCardsProps<T> {
 
 export function AdminProjectLinkedCards<T extends { id?: string, projectId?: string, order?: number }>({
   title,
-  activePath,
   apiEndpoint,
   itemDataExtractor,
   defaultFormData,
@@ -91,9 +88,7 @@ export function AdminProjectLinkedCards<T extends { id?: string, projectId?: str
   };
 
   return (
-    <div className="min-h-screen bg-neu-bg flex">
-      <AdminSidebar activePath={activePath} />
-      <div className="flex-1 p-8 overflow-y-auto">
+    <>
         <h1 className="text-3xl font-display font-bold text-neu-text mb-8">{title}</h1>
         
         {loading ? (
@@ -175,7 +170,6 @@ export function AdminProjectLinkedCards<T extends { id?: string, projectId?: str
             </div>
           </>
         )}
-      </div>
-    </div>
+    </>
   );
 }

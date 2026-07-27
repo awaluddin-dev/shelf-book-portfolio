@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import { AdminSidebar } from '@/shared/ui/admin/AdminSidebar'
+import { AdminSidebar } from '@/widgets/admin-sidebar/ui/AdminSidebar'
 import { useRouter } from 'next/navigation'
 
 // Mock useRouter
@@ -48,7 +48,7 @@ describe('AdminSidebar', () => {
   it('renders collapse/expand button', () => {
     // Before expansion, the span with 'Collapse' text should not be visible (handled by AnimatePresence mock conditionally rendering)
     // Wait, AnimatePresence mock just renders children, so the component's internal state determines if it renders.
-    const { container } = render(<AdminSidebar activePath="/admin/dashboard" />)
+    const { container } = render(<AdminSidebar  />)
     
     const toggleButton = container.querySelector('button')
     expect(toggleButton).toBeInTheDocument()
@@ -67,7 +67,7 @@ describe('AdminSidebar', () => {
   })
 
   it('navigates to different paths on nav item click', () => {
-    const { container } = render(<AdminSidebar activePath="/admin/dashboard" />)
+    const { container } = render(<AdminSidebar  />)
     
     // Dashboard is the first link after toggle
     const buttons = container.querySelectorAll('button')
@@ -81,7 +81,7 @@ describe('AdminSidebar', () => {
 
   it('handles logout', () => {
     // We need to expand to click logout easily by text, or just get the last button
-    const { container } = render(<AdminSidebar activePath="/admin/dashboard" />)
+    const { container } = render(<AdminSidebar  />)
     
     const buttons = Array.from(container.querySelectorAll('button'))
     const logoutBtn = buttons[buttons.length - 1] // Logout is the last button
@@ -93,7 +93,7 @@ describe('AdminSidebar', () => {
   })
 
   it('renders Back to Portfolio button only on dashboard', () => {
-    const { container: dashboardContainer } = render(<AdminSidebar activePath="/admin/dashboard" />)
+    const { container: dashboardContainer } = render(<AdminSidebar  />)
     
     // We can't find by text easily if collapsed, but it's the second to last button when on dashboard
     let buttons = Array.from(dashboardContainer.querySelectorAll('button'))
@@ -104,7 +104,7 @@ describe('AdminSidebar', () => {
 
     // Test on another path
     mockPush.mockClear()
-    const { container: otherContainer } = render(<AdminSidebar activePath="/admin/projects" />)
+    const { container: otherContainer } = render(<AdminSidebar  />)
     
     // If we click the second to last button here, it should be the last nav item, not Back to Portfolio
     buttons = Array.from(otherContainer.querySelectorAll('button'))

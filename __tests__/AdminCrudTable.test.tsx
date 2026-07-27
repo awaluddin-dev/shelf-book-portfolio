@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { AdminCrudTable } from '@/shared/ui/admin/AdminCrudTable'
+import { AdminCrudTable } from '@/widgets/admin-crud-table/ui/AdminCrudTable'
 
 // Mock the router
 const mockRouter = { push: jest.fn() }
@@ -9,7 +9,7 @@ jest.mock('next/navigation', () => ({
   useRouter: () => mockRouter
 }))
 
-jest.mock('@/shared/ui/admin/AdminSidebar', () => ({
+jest.mock('@/widgets/admin-sidebar/ui/AdminSidebar', () => ({
   AdminSidebar: () => <div data-testid="admin-sidebar" />
 }))
 

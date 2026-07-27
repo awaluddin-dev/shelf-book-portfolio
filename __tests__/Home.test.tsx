@@ -4,13 +4,13 @@ import Home from '@/views/home/ui/Home'
 import { ThemeProvider } from '@/shared/ui/ThemeProvider'
 
 // Mock sub-components
-jest.mock('@/views/home/ui/sections/HeroSection', () => () => <div data-testid="hero-section" />)
-jest.mock('@/views/home/ui/sections/ProjectsSection', () => () => <div data-testid="projects-section" />)
-jest.mock('@/views/home/ui/sections/ProficiencySection', () => () => <div data-testid="proficiency-section" />)
-jest.mock('@/views/home/ui/sections/ExperienceSection', () => () => <div data-testid="experience-section" />)
+jest.mock('@/widgets/hero/ui/Hero', () => () => <div data-testid="hero-section" />)
+jest.mock('@/widgets/projects-list/ui/ProjectsList', () => () => <div data-testid="projects-section" />)
+jest.mock('@/widgets/proficiency/ui/Proficiency', () => () => <div data-testid="proficiency-section" />)
+jest.mock('@/widgets/experience/ui/Experience', () => () => <div data-testid="experience-section" />)
 jest.mock('@/features/contact/ui/ContactModal', () => () => <div data-testid="contact-modal" />)
-jest.mock('@/views/home/ui/components/ProjectModal', () => () => <div data-testid="project-modal" />)
-jest.mock('@/views/home/ui/components/TestimonialModal', () => () => <div data-testid="testimonial-modal" />)
+jest.mock('@/widgets/project-modal/ui/ProjectModal', () => () => <div data-testid="project-modal" />)
+jest.mock('@/widgets/testimonial-modal/ui/TestimonialModal', () => () => <div data-testid="testimonial-modal" />)
 
 // Mock fetch API
 global.fetch = jest.fn(() =>

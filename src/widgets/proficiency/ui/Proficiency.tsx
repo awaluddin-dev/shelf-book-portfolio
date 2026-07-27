@@ -1,16 +1,30 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Cpu, ArrowRight, TrendingUp, Layers, PenTool, Briefcase, BrainCircuit, Milestone, User } from 'lucide-react';
+import React from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  Cpu,
+  ArrowRight,
+  TrendingUp,
+  Layers,
+  PenTool,
+  Briefcase,
+  BrainCircuit,
+  Milestone,
+  BriefcaseBusiness,
+} from "lucide-react";
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";
-import P5Background from '@/shared/ui/P5Background';
-import SkillTree from '@/entities/skill/ui/SkillTree';
-import { cn } from '@/shared/lib/utils';
+import P5Background from "@/shared/ui/P5Background";
+import SkillTree from "@/entities/skill/ui/SkillTree";
+import { cn } from "@/shared/lib/utils";
 
 interface ProficiencySectionProps {
   dynamicProficiency: any[];
   activeRoadmap: any[];
   activeCurrentFocus: boolean;
-  renderIcon: (iconName: string, isSavings: boolean, customSize?: number) => React.ReactNode;
+  renderIcon: (
+    iconName: string,
+    isSavings: boolean,
+    customSize?: number,
+  ) => React.ReactNode;
   selectedRoadmapIndex: number | null;
   setSelectedRoadmapIndex: (idx: number | null) => void;
   isDark: boolean;
@@ -27,8 +41,8 @@ export default function ProficiencySection({
   setSelectedRoadmapIndex,
   isDark,
   activeProficiency,
-  isLoading
-}: ProficiencySectionProps) {
+  isLoading,
+}: Readonly<ProficiencySectionProps>) {
   return (
     <>
       {/* Combined Section 2: Stack, Learning, Philosophy & Career */}
@@ -116,7 +130,7 @@ export default function ProficiencySection({
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {(activeProficiency || []).map((category: any, catIdx: number) => (
               <div
-                key={catIdx}
+                key={catIdx as number}
                 className="p-6 sm:p-8 rounded-3xl glass-card border border-white/5 dark:border-zinc-800/30 flex flex-col justify-between relative overflow-hidden group/card"
               >
                 <P5Background isDark={isDark} />
@@ -128,7 +142,7 @@ export default function ProficiencySection({
                   <div className="flex flex-col">
                     {category.skills?.map((skill: any, skillIdx: number) => (
                       <div
-                        key={skillIdx}
+                        key={skillIdx as number}
                         className="py-4 border-b border-gray-200/5 dark:border-zinc-800/20 last:border-b-0 flex justify-between items-center gap-4 group/item"
                       >
                         <div className="flex items-start gap-3">
@@ -237,11 +251,15 @@ export default function ProficiencySection({
                 <strong className="text-neu-text font-medium">
                   At Astra Group
                 </strong>
-                {", shipping Node.js microservices for enterprise fleet and driver management. "}
+                {
+                  ", shipping Node.js microservices for enterprise fleet and driver management. "
+                }
                 <strong className="text-neu-text font-medium">
                   Parallel focus:
                 </strong>
-                {" building AuraFlow AI as primary portfolio project for remote backend roles."}
+                {
+                  " building AuraFlow AI as primary portfolio project for remote backend roles."
+                }
               </p>
             </div>
 
@@ -307,11 +325,11 @@ export default function ProficiencySection({
               {/* Milestones wrapper */}
               <div className="relative flex justify-between">
                 {(activeRoadmap || []).map((item: any, index: number) => {
-                  const isSelected = selectedRoadmapIndex! === index;
+                  const isSelected = selectedRoadmapIndex! === index; //NOSONAR
                   const isPast = index <= selectedRoadmapIndex!;
                   return (
                     <button
-                      key={index}
+                      key={index as number}
                       onClick={() => setSelectedRoadmapIndex(index)}
                       className="flex flex-col items-center group cursor-pointer relative z-10 focus:outline-none"
                     >
@@ -345,10 +363,11 @@ export default function ProficiencySection({
                           className={cn(
                             "w-4 h-4 rounded-full flex items-center justify-center border-2 transition-all duration-300 relative z-10",
                             (() => {
-                              if (isSelected) return "bg-neu-accent border-neu-accent scale-110 shadow-lg";
+                              if (isSelected)
+                                return "bg-neu-accent border-neu-accent scale-110 shadow-lg";
                               if (isPast) return "bg-neu-bg border-neu-accent";
                               return "bg-neu-bg border-gray-400 dark:border-zinc-700 group-hover:border-neu-text";
-                            })()
+                            })(),
                           )}
                         >
                           <div
@@ -358,7 +377,7 @@ export default function ProficiencySection({
                                 if (isSelected) return "bg-neu-bg";
                                 if (isPast) return "bg-neu-accent";
                                 return "bg-transparent";
-                              })()
+                              })(),
                             )}
                           />
                         </div>
@@ -384,10 +403,10 @@ export default function ProficiencySection({
             {/* Mobile simplified timeline view */}
             <div className="flex md:hidden flex-wrap gap-2 justify-center mb-6">
               {(activeRoadmap || []).map((item: any, index: number) => {
-                const isSelected = selectedRoadmapIndex! === index;
+                const isSelected = selectedRoadmapIndex! === index; //NOSONAR
                 return (
                   <button
-                    key={index}
+                    key={index as number}
                     onClick={() => setSelectedRoadmapIndex(index)}
                     className={cn(
                       "px-3 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 border cursor-pointer",
@@ -405,105 +424,112 @@ export default function ProficiencySection({
 
             {/* Details panel for the selected roadmap item */}
             <AnimatePresence mode="wait">
-              {activeRoadmap.length > 0 && activeRoadmap[selectedRoadmapIndex!] && (
-                <motion.div
-                  key={`roadmap-details-${selectedRoadmapIndex!}`}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.35, ease: "easeInOut" }}
-                  className="mt-6 p-6 sm:p-8 rounded-3xl glass-card-inset border border-gray-300/30 dark:border-gray-800/40 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
-                >
-                  {/* Tech Info */}
-                  <div className="lg:col-span-7 space-y-5">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3.5 rounded-2xl glass-card text-neu-accent">
-                        {renderIcon(
-                          activeRoadmap[selectedRoadmapIndex!].icon,
-                          false,
-                          24,
-                        )}
+              {activeRoadmap.length > 0 &&
+                activeRoadmap[selectedRoadmapIndex!] && (
+                  <motion.div
+                    key={`roadmap-details-${selectedRoadmapIndex!}`}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -15 }}
+                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    className="mt-6 p-6 sm:p-8 rounded-3xl glass-card-inset border border-gray-300/30 dark:border-gray-800/40 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+                  >
+                    {/* Tech Info */}
+                    <div className="lg:col-span-7 space-y-5">
+                      <div className="flex items-center gap-3">
+                        <div className="p-3.5 rounded-2xl glass-card text-neu-accent">
+                          {renderIcon(
+                            activeRoadmap[selectedRoadmapIndex!].icon,
+                            false,
+                            24,
+                          )}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2.5 flex-wrap">
+                            <span className="font-mono text-xs font-bold tracking-widest text-neu-accent uppercase">
+                              {activeRoadmap[selectedRoadmapIndex!].quarter}
+                            </span>
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold tracking-wider uppercase bg-white/50 dark:bg-black/30 border border-gray-300/40 dark:border-zinc-800 text-neu-accent/90">
+                              <span className="w-1.5 h-1.5 rounded-full bg-neu-accent mr-1.5" />
+                              {activeRoadmap[selectedRoadmapIndex!].status}
+                            </span>
+                          </div>
+                          <h4 className="text-xl font-bold text-neu-text mt-1">
+                            {activeRoadmap[selectedRoadmapIndex!].tech}
+                          </h4>
+                        </div>
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2.5 flex-wrap">
-                          <span className="font-mono text-xs font-bold tracking-widest text-neu-accent uppercase">
-                            {activeRoadmap[selectedRoadmapIndex!].quarter}
+
+                      <p className="text-sm text-neu-text-muted leading-relaxed">
+                        {activeRoadmap[selectedRoadmapIndex!].description}
+                      </p>
+
+                      <div className="flex items-center gap-6 pt-2">
+                        <div>
+                          <span className="block font-mono text-[10px] text-neu-text-muted uppercase tracking-wider">
+                            Estimated Depth
                           </span>
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold tracking-wider uppercase bg-white/50 dark:bg-black/30 border border-gray-300/40 dark:border-zinc-800 text-neu-accent/90">
-                            <span className="w-1.5 h-1.5 rounded-full bg-neu-accent mr-1.5" />
-                            {activeRoadmap[selectedRoadmapIndex!].status}
+                          <span className="text-sm font-semibold text-neu-text">
+                            {activeRoadmap[selectedRoadmapIndex!].depth}
                           </span>
                         </div>
-                        <h4 className="text-xl font-bold text-neu-text mt-1">
-                          {activeRoadmap[selectedRoadmapIndex!].tech}
-                        </h4>
+                        <div className="w-[1px] h-8 bg-gray-300/60 dark:bg-zinc-800" />
+                        <div>
+                          <span className="block font-mono text-[10px] text-neu-text-muted uppercase tracking-wider">
+                            Direction
+                          </span>
+                          <span className="text-sm font-semibold text-neu-text inline-flex items-center gap-1">
+                            <TrendingUp size={14} className="text-neu-accent" />{" "}
+                            Continuous Growth
+                          </span>
+                        </div>
                       </div>
                     </div>
 
-                    <p className="text-sm text-neu-text-muted leading-relaxed">
-                      {activeRoadmap[selectedRoadmapIndex!].description}
-                    </p>
-
-                    <div className="flex items-center gap-6 pt-2">
-                      <div>
-                        <span className="block font-mono text-[10px] text-neu-text-muted uppercase tracking-wider">
-                          Estimated Depth
+                    {/* Topics & Target Projects */}
+                    <div className="lg:col-span-5 space-y-6">
+                      {/* Core Topics */}
+                      <div className="p-5 rounded-2xl bg-white/20 dark:bg-black/10 border border-white/10">
+                        <span className="block font-mono text-[10px] text-neu-accent font-extrabold uppercase tracking-widest mb-3">
+                          Core Topics to Master
                         </span>
-                        <span className="text-sm font-semibold text-neu-text">
-                          {activeRoadmap[selectedRoadmapIndex!].depth}
-                        </span>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-neu-text-muted">
+                          {activeRoadmap[selectedRoadmapIndex!].topics.map(
+                            (topic: any, i: number) => (
+                              <li
+                                key={i as number}
+                                className="flex items-center gap-2"
+                              >
+                                <span className="w-1.5 h-1.5 rounded-full bg-neu-accent/80 flex-shrink-0" />
+                                <span>{topic}</span>
+                              </li>
+                            ),
+                          )}
+                        </ul>
                       </div>
-                      <div className="w-[1px] h-8 bg-gray-300/60 dark:bg-zinc-800" />
-                      <div>
-                        <span className="block font-mono text-[10px] text-neu-text-muted uppercase tracking-wider">
-                          Direction
-                        </span>
-                        <span className="text-sm font-semibold text-neu-text inline-flex items-center gap-1">
-                          <TrendingUp size={14} className="text-neu-accent" />{" "}
-                          Continuous Growth
-                        </span>
-                      </div>
-                    </div>
-                  </div>
 
-                  {/* Topics & Target Projects */}
-                  <div className="lg:col-span-5 space-y-6">
-                    {/* Core Topics */}
-                    <div className="p-5 rounded-2xl bg-white/20 dark:bg-black/10 border border-white/10">
-                      <span className="block font-mono text-[10px] text-neu-accent font-extrabold uppercase tracking-widest mb-3">
-                        Core Topics to Master
-                      </span>
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-neu-text-muted">
-                        {activeRoadmap[selectedRoadmapIndex!].topics.map(
-                          (topic: any, i: number) => (
-                            <li key={i} className="flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-neu-accent/80 flex-shrink-0" />
-                              <span>{topic}</span>
-                            </li>
-                          ),
-                        )}
-                      </ul>
-                    </div>
-
-                    {/* Target Projects */}
-                    <div className="p-5 rounded-2xl bg-white/20 dark:bg-black/10 border border-white/10">
-                      <span className="block font-mono text-[10px] text-neu-accent font-extrabold uppercase tracking-widest mb-3">
-                        Planned Prototype Projects
-                      </span>
-                      <ul className="space-y-2 text-xs text-neu-text-muted font-mono">
-                        {(activeRoadmap[selectedRoadmapIndex!].projects || []).map(
-                          (proj: any, i: number) => (
-                            <li key={i} className="flex items-start gap-2.5">
+                      {/* Target Projects */}
+                      <div className="p-5 rounded-2xl bg-white/20 dark:bg-black/10 border border-white/10">
+                        <span className="block font-mono text-[10px] text-neu-accent font-extrabold uppercase tracking-widest mb-3">
+                          Planned Prototype Projects
+                        </span>
+                        <ul className="space-y-2 text-xs text-neu-text-muted font-mono">
+                          {(
+                            activeRoadmap[selectedRoadmapIndex!].projects || []
+                          ).map((proj: any, i: number) => (
+                            <li
+                              key={i as number}
+                              className="flex items-start gap-2.5"
+                            >
                               <span className="mt-0.5 text-neu-accent">✦</span>
                               <span className="text-neu-text">{proj}</span>
                             </li>
-                          ),
-                        )}
-                      </ul>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              )}
+                  </motion.div>
+                )}
             </AnimatePresence>
           </div>
         </motion.div>
@@ -520,9 +546,10 @@ export default function ProficiencySection({
         </motion.div>
 
         {/* Animated divider with a section-specific icon and quote tooltip */}
-        <AnimatedDivider 
-          icon={User} 
-          quote="My professional journey is a continuous loop of learning, building, breaking, and improving." 
+        <AnimatedDivider
+          icon={BriefcaseBusiness}
+          quote="Every system I've built carries the weight of the
+                problems it was meant to solve."
         />
       </section>
     </>

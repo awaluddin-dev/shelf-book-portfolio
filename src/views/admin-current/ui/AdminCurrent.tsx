@@ -1,14 +1,13 @@
 "use client";
 
 import React from 'react';
-import { AdminCrudTable } from '@/shared/ui/admin/AdminCrudTable';
+import { AdminCrudTable } from '@/widgets/admin-crud-table/ui/AdminCrudTable';
 
 export default function AdminCurrent() {
   return (
     <AdminCrudTable
       title="Right Now Focus"
       itemName="Focus Item"
-      activePath="/admin/current"
       apiEndpoint="/api/current"
       dataExtractor={(data) => {
         if (data.data?.currentFocus) return data.data.currentFocus;

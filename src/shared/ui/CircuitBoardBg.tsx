@@ -15,7 +15,7 @@ export function CircuitBoardBg() {
 
 
   return (
-    <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[100vw] h-full pointer-events-none z-0 overflow-hidden">
+    <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[100vw] h-[100vh] pointer-events-none z-0 overflow-hidden">
       {/* Circuit Board SVG Background Pattern - Centered, Mirrored, Circular */}
       <svg 
         className="absolute inset-0 w-full h-full opacity-40 text-neu-accent pointer-events-none" 
@@ -42,27 +42,31 @@ export function CircuitBoardBg() {
             <path d="M 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" fill="none" stroke="currentColor" strokeWidth="2.5" />
             <path d="M 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" fill="none" stroke="currentColor" strokeWidth="2.5" />
 
-            {/* Standard Traces */}
-            <path d="M 95,35 L 130,35 L 180,85 L 280,85 L 330,135 L 500,135" fill="none" stroke="currentColor" strokeWidth="1" />
-            <path d="M 95,55 L 110,55 L 160,105 L 250,105 L 300,155 L 450,155 L 500,205" fill="none" stroke="currentColor" strokeWidth="1" />
-            <path d="M 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            
-            <path d="M 35,95 L 35,130 L 85,180 L 85,280 L 135,330 L 135,500" fill="none" stroke="currentColor" strokeWidth="1" />
-            <path d="M 55,95 L 55,110 L 105,160 L 105,250 L 155,300 L 155,450 L 205,500" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M 75,95 L 75,105 L 110,140 L 110,220 L 160,270 L 160,350 L 210,400 L 210,500" fill="none" stroke="currentColor" strokeWidth="1" />
+            {/* Static Traces with pulsing glow */}
+            <g>
+              <animate attributeName="opacity" values="0.1;1;0.1" dur="4s" repeatCount="indefinite" />
+              {/* Standard Traces */}
+              <path d="M 95,35 L 130,35 L 180,85 L 280,85 L 330,135 L 500,135" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              <path d="M 95,55 L 110,55 L 160,105 L 250,105 L 300,155 L 450,155 L 500,205" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              <path d="M 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" fill="none" stroke="currentColor" strokeWidth="2" />
+              
+              <path d="M 35,95 L 35,130 L 85,180 L 85,280 L 135,330 L 135,500" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              <path d="M 55,95 L 55,110 L 105,160 L 105,250 L 155,300 L 155,450 L 205,500" fill="none" stroke="currentColor" strokeWidth="2" />
+              <path d="M 75,95 L 75,105 L 110,140 L 110,220 L 160,270 L 160,350 L 210,400 L 210,500" fill="none" stroke="currentColor" strokeWidth="1.5" />
 
-            {/* Dense 45-degree corner memory bus */}
-            <path d="M 200,200 L 250,250 L 500,250" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.8" />
-            <path d="M 190,210 L 240,260 L 500,260" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.6" />
-            <path d="M 180,220 L 230,270 L 500,270" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.6" />
-            <path d="M 170,230 L 220,280 L 500,280" fill="none" stroke="currentColor" strokeWidth="2" strokeOpacity="0.8" />
-            <path d="M 160,240 L 210,290 L 500,290" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.6" />
-            
-            <path d="M 200,200 L 250,150 L 250,0" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.8" />
-            <path d="M 210,190 L 260,140 L 260,0" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.6" />
-            <path d="M 220,180 L 270,130 L 270,0" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.6" />
-            <path d="M 230,170 L 280,120 L 280,0" fill="none" stroke="currentColor" strokeWidth="2" strokeOpacity="0.8" />
-            <path d="M 240,160 L 290,110 L 290,0" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.6" />
+              {/* Dense 45-degree corner memory bus */}
+              <path d="M 200,200 L 250,250 L 500,250" fill="none" stroke="currentColor" strokeWidth="2" strokeOpacity="0.9" />
+              <path d="M 190,210 L 240,260 L 500,260" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.7" />
+              <path d="M 180,220 L 230,270 L 500,270" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.7" />
+              <path d="M 170,230 L 220,280 L 500,280" fill="none" stroke="currentColor" strokeWidth="2.5" strokeOpacity="0.9" />
+              <path d="M 160,240 L 210,290 L 500,290" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.7" />
+              
+              <path d="M 200,200 L 250,150 L 250,0" fill="none" stroke="currentColor" strokeWidth="2" strokeOpacity="0.9" />
+              <path d="M 210,190 L 260,140 L 260,0" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.7" />
+              <path d="M 220,180 L 270,130 L 270,0" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.7" />
+              <path d="M 230,170 L 280,120 L 280,0" fill="none" stroke="currentColor" strokeWidth="2.5" strokeOpacity="0.9" />
+              <path d="M 240,160 L 290,110 L 290,0" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.7" />
+            </g>
 
             {/* Vias (Nodes/Circles) */}
             <circle cx="500" cy="115" r="4" fill="currentColor" />
@@ -91,8 +95,16 @@ export function CircuitBoardBg() {
         <use href="#circuit-quadrant" transform="scale(1, -1)" />
         <use href="#circuit-quadrant" transform="scale(-1, -1)" />
         
+        {/* Fake Lightweight Aura Glow (No blur filter used = fast performance) */}
+        <rect x="-86" y="-86" width="172" height="172" fill="none" stroke="currentColor" strokeWidth="8">
+          <animate attributeName="stroke-opacity" values="0;0.25;0" dur="3s" repeatCount="indefinite" />
+        </rect>
+        
         {/* Central glowing processor accent */}
-        <rect x="-80" y="-80" width="160" height="160" fill="none" stroke="currentColor" strokeWidth="3" strokeOpacity="0.8" />
+        <rect x="-80" y="-80" width="160" height="160" fill="currentColor" stroke="currentColor" strokeWidth="4">
+          <animate attributeName="stroke-opacity" values="0.2;1;0.2" dur="3s" repeatCount="indefinite" />
+          <animate attributeName="fill-opacity" values="0.02;0.25;0.02" dur="3s" repeatCount="indefinite" />
+        </rect>
       </svg>
       {/* Animated Data Nodes Overlay - 100% Opacity, No Vignette Mask */}
       <svg

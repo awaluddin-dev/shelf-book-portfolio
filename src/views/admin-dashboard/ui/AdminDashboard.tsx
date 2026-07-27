@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Loader } from "@/shared/ui/Loader";
-import { AdminSidebar } from "@/shared/ui/admin/AdminSidebar";
-import { AdminPageSkeleton } from "@/shared/ui/admin/AdminPageSkeleton";
+import { AdminPageSkeleton } from "@/widgets/admin-page-skeleton/ui/AdminPageSkeleton";
 import { useRouter } from "next/navigation";
 import {
   Briefcase,
@@ -139,13 +138,8 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-neu-bg flex text-neu-text">
+    <>
       {isProcessing && <Loader fullScreen text="Processing..." />}
-      {/* Sidebar */}
-      <AdminSidebar activePath="/admin/dashboard" />
-
-      {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
         {loading ? (
           <AdminPageSkeleton />
         ) : (
@@ -374,7 +368,6 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
-      </main>
 
       {/* Toast Notification */}
       <AnimatePresence>
@@ -399,6 +392,6 @@ export default function AdminDashboard() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }

@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { Briefcase, LogOut, LayoutDashboard, MessageSquare, ChevronRight, ChevronLeft, Network, Rocket, Layers, Cpu, ArrowLeft, BookOpen, Palette, Milestone } from "lucide-react";
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/shared/lib/utils';
 
-export function AdminSidebar({ activePath }: { activePath: string }) {
+export function AdminSidebar() {
   const [isExpanded, setIsExpanded] = useState(false);
   const router = useRouter();
+  const activePath = usePathname();
 
   const handleLogout = () => {
     localStorage.removeItem('isAdmin');
@@ -54,9 +56,9 @@ export function AdminSidebar({ activePath }: { activePath: string }) {
             const isActive = activePath === item.path;
             const Icon = item.icon;
             return (
-              <button 
+              <Link 
+                href={item.path}
                 key={item.path}
-                onClick={() => router.push(item.path)} 
                 className={cn(
                   "h-10 rounded-xl flex items-center gap-3 px-2 transition-colors overflow-hidden whitespace-nowrap",
                   isActive ? "bg-black/5 dark:bg-white/5 text-neu-accent font-bold" : "text-neu-text hover:bg-black/5 dark:hover:bg-white/5"
@@ -66,17 +68,17 @@ export function AdminSidebar({ activePath }: { activePath: string }) {
                 <AnimatePresence>
                   {isExpanded && <motion.span initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="text-sm">{item.label}</motion.span>}
                 </AnimatePresence>
-              </button>
+              </Link>
             )
           })}
           </div>
 
           <div className="mt-auto pt-2 space-y-2 border-t border-black/10 dark:border-white/10 shrink-0">
             {activePath === '/admin/dashboard' && (
-              <button onClick={() => router.push('/')} className="w-full h-10 rounded-xl flex items-center gap-3 px-2 hover:bg-black/5 dark:hover:bg-white/5 text-neu-text transition-colors overflow-hidden whitespace-nowrap">
+              <Link href="/" className="w-full h-10 rounded-xl flex items-center gap-3 px-2 hover:bg-black/5 dark:hover:bg-white/5 text-neu-text transition-colors overflow-hidden whitespace-nowrap">
                 <div className="min-w-[24px] flex justify-center"><ArrowLeft size={18} /></div>
                 <AnimatePresence>{isExpanded && <motion.span initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="font-bold text-sm">Back to Portfolio</motion.span>}</AnimatePresence>
-              </button>
+              </Link>
             )}
             <button onClick={handleLogout} className="w-full h-10 rounded-xl flex items-center gap-3 px-2 hover:bg-red-500/10 text-neu-text-muted hover:text-red-500 transition-colors overflow-hidden whitespace-nowrap">
               <div className="min-w-[24px] flex justify-center"><LogOut size={18} /></div>

@@ -2,13 +2,12 @@
 
 import React from "react";
 import { ExternalLink } from "lucide-react";
-import { AdminProjectLinkedCards } from "@/shared/ui/admin/AdminProjectLinkedCards";
+import { AdminProjectLinkedCards } from "@/widgets/admin-project-linked-cards/ui/AdminProjectLinkedCards";
 
 export default function AdminLifecycle() {
   return (
     <AdminProjectLinkedCards
       title="Project Lifecycle Tracker"
-      activePath="/admin/lifecycle"
       apiEndpoint="/api/lifecycle"
       itemDataExtractor={(data) => {
         if (Array.isArray(data.data)) return data.data;

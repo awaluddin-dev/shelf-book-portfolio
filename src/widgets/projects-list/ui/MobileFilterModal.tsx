@@ -1,7 +1,7 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X } from 'lucide-react';
-import { cn } from '@/shared/lib/utils';
+import React from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { X } from "lucide-react";
+import { cn } from "@/shared/lib/utils";
 
 interface MobileFilterModalProps {
   isOpen: boolean;
@@ -16,8 +16,8 @@ export default function MobileFilterModal({
   onClose,
   categories,
   selectedCategory,
-  onSelectCategory
-}: MobileFilterModalProps) {
+  onSelectCategory,
+}: Readonly<MobileFilterModalProps>) {
   return (
     <AnimatePresence>
       {isOpen && (

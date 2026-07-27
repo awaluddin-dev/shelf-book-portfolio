@@ -28,9 +28,12 @@ export default function AdminLogin() {
 
       const resData = await res.json();
       const token = resData.data?.access_token || resData.access_token;
+      const refreshToken = resData.data?.refresh_token || resData.refresh_token;
+      
       if (token) {
         localStorage.setItem('isAdmin', 'true'); // kept for backwards compatibility in UI state
         localStorage.setItem('token', token);
+        if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
         router.push('/admin/dashboard');
       } else {
         setError(true);
@@ -115,8 +118,17 @@ export default function AdminLogin() {
               disabled={isLoading || !turnstileToken}
               className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-neu-accent text-white rounded-xl shadow-neu hover:scale-[1.02] active:scale-95 transition-all font-bold disabled:opacity-50 disabled:hover:scale-100"
             >
-              {isLoading ? "Signing In..." : "Sign In"}{" "}
-              {!isLoading && <ArrowRight size={18} />}
+              {isLoading ? (
+                <>
+                  <div className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin"></div>
+                  <span>Authenticating...</span>
+                </>
+              ) : (
+                <>
+                  <span>Sign In</span>
+                  <ArrowRight size={18} />
+                </>
+              )}
             </button>
           </div>
         </form>

@@ -1,14 +1,13 @@
 "use client";
 
 import React from 'react';
-import { AdminCrudTable } from '@/shared/ui/admin/AdminCrudTable';
+import { AdminCrudTable } from '@/widgets/admin-crud-table/ui/AdminCrudTable';
 
 export default function AdminSkill() {
   return (
     <AdminCrudTable
       title="Skill Tree Nodes"
       itemName="Skill Node"
-      activePath="/admin/skill"
       apiEndpoint="/api/skills"
       dataExtractor={(data) => {
         if (data.data?.skills) return data.data.skills;

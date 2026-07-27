@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Globe, Github, 
-  Terminal, Lightbulb, Target, FileText, Network, Layers, Sparkles, Code2, Check, Copy 
-} from 'lucide-react';
-import { cn } from '@/shared/lib/utils';
-import ReactMarkdown from 'react-markdown';
-import MermaidDiagram from '@/shared/ui/MermaidDiagram';
-import ProjectLifecycleTracker from '@/entities/project/ui/ProjectLifecycleTracker';
-import ProjectArchitectureDiagram from '@/entities/project/ui/ProjectArchitectureDiagram';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  X,
+  Globe,
+  Github,
+  Terminal,
+  Lightbulb,
+  Target,
+  FileText,
+  Network,
+  Layers,
+  Sparkles,
+  Code2,
+  Check,
+  Copy,
+} from "lucide-react"; //NOSONAR
+import { cn } from "@/shared/lib/utils";
+import ReactMarkdown from "react-markdown";
+import MermaidDiagram from "@/shared/ui/MermaidDiagram";
+import ProjectLifecycleTracker from "@/entities/project/ui/ProjectLifecycleTracker";
+import ProjectArchitectureDiagram from "@/entities/project/ui/ProjectArchitectureDiagram";
 
 interface ProjectModalProps {
   selectedProject: any;
@@ -20,7 +35,10 @@ interface ProjectModalProps {
   setIsBannerMinimized: (val: boolean) => void;
   isDark: boolean;
   getRelatedProjects: (project: any) => any[];
-  getTechIconAndColor: (tag: string) => { color: string; icon: React.ReactNode };
+  getTechIconAndColor: (tag: string) => {
+    color: string;
+    icon: React.ReactNode;
+  };
   getTagProjectCount: (tag: string) => number;
   TECHNICAL_IMAGERY: Record<string, any>;
 }
@@ -37,8 +55,8 @@ export default function ProjectModal({
   getRelatedProjects,
   getTechIconAndColor,
   getTagProjectCount,
-  TECHNICAL_IMAGERY
-}: ProjectModalProps) {
+  TECHNICAL_IMAGERY,
+}: Readonly<ProjectModalProps>) {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   return (
@@ -52,7 +70,7 @@ export default function ProjectModal({
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
           onClick={onClose}
           onKeyDown={(e) => {
-            if (e.key === 'Escape') onClose();
+            if (e.key === "Escape") onClose();
           }}
         >
           {/* Left Desktop Arrow Button */}
@@ -102,7 +120,7 @@ export default function ProjectModal({
             transition={{ type: "spring", stiffness: 160, damping: 22 }}
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') e.stopPropagation();
+              if (e.key === "Enter") e.stopPropagation();
             }}
             className="bg-neu-bg rounded-3xl shadow-neu-modal w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col relative cursor-grab active:cursor-grabbing"
           >
@@ -124,10 +142,16 @@ export default function ProjectModal({
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   className={cn(
                     "relative overflow-hidden flex-shrink-0",
-                    !selectedProject.coverColor?.startsWith('#') && !selectedProject.coverColor?.startsWith('rgb') ? selectedProject.coverColor : ""
+                    !selectedProject.coverColor?.startsWith("#") &&
+                      !selectedProject.coverColor?.startsWith("rgb")
+                      ? selectedProject.coverColor
+                      : "",
                   )}
                   style={{
-                    ...(selectedProject.coverColor?.startsWith('#') || selectedProject.coverColor?.startsWith('rgb') ? { backgroundColor: selectedProject.coverColor } : {})
+                    ...(selectedProject.coverColor?.startsWith("#") ||
+                    selectedProject.coverColor?.startsWith("rgb")
+                      ? { backgroundColor: selectedProject.coverColor }
+                      : {}),
                   }}
                 >
                   {/* The High-Quality Unsplash Background Image */}
@@ -152,9 +176,7 @@ export default function ProjectModal({
                       }}
                       className="p-2 rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors border border-white/10 shadow-sm"
                       title={
-                        isBannerMinimized
-                          ? "Expand Banner"
-                          : "Minimize Banner"
+                        isBannerMinimized ? "Expand Banner" : "Minimize Banner"
                       }
                     >
                       {isBannerMinimized ? (
@@ -221,7 +243,7 @@ export default function ProjectModal({
                               >
                                 <span className={cn("flex-shrink-0", color)}>
                                   {icon}
-                               </span>
+                                </span>
                                 <span>{tag}</span>
                                 <span className="text-emerald-400 font-bold text-[10px] bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
                                   +{count} project{count > 1 ? "s" : ""} exp
@@ -334,10 +356,7 @@ export default function ProjectModal({
                           {selectedProject.problemSolved && (
                             <div className="flex-1 bg-neu-bg p-6 rounded-3xl shadow-neu-inset border border-white/5">
                               <h4 className="text-sm font-mono font-bold text-neu-accent uppercase tracking-wider mb-4 flex items-center gap-2">
-                                <Target
-                                  size={14}
-                                  className="text-neu-accent"
-                                />{" "}
+                                <Target size={14} className="text-neu-accent" />{" "}
                                 Business Problem Solved
                               </h4>
                               <p className="text-neu-text-muted text-sm leading-relaxed whitespace-pre-wrap">
@@ -384,18 +403,66 @@ export default function ProjectModal({
 
                                 // Apply custom theme colors to the code block tokens
                                 const keywordList = [
-                                  "const", "let", "var", "function", "return", "import", "export", 
-                                  "from", "class", "extends", "if", "else", "for", "while", "async", 
-                                  "await", "try", "catch", "def", "elif", "print", "public", "private", 
-                                  "protected", "interface", "new", "this", "package", "void", "string", 
-                                  "number", "boolean", "any", "type", "implements"
+                                  "const",
+                                  "let",
+                                  "var",
+                                  "function",
+                                  "return",
+                                  "import",
+                                  "export",
+                                  "from",
+                                  "class",
+                                  "extends",
+                                  "if",
+                                  "else",
+                                  "for",
+                                  "while",
+                                  "async",
+                                  "await",
+                                  "try",
+                                  "catch",
+                                  "def",
+                                  "elif",
+                                  "print",
+                                  "public",
+                                  "private",
+                                  "protected",
+                                  "interface",
+                                  "new",
+                                  "this",
+                                  "package",
+                                  "void",
+                                  "string",
+                                  "number",
+                                  "boolean",
+                                  "any",
+                                  "type",
+                                  "implements",
                                 ];
-                                const keywords = new RegExp(`\\b(${keywordList.join('|')})\\b`, "g");
-                                html = html.replace(keywords, '<span class="text-purple-400 dark:text-purple-400 font-medium">$1</span>');
-                                html = html.replace(/(["'`])(.*?)\1/g, '<span class="text-emerald-400 dark:text-emerald-400">$1$2$1</span>');
-                                html = html.replace(/(\/\/.*|#.*)/g, '<span class="text-zinc-500 italic">$1</span>');
-                                html = html.replace(/\b(\d+)\b/g, '<span class="text-amber-400 dark:text-amber-400">$1</span>');
-                                html = html.replace(/\b(console|log|error|window|document|process|env|true|false|null|undefined)\b/g, '<span class="text-rose-400 dark:text-rose-400 font-medium">$1</span>');
+                                const keywords = new RegExp(
+                                  `\\b(${keywordList.join("|")})\\b`,
+                                  "g",
+                                );
+                                html = html.replace(
+                                  keywords,
+                                  '<span class="text-purple-400 dark:text-purple-400 font-medium">$1</span>',
+                                );
+                                html = html.replace(
+                                  /(["'`])(.*?)\1/g,
+                                  '<span class="text-emerald-400 dark:text-emerald-400">$1$2$1</span>',
+                                );
+                                html = html.replace(
+                                  /(\/\/.*|#.*)/g,
+                                  '<span class="text-zinc-500 italic">$1</span>',
+                                );
+                                html = html.replace(
+                                  /\b(\d+)\b/g,
+                                  '<span class="text-amber-400 dark:text-amber-400">$1</span>',
+                                );
+                                html = html.replace(
+                                  /\b(console|log|error|window|document|process|env|true|false|null|undefined)\b/g,
+                                  '<span class="text-rose-400 dark:text-rose-400 font-medium">$1</span>',
+                                );
 
                                 return html;
                               };
@@ -427,23 +494,36 @@ export default function ProjectModal({
                                 <div className="relative group/code my-6 rounded-2xl overflow-hidden border border-black/5 dark:border-white/5 bg-zinc-950 dark:bg-black/40">
                                   <div className="flex items-center justify-between px-4 py-2 bg-zinc-900/50 dark:bg-zinc-900/20 border-b border-white/5 text-[10px] font-mono uppercase tracking-wider text-neutral-400">
                                     <span className="flex items-center gap-1.5">
-                                      <Code2 size={12} className="text-neu-accent" />
+                                      <Code2
+                                        size={12}
+                                        className="text-neu-accent"
+                                      />
                                       {match[1]}
                                     </span>
                                     <button
                                       onClick={() => {
-                                        navigator.clipboard.writeText(String(children));
+                                        navigator.clipboard.writeText(
+                                          String(children),
+                                        );
                                         setCopiedCode(String(children));
-                                        setTimeout(() => setCopiedCode(null), 2000);
+                                        setTimeout(
+                                          () => setCopiedCode(null),
+                                          2000,
+                                        );
                                       }}
                                       className="flex items-center gap-1 text-neu-accent hover:text-white transition-colors"
                                     >
                                       {copiedCode === String(children) ? (
-                                        <Check size={12} className="text-green-400" />
+                                        <Check
+                                          size={12}
+                                          className="text-green-400"
+                                        />
                                       ) : (
                                         <Copy size={12} />
                                       )}
-                                      {copiedCode === String(children) ? "Copied" : "Copy"}
+                                      {copiedCode === String(children)
+                                        ? "Copied"
+                                        : "Copy"}
                                     </button>
                                   </div>
                                   <div className="p-4 overflow-x-auto">
@@ -453,7 +533,10 @@ export default function ProjectModal({
                                         className,
                                       )}
                                       dangerouslySetInnerHTML={{
-                                        __html: highlightCode(String(children).replace(/\n$/, ""), match[1]),
+                                        __html: highlightCode(
+                                          String(children).replace(/\n$/, ""),
+                                          match[1],
+                                        ),
                                       }}
                                       {...props}
                                     />
@@ -513,7 +596,7 @@ export default function ProjectModal({
                             onSelectProject(proj);
                           }}
                           onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
+                            if (e.key === "Enter" || e.key === " ") {
                               e.preventDefault();
                               e.stopPropagation();
                               onSelectProject(proj);
@@ -524,10 +607,16 @@ export default function ProjectModal({
                           <div
                             className={cn(
                               "w-10 h-14 rounded-md shadow-md flex-shrink-0 flex items-center justify-center relative border border-white/20",
-                              !proj.spineColor?.startsWith('#') && !proj.spineColor?.startsWith('rgb') ? proj.spineColor : ""
+                              !proj.spineColor?.startsWith("#") &&
+                                !proj.spineColor?.startsWith("rgb")
+                                ? proj.spineColor
+                                : "",
                             )}
                             style={{
-                              ...(proj.spineColor?.startsWith('#') || proj.spineColor?.startsWith('rgb') ? { backgroundColor: proj.spineColor } : {})
+                              ...(proj.spineColor?.startsWith("#") ||
+                              proj.spineColor?.startsWith("rgb")
+                                ? { backgroundColor: proj.spineColor }
+                                : {}),
                             }}
                           >
                             <span className="absolute text-[6px] font-mono font-bold text-white/80 whitespace-nowrap overflow-hidden text-ellipsis w-10 text-center transform -rotate-90">
