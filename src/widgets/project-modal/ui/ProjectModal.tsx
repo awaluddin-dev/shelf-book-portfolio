@@ -133,7 +133,7 @@ export default function ProjectModal({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProject, currentPage, pages.length]);
 
-  const pageVariants = {
+  const pageVariants: any = {
     enter: (direction: number) => {
       return {
         rotateY: direction > 0 ? 90 : -90,
