@@ -119,7 +119,18 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
           const payload = resData.data || resData;
           const arr =
             payload.roadmap || (Array.isArray(payload) ? payload : []);
-          if (arr.length > 0) set({ dynamicRoadmap: arr });
+          if (arr.length > 0) {
+            arr.sort((a: any, b: any) => {
+              if (!a.quarter || !b.quarter) return 0;
+              const partsA = a.quarter.split(" ");
+              const partsB = b.quarter.split(" ");
+              const yA = parseInt(partsA[1]) || 0;
+              const yB = parseInt(partsB[1]) || 0;
+              if (yA !== yB) return yA - yB;
+              return partsA[0].localeCompare(partsB[0]);
+            });
+            set({ dynamicRoadmap: arr });
+          }
         } catch (e) {
           console.error(e);
         }

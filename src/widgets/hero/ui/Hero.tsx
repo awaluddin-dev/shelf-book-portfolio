@@ -57,13 +57,18 @@ export default function HeroSection({
                   className="flex flex-col gap-y-6 md:gap-y-8 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-6 md:p-10 rounded-3xl shadow-neu border border-black/5 dark:border-white/5"
                 >
                   {/* Headline */}
-                  <motion.h1
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-5xl md:text-7xl font-display font-extrabold tracking-tight text-neu-text drop-shadow-sm transition-colors duration-300"
-                  >
-                    {dynamicHeroConfig?.name || "Awaluddin"}
-                  </motion.h1>
+                  <div className="relative w-fit">
+                    {/* Spotlight Glow */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-neu-accent/30 dark:bg-neu-accent/20 blur-[50px] md:blur-[70px] rounded-full -z-10 pointer-events-none"></div>
+                    
+                    <motion.h1
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-5xl md:text-7xl font-display font-extrabold tracking-tight text-neu-text drop-shadow-sm transition-colors duration-300 relative"
+                    >
+                      {dynamicHeroConfig?.name || "Awaluddin"}
+                    </motion.h1>
+                  </div>
 
                   {/* Subheadlines / Narrative Group */}
                   <div className="flex flex-col gap-y-4 md:gap-y-5">

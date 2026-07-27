@@ -20,9 +20,40 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Awaluddin | Backend Engineer",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://awaluddin.dev"),
+  title: {
+    default: "Awaluddin | Backend Engineer",
+    template: "%s | Awaluddin",
+  },
   description:
-    "Backend Developer portfolio featuring system architecture and technical projects.",
+    "Backend Developer portfolio featuring system architecture, distributed systems, and technical projects.",
+  keywords: ["Backend Engineer", "Software Engineer", "System Architecture", "Node.js", "Awaluddin", "Portfolio"],
+  authors: [{ name: "Awaluddin", url: "https://awaluddin.dev" }],
+  creator: "Awaluddin",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    title: "Awaluddin | Backend Engineer",
+    description: "Backend Developer portfolio featuring system architecture and technical projects.",
+    siteName: "Awaluddin Portfolio",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Awaluddin | Backend Engineer",
+    description: "Backend Developer portfolio featuring system architecture and technical projects.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
