@@ -39,6 +39,18 @@ export default function ProficiencySection({
   } = usePortfolioStore();
 
   const [selectedRoadmapIndex, setSelectedRoadmapIndex] = useState<number | null>(0);
+  const [windowStartIndex, setWindowStartIndex] = useState<number>(0);
+  const MAX_VISIBLE = 4;
+
+  const handleSelectNode = (index: number) => {
+    setSelectedRoadmapIndex(index);
+    if (index === windowStartIndex + MAX_VISIBLE - 1 && index < activeRoadmap.length - 1) {
+      setWindowStartIndex(windowStartIndex + 1);
+    }
+    if (index === windowStartIndex && index > 0) {
+      setWindowStartIndex(windowStartIndex - 1);
+    }
+  };
   return (
     <>
       {/* Combined Section 2: Stack, Learning, Philosophy & Career */}
@@ -304,45 +316,76 @@ export default function ProficiencySection({
           {/* Timeline Graph Visualization */}
           <div className="p-6 sm:p-10 rounded-3xl glass-card mb-10 overflow-hidden">
             {/* Timeline track (Horizontal on desktop, vertical list on narrow screens) */}
-            <div className="relative my-8 px-4 hidden md:block">
-              {/* Connecting Line */}
-              <div className="absolute top-1/2 left-0 right-0 h-[3px] bg-gray-300 dark:bg-zinc-800/80 -translate-y-1/2 rounded-full" />
+            <div className="relative mt-8 mb-16 px-12 hidden md:block">
+              <div className="relative h-20 w-full">
+                {/* Connecting Line */}
+                <div className="absolute top-1/2 left-0 right-0 h-[3px] bg-gray-300 dark:bg-zinc-800/80 -translate-y-1/2 rounded-full" />
 
-              {/* Dynamic filled progress track */}
-              <motion.div
-                className="absolute top-1/2 left-0 h-[3px] bg-neu-accent -translate-y-1/2 rounded-full origin-left"
-                initial={{ width: "0%" }}
-                animate={{
-                  width: `${(selectedRoadmapIndex! / (activeRoadmap.length - 1)) * 100}%`,
-                }}
-                transition={{ type: "spring", stiffness: 120, damping: 20 }}
-              />
+                {/* Dynamic filled progress track */}
+                <motion.div
+                  className="absolute top-1/2 left-0 h-[3px] bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 animate-gradient-x -translate-y-1/2 rounded-full origin-left"
+                  initial={{ width: "0%" }}
+                  animate={{
+                    width: activeRoadmap.length > 1 
+                      ? `${(Math.max(0, Math.min(selectedRoadmapIndex! - windowStartIndex, MAX_VISIBLE - 1)) / (Math.min(activeRoadmap.length - windowStartIndex, MAX_VISIBLE) - 1)) * 100}%` 
+                      : "0%",
+                  }}
+                  transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                />
 
-              {/* Milestones wrapper */}
-              <div className="relative flex justify-between">
-                {(activeRoadmap || []).map((item: any, index: number) => {
-                  const isSelected = selectedRoadmapIndex! === index; //NOSONAR
-                  const isPast = index <= selectedRoadmapIndex!;
+                {/* Milestones wrapper */}
+                {(activeRoadmap || []).map((item: any, globalIndex: number) => {
+                  const isSelected = selectedRoadmapIndex! === globalIndex;
+                  const isPast = globalIndex <= selectedRoadmapIndex!;
+                  
+                  const localIndex = globalIndex - windowStartIndex;
+                  const isVisible = localIndex >= 0 && localIndex < MAX_VISIBLE;
+                  
+                  const visibleCount = Math.min(activeRoadmap.length, MAX_VISIBLE);
+                  let percent = 50;
+                  if (visibleCount > 1) {
+                    percent = (localIndex / (visibleCount - 1)) * 100;
+                  }
+                  
+                  const isDone = item.status?.toLowerCase() === 'completed' || item.status?.toLowerCase() === 'done' || item.status?.toLowerCase() === 'success';
+
                   return (
-                    <button
-                      key={index as number}
-                      onClick={() => setSelectedRoadmapIndex(index)}
-                      className="flex flex-col items-center group cursor-pointer relative z-10 focus:outline-none"
+                    <motion.button
+                      key={globalIndex as number}
+                      onClick={() => isVisible && handleSelectNode(globalIndex)}
+                      className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center group cursor-pointer z-10 focus:outline-none w-32"
+                      initial={false}
+                      animate={{
+                        left: `${percent}%`,
+                        opacity: isVisible ? 1 : 0,
+                        scale: isVisible ? 1 : 0.8,
+                      }}
+                      style={{
+                        pointerEvents: isVisible ? "auto" : "none",
+                      }}
+                      transition={{ type: "spring", stiffness: 120, damping: 20 }}
                     >
-                      {/* Quarter Label */}
-                      <span
-                        className={cn(
-                          "font-mono text-[11px] font-bold tracking-wider mb-3 transition-colors duration-300 uppercase",
-                          isSelected
-                            ? "text-neu-accent font-extrabold"
-                            : "text-neu-text-muted group-hover:text-neu-text",
+                      {/* Quarter Label & Done Badge */}
+                      <div className="absolute bottom-[100%] mb-3 flex flex-col items-center gap-1">
+                        <span
+                          className={cn(
+                            "font-mono text-[11px] font-bold tracking-wider transition-colors duration-300 uppercase whitespace-nowrap",
+                            isSelected
+                              ? "text-neu-accent font-extrabold"
+                              : "text-neu-text-muted group-hover:text-neu-text",
+                          )}
+                        >
+                          {item.quarter}
+                        </span>
+                        {isDone && (
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20 leading-none">
+                            DONE
+                          </span>
                         )}
-                      >
-                        {item.quarter}
-                      </span>
+                      </div>
 
                       {/* Interactive Circle Node */}
-                      <div className="relative flex items-center justify-center">
+                      <div className="relative flex items-center justify-center h-8 w-8">
                         {/* Selected outer pulse ring */}
                         {isSelected && (
                           <motion.div
@@ -371,7 +414,7 @@ export default function ProficiencySection({
                               "w-1.5 h-1.5 rounded-full",
                               (() => {
                                 if (isSelected) return "bg-neu-bg";
-                                if (isPast) return "bg-neu-accent";
+                                if (isPast) return "bg-gradient-to-r from-pink-500 to-cyan-500";
                                 return "bg-transparent";
                               })(),
                             )}
@@ -382,7 +425,7 @@ export default function ProficiencySection({
                       {/* Tech Badge name below */}
                       <span
                         className={cn(
-                          "mt-3 text-xs font-bold tracking-tight text-center max-w-[120px] transition-colors duration-300",
+                          "absolute top-[100%] mt-3 text-xs font-bold tracking-tight text-center transition-colors duration-300 w-full",
                           isSelected
                             ? "text-neu-text"
                             : "text-neu-text-muted group-hover:text-neu-text",
@@ -390,7 +433,7 @@ export default function ProficiencySection({
                       >
                         {item.tech}
                       </span>
-                    </button>
+                    </motion.button>
                   );
                 })}
               </div>
@@ -400,10 +443,11 @@ export default function ProficiencySection({
             <div className="flex md:hidden flex-wrap gap-2 justify-center mb-6">
               {(activeRoadmap || []).map((item: any, index: number) => {
                 const isSelected = selectedRoadmapIndex! === index; //NOSONAR
+                const isDone = item.status?.toLowerCase() === 'completed' || item.status?.toLowerCase() === 'done' || item.status?.toLowerCase() === 'success';
                 return (
                   <button
                     key={index as number}
-                    onClick={() => setSelectedRoadmapIndex(index)}
+                    onClick={() => handleSelectNode(index)}
                     className={cn(
                       "px-3 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 border cursor-pointer",
                       isSelected
@@ -413,6 +457,11 @@ export default function ProficiencySection({
                   >
                     <span className="opacity-60">{item.quarter}:</span>
                     <span>{item.tech}</span>
+                    {isDone && (
+                      <span className="ml-1 text-[9px] px-1 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-bold leading-none">
+                        ✓
+                      </span>
+                    )}
                   </button>
                 );
               })}

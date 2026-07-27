@@ -163,7 +163,7 @@ export default function Portfolio() {
         role="progressbar"
         aria-label="Scroll Progress"
         suppressHydrationWarning
-        className="fixed top-0 left-0 right-0 h-[4px] bg-neu-accent z-[100] origin-left"
+        className="fixed top-0 left-0 right-0 h-[4px] bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 animate-gradient-x z-[100] origin-left"
         style={{ scaleX }}
       />
       {/* Sticky bottom dock navigation */}

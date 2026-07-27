@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Copy, Save, Moon, Sun, CheckCircle, Palette, X, Eye, EyeOff } from 'lucide-react';
+import { Save, Moon, Sun, Palette, X, Eye, EyeOff } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -13,8 +13,6 @@ interface AdminPlaygroundProps {
 export default function AdminPlayground({ onClose }: AdminPlaygroundProps) {
   const { resolvedTheme, setTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
-  
-  const [toast, setToast] = useState<string | null>(null);
 
   const getInitialThemeConfig = (isDark: boolean) => ({
     bg: isDark ? '#222831' : '#F9F7F7',
@@ -87,28 +85,7 @@ export default function AdminPlayground({ onClose }: AdminPlaygroundProps) {
     };
   }, [themeConfig, isDark]);
 
-  const handleExport = () => {
-    const sOpacity = themeConfig.shadowOpacity;
-    const blur = themeConfig.shadowBlur;
-    const lightShadowHex = isDark ? themeConfig.secondary : '#ffffff';
-    
-    const cssString = `
-/* Copy this to globals.css under ${isDark ? '.dark' : ':root'} */
-${isDark ? '.dark' : ':root'} {
-  --color-neu-bg: ${themeConfig.bg};
-  --color-neu-secondary: ${themeConfig.secondary};
-  --color-neu-text: ${themeConfig.text};
-  --color-neu-accent: ${themeConfig.accent};
 
-  --shadow-neu: 8px 8px ${blur}px rgba(0,0,0,${sOpacity}), -8px -8px ${blur}px ${lightShadowHex};
-  --shadow-neu-inset: inset 6px 6px ${blur-4}px rgba(0,0,0,${sOpacity}), inset -6px -6px ${blur-4}px ${lightShadowHex};
-  --shadow-neu-sm: 4px 4px ${blur/2}px rgba(0,0,0,${sOpacity}), -4px -4px ${blur/2}px ${lightShadowHex};
-  --shadow-neu-modal: 16px 16px ${blur*2}px rgba(0,0,0,${sOpacity*1.5});
-}`;
-    navigator.clipboard.writeText(cssString.trim());
-    setToast("CSS Copied to clipboard!");
-    setTimeout(() => setToast(null), 3000);
-  };
 
   const updateConfig = (key: string, value: string | number) => {
     setDraftConfig(prev => ({ ...prev, [key]: value }));
@@ -143,45 +120,39 @@ ${isDark ? '.dark' : ':root'} {
               <Palette size={24} className="text-neu-accent" />
               Theme Playground
             </h1>
-            <div className="flex items-center gap-4">
-              <button 
-                onClick={() => setIsPreviewMode(true)}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl glass-card text-sm font-bold text-neu-text hover:bg-black/5 dark:hover:bg-white/5 transition-colors border border-black/10 dark:border-white/10 shadow-neu-sm"
-              >
-                <Eye size={16} /> Live Preview
-              </button>
-              
-              <div className="w-px h-6 bg-black/10 dark:bg-white/10 mx-1"></div>
-
+            <div className="flex items-center p-1.5 rounded-2xl glass-card-inset border border-white/5 shadow-inner">
               <button 
                 onClick={() => setTheme(isDark ? 'light' : 'dark')}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl glass-card text-sm font-bold text-neu-text hover:bg-black/5 dark:hover:bg-white/5 transition-colors border border-black/10 dark:border-white/10 shadow-neu-sm"
+                className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-neu-text hover:bg-neu-accent hover:text-white transition-all"
                 aria-label="Toggle Theme Mode"
               >
                 {isDark ? (
-                  <>
-                    <Sun size={16} /> Light Mode
-                  </>
+                  <><Sun size={16} /> <span className="hidden sm:inline">Light</span></>
                 ) : (
-                  <>
-                    <Moon size={16} /> Dark Mode
-                  </>
+                  <><Moon size={16} /> <span className="hidden sm:inline">Dark</span></>
                 )}
               </button>
+
+              <div className="w-px h-5 bg-black/10 dark:bg-white/10 mx-1"></div>
+
               <button 
-                onClick={handleExport}
-                className="flex items-center gap-2 px-5 py-2.5 bg-neu-accent text-white font-bold rounded-xl shadow-neu-sm hover:scale-105 active:scale-95 transition-all text-sm"
+                onClick={() => setIsPreviewMode(true)}
+                className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-neu-text hover:bg-neu-accent hover:text-white transition-all"
               >
-                <Copy size={16} /> Export CSS
+                <Eye size={16} /> <span className="hidden sm:inline">Preview</span>
               </button>
+              
               {onClose && (
-                <button
-                  onClick={onClose}
-                  className="p-3 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors ml-2"
-                  aria-label="Close Modal"
-                >
-                  <X size={20} />
-                </button>
+                <>
+                  <div className="w-px h-5 bg-black/10 dark:bg-white/10 mx-1"></div>
+                  <button
+                    onClick={onClose}
+                    className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-red-500 hover:bg-red-500 hover:text-white transition-all"
+                    aria-label="Close Modal"
+                  >
+                    <X size={16} /> <span className="hidden sm:inline">Close</span>
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -343,13 +314,7 @@ ${isDark ? '.dark' : ':root'} {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {toast && (
-          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[300] px-6 py-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-bold font-mono text-sm flex items-center gap-2 backdrop-blur-md">
-            <CheckCircle size={16} /> {toast}
-          </motion.div>
-        )}
-      </AnimatePresence>
+
     </div>
   );
 }
