@@ -1,4 +1,4 @@
-import AdminCurrent from "@/pages/admin-current/ui/AdminCurrent";
+import AdminCurrent from "@/views/admin-current/ui/AdminCurrent";
 
 export const metadata = {
   title: "Right Now Focus | Admin",

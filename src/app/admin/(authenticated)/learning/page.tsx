@@ -1,4 +1,4 @@
-import AdminLearning from "@/pages/admin-learning/ui/AdminLearning";
+import AdminLearning from "@/views/admin-learning/ui/AdminLearning";
 
 export const metadata = {
   title: "Upcoming Tech & Roadmap | Admin",

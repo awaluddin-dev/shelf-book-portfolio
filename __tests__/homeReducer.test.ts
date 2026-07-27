@@ -1,4 +1,4 @@
-import { homeReducer, initialHomeState, HomeAction } from '@/pages/home/model/homeReducer'
+import { homeReducer, initialHomeState, HomeAction } from '@/views/home/model/homeReducer'
 
 describe('homeReducer', () => {
   it('should return the initial state', () => {

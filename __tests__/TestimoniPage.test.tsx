@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import SubmitTestimonial from '@/pages/testimoni/ui/TestimoniPage'
+import SubmitTestimonial from '@/views/testimoni/ui/TestimoniPage'
 
 // Mock React.use to resolve the promise immediately in tests
 jest.mock('react', () => {

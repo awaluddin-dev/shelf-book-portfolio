@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import AdminLifecycle from '@/pages/admin-lifecycle/ui/AdminLifecycle'
+import AdminLifecycle from '@/views/admin-lifecycle/ui/AdminLifecycle'
 import { ThemeProvider } from '@/shared/ui/ThemeProvider'
 
 // Mock the router

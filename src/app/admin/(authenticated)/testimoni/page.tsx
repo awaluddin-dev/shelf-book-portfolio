@@ -1,4 +1,4 @@
-import AdminTestimoni from "@/pages/admin-testimoni/ui/AdminTestimoni";
+import AdminTestimoni from "@/views/admin-testimoni/ui/AdminTestimoni";
 
 export const metadata = {
   title: "Testimonials Management | Admin",

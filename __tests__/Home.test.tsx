@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import { render, screen, waitFor } from '@testing-library/react'
-import Home from '@/pages/home/ui/Home'
+import Home from '@/views/home/ui/Home'
 import { ThemeProvider } from '@/shared/ui/ThemeProvider'
 
 // Mock sub-components

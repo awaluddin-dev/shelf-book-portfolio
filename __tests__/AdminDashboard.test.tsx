@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import AdminDashboard from '@/pages/admin-dashboard/ui/AdminDashboard'
+import AdminDashboard from '@/views/admin-dashboard/ui/AdminDashboard'
 import { ThemeProvider } from 'next-themes'
 
 // Mock subcomponents

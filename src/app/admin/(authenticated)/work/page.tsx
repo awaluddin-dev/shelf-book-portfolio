@@ -1,4 +1,4 @@
-import AdminWork from "@/pages/admin-work/ui/AdminWork";
+import AdminWork from "@/views/admin-work/ui/AdminWork";
 
 export const metadata = {
   title: "Work Experience | Admin",

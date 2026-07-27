@@ -1,4 +1,4 @@
-import AdminPlayground from '@/pages/admin-playground/ui/AdminPlayground';
+import AdminPlayground from '@/views/admin-playground/ui/AdminPlayground';
 
 export const metadata = {
   title: 'Theme Playground - Admin',
