@@ -8,7 +8,6 @@ export default function AdminSkill() {
     <AdminCrudTable
       title="Skill Tree Nodes"
       itemName="Skill Node"
-      activePath="/admin/skill"
       apiEndpoint="/api/skills"
       dataExtractor={(data) => {
         if (data.data?.skills) return data.data.skills;

@@ -7,7 +7,6 @@ export default function AdminArchitecture() {
   return (
     <AdminProjectLinkedCards
       title="System Architecture Nodes"
-      activePath="/admin/architecture"
       apiEndpoint="/api/architecture"
       itemDataExtractor={(data) => {
         if (Array.isArray(data.data)) return data.data;

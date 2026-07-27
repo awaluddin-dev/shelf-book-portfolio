@@ -8,7 +8,6 @@ export default function AdminCurrent() {
     <AdminCrudTable
       title="Right Now Focus"
       itemName="Focus Item"
-      activePath="/admin/current"
       apiEndpoint="/api/current"
       dataExtractor={(data) => {
         if (data.data?.currentFocus) return data.data.currentFocus;

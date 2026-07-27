@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { AdminSidebar } from '@/widgets/admin-sidebar/ui/AdminSidebar';
 import { useRouter } from 'next/navigation';
 import { Copy, Save, Moon, Sun, CheckCircle, Palette } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -100,10 +99,7 @@ ${isDark ? '.dark' : ':root'} {
   };
 
   return (
-    <div className="min-h-screen bg-neu-bg flex text-neu-text">
-      <AdminSidebar activePath="/admin/playground" />
-
-      <main className="flex-1 p-8 overflow-y-auto">
+    <>
         <div className="max-w-6xl mx-auto space-y-8">
           
           <div className="flex items-center justify-between">
@@ -258,7 +254,6 @@ ${isDark ? '.dark' : ':root'} {
             </div>
           </div>
         </div>
-      </main>
 
       <AnimatePresence>
         {toast && (
@@ -267,6 +262,6 @@ ${isDark ? '.dark' : ':root'} {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }

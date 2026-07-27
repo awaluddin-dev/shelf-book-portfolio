@@ -17,7 +17,6 @@ export default function AdminProjects() {
     <AdminCrudTable
       title="Portfolio Projects"
       itemName="Project"
-      activePath="/admin/projects"
       apiEndpoint="/api/projects"
       dataExtractor={(data) => {
         if (data.data?.projects) return data.data.projects;

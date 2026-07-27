@@ -9,7 +9,6 @@ export default function AdminProficiency() {
     <AdminCrudTable
       title="Proficiency Categories"
       itemName="Category"
-      activePath="/admin/proficiency"
       apiEndpoint="/api/proficiency"
       dataExtractor={(data) => {
         if (data.data?.proficiency) return data.data.proficiency;

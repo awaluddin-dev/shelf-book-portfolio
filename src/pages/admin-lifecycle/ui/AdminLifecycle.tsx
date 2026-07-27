@@ -8,7 +8,6 @@ export default function AdminLifecycle() {
   return (
     <AdminProjectLinkedCards
       title="Project Lifecycle Tracker"
-      activePath="/admin/lifecycle"
       apiEndpoint="/api/lifecycle"
       itemDataExtractor={(data) => {
         if (Array.isArray(data.data)) return data.data;

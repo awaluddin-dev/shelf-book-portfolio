@@ -17,7 +17,6 @@ export default function AdminWork() {
       <AdminCrudTable
         title="Work Experience"
         itemName="Experience"
-        activePath="/admin/work"
         apiEndpoint="/api/work"
         dataExtractor={(data) => {
           if (data.data?.workExperience) return data.data.workExperience;

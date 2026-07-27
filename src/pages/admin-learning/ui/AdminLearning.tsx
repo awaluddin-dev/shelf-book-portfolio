@@ -8,7 +8,6 @@ export default function AdminLearning() {
     <AdminCrudTable
       title="Learning Roadmap"
       itemName="Tech Goal"
-      activePath="/admin/learning"
       apiEndpoint="/api/learning"
       dataExtractor={(data) => {
         if (data.data?.roadmap) return data.data.roadmap;
