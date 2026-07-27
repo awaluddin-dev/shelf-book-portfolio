@@ -100,8 +100,8 @@ export default function ProjectModal({
       .filter(Boolean);
 
     const archImages = selectedProject.systemArchitectures?.length > 0 
-      ? selectedProject.systemArchitectures 
-      : (selectedProject.architectureImage ? [selectedProject.architectureImage] : []);
+      ? selectedProject.systemArchitectures.map((arch: any) => arch.imageUrl).filter(Boolean)
+      : [];
 
     // Flatten ALL interior pages into a single continuous array
     // This prevents any blank pages in the middle of the book
