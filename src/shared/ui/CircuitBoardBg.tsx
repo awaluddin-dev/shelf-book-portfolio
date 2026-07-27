@@ -112,51 +112,197 @@ export function CircuitBoardBg() {
         viewBox="-500 -500 1000 1000"
         preserveAspectRatio="xMidYMid slice"
       >
-        <defs>
-          <g id="circuit-nodes-quadrant">
-            {/* Amber Node 1 (Fast, Thick Bus 1) */}
+        {/* Quadrant 1: Top Right */}
+        <g>
+          {/* Fast Amber */}
+          <g>
             <g>
-              <circle r="6" fill="#fbbf24" fillOpacity="0.4" />
-              <circle r="2" fill="#fbbf24" />
-              <animateMotion 
-                dur="24s" 
-                repeatCount="indefinite" 
-                path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115"
-              />
-              <animate attributeName="opacity" values="0.2;1;0.2" dur="2.5s" repeatCount="indefinite" />
+              <circle r="4" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1.5" fill="#fff" />
+              <animateMotion dur="16s" repeatCount="indefinite" rotate="auto" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
             </g>
-            
-            {/* Cyan Node 2 (Slow, Thick Bus 2) */}
             <g>
-              <circle r="6" fill="#22d3ee" fillOpacity="0.4" />
-              <circle r="2" fill="#22d3ee" />
-              <animateMotion 
-                dur="32s" 
-                repeatCount="indefinite" 
-                path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500"
-              />
-              <animate attributeName="opacity" values="0.3;1;0.3" dur="3.5s" repeatCount="indefinite" />
-            </g>
-
-            {/* Amber Node 3 (Medium, Standard Trace) */}
-            <g>
-              <circle r="4" fill="#fbbf24" fillOpacity="0.4" />
-              <circle r="1.5" fill="#fbbf24" />
-              <animateMotion 
-                dur="28s" 
-                repeatCount="indefinite" 
-                path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210"
-              />
-              <animate attributeName="opacity" values="0.1;1;0.1" dur="2s" repeatCount="indefinite" />
+              <text x="0" y="-9" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>{`{JSON}`}</text>
+              <animateMotion dur="16s" repeatCount="indefinite" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
+              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
             </g>
           </g>
-        </defs>
-        
-        {/* Render animated nodes symmetrically in all 4 quadrants */}
-        <use href="#circuit-nodes-quadrant" />
-        <use href="#circuit-nodes-quadrant" transform="scale(-1, 1)" />
-        <use href="#circuit-nodes-quadrant" transform="scale(1, -1)" />
-        <use href="#circuit-nodes-quadrant" transform="scale(-1, -1)" />
+          
+          {/* Slow Cyan */}
+          <g>
+            <g>
+              <circle r="5" fill="#22d3ee" fillOpacity="0.5" />
+              <circle r="2" fill="#fff" />
+              <animateMotion dur="22s" repeatCount="indefinite" rotate="auto" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text x="0" y="-10" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>[TENSOR]</text>
+              <animateMotion dur="22s" repeatCount="indefinite" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
+              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite" />
+            </g>
+          </g>
+
+          {/* Medium Amber */}
+          <g>
+            <g>
+              <circle r="3" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1" fill="#fff" />
+              <animateMotion dur="18s" repeatCount="indefinite" rotate="auto" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text x="0" y="-7" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 2px #fbbf24" }}>gRPC</text>
+              <animateMotion dur="18s" repeatCount="indefinite" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
+              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="2s" repeatCount="indefinite" />
+            </g>
+          </g>
+        </g>
+
+        {/* Quadrant 2: Top Left */}
+        <g transform="scale(-1, 1)">
+          {/* Fast Amber */}
+          <g>
+            <g>
+              <circle r="4" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1.5" fill="#fff" />
+              <animateMotion dur="17s" repeatCount="indefinite" rotate="auto" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text transform="scale(-1, 1)" x="0" y="-9" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>REST</text>
+              <animateMotion dur="17s" repeatCount="indefinite" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
+              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
+            </g>
+          </g>
+          
+          {/* Slow Cyan */}
+          <g>
+            <g>
+              <circle r="5" fill="#22d3ee" fillOpacity="0.5" />
+              <circle r="2" fill="#fff" />
+              <animateMotion dur="23s" repeatCount="indefinite" rotate="auto" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text transform="scale(-1, 1)" x="0" y="-10" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>GraphQL</text>
+              <animateMotion dur="23s" repeatCount="indefinite" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
+              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite" />
+            </g>
+          </g>
+
+          {/* Medium Amber */}
+          <g>
+            <g>
+              <circle r="3" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1" fill="#fff" />
+              <animateMotion dur="19s" repeatCount="indefinite" rotate="auto" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text transform="scale(-1, 1)" x="0" y="-7" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 2px #fbbf24" }}>Kafka</text>
+              <animateMotion dur="19s" repeatCount="indefinite" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
+              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="2s" repeatCount="indefinite" />
+            </g>
+          </g>
+        </g>
+
+        {/* Quadrant 3: Bottom Right */}
+        <g transform="scale(1, -1)">
+          {/* Fast Amber */}
+          <g>
+            <g>
+              <circle r="4" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1.5" fill="#fff" />
+              <animateMotion dur="15s" repeatCount="indefinite" rotate="auto" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text transform="scale(1, -1)" x="0" y="15" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>Redis</text>
+              <animateMotion dur="15s" repeatCount="indefinite" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
+              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
+            </g>
+          </g>
+          
+          {/* Slow Cyan */}
+          <g>
+            <g>
+              <circle r="5" fill="#22d3ee" fillOpacity="0.5" />
+              <circle r="2" fill="#fff" />
+              <animateMotion dur="21s" repeatCount="indefinite" rotate="auto" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text transform="scale(1, -1)" x="0" y="15" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>Docker</text>
+              <animateMotion dur="21s" repeatCount="indefinite" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
+              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite" />
+            </g>
+          </g>
+
+          {/* Medium Amber */}
+          <g>
+            <g>
+              <circle r="3" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1" fill="#fff" />
+              <animateMotion dur="17s" repeatCount="indefinite" rotate="auto" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text transform="scale(1, -1)" x="0" y="12" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 2px #fbbf24" }}>SQL</text>
+              <animateMotion dur="17s" repeatCount="indefinite" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
+              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="2s" repeatCount="indefinite" />
+            </g>
+          </g>
+        </g>
+
+        {/* Quadrant 4: Bottom Left */}
+        <g transform="scale(-1, -1)">
+          {/* Fast Amber */}
+          <g>
+            <g>
+              <circle r="4" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1.5" fill="#fff" />
+              <animateMotion dur="16.5s" repeatCount="indefinite" rotate="auto" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text transform="scale(-1, -1)" x="0" y="15" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>OAuth</text>
+              <animateMotion dur="16.5s" repeatCount="indefinite" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
+              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
+            </g>
+          </g>
+          
+          {/* Slow Cyan */}
+          <g>
+            <g>
+              <circle r="5" fill="#22d3ee" fillOpacity="0.5" />
+              <circle r="2" fill="#fff" />
+              <animateMotion dur="22.5s" repeatCount="indefinite" rotate="auto" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text transform="scale(-1, -1)" x="0" y="15" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>CUDA</text>
+              <animateMotion dur="22.5s" repeatCount="indefinite" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
+              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite" />
+            </g>
+          </g>
+
+          {/* Medium Amber */}
+          <g>
+            <g>
+              <circle r="3" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1" fill="#fff" />
+              <animateMotion dur="18.5s" repeatCount="indefinite" rotate="auto" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text transform="scale(-1, -1)" x="0" y="12" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 2px #fbbf24" }}>Python</text>
+              <animateMotion dur="18.5s" repeatCount="indefinite" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
+              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="2s" repeatCount="indefinite" />
+            </g>
+          </g>
+        </g>
       </svg>
     </div>
   );
