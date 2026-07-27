@@ -6,22 +6,21 @@ import {
   Cpu,
   Briefcase,
   MessageSquare,
-  Sun,
-  Moon,
+  Palette,
 } from "lucide-react";
 
 interface DockNavigationProps {
   isDark: boolean;
   showBackToTop: boolean;
   activeSection: string;
-  toggleTheme: () => void;
+  openPlayground: () => void;
 }
 
 export default function DockNavigation({
   isDark,
   showBackToTop,
   activeSection,
-  toggleTheme,
+  openPlayground,
 }: Readonly<DockNavigationProps>) {
   const [hoveredDockId, setHoveredDockId] = useState<string | null>(null);
 
@@ -177,28 +176,24 @@ export default function DockNavigation({
         {/* Vertical divider */}
         <div className="w-[1px] h-6 bg-neu-text/10 dark:bg-neu-text/15 mx-1 flex-shrink-0" />
 
-        {/* Theme Toggle Button */}
+        {/* Theme Playground Button */}
         <button
-          onClick={toggleTheme}
-          onMouseEnter={() => setHoveredDockId("theme")}
+          onClick={openPlayground}
+          onMouseEnter={() => setHoveredDockId("theme-playground")}
           onMouseLeave={() => setHoveredDockId(null)}
           className="group relative flex items-center justify-center w-8 h-8 xs:w-9 xs:h-9 sm:w-11 sm:h-11 rounded-xl hover:bg-neu-secondary/50 dark:hover:bg-neu-secondary/30 active:scale-90 transition-all cursor-pointer flex-shrink"
-          aria-label="Toggle Theme"
+          aria-label="Theme Playground"
         >
           <div
             className={cn(
               "relative z-10 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110",
-              "text-neu-text-muted group-hover:text-neu-accent",
+              "text-neu-text-muted group-hover:colorful",
             )}
           >
-            {isDark ? (
-              <Sun size={16} className="sm:w-[18px] sm:h-[18px]" />
-            ) : (
-              <Moon size={16} className="sm:w-[18px] sm:h-[18px]" />
-            )}
+            <Palette size={16} className="sm:w-[18px] sm:h-[18px]" />
           </div>
           <AnimatePresence>
-            {hoveredDockId === "theme" && (
+            {hoveredDockId === "theme-playground" && (
               <motion.div
                 initial={{ opacity: 0, y: 10, x: "-50%", scale: 0.8 }}
                 animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
@@ -206,7 +201,7 @@ export default function DockNavigation({
                 transition={{ type: "spring", stiffness: 450, damping: 24 }}
                 className="absolute bottom-full mb-3 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none left-1/2"
               >
-                {isDark ? "Light Mode" : "Dark Mode"}
+                Theme Playground
                 <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[5px] w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-r border-b border-neu-accent/20"></div>
               </motion.div>
             )}

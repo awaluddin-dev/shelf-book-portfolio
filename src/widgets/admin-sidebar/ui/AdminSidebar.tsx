@@ -26,7 +26,7 @@ export function AdminSidebar() {
     { path: '/admin/learning', icon: Rocket, label: 'Learning' },
     { path: '/admin/current', icon: Layers, label: 'Right Now' },
     { path: '/admin/proficiency', icon: Cpu, label: 'Proficiency' },
-    { path: '/admin/playground', icon: Palette, label: 'Theme Playground' },
+    { path: '/admin/experiences', icon: Briefcase, label: 'Experiences' },
   ];
 
   return (

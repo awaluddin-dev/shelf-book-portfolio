@@ -1,39 +1,41 @@
-import { create } from 'zustand';
-import { fetchWithRetry, warmupDatabase } from '@/shared/lib/fetchUtils';
+import { create } from "zustand";
+import { fetchWithRetry, warmupDatabase } from "@/shared/lib/fetchUtils";
+
+type AnyOrNullType = any | null;
 
 interface PortfolioState {
   // --- UI State ---
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  
+
   selectedCategory: string | null;
   setSelectedCategory: (category: string | null) => void;
-  
-  selectedProject: any | null;
-  setSelectedProject: (project: any | null) => void;
-  
-  focusedProject: any | null;
-  setFocusedProject: (project: any | null) => void;
 
-  selectedTestimonial: any | null;
-  setSelectedTestimonial: (testimonial: any | null) => void;
-  
+  selectedProject: AnyOrNullType;
+  setSelectedProject: (project: AnyOrNullType) => void;
+
+  focusedProject: AnyOrNullType;
+  setFocusedProject: (project: AnyOrNullType) => void;
+
+  selectedTestimonial: AnyOrNullType;
+  setSelectedTestimonial: (testimonial: AnyOrNullType) => void;
+
   isBannerMinimized: boolean;
   setIsBannerMinimized: (isMinimized: boolean) => void;
-  
+
   showInquiryModal: boolean;
   setShowInquiryModal: (show: boolean) => void;
-  
+
   toastMessage: string | null;
   triggerToast: (msg: string) => void;
-  
+
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
 
   // --- API Data State ---
   dynamicRoadmap: any[];
   dynamicProficiency: any[];
-  dynamicHeroConfig: any | null;
+  dynamicHeroConfig: AnyOrNullType;
   dynamicMetrics: any[];
   dynamicProjects: any[];
   dynamicWork: any[];
@@ -50,27 +52,29 @@ interface PortfolioState {
 
 export const usePortfolioStore = create<PortfolioState>((set) => ({
   // --- UI State ---
-  searchQuery: '',
+  searchQuery: "",
   setSearchQuery: (query) => set({ searchQuery: query }),
-  
+
   selectedCategory: null,
   setSelectedCategory: (category) => set({ selectedCategory: category }),
-  
+
   selectedProject: null,
   setSelectedProject: (project) => set({ selectedProject: project }),
-  
+
   focusedProject: null,
   setFocusedProject: (project) => set({ focusedProject: project }),
 
   selectedTestimonial: null,
-  setSelectedTestimonial: (testimonial) => set({ selectedTestimonial: testimonial }),
-  
+  setSelectedTestimonial: (testimonial) =>
+    set({ selectedTestimonial: testimonial }),
+
   isBannerMinimized: false,
-  setIsBannerMinimized: (isMinimized) => set({ isBannerMinimized: isMinimized }),
-  
+  setIsBannerMinimized: (isMinimized) =>
+    set({ isBannerMinimized: isMinimized }),
+
   showInquiryModal: false,
   setShowInquiryModal: (show) => set({ showInquiryModal: show }),
-  
+
   toastMessage: null,
   triggerToast: (msg) => {
     set({ toastMessage: msg });
@@ -78,7 +82,7 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
       set({ toastMessage: null });
     }, 3000);
   },
-  
+
   isLoading: true,
   setIsLoading: (isLoading) => set({ isLoading }),
 
@@ -101,7 +105,9 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     try {
       await warmupDatabase((attempt) => {
         if (attempt === 1) {
-          set({ toastMessage: "Waking up database (cold start)... Please wait." });
+          set({
+            toastMessage: "Waking up database (cold start)... Please wait.",
+          });
           setTimeout(() => set({ toastMessage: null }), 3000);
         }
       });
@@ -111,7 +117,8 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
           const res = await fetchWithRetry("/api/learning");
           const resData = await res.json();
           const payload = resData.data || resData;
-          const arr = payload.roadmap || (Array.isArray(payload) ? payload : []);
+          const arr =
+            payload.roadmap || (Array.isArray(payload) ? payload : []);
           if (arr.length > 0) set({ dynamicRoadmap: arr });
         } catch (e) {
           console.error(e);
@@ -123,7 +130,8 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
           const res = await fetchWithRetry("/api/proficiency");
           const resData = await res.json();
           const payload = resData.data || resData;
-          const arr = payload.proficiency || (Array.isArray(payload) ? payload : []);
+          const arr =
+            payload.proficiency || (Array.isArray(payload) ? payload : []);
           if (arr.length > 0) set({ dynamicProficiency: arr });
         } catch (e) {
           console.error(e);
@@ -135,8 +143,10 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
           const res = await fetchWithRetry("/api/hero", { cache: "no-store" });
           const resData = await res.json();
           const payload = resData.data || resData;
-          if (payload.heroConfig) set({ dynamicHeroConfig: payload.heroConfig });
-          const metricsArr = payload.metrics || (Array.isArray(payload) ? payload : []);
+          if (payload.heroConfig)
+            set({ dynamicHeroConfig: payload.heroConfig });
+          const metricsArr =
+            payload.metrics || (Array.isArray(payload) ? payload : []);
           if (metricsArr.length > 0) set({ dynamicMetrics: metricsArr });
         } catch (e) {
           console.error(e);
@@ -148,7 +158,8 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
           const res = await fetchWithRetry("/api/projects");
           const resData = await res.json();
           const payload = resData.data || resData;
-          const arr = payload.projects || (Array.isArray(payload) ? payload : []);
+          const arr =
+            payload.projects || (Array.isArray(payload) ? payload : []);
           if (arr.length > 0) set({ dynamicProjects: arr });
         } catch (e) {
           console.error(e);
@@ -168,8 +179,12 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
         if (!isPresentA && isPresentB) return 1;
         const startA = a.years.split("-")[0].trim();
         const startB = b.years.split("-")[0].trim();
-        const dateA = new Date(startA).getTime() || parseInt(startA.match(/\d{4}/)?.[0] || "0");
-        const dateB = new Date(startB).getTime() || parseInt(startB.match(/\d{4}/)?.[0] || "0");
+        const dateA =
+          new Date(startA).getTime() ||
+          Number.parseInt(startA.match(/\d{4}/)?.[0] || "0");
+        const dateB =
+          new Date(startB).getTime() ||
+          Number.parseInt(startB.match(/\d{4}/)?.[0] || "0");
         return dateB - dateA;
       };
 
@@ -178,7 +193,10 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
           const res = await fetchWithRetry("/api/work");
           const resData = await res.json();
           const payload = resData.data || resData;
-          const arr = payload.workExperience || payload.workExperiences || (Array.isArray(payload) ? payload : []);
+          const arr =
+            payload.workExperience ||
+            payload.workExperiences ||
+            (Array.isArray(payload) ? payload : []);
           if (arr.length > 0) {
             arr.sort(sortWorkExp);
             set({ dynamicWork: arr });
@@ -187,31 +205,32 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
           console.error(e);
         }
       };
-      
+
       const fetchTestimonials = async () => {
         try {
           const res = await fetch("/api/testimonials");
           const data = await res.json();
           const payload = data.data || data;
-          let arr = payload.testimonials || (Array.isArray(payload) ? payload : []);
+          let arr =
+            payload.testimonials || (Array.isArray(payload) ? payload : []);
           arr = arr.filter((t: any) => t.status === "accepted" || !t.status);
           set({ testimonialsList: arr });
         } catch (e) {
           console.error(e);
         }
       };
-      
+
       const fetchGithub = async () => {
         try {
           const res = await fetch("/api/github/contributions/awaluddin-dev");
           const data = await res.json();
           const payload = data.data || data;
           if (payload?.calendar) {
-            set({ 
+            set({
               contributionData: payload.calendar,
               timelineData: payload.timeline || [],
               repoData: payload.repositories || [],
-              languageData: payload.languages || []
+              languageData: payload.languages || [],
             });
           } else {
             set({ contributionData: Array.isArray(payload) ? payload : [] });
@@ -220,7 +239,7 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
           console.error(e);
         }
       };
-      
+
       const fetchStatus = async () => {
         try {
           const res = await fetch("/api/status");
@@ -229,7 +248,7 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
         } catch (e) {
           console.error(e);
         }
-      }
+      };
 
       await Promise.all([
         fetchRoadmap(),
@@ -239,14 +258,13 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
         fetchWork(),
         fetchTestimonials(),
         fetchGithub(),
-        fetchStatus()
+        fetchStatus(),
       ]);
-      
+
       set({ isLoading: false });
-      
     } catch (e) {
       console.error("Initialization error:", e);
       set({ isLoading: false });
     }
-  }
+  },
 }));

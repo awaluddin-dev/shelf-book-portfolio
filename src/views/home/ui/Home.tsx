@@ -41,10 +41,13 @@ import ContactModal from "@/features/contact/ui/ContactModal";
 import ProjectModal from "@/widgets/project-modal/ui/ProjectModal";
 import DockNavigation from "@/widgets/dock-navigation/ui/DockNavigation";
 import TestimonialModal from "@/widgets/testimonial-modal/ui/TestimonialModal";
+import AdminPlayground from "@/views/admin-playground/ui/AdminPlayground";
 
 export default function Portfolio() {
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark } = useTheme();
   const { isLoading, dynamicHeroConfig, initializeData, toastMessage } = usePortfolioStore();
+
+  const [isPlaygroundOpen, setPlaygroundOpen] = useState(false);
 
   useEffect(() => {
     initializeData();
@@ -168,7 +171,7 @@ export default function Portfolio() {
         isDark={isDark}
         showBackToTop={showBackToTop}
         activeSection={activeSection}
-        toggleTheme={toggleTheme}
+        openPlayground={() => setPlaygroundOpen(true)}
       />
       {/* Extracted Sections */}
       <HeroSection
@@ -213,6 +216,11 @@ export default function Portfolio() {
         )}
       </AnimatePresence>
       <TestimonialModal />
+      <AnimatePresence>
+        {isPlaygroundOpen && (
+          <AdminPlayground onClose={() => setPlaygroundOpen(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

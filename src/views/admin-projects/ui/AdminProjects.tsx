@@ -9,6 +9,7 @@ export default function AdminProjects() {
     title: '', subtitle: '', category: '', tags: '', spineColor: '#4f46e5', coverColor: '#312e81',
     spineText: '', date: '', demoUrl: '', github: '', markdown: '', reasonToBuild: '', problemSolved: '',
     architectureImage: '',
+    systemArchitectures: [] as string[],
     stats: [] as {label: string, value: string}[],
     phases: [] as {date: string, title: string, description: string}[]
   };
@@ -78,6 +79,18 @@ export default function AdminProjects() {
           setFormData({ ...formData, phases: newPhases });
         };
 
+        const addArchitecture = () => setFormData({ ...formData, systemArchitectures: [...(formData.systemArchitectures || []), ''] });
+        const updateArchitecture = (index: number, value: string) => {
+          const newArchs = [...(formData.systemArchitectures || [])];
+          newArchs[index] = value;
+          setFormData({ ...formData, systemArchitectures: newArchs });
+        };
+        const removeArchitecture = (index: number) => {
+          const newArchs = [...(formData.systemArchitectures || [])];
+          newArchs.splice(index, 1);
+          setFormData({ ...formData, systemArchitectures: newArchs });
+        };
+
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -141,9 +154,24 @@ export default function AdminProjects() {
                 <input value={formData.github} onChange={e => setFormData({...formData, github: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
               </div>
               <div className="col-span-full space-y-1">
-                <label className="text-xs font-mono text-neu-accent font-bold flex items-center gap-1.5">⚡ Architecture Diagram (Excalidraw Export)</label>
-                <input value={formData.architectureImage} onChange={e => setFormData({...formData, architectureImage: e.target.value})} placeholder="/assets/architecture.svg or /assets/diagram.png" className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-neu-accent/20" />
-                <p className="text-[10px] text-neu-text-muted font-mono pl-1">Export your Excalidraw diagram as SVG/PNG, place it in /public/assets/, then paste the path here.</p>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-mono text-neu-accent font-bold flex items-center gap-1.5">⚡ Architecture Diagrams</label>
+                  <button type="button" onClick={addArchitecture} className="text-xs font-bold text-neu-accent bg-neu-accent/10 px-2 py-1 rounded">Add Diagram</button>
+                </div>
+                <div className="space-y-2">
+                  {(!formData.systemArchitectures || formData.systemArchitectures.length === 0) && (
+                    <div className="flex items-center gap-2">
+                      <input value={formData.architectureImage || ''} onChange={e => setFormData({...formData, architectureImage: e.target.value})} placeholder="/assets/architecture.svg" className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-neu-accent/20" />
+                    </div>
+                  )}
+                  {(formData.systemArchitectures || []).map((arch: string, i: number) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <input value={arch} onChange={e => updateArchitecture(i, e.target.value)} placeholder="/assets/architecture.svg" className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-neu-accent/20" />
+                      <button type="button" onClick={() => removeArchitecture(i)} className="p-2.5 text-red-500 hover:bg-red-500/10 rounded-xl"><Trash2 size={16}/></button>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[10px] text-neu-text-muted font-mono pl-1">Export your Excalidraw diagrams as SVG/PNG, place them in /public/assets/, then paste the paths here.</p>
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-mono text-neu-text-muted">Demo URL (Optional)</label>

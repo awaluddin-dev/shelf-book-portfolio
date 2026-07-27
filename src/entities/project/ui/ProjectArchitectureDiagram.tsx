@@ -290,12 +290,15 @@ function NodeView({ nodes, projectId }: { nodes: any[]; projectId: string }) {
 export default function ProjectArchitectureDiagram({
   project,
   isDark,
+  imageUrl,
 }: {
-  project: any;
-  isDark: boolean;
+  project?: any;
+  isDark?: boolean;
+  imageUrl?: string;
 }) {
   const [nodes, setNodes] = useState<any[]>([]);
-  const hasImage = !!project?.architectureImage;
+  const hasImage = !!imageUrl || !!project?.architectureImage;
+  const activeImageUrl = imageUrl || project?.architectureImage;
   const [loading, setLoading] = useState(!hasImage);
 
   useEffect(() => {
@@ -354,7 +357,7 @@ export default function ProjectArchitectureDiagram({
           );
         }
         if (hasImage) {
-          return <ImageView imageUrl={project.architectureImage!} />;
+          return <ImageView imageUrl={activeImageUrl!} />;
         }
         return <NodeView nodes={nodes} projectId={project?.id} />;
       })()}

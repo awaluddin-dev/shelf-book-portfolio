@@ -93,18 +93,48 @@ export default function ProjectModal({
     // Spread 0: Front Cover (Single Page)
     sp.push({ id: 'front-cover', type: 'front-cover' });
     
-    // Spread 1: Details & Tech Stack
-    sp.push({ id: 'spread-1', type: 'spread', left: 'details', right: 'tech-stack' });
-    
-    // Spread 2: Markdown & Architecture
-    if (selectedProject.markdown || (selectedProject.systemArchitectures && selectedProject.systemArchitectures.length > 0) || selectedProject.architectureImage) {
-      sp.push({ id: 'spread-2', type: 'spread', left: 'markdown', right: 'architecture' });
-    }
-    
-    // Spread 3: Lifecycle & Related
-    sp.push({ id: 'spread-3', type: 'spread', left: 'lifecycle', right: 'related' });
+    // Parse Markdown and Architecture
+    const mdParts = (selectedProject.markdown || '')
+      .split('---')
+      .map((p: string) => p.trim())
+      .filter(Boolean);
 
-    // Spread 4: Back Cover (Single Page)
+    const archImages = selectedProject.systemArchitectures?.length > 0 
+      ? selectedProject.systemArchitectures 
+      : (selectedProject.architectureImage ? [selectedProject.architectureImage] : []);
+
+    // Flatten ALL interior pages into a single continuous array
+    // This prevents any blank pages in the middle of the book
+    const interiorPages: any[] = [];
+    
+    interiorPages.push({ type: 'details' });
+    interiorPages.push({ type: 'tech-stack' });
+
+    // Add all markdown pages
+    mdParts.forEach((content: string, i: number) => {
+        interiorPages.push({ type: 'markdown', content, index: i, total: mdParts.length });
+    });
+
+    // Add all architecture pages
+    archImages.forEach((imgUrl: string, i: number) => {
+        interiorPages.push({ type: 'architecture', content: imgUrl, index: i, total: archImages.length });
+    });
+
+    // Add tail pages
+    interiorPages.push({ type: 'lifecycle' });
+    interiorPages.push({ type: 'related' });
+
+    // Pair interiorPages into spreads (2 pages per spread)
+    for (let i = 0; i < interiorPages.length; i += 2) {
+       sp.push({
+         id: `spread-dynamic-${i}`,
+         type: 'spread',
+         left: interiorPages[i],
+         right: interiorPages[i + 1] || null // If null, it will just render a blank page (only possible at the very end)
+       });
+    }
+
+    // Spread Last: Back Cover (Single Page)
     sp.push({ id: 'back-cover', type: 'back-cover' });
     
     return sp;
@@ -157,8 +187,9 @@ export default function ProjectModal({
     })
   };
 
-  const renderInteriorSection = (type: string) => {
-    if (!selectedProject) return null;
+  const renderInteriorSection = (data: any) => {
+    if (!selectedProject || !data) return null;
+    const { type, content, index, total } = data;
 
     switch (type) {
       case 'details':
@@ -246,12 +277,12 @@ export default function ProjectModal({
 
       case 'markdown':
         return (
-          <div className="w-full h-full">
-            <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
-              <FileText size={14} /> System Specifications
+          <div className="w-full h-full flex flex-col">
+            <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 shrink-0">
+              <FileText size={14} /> System Specifications {total > 1 ? `(${index + 1}/${total})` : ''}
             </h4>
-            {selectedProject.markdown ? (
-              <div className="prose prose-slate prose-sm max-w-none font-sans
+            {content ? (
+              <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar prose prose-slate prose-sm max-w-none font-sans
                 prose-headings:font-display prose-headings:font-bold prose-headings:text-zinc-900 dark:prose-headings:text-white
                 prose-p:text-zinc-600 dark:prose-p:text-zinc-400 
                 prose-li:text-zinc-600 dark:prose-li:text-zinc-400 
@@ -278,7 +309,7 @@ export default function ProjectModal({
                       );
                     }
                   }}
-                >{selectedProject.markdown}</ReactMarkdown>
+                >{content}</ReactMarkdown>
               </div>
             ) : (
               <p className="text-xs text-zinc-500 italic">No markdown specifications provided.</p>
@@ -290,11 +321,11 @@ export default function ProjectModal({
         return (
           <div className="w-full h-full flex flex-col">
             <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 shrink-0">
-              <Layers size={14} /> System Architecture
+              <Layers size={14} /> System Architecture {total > 1 ? `(${index + 1}/${total})` : ''}
             </h4>
             <div className="flex-1 min-h-0 bg-white dark:bg-zinc-900/50 rounded-xl p-2 border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-inner flex items-center justify-center relative">
-              {selectedProject.architectureImage || (selectedProject.systemArchitectures && selectedProject.systemArchitectures.length > 0) ? (
-                 <ProjectArchitectureDiagram project={selectedProject} isDark={isDark} />
+              {content ? (
+                 <ProjectArchitectureDiagram project={selectedProject} isDark={isDark} imageUrl={content} />
               ) : (
                 <p className="text-xs text-zinc-500 italic">No architecture diagram provided.</p>
               )}
