@@ -33,69 +33,159 @@ import {
 import { cn } from "@/shared/lib/utils";
 import { Testimonial } from "@/shared/types";
 
+import { usePortfolioStore } from "@/shared/store/portfolioStore";
+import { useState, useRef, useMemo, useCallback, useEffect } from "react";
+import { legendLevels } from "@/shared/lib/helpers";
+
 interface ExperienceSectionProps {
-  dynamicWork: any[];
-  activeExpIdx: number | null;
-  setActiveExpIdx: (idx: number | null) => void;
-  testimonialsList: Testimonial[];
-  setSelectedTestimonial: (test: any) => void;
-  contributionData: any;
-  chartType: "temporal" | "repository";
-  setChartType: (type: "temporal" | "repository") => void;
-  timelineData: any[];
-  repoData: any[];
-  languageData: any[];
-  hoveredMonth: number | null;
-  setHoveredMonth: (month: number | null) => void;
-  hoveredLang: string | null;
-  setHoveredLang: (lang: string | null) => void;
-  mounted: boolean;
-  isLoading: boolean;
   isDark: boolean;
-  heatmapStats: any;
-  heatmapRef: any;
-  monthsData: any;
-  selectedLevelFilter: number | null;
-  setSelectedLevelFilter: (val: number | null) => void;
-  handleTouchStart: (date: string) => void;
-  handleTouchEnd: () => void;
-  handleTouchMove: () => void;
-  activeTooltipDate: string | null;
-  legendLevels: any[];
-  activeWork: any[];
 }
 
 export default function ExperienceSection({
-  dynamicWork,
-  activeExpIdx,
-  setActiveExpIdx,
-  testimonialsList,
-  setSelectedTestimonial,
-  contributionData,
-  chartType,
-  setChartType,
-  timelineData,
-  repoData,
-  languageData,
-  hoveredMonth,
-  setHoveredMonth,
-  hoveredLang,
-  setHoveredLang,
-  mounted,
-  isLoading,
   isDark,
-  heatmapStats,
-  heatmapRef,
-  monthsData,
-  selectedLevelFilter,
-  setSelectedLevelFilter,
-  handleTouchStart,
-  handleTouchEnd,
-  handleTouchMove,
-  activeTooltipDate,
-  legendLevels,
-  activeWork,
 }: Readonly<ExperienceSectionProps>) {
+  const { 
+    dynamicWork: activeWork,
+    testimonialsList,
+    setSelectedTestimonial,
+    contributionData,
+    timelineData,
+    repoData,
+    languageData,
+    isLoading
+  } = usePortfolioStore();
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const [activeExpIdx, setActiveExpIdx] = useState<number | null>(0);
+  const [chartType, setChartType] = useState<"temporal" | "repository">("temporal");
+  const [hoveredMonth, setHoveredMonth] = useState<number | null>(null);
+  const [hoveredLang, setHoveredLang] = useState<string | null>(null);
+  const [selectedLevelFilter, setSelectedLevelFilter] = useState<number | null>(null);
+  const [activeTooltipDate, setActiveTooltipDate] = useState<string | null>(null);
+  
+  const heatmapRef = useRef<HTMLDivElement>(null);
+  const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const fadeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleTouchStart = useCallback((dayDate: string) => {
+    if (touchTimeoutRef.current) clearTimeout(touchTimeoutRef.current);
+    if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
+
+    touchTimeoutRef.current = setTimeout(() => {
+      setActiveTooltipDate(dayDate);
+    }, 200);
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (touchTimeoutRef.current) {
+      clearTimeout(touchTimeoutRef.current);
+      touchTimeoutRef.current = null;
+    }
+    if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
+    fadeTimeoutRef.current = setTimeout(() => {
+      setActiveTooltipDate(null);
+    }, 1500);
+  }, []);
+
+  const handleTouchMove = useCallback(() => {
+    if (touchTimeoutRef.current) {
+      clearTimeout(touchTimeoutRef.current);
+      touchTimeoutRef.current = null;
+    }
+  }, []);
+
+  const weeks = contributionData;
+
+  const heatmapStats = useMemo(() => {
+    let total = 0;
+    let currentStreak = 0;
+    let max = 0;
+    let activeDays = 0;
+    let totalDays = 0;
+
+    weeks.forEach((week) => {
+      if (!Array.isArray(week)) return;
+      week.forEach((day) => {
+        if (!day) return;
+        totalDays++;
+        if (day.count > 0) {
+          total += day.count;
+          currentStreak++;
+          activeDays++;
+        } else {
+          if (currentStreak > max) max = currentStreak;
+          currentStreak = 0;
+        }
+      });
+    });
+    if (currentStreak > max) max = currentStreak;
+
+    const intensity = totalDays > 0 ? (activeDays / totalDays) * 100 : 0;
+
+    return {
+      total,
+      maxStreak: max,
+      avgIntensity: intensity.toFixed(1),
+    };
+  }, [weeks]);
+
+  const monthLabels = useMemo(() => {
+    const labels: { index: number; label: string; monthNum: number }[] = [];
+    let prevMonth = -1;
+    weeks.forEach((week, index) => {
+      if (!Array.isArray(week)) return;
+      const firstValidDay = week.find((d) => d !== null);
+      if (firstValidDay) {
+        const currentMonth = firstValidDay.month;
+        if (currentMonth !== prevMonth) {
+          const monthName = new Date(2026, currentMonth, 1).toLocaleDateString(
+            "en-US",
+            { month: "short" },
+          );
+          labels.push({ index, label: monthName, monthNum: currentMonth });
+          prevMonth = currentMonth;
+        }
+      }
+    });
+    return labels;
+  }, [weeks]);
+
+  const monthsData = useMemo(() => {
+    const months: { label: string; monthNum: number; weeks: typeof weeks }[] = [];
+    let currentMonthWeeks: typeof weeks = [];
+    let currentMonthLabel = "";
+    let currentMonthNum = -1;
+
+    weeks.forEach((week, index) => {
+      const monthLabel = monthLabels.find((lbl: any) => lbl.index === index);
+      if (monthLabel) {
+        if (currentMonthWeeks.length > 0) {
+          months.push({
+            label: currentMonthLabel,
+            monthNum: currentMonthNum,
+            weeks: currentMonthWeeks,
+          });
+        }
+        currentMonthWeeks = [week];
+        currentMonthLabel = monthLabel.label;
+        currentMonthNum = monthLabel.monthNum;
+      } else {
+        currentMonthWeeks.push(week);
+      }
+    });
+    if (currentMonthWeeks.length > 0) {
+      months.push({
+        label: currentMonthLabel,
+        monthNum: currentMonthNum,
+        weeks: currentMonthWeeks,
+      });
+    }
+    return months;
+  }, [weeks, monthLabels]);
   const customTooltipStyle = {
     backgroundColor: isDark ? "#1a1b1e" : "#e0e5ec",
     border: "none",
@@ -1123,7 +1213,7 @@ export default function ExperienceSection({
 
                   {/* Tags associated with endorsement */}
                   <div className="flex flex-wrap gap-1.5 mt-5">
-                    {(t.tags || []).map((tag) => (
+                    {(t.tags || []).map((tag: string) => (
                       <span
                         key={tag}
                         className="px-2.5 py-1 glass-card-inset text-[10px] font-mono font-medium rounded-lg text-neu-text-muted"

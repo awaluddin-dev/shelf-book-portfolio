@@ -3,19 +3,15 @@ import { X, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/shared/lib/utils";
 
-interface ContactModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  portfolioStatus: string;
-  triggerToast: (msg: string) => void;
-}
+import { usePortfolioStore } from "@/shared/store/portfolioStore";
 
-export default function ContactModal({
-  isOpen,
-  onClose,
-  portfolioStatus,
-  triggerToast,
-}: Readonly<ContactModalProps>) {
+export default function ContactModal() {
+  const { 
+    showInquiryModal: isOpen, 
+    setShowInquiryModal: onClose, 
+    portfolioStatus, 
+    triggerToast 
+  } = usePortfolioStore();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -49,7 +45,7 @@ export default function ContactModal({
       if (responseEtag) localStorage.setItem("inquiryEtag", responseEtag);
 
       triggerToast("Availability inquiry sent successfully! Thank you.");
-      onClose();
+      onClose(false);
       setFormData({
         name: "",
         email: "",
@@ -73,7 +69,7 @@ export default function ContactModal({
             exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
             transition={{ type: "spring", stiffness: 100, damping: 15 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            onClick={() => onClose()}
+            onClick={() => onClose(false)}
           >
             <motion.div
               initial={{ opacity: 0, y: 50, scale: 0.95 }}
@@ -85,7 +81,7 @@ export default function ContactModal({
             >
               <button
                 type="button"
-                onClick={() => onClose()}
+                onClick={() => onClose(false)}
                 className="absolute top-5 right-5 p-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-neu-text transition-colors"
                 title="Close"
               >

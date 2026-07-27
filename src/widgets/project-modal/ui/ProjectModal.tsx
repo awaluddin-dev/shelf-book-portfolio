@@ -24,36 +24,56 @@ import MermaidDiagram from "@/shared/ui/MermaidDiagram";
 import ProjectLifecycleTracker from "@/entities/project/ui/ProjectLifecycleTracker";
 import ProjectArchitectureDiagram from "@/entities/project/ui/ProjectArchitectureDiagram";
 
+import { usePortfolioStore } from "@/shared/store/portfolioStore";
+import { getRelatedProjects, TECHNICAL_IMAGERY, getTagProjectCount } from "@/shared/lib/helpers";
+
 interface ProjectModalProps {
-  selectedProject: any;
-  onClose: () => void;
-  onPrevProject: () => void;
-  onNextProject: () => void;
-  onSelectProject: (project: any) => void;
-  isBannerMinimized: boolean;
-  setIsBannerMinimized: (val: boolean) => void;
   isDark: boolean;
-  getRelatedProjects: (project: any) => any[];
   getTechIconAndColor: (tag: string) => {
     color: string;
     icon: React.ReactNode;
   };
-  getTagProjectCount: (tag: string) => number;
-  TECHNICAL_IMAGERY: Record<string, any>;
 }
 
 export default function ProjectModal({
-  selectedProject,
-  onClose,
-  onPrevProject,
-  onNextProject,
-  onSelectProject,
   isDark,
-  getRelatedProjects,
   getTechIconAndColor,
-  getTagProjectCount,
-  TECHNICAL_IMAGERY,
 }: Readonly<ProjectModalProps>) {
+  const { 
+    selectedProject, setSelectedProject,
+    dynamicProjects: activeProjects,
+    isBannerMinimized, setIsBannerMinimized
+  } = usePortfolioStore();
+
+  const onClose = () => setSelectedProject(null);
+  const onSelectProject = (project: any) => setSelectedProject(project);
+
+  const onPrevProject = () => {
+    if (!selectedProject) return;
+    const currentIndex = activeProjects.findIndex(
+      (p) => p.id === selectedProject.id,
+    );
+    if (currentIndex === -1) return;
+    if (currentIndex > 0) {
+      setSelectedProject(activeProjects[currentIndex - 1]);
+    } else {
+      setSelectedProject(activeProjects.at(-1));
+    }
+  };
+
+  const onNextProject = () => {
+    if (!selectedProject) return;
+    const currentIndex = activeProjects.findIndex(
+      (p) => p.id === selectedProject.id,
+    );
+    if (currentIndex === -1) return;
+    if (currentIndex < activeProjects.length - 1) {
+      setSelectedProject(activeProjects[currentIndex + 1]);
+    } else {
+      setSelectedProject(activeProjects[0]);
+    }
+  };
+
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   
   // Flip Book Pagination State
@@ -136,31 +156,25 @@ export default function ProjectModal({
   const pageVariants: any = {
     enter: (direction: number) => {
       return {
-        rotateY: direction > 0 ? 90 : -90,
+        rotateY: direction > 0 ? 60 : -60,
         opacity: 0,
-        z: direction > 0 ? 100 : -100,
-        scale: 0.95
       };
     },
     center: {
       rotateY: 0,
       opacity: 1,
-      z: 0,
-      scale: 1,
       transition: {
-        rotateY: { type: "spring", stiffness: 100, damping: 20 },
-        opacity: { duration: 0.3 }
+        rotateY: { type: "spring", stiffness: 400, damping: 40, mass: 0.8 },
+        opacity: { duration: 0.25, ease: "easeOut" }
       }
     },
     exit: (direction: number) => {
       return {
-        rotateY: direction < 0 ? 90 : -90,
+        rotateY: direction < 0 ? 60 : -60,
         opacity: 0,
-        z: direction < 0 ? 100 : -100,
-        scale: 0.95,
         transition: {
-          rotateY: { type: "spring", stiffness: 100, damping: 20 },
-          opacity: { duration: 0.3 }
+          rotateY: { type: "spring", stiffness: 400, damping: 40, mass: 0.8 },
+          opacity: { duration: 0.25, ease: "easeIn" }
         }
       };
     }
@@ -279,7 +293,7 @@ export default function ProjectModal({
               <div className="flex flex-wrap gap-2.5">
                 {(selectedProject.tags || []).map((tag: string) => {
                   const { color, icon } = getTechIconAndColor(tag);
-                  const count = getTagProjectCount(tag);
+                  const count = getTagProjectCount(tag, activeProjects);
                   return (
                     <div key={tag} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neu-base border border-neu-text/5 text-xs font-mono font-medium shadow-sm">
                       <span className={cn("flex-shrink-0", color)}>{icon}</span>
@@ -358,7 +372,7 @@ export default function ProjectModal({
               <Sparkles size={14} /> Related Projects
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {getRelatedProjects(selectedProject).map((proj) => (
+              {getRelatedProjects(selectedProject, activeProjects).map((proj) => (
                 <div
                   key={proj.id}
                   onClick={(e) => { e.stopPropagation(); onSelectProject(proj); }}
@@ -462,7 +476,11 @@ export default function ProjectModal({
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    style={{ transformOrigin: direction > 0 ? "left center" : "right center" }}
+                    style={{ 
+                      transformOrigin: direction > 0 ? "left center" : "right center",
+                      willChange: "transform, opacity",
+                      backfaceVisibility: "hidden"
+                    }}
                     className="absolute inset-0 w-full h-full bg-neu-bg"
                   >
                     {renderPageContent(pages[currentPage])}

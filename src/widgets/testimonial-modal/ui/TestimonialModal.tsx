@@ -3,15 +3,11 @@ import { motion, AnimatePresence } from "motion/react";
 import { X, Quote } from "lucide-react";
 import { Testimonial } from "@/shared/types";
 
-interface TestimonialModalProps {
-  selectedTestimonial: Testimonial | null;
-  onClose: () => void;
-}
+import { usePortfolioStore } from "@/shared/store/portfolioStore";
 
-export default function TestimonialModal({
-  selectedTestimonial,
-  onClose,
-}: Readonly<TestimonialModalProps>) {
+export default function TestimonialModal() {
+  const { selectedTestimonial, setSelectedTestimonial } = usePortfolioStore();
+  const onClose = () => setSelectedTestimonial(null);
   return (
     <AnimatePresence>
       {selectedTestimonial && (

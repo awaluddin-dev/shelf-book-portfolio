@@ -12,29 +12,23 @@ import {
 import { cn } from "@/shared/lib/utils";
 import { CircuitBoardBg } from "@/shared/ui/CircuitBoardBg";
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";
+import { usePortfolioStore } from "@/shared/store/portfolioStore";
 
 interface HeroSectionProps {
-  isLoading: boolean;
   isDark: boolean;
-  dynamicHeroConfig: any;
-  activeMetrics: any[];
   renderIcon: (
     iconName: string,
     isSavings: boolean,
     size: number,
   ) => React.ReactNode;
-  triggerToast: (msg: string) => void;
-  setShowInquiryModal: (val: boolean) => void;
 }
 
 export default function HeroSection({
-  isLoading,
-  dynamicHeroConfig,
-  activeMetrics,
+  isDark,
   renderIcon,
-  triggerToast,
-  setShowInquiryModal,
 }: Readonly<HeroSectionProps>) {
+  const { isLoading, dynamicHeroConfig, dynamicMetrics: activeMetrics, triggerToast, setShowInquiryModal } = usePortfolioStore();
+
   return (
     <>
       <header className="relative z-10 min-h-[70vh] lg:min-h-[80vh] flex flex-col justify-center pt-6 md:pt-9 lg:pt-12 pb-16 md:pb-20 lg:pb-24 w-full overflow-hidden">
