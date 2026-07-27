@@ -13,35 +13,33 @@ export default function AdminArchitecture() {
         if (Array.isArray(data)) return data;
         return [];
       }}
-      defaultFormData={{ name: '', title: '', description: '', metrics: '', order: 0 }}
+      defaultFormData={{ imageUrl: '', order: 0 }}
       onBeforeSave={(formData) => ({
         ...formData,
         order: Number(formData.order)
       })}
       renderForm={(formData, setFormData) => (
         <>
-          <div className="flex gap-4">
-            <input placeholder="Node ID (e.g. gateway)" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-1/3 px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
+          <div className="flex gap-4 mb-4">
             <input placeholder="Order (e.g. 0)" type="number" value={formData.order} onChange={e => setFormData({...formData, order: parseInt(e.target.value) || 0})} className="w-20 px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
+            <input placeholder="Image URL (e.g. /assets/arch1.png)" value={formData.imageUrl || ''} onChange={e => setFormData({...formData, imageUrl: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
           </div>
-          <input placeholder="Title (e.g. NestJS Gateway)" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
-          <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none min-h-[100px]" />
-          <input placeholder="KPI/Metrics (e.g. Response: <12ms)" value={formData.metrics} onChange={e => setFormData({...formData, metrics: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-card-inset text-sm outline-none" />
         </>
       )}
       renderCardDisplay={(item: any) => (
         <div className="flex justify-between items-start">
-          <div className="flex gap-4 items-start">
+          <div className="flex gap-4 items-start w-full">
             <div className="w-8 h-8 rounded-full glass-card-inset flex items-center justify-center font-bold text-neu-accent shrink-0">
               {item.order}
             </div>
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-[10px] font-mono bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded text-neu-text-muted">{item.name}</span>
-                <h3 className="font-bold text-lg text-neu-accent">{item.title}</h3>
+            <div className="flex-1">
+              <div className="w-full aspect-video rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 overflow-hidden flex items-center justify-center">
+                {item.imageUrl ? (
+                  <img src={item.imageUrl} alt="Architecture Preview" className="w-full h-full object-contain" />
+                ) : (
+                  <span className="text-xs text-zinc-500 italic">No image URL provided</span>
+                )}
               </div>
-              <p className="font-medium text-neu-text mb-2 text-sm">{item.description}</p>
-              <span className="text-xs font-mono font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded">{item.metrics}</span>
             </div>
           </div>
         </div>

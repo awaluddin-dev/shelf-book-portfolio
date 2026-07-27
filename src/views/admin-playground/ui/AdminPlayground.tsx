@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Copy, Save, Moon, Sun, CheckCircle, Palette } from 'lucide-react';
+import { Copy, Save, Moon, Sun, CheckCircle, Palette, X, Eye, EyeOff } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'motion/react';
 
-export default function AdminPlayground() {
-  const router = useRouter();
+interface AdminPlaygroundProps {
+  onClose?: () => void;
+}
+
+export default function AdminPlayground({ onClose }: AdminPlaygroundProps) {
   const { resolvedTheme, setTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
   
@@ -25,18 +28,31 @@ export default function AdminPlayground() {
 
   // Theme State Variables
   const [themeConfig, setThemeConfig] = useState(getInitialThemeConfig(isDark));
+  const [draftConfig, setDraftConfig] = useState(themeConfig);
   const [prevIsDark, setPrevIsDark] = useState(isDark);
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
 
+  // Sync draft when theme changes via toggle
   if (isDark !== prevIsDark) {
+    const newConfig = getInitialThemeConfig(isDark);
     setPrevIsDark(isDark);
-    setThemeConfig(getInitialThemeConfig(isDark));
+    setThemeConfig(newConfig);
+    setDraftConfig(newConfig);
   }
 
+  // Debounce logic: when user pauses dragging/typing for 400ms, auto-apply the theme
   useEffect(() => {
-    if (localStorage.getItem('isAdmin') !== 'true') {
-      router.push('/admin/login');
+    const isDifferent = JSON.stringify(draftConfig) !== JSON.stringify(themeConfig);
+    if (!isDifferent) {
+      return;
     }
-  }, [router]);
+
+    const timer = setTimeout(() => {
+      setThemeConfig(draftConfig);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [draftConfig, themeConfig]);
 
   // Apply theme to document in real-time
   useEffect(() => {
@@ -56,7 +72,7 @@ export default function AdminPlayground() {
     root.style.setProperty('--shadow-neu', `8px 8px ${blur}px rgba(0,0,0,${sOpacity}), -8px -8px ${blur}px ${lightShadowHex}`);
     root.style.setProperty('--shadow-neu-inset', `inset 6px 6px ${blur-4}px rgba(0,0,0,${sOpacity}), inset -6px -6px ${blur-4}px ${lightShadowHex}`);
     root.style.setProperty('--shadow-neu-sm', `4px 4px ${blur/2}px rgba(0,0,0,${sOpacity}), -4px -4px ${blur/2}px ${lightShadowHex}`);
-    root.style.setProperty('--shadow-neu-modal', `16px 16px ${blur*2}px rgba(0,0,0,${sOpacity*1.5}), -16px -16px ${blur*2}px ${lightShadowHex}`);
+    root.style.setProperty('--shadow-neu-modal', `16px 16px ${blur*2}px rgba(0,0,0,${sOpacity*1.5})`);
 
     return () => {
       // Clean up inline styles when leaving the playground to restore globals.css
@@ -87,7 +103,7 @@ ${isDark ? '.dark' : ':root'} {
   --shadow-neu: 8px 8px ${blur}px rgba(0,0,0,${sOpacity}), -8px -8px ${blur}px ${lightShadowHex};
   --shadow-neu-inset: inset 6px 6px ${blur-4}px rgba(0,0,0,${sOpacity}), inset -6px -6px ${blur-4}px ${lightShadowHex};
   --shadow-neu-sm: 4px 4px ${blur/2}px rgba(0,0,0,${sOpacity}), -4px -4px ${blur/2}px ${lightShadowHex};
-  --shadow-neu-modal: 16px 16px ${blur*2}px rgba(0,0,0,${sOpacity*1.5}), -16px -16px ${blur*2}px ${lightShadowHex};
+  --shadow-neu-modal: 16px 16px ${blur*2}px rgba(0,0,0,${sOpacity*1.5});
 }`;
     navigator.clipboard.writeText(cssString.trim());
     setToast("CSS Copied to clipboard!");
@@ -95,24 +111,62 @@ ${isDark ? '.dark' : ':root'} {
   };
 
   const updateConfig = (key: string, value: string | number) => {
-    setThemeConfig(prev => ({ ...prev, [key]: value }));
+    setDraftConfig(prev => ({ ...prev, [key]: value }));
   };
 
   return (
-    <>
-        <div className="max-w-6xl mx-auto space-y-8">
+    <div className={`fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 transition-all duration-500 ${isPreviewMode ? 'pointer-events-none' : ''}`}>
+      <AnimatePresence>
+        {!isPreviewMode && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto"
+            onClick={onClose}
+          />
+        )}
+      </AnimatePresence>
+      
+      <AnimatePresence>
+        {!isPreviewMode && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto custom-scrollbar bg-neu-bg rounded-3xl shadow-neu-modal border border-white/10 p-6 sm:p-8 pointer-events-auto"
+          >
+            <div className="space-y-8">
           
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <h1 className="text-2xl font-bold font-display tracking-tight flex items-center gap-2">
               <Palette size={24} className="text-neu-accent" />
               Theme Playground
             </h1>
             <div className="flex items-center gap-4">
               <button 
-                onClick={() => setTheme(isDark ? 'light' : 'dark')}
-                className="p-3 rounded-full glass-card hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                onClick={() => setIsPreviewMode(true)}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl glass-card text-sm font-bold text-neu-text hover:bg-black/5 dark:hover:bg-white/5 transition-colors border border-black/10 dark:border-white/10 shadow-neu-sm"
               >
-                {isDark ? <Sun size={20} /> : <Moon size={20} />}
+                <Eye size={16} /> Live Preview
+              </button>
+              
+              <div className="w-px h-6 bg-black/10 dark:bg-white/10 mx-1"></div>
+
+              <button 
+                onClick={() => setTheme(isDark ? 'light' : 'dark')}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl glass-card text-sm font-bold text-neu-text hover:bg-black/5 dark:hover:bg-white/5 transition-colors border border-black/10 dark:border-white/10 shadow-neu-sm"
+                aria-label="Toggle Theme Mode"
+              >
+                {isDark ? (
+                  <>
+                    <Sun size={16} /> Light Mode
+                  </>
+                ) : (
+                  <>
+                    <Moon size={16} /> Dark Mode
+                  </>
+                )}
               </button>
               <button 
                 onClick={handleExport}
@@ -120,6 +174,15 @@ ${isDark ? '.dark' : ':root'} {
               >
                 <Copy size={16} /> Export CSS
               </button>
+              {onClose && (
+                <button
+                  onClick={onClose}
+                  className="p-3 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors ml-2"
+                  aria-label="Close Modal"
+                >
+                  <X size={20} />
+                </button>
+              )}
             </div>
           </div>
 
@@ -140,17 +203,17 @@ ${isDark ? '.dark' : ':root'} {
                   ].map((color) => (
                     <div key={color.key} className="flex flex-col gap-2">
                       <label className="text-xs font-mono font-bold text-neu-text-muted flex justify-between">
-                        {color.label} <span>{(themeConfig as any)[color.key]}</span>
+                        {color.label} <span>{(draftConfig as any)[color.key]}</span>
                       </label>
                       <div className="flex items-center gap-3">
                         <input 
                           type="color" 
-                          value={(themeConfig as any)[color.key]} 
+                          value={(draftConfig as any)[color.key]} 
                           onChange={(e) => updateConfig(color.key, e.target.value)}
                           className="w-12 h-12 rounded-xl cursor-pointer bg-transparent border-0 p-0" 
                         />
                         <div className="flex-1 px-4 py-2 glass-card-inset rounded-xl font-mono text-sm opacity-50">
-                          {(themeConfig as any)[color.key]}
+                          {(draftConfig as any)[color.key]}
                         </div>
                       </div>
                     </div>
@@ -164,11 +227,11 @@ ${isDark ? '.dark' : ':root'} {
                 <div className="space-y-6">
                   <div className="space-y-2">
                     <label className="text-xs font-mono font-bold text-neu-text-muted flex justify-between">
-                      Shadow Intensity <span>{themeConfig.shadowOpacity.toFixed(2)}</span>
+                      Shadow Intensity <span>{draftConfig.shadowOpacity.toFixed(2)}</span>
                     </label>
                     <input 
                       type="range" min="0.01" max="1" step="0.01"
-                      value={themeConfig.shadowOpacity}
+                      value={draftConfig.shadowOpacity}
                       onChange={(e) => updateConfig('shadowOpacity', parseFloat(e.target.value))}
                       className="w-full accent-neu-accent"
                     />
@@ -176,11 +239,11 @@ ${isDark ? '.dark' : ':root'} {
 
                   <div className="space-y-2">
                     <label className="text-xs font-mono font-bold text-neu-text-muted flex justify-between">
-                      Shadow Blur (px) <span>{themeConfig.shadowBlur}</span>
+                      Shadow Blur (px) <span>{draftConfig.shadowBlur}</span>
                     </label>
                     <input 
                       type="range" min="4" max="64" step="1"
-                      value={themeConfig.shadowBlur}
+                      value={draftConfig.shadowBlur}
                       onChange={(e) => updateConfig('shadowBlur', parseInt(e.target.value))}
                       className="w-full accent-neu-accent"
                     />
@@ -254,14 +317,39 @@ ${isDark ? '.dark' : ':root'} {
             </div>
           </div>
         </div>
+      </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Exit Preview Button when in Preview Mode */}
+      <AnimatePresence>
+        {isPreviewMode && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.9 }}
+            className="fixed top-6 right-6 sm:top-8 sm:right-8 z-[250]"
+          >
+            <button
+              onClick={() => setIsPreviewMode(false)}
+              className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-full bg-neu-bg text-neu-text shadow-neu-modal border border-white/20 hover:scale-105 active:scale-95 transition-all font-bold text-sm sm:text-base group pointer-events-auto"
+            >
+              <div className="p-2 rounded-full bg-neu-accent text-white group-hover:rotate-12 transition-transform">
+                <EyeOff size={18} />
+              </div>
+              Exit Preview Mode
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {toast && (
-          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-bold font-mono text-sm flex items-center gap-2 backdrop-blur-md">
+          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[300] px-6 py-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-bold font-mono text-sm flex items-center gap-2 backdrop-blur-md">
             <CheckCircle size={16} /> {toast}
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }

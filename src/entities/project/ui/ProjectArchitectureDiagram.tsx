@@ -1,27 +1,22 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
-  Network,
-  Layers,
-  Activity,
   ZoomIn,
   ZoomOut,
   RotateCcw,
   Maximize2,
   X,
   Move,
-  Image as ImageIcon,
 } from "lucide-react";
 import {
   TransformWrapper,
   TransformComponent,
   useControls,
 } from "react-zoom-pan-pinch";
-import EmptyState from "@/shared/ui/EmptyState";
 
-// --- Toolbar Controls (must be inside TransformWrapper) ---
+// --- Toolbar Controls ---
 function ZoomControls() {
   const { zoomIn, zoomOut, resetTransform } = useControls();
   return (
@@ -72,7 +67,6 @@ function FullscreenViewer({
         if (e.key === "Escape") onClose();
       }}
     >
-      {/* Header bar */}
       <div
         className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0"
         onClick={(e) => e.stopPropagation()}
@@ -81,8 +75,7 @@ function FullscreenViewer({
         }}
       >
         <span className="text-xs font-mono text-white/60 flex items-center gap-2">
-          <Move size={12} /> Drag to pan • Scroll / Pinch to zoom • Click
-          outside to close
+          <Move size={12} /> Drag to pan • Scroll / Pinch to zoom • Click outside to close
         </span>
         <button
           type="button"
@@ -93,7 +86,6 @@ function FullscreenViewer({
         </button>
       </div>
 
-      {/* Zoomable Canvas */}
       <div
         className="flex-1 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
@@ -112,6 +104,7 @@ function FullscreenViewer({
             <img
               src={imageUrl}
               alt="Architecture Diagram"
+              className={imageUrl.toLowerCase().endsWith('.svg') ? 'dark:invert dark:hue-rotate-180 transition-all duration-300' : ''}
               style={{
                 maxWidth: "90vw",
                 maxHeight: "85vh",
@@ -126,23 +119,25 @@ function FullscreenViewer({
   );
 }
 
-// --- Image View Mode ---
-function ImageView({ imageUrl }: Readonly<{ imageUrl: string }>) {
+// --- Main Component ---
+export default function ProjectArchitectureDiagram({
+  imageUrl,
+}: {
+  imageUrl: string;
+  project?: any; // Kept for backwards compatibility if passed, though unused
+  isDark?: boolean; // Kept for backwards compatibility if passed, though unused
+}) {
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  if (!imageUrl) return null;
 
   return (
     <>
-      {/* Compact Pan/Zoom Canvas */}
-      <div
-        className="relative rounded-2xl overflow-hidden border border-white/5 bg-zinc-950/50 dark:bg-black/30 group"
-        style={{ height: "420px" }}
-      >
-        {/* Hint overlay */}
+      <div className="w-full h-full relative rounded-2xl overflow-hidden group">
         <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-[10px] font-mono text-white/70 pointer-events-none select-none">
           <Move size={10} /> Drag · Scroll to zoom
         </div>
 
-        {/* Fullscreen button */}
         <div
           role="button"
           tabIndex={0}
@@ -167,6 +162,8 @@ function ImageView({ imageUrl }: Readonly<{ imageUrl: string }>) {
           <TransformComponent
             wrapperStyle={{ width: "100%", height: "100%", cursor: "grab" }}
             contentStyle={{
+              width: "100%",
+              height: "100%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -175,6 +172,7 @@ function ImageView({ imageUrl }: Readonly<{ imageUrl: string }>) {
             <img
               src={imageUrl}
               alt="Architecture Diagram"
+              className={imageUrl.toLowerCase().endsWith('.svg') ? 'dark:invert dark:hue-rotate-180 transition-all duration-300' : ''}
               style={{
                 maxWidth: "100%",
                 maxHeight: "100%",
@@ -189,7 +187,6 @@ function ImageView({ imageUrl }: Readonly<{ imageUrl: string }>) {
         </TransformWrapper>
       </div>
 
-      {/* Fullscreen Portal */}
       <AnimatePresence>
         {isFullscreen && (
           <FullscreenViewer
@@ -199,165 +196,5 @@ function ImageView({ imageUrl }: Readonly<{ imageUrl: string }>) {
         )}
       </AnimatePresence>
     </>
-  );
-}
-
-// --- Legacy Node View Mode ---
-function NodeView({ nodes, projectId }: { nodes: any[]; projectId: string }) {
-  const [hoveredNode, setHoveredNode] = useState<any | null>(null);
-
-  return (
-    <>
-      {/* Horizontal scrollable node pipeline */}
-      <div className="w-full relative py-8 overflow-x-auto hide-scrollbar">
-        <div className="flex items-center min-w-max gap-4 px-4 pb-8">
-          {nodes.map((node, idx) => (
-            <div key={node.id} className="flex items-center">
-              <div
-                onMouseEnter={() => setHoveredNode(node)}
-                onMouseLeave={() => setHoveredNode(null)}
-                className={`relative cursor-pointer transition-all duration-300 rounded-2xl p-5 w-48 shrink-0 flex flex-col items-center text-center 
-                  ${hoveredNode?.id === node.id ? "glass-card border-neu-accent scale-105" : "glass-card-inset border-transparent hover:border-white/10"}`}
-                style={{ borderWidth: "2px" }}
-              >
-                <div
-                  className={`p-3 rounded-xl mb-3 ${hoveredNode?.id === node.id ? "bg-neu-accent/20 text-neu-accent" : "bg-black/5 dark:bg-white/5 text-neu-text"}`}
-                >
-                  <Layers size={24} />
-                </div>
-                <h5 className="font-bold text-neu-text text-sm mb-1">
-                  {node.name}
-                </h5>
-                <p className="text-[10px] font-mono text-neu-text-muted line-clamp-2">
-                  {node.title}
-                </p>
-
-                {hoveredNode?.id === node.id && (
-                  <div className="absolute -inset-1 border-2 border-neu-accent/30 rounded-2xl animate-pulse -z-10" />
-                )}
-              </div>
-
-              {idx < nodes.length - 1 && (
-                <div className="w-12 h-[2px] bg-neu-text-muted/30 shrink-0 relative flex items-center mx-1">
-                  <div className="absolute right-0 w-2 h-2 border-t-2 border-r-2 border-neu-text-muted/30 rotate-45 transform translate-x-1" />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Hover detail panel */}
-      <div className="mt-2 p-5 rounded-2xl glass-card relative min-h-[96px] flex flex-col justify-center border border-white/5">
-        {hoveredNode ? (
-          <motion.div
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center"
-          >
-            <div className="md:col-span-3">
-              <span className="text-xs font-mono text-neu-accent font-bold uppercase tracking-wider block mb-1">
-                Node: {hoveredNode.name}
-              </span>
-              <h5 className="text-sm font-bold text-neu-text font-display">
-                {hoveredNode.title}
-              </h5>
-              <p className="text-xs text-neu-text-muted mt-1 leading-relaxed font-light">
-                {hoveredNode.description}
-              </p>
-            </div>
-            <div className="p-3 rounded-xl glass-card-inset text-center md:col-span-1 border border-white/5 flex flex-col justify-center items-center gap-1 h-full">
-              <span className="text-[9px] font-mono text-neu-text-muted block uppercase flex items-center gap-1">
-                <Activity size={10} /> KPI Performance
-              </span>
-              <span className="text-xs font-mono font-bold text-neu-accent block">
-                {hoveredNode.metrics}
-              </span>
-            </div>
-          </motion.div>
-        ) : (
-          <p className="text-xs font-mono text-neu-text-muted text-center italic flex items-center justify-center gap-2">
-            <Layers size={14} /> Hover over any component node to inspect
-            technical metrics.
-          </p>
-        )}
-      </div>
-    </>
-  );
-}
-
-// --- Main Component ---
-export default function ProjectArchitectureDiagram({
-  project,
-  isDark,
-}: {
-  project: any;
-  isDark: boolean;
-}) {
-  const [nodes, setNodes] = useState<any[]>([]);
-  const hasImage = !!project?.architectureImage;
-  const [loading, setLoading] = useState(!hasImage);
-
-  useEffect(() => {
-    if (hasImage) return;
-
-    fetch("/api/architecture")
-      .then((res) => res.json())
-      .then((data) => {
-        const arr = data.data || data;
-        const projectNodes = (Array.isArray(arr) ? arr : [])
-          .filter((n: any) => n.projectId === project?.id)
-          .sort((a: any, b: any) => a.order - b.order);
-        setNodes(projectNodes);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, [project?.id, hasImage]);
-
-  if (loading) {
-    return (
-      <div className="h-40 flex items-center justify-center text-neu-text-muted animate-pulse">
-        Loading Architecture...
-      </div>
-    );
-  }
-
-  const showEmptyState = !hasImage && nodes.length === 0;
-
-  return (
-    <div className="mb-10 p-6 md:p-8 rounded-3xl glass-card-inset border border-gray-300/10 relative overflow-hidden transition-all duration-300">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-6">
-        <div>
-          <h4 className="text-sm font-mono font-bold text-neu-accent uppercase tracking-wider flex items-center gap-2">
-            <Network size={14} /> System Architecture
-          </h4>
-          <p className="text-xs font-mono text-neu-text-muted mt-1">
-            {hasImage
-              ? "Drag to pan · Scroll or pinch to zoom · Click ⛶ for fullscreen."
-              : "Hover over nodes to inspect technical details and orchestration patterns."}
-          </p>
-        </div>
-        {hasImage && (
-          <span className="flex items-center gap-1.5 text-[10px] font-mono text-neu-accent/70 border border-neu-accent/20 px-2.5 py-1 rounded-lg bg-neu-accent/5">
-            <ImageIcon size={10} /> Excalidraw Export
-          </span>
-        )}
-      </div>
-
-      {(() => {
-        if (showEmptyState) {
-          return (
-            <EmptyState message="No architecture diagram defined for this project. Upload an Excalidraw export or add architecture nodes via the Admin panel." />
-          );
-        }
-        if (hasImage) {
-          return <ImageView imageUrl={project.architectureImage!} />;
-        }
-        return <NodeView nodes={nodes} projectId={project?.id} />;
-      })()}
-    </div>
   );
 }

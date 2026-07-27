@@ -8,7 +8,6 @@ export default function AdminProjects() {
   const defaultForm = {
     title: '', subtitle: '', category: '', tags: '', spineColor: '#4f46e5', coverColor: '#312e81',
     spineText: '', date: '', demoUrl: '', github: '', markdown: '', reasonToBuild: '', problemSolved: '',
-    architectureImage: '',
     stats: [] as {label: string, value: string}[],
     phases: [] as {date: string, title: string, description: string}[]
   };
@@ -139,11 +138,6 @@ export default function AdminProjects() {
               <div className="space-y-1">
                 <label className="text-xs font-mono text-neu-text-muted">GitHub URL</label>
                 <input value={formData.github} onChange={e => setFormData({...formData, github: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent" />
-              </div>
-              <div className="col-span-full space-y-1">
-                <label className="text-xs font-mono text-neu-accent font-bold flex items-center gap-1.5">⚡ Architecture Diagram (Excalidraw Export)</label>
-                <input value={formData.architectureImage} onChange={e => setFormData({...formData, architectureImage: e.target.value})} placeholder="/assets/architecture.svg or /assets/diagram.png" className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-neu-accent/20" />
-                <p className="text-[10px] text-neu-text-muted font-mono pl-1">Export your Excalidraw diagram as SVG/PNG, place it in /public/assets/, then paste the path here.</p>
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-mono text-neu-text-muted">Demo URL (Optional)</label>

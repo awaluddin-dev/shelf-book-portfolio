@@ -12,35 +12,15 @@ import {
 } from "lucide-react";
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";
 import { cn } from "@/shared/lib/utils";
+import { getTechIconAndColor } from "@/shared/lib/tech-icons";
+import { getTagProjectCount } from "@/shared/lib/helpers";
 import BookItem from "@/entities/project/ui/BookItem";
 import MobileFilterModal from "./MobileFilterModal";
+import { usePortfolioStore } from "@/shared/store/portfolioStore";
+import { useState, useRef, useMemo } from "react";
 
 interface ProjectsSectionProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  selectedCategory: string | null;
-  setSelectedCategory: (cat: string | null) => void;
-  categories: string[];
-  sortBy: any;
-  setSortBy: (sort: any) => void;
-  isFilterModalOpen: boolean;
-  setIsFilterModalOpen: (open: boolean) => void;
-  filteredProjects: any[];
-  getTechIconAndColor: (tag: string) => any;
-  getTagProjectCount: (tag: string) => number;
-  setSelectedProject: (proj: any) => void;
-  setFocusedProject: (proj: any) => void;
   isDark: boolean;
-  focusedProject: any;
-  dynamicHeroConfig: any;
-  triggerToast: (msg: string) => void;
-  shelfRef: any;
-  activeProjects: any[];
-  selectedProject: any;
-  isBannerMinimized: boolean;
-  setIsBannerMinimized: (b: boolean) => void;
-  isLoading: boolean;
-  scrollShelf: (dir: "left" | "right") => void;
 }
 
 const LoadingState = () => (
@@ -108,7 +88,7 @@ const ProjectList = ({
   setSelectedProject,
   setFocusedProject,
   isDark,
-  getTagProjectCount,
+  activeProjects,
 }: any) => (
   <motion.div
     layout
@@ -123,7 +103,7 @@ const ProjectList = ({
           setSelectedProject={setSelectedProject}
           setFocusedProject={setFocusedProject}
           isDark={isDark}
-          getTagProjectCount={getTagProjectCount}
+          getTagProjectCount={(tag: string) => getTagProjectCount(tag, activeProjects)}
         />
       ))}
     </AnimatePresence>
@@ -135,8 +115,7 @@ const FocusedProject = ({
   setSelectedProject,
   setFocusedProject,
   dynamicHeroConfig,
-  getTechIconAndColor,
-  getTagProjectCount,
+  activeProjects,
 }: any) => (
   <div className="relative py-8 md:py-12 px-4 md:px-8 z-20 flex flex-col lg:flex-row items-center justify-center gap-10 md:gap-16">
     <div className="absolute inset-0 bg-black/5 dark:bg-black/30 backdrop-blur-md rounded-3xl z-0 pointer-events-none"></div>
@@ -297,7 +276,7 @@ const FocusedProject = ({
         <div className="flex flex-wrap gap-2 mb-6">
           {(focusedProject.tags || []).map((tag: string) => {
             const { color, icon } = getTechIconAndColor(tag);
-            const count = getTagProjectCount(tag);
+            const count = getTagProjectCount(tag, activeProjects || []);
             return (
               <div
                 key={tag}
@@ -351,28 +330,80 @@ const FocusedProject = ({
 );
 
 export default function ProjectsSection({
-  searchQuery,
-  setSearchQuery,
-  selectedCategory,
-  setSelectedCategory,
-  categories,
-  sortBy,
-  setSortBy,
-  isFilterModalOpen,
-  setIsFilterModalOpen,
-  filteredProjects,
-  getTechIconAndColor,
-  getTagProjectCount,
-  setSelectedProject,
-  setFocusedProject,
   isDark,
-  focusedProject,
-  dynamicHeroConfig,
-  triggerToast,
-  shelfRef,
-  isLoading,
-  scrollShelf,
 }: Readonly<ProjectsSectionProps>) {
+  const { 
+    searchQuery, setSearchQuery, 
+    selectedCategory, setSelectedCategory,
+    setSelectedProject, setFocusedProject,
+    focusedProject, dynamicHeroConfig, triggerToast,
+    dynamicProjects: activeProjects, isLoading
+  } = usePortfolioStore();
+
+  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "alphabetical">("newest");
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const shelfRef = useRef<HTMLDivElement>(null);
+
+  const categories = Array.from(
+    new Set((activeProjects || []).map((p: any) => p.category)),
+  ) as string[];
+
+  const filteredProjects = useMemo(() => {
+    const filtered = (activeProjects || []).filter((project: any) => {
+      const matchesSearch =
+        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (project.tags || []).some((tag: string) =>
+          tag.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
+      const matchesCategory = selectedCategory
+        ? project.category === selectedCategory
+        : true;
+      return matchesSearch && matchesCategory;
+    });
+
+    return [...filtered].sort((a: any, b: any) => {
+      if (sortBy === "alphabetical") {
+        return a.title.localeCompare(b.title);
+      }
+      const getLatestYear = (dateStr: string) => {
+        const years = dateStr.match(/\d{4}/g);
+        if (!years) return 0;
+        return Math.max(...years.map(Number));
+      };
+      const getEarliestYear = (dateStr: string) => {
+        const years = dateStr.match(/\d{4}/g);
+        if (!years) return 0;
+        return Math.min(...years.map(Number));
+      };
+
+      if (sortBy === "newest") {
+        const yearA = getLatestYear(a.date);
+        const yearB = getLatestYear(b.date);
+        if (yearA !== yearB) {
+          return yearB - yearA;
+        }
+        return activeProjects.indexOf(a) - activeProjects.indexOf(b);
+      } else if (sortBy === "oldest") {
+        const yearA = getEarliestYear(a.date);
+        const yearB = getEarliestYear(b.date);
+        if (yearA !== yearB) {
+          return yearA - yearB;
+        }
+        return activeProjects.indexOf(a) - activeProjects.indexOf(b);
+      }
+      return 0;
+    });
+  }, [searchQuery, selectedCategory, sortBy, activeProjects]);
+
+  const scrollShelf = (direction: "left" | "right") => {
+    if (shelfRef.current) {
+      const scrollAmount = 300;
+      shelfRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
   const renderContent = () => {
     if (isLoading) return <LoadingState />;
     if (focusedProject)
@@ -382,8 +413,7 @@ export default function ProjectsSection({
           setSelectedProject={setSelectedProject}
           setFocusedProject={setFocusedProject}
           dynamicHeroConfig={dynamicHeroConfig}
-          getTechIconAndColor={getTechIconAndColor}
-          getTagProjectCount={getTagProjectCount}
+          activeProjects={activeProjects}
         />
       );
     if (filteredProjects.length === 0)
@@ -403,7 +433,7 @@ export default function ProjectsSection({
         setSelectedProject={setSelectedProject}
         setFocusedProject={setFocusedProject}
         isDark={isDark}
-        getTagProjectCount={getTagProjectCount}
+        activeProjects={activeProjects}
       />
     );
   };

@@ -16,7 +16,7 @@ import {
   Code2,
   Check,
   Copy,
-  User
+  Quote
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import ReactMarkdown from "react-markdown";
@@ -24,97 +24,134 @@ import MermaidDiagram from "@/shared/ui/MermaidDiagram";
 import ProjectLifecycleTracker from "@/entities/project/ui/ProjectLifecycleTracker";
 import ProjectArchitectureDiagram from "@/entities/project/ui/ProjectArchitectureDiagram";
 
+import { usePortfolioStore } from "@/shared/store/portfolioStore";
+import { getRelatedProjects, TECHNICAL_IMAGERY, getTagProjectCount } from "@/shared/lib/helpers";
+
 interface ProjectModalProps {
-  selectedProject: any;
-  onClose: () => void;
-  onPrevProject: () => void;
-  onNextProject: () => void;
-  onSelectProject: (project: any) => void;
-  isBannerMinimized: boolean;
-  setIsBannerMinimized: (val: boolean) => void;
   isDark: boolean;
-  getRelatedProjects: (project: any) => any[];
   getTechIconAndColor: (tag: string) => {
     color: string;
     icon: React.ReactNode;
   };
-  getTagProjectCount: (tag: string) => number;
-  TECHNICAL_IMAGERY: Record<string, any>;
 }
 
 export default function ProjectModal({
-  selectedProject,
-  onClose,
-  onPrevProject,
-  onNextProject,
-  onSelectProject,
   isDark,
-  getRelatedProjects,
   getTechIconAndColor,
-  getTagProjectCount,
-  TECHNICAL_IMAGERY,
 }: Readonly<ProjectModalProps>) {
+  const { 
+    selectedProject, setSelectedProject,
+    dynamicProjects: activeProjects,
+  } = usePortfolioStore();
+
+  const onClose = () => setSelectedProject(null);
+  const onSelectProject = (project: any) => setSelectedProject(project);
+
+  const onPrevProject = () => {
+    if (!selectedProject) return;
+    const currentIndex = activeProjects.findIndex(
+      (p) => p.id === selectedProject.id,
+    );
+    if (currentIndex === -1) return;
+    if (currentIndex > 0) {
+      setSelectedProject(activeProjects[currentIndex - 1]);
+    } else {
+      setSelectedProject(activeProjects.at(-1));
+    }
+  };
+
+  const onNextProject = () => {
+    if (!selectedProject) return;
+    const currentIndex = activeProjects.findIndex(
+      (p) => p.id === selectedProject.id,
+    );
+    if (currentIndex === -1) return;
+    if (currentIndex < activeProjects.length - 1) {
+      setSelectedProject(activeProjects[currentIndex + 1]);
+    } else {
+      setSelectedProject(activeProjects[0]);
+    }
+  };
+
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   
   // Flip Book Pagination State
   const [currentPage, setCurrentPage] = useState(0);
-  const [direction, setDirection] = useState(0); // 1 for next, -1 for prev
+  const [direction, setDirection] = useState(0);
 
   // Reset page when project changes
   useEffect(() => {
     setCurrentPage(0);
-    setDirection(1); // open book animation implicitly moves forward
+    setDirection(1);
   }, [selectedProject?.id]);
 
-  const pages = useMemo(() => {
+  const spreads = useMemo(() => {
     if (!selectedProject) return [];
-    const p: { id: string, type: string }[] = [];
     
-    // Page 0: Header
-    p.push({ id: 'header', type: 'header' });
+    const sp: any[] = [];
     
-    // Page 1: Details
-    p.push({ id: 'details', type: 'details' });
+    // Spread 0: Front Cover (Single Page)
+    sp.push({ id: 'front-cover', type: 'front-cover' });
     
-    // Page 2: System Spec
-    if (selectedProject.markdown) {
-      p.push({ id: 'markdown', type: 'markdown' });
+    // Parse Markdown and Architecture
+    const mdParts = (selectedProject.markdown || '')
+      .split('---')
+      .map((p: string) => p.trim())
+      .filter(Boolean);
+
+    const archImages = selectedProject.systemArchitectures?.length > 0 
+      ? selectedProject.systemArchitectures.map((arch: any) => arch.imageUrl).filter(Boolean)
+      : [];
+
+    // Flatten ALL interior pages into a single continuous array
+    // This prevents any blank pages in the middle of the book
+    const interiorPages: any[] = [];
+    
+    interiorPages.push({ type: 'details' });
+    interiorPages.push({ type: 'tech-stack' });
+
+    // Add all markdown pages
+    mdParts.forEach((content: string, i: number) => {
+        interiorPages.push({ type: 'markdown', content, index: i, total: mdParts.length });
+    });
+
+    // Add all architecture pages
+    archImages.forEach((imgUrl: string, i: number) => {
+        interiorPages.push({ type: 'architecture', content: imgUrl, index: i, total: archImages.length });
+    });
+
+    // Add tail pages
+    interiorPages.push({ type: 'lifecycle' });
+    interiorPages.push({ type: 'related' });
+
+    // Pair interiorPages into spreads (2 pages per spread)
+    for (let i = 0; i < interiorPages.length; i += 2) {
+       sp.push({
+         id: `spread-dynamic-${i}`,
+         type: 'spread',
+         left: interiorPages[i],
+         right: interiorPages[i + 1] || null // If null, it will just render a blank page (only possible at the very end)
+       });
     }
+
+    // Spread Last: Back Cover (Single Page)
+    sp.push({ id: 'back-cover', type: 'back-cover' });
     
-    // Page 3: Architecture
-    if ((selectedProject.systemArchitectures && selectedProject.systemArchitectures.length > 0) || selectedProject.architectureImage) {
-      p.push({ id: 'architecture', type: 'architecture' });
-    }
-    
-    // Page 4: Lifecycle
-    if (selectedProject.projectLifecycles && selectedProject.projectLifecycles.length > 0) {
-      p.push({ id: 'lifecycle', type: 'lifecycle' });
-    }
-    
-    // Page 5: Related
-    p.push({ id: 'related', type: 'related' });
-    
-    // Page 6: About Author
-    p.push({ id: 'about', type: 'about' });
-    
-    return p;
+    return sp;
   }, [selectedProject]);
 
   const paginate = (newDirection: number) => {
     const nextIndex = currentPage + newDirection;
-    if (nextIndex >= 0 && nextIndex < pages.length) {
+    if (nextIndex >= 0 && nextIndex < spreads.length) {
       setDirection(newDirection);
       setCurrentPage(nextIndex);
     } else if (nextIndex < 0) {
-      // Go to previous project
       onPrevProject();
-    } else if (nextIndex >= pages.length) {
-      // Go to next project
+    } else if (nextIndex >= spreads.length) {
       onNextProject();
     }
   };
 
-  // Keyboard navigation for pages
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!selectedProject) return;
@@ -131,160 +168,105 @@ export default function ProjectModal({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedProject, currentPage, pages.length]);
+  }, [selectedProject, currentPage, spreads.length]);
 
   const pageVariants: any = {
-    enter: (direction: number) => {
-      return {
-        rotateY: direction > 0 ? 90 : -90,
-        opacity: 0,
-        z: direction > 0 ? 100 : -100,
-        scale: 0.95
-      };
-    },
+    enter: (direction: number) => ({
+      rotateY: direction > 0 ? 60 : -60,
+      opacity: 0,
+    }),
     center: {
       rotateY: 0,
       opacity: 1,
-      z: 0,
-      scale: 1,
-      transition: {
-        rotateY: { type: "spring", stiffness: 100, damping: 20 },
-        opacity: { duration: 0.3 }
-      }
+      transition: { rotateY: { type: "spring", stiffness: 400, damping: 40, mass: 0.8 }, opacity: { duration: 0.25, ease: "easeOut" } }
     },
-    exit: (direction: number) => {
-      return {
-        rotateY: direction < 0 ? 90 : -90,
-        opacity: 0,
-        z: direction < 0 ? 100 : -100,
-        scale: 0.95,
-        transition: {
-          rotateY: { type: "spring", stiffness: 100, damping: 20 },
-          opacity: { duration: 0.3 }
-        }
-      };
-    }
+    exit: (direction: number) => ({
+      rotateY: direction < 0 ? 60 : -60,
+      opacity: 0,
+      transition: { rotateY: { type: "spring", stiffness: 400, damping: 40, mass: 0.8 }, opacity: { duration: 0.25, ease: "easeIn" } }
+    })
   };
 
-  const renderPageContent = (page: { id: string, type: string }) => {
-    if (!selectedProject) return null;
+  const renderInteriorSection = (data: any) => {
+    if (!selectedProject || !data) return null;
+    const { type, content, index, total } = data;
 
-    switch (page.type) {
-      case 'header':
-        return (
-          <div className="w-full h-full flex flex-col relative">
-            <div 
-              className={cn(
-                "absolute inset-0 z-0",
-                !selectedProject.coverColor?.startsWith("#") && !selectedProject.coverColor?.startsWith("rgb") ? selectedProject.coverColor : ""
-              )}
-              style={{
-                ...(selectedProject.coverColor?.startsWith("#") || selectedProject.coverColor?.startsWith("rgb") ? { backgroundColor: selectedProject.coverColor } : {})
-              }}
-            >
-              <img
-                src={TECHNICAL_IMAGERY[selectedProject.id]?.featured || TECHNICAL_IMAGERY["auraflow-ai"]?.featured}
-                alt="Background"
-                className="w-full h-full object-cover opacity-30 mix-blend-overlay"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-neu-bg via-neu-bg/80 to-transparent"></div>
-            </div>
-            
-            <div className="relative z-10 flex flex-col justify-end h-full p-8 md:p-12 pb-20">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-mono font-medium text-white/90">
-                  {selectedProject.category}
-                </span>
-                <span className="text-white/70 text-sm font-mono">
-                  {selectedProject.date}
-                </span>
-              </div>
-              <h1 className="font-display font-bold text-4xl md:text-6xl text-white tracking-tight mb-4 drop-shadow-lg">
-                {selectedProject.title}
-              </h1>
-              <p className="text-lg md:text-xl text-white/90 font-light max-w-2xl drop-shadow-md">
-                {selectedProject.subtitle}
-              </p>
-            </div>
-          </div>
-        );
-
+    switch (type) {
       case 'details':
         return (
-          <div className="w-full h-full flex flex-col p-8 md:p-12 overflow-y-auto custom-scrollbar">
-            <div className="flex flex-wrap items-center gap-4 mb-10 pb-6 border-b border-neu-text/10">
+          <div className="flex flex-col h-full space-y-8">
+            <div>
+              <h2 className="text-3xl font-display font-black tracking-tight mb-2 text-zinc-900 dark:text-white">{selectedProject.title}</h2>
+              <p className="text-sm italic font-mono text-zinc-600 dark:text-zinc-400">{selectedProject.subtitle}</p>
+            </div>
+            
+            <div className="flex flex-wrap items-center gap-3">
               {selectedProject.demoUrl && (
-                <a
-                  href={selectedProject.demoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-neu-accent hover:bg-neu-accent/90 text-white rounded-xl font-mono text-sm font-bold shadow-md transition-transform active:scale-95"
-                >
-                  <Globe size={16} /> Live Demo
+                <a href={selectedProject.demoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-neu-accent hover:bg-neu-accent/90 text-white rounded-lg font-mono text-[10px] font-bold shadow-md transition-transform active:scale-95">
+                  <Globe size={14} /> Live Demo
                 </a>
               )}
               {selectedProject.github && (
-                <a
-                  href={selectedProject.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-neu-bg hover:bg-neu-base text-neu-text rounded-xl font-mono text-sm font-bold shadow-neu-sm border border-neu-text/10 transition-transform active:scale-95"
-                >
-                  <Github size={16} /> Source Code
+                <a href={selectedProject.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 rounded-lg font-mono text-[10px] font-bold shadow-sm border border-zinc-300 dark:border-zinc-700 transition-transform active:scale-95">
+                  <Github size={14} /> Source Code
                 </a>
               )}
             </div>
 
             {selectedProject.stats && selectedProject.stats.length > 0 && (
-              <div className="mb-10">
-                <h4 className="text-sm font-mono font-bold text-neu-accent uppercase tracking-wider mb-4 flex items-center gap-2">
-                  <Terminal size={14} /> Project Impact & Metrics
+              <div>
+                <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <Terminal size={14} /> Project Metrics
                 </h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   {selectedProject.stats.map((stat: any, idx: number) => (
-                    <div key={idx} className="p-4 rounded-2xl glass-card flex flex-col justify-between items-start text-left border border-white/5">
-                      <span className="text-2xl font-bold font-display text-neu-text tracking-tight mb-1">{stat.value}</span>
-                      <span className="text-xs font-mono text-neu-text-muted">{stat.label}</span>
+                    <div key={idx} className="p-3 rounded-xl bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-800 flex flex-col justify-between items-start text-left">
+                      <span className="text-lg font-bold font-display text-zinc-900 dark:text-white tracking-tight">{stat.value}</span>
+                      <span className="text-[9px] font-mono text-zinc-500 dark:text-zinc-400 mt-1">{stat.label}</span>
                     </div>
                   ))}
                 </div>
               </div>
             )}
+          </div>
+        );
 
+      case 'tech-stack':
+        return (
+          <div className="flex flex-col h-full space-y-8">
             {(selectedProject.reasonToBuild || selectedProject.problemSolved) && (
-              <div className="flex flex-col gap-6 mb-10">
+              <div className="flex flex-col gap-6">
                 {selectedProject.reasonToBuild && (
-                  <div className="bg-neu-bg p-6 rounded-3xl shadow-neu-inset border border-white/5">
-                    <h4 className="text-sm font-mono font-bold text-neu-accent uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800">
+                    <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-3 flex items-center gap-2">
                       <Lightbulb size={14} className="text-neu-accent" /> Why I Built This
                     </h4>
-                    <p className="text-neu-text-muted text-sm leading-relaxed">{selectedProject.reasonToBuild}</p>
+                    <p className="text-zinc-600 dark:text-zinc-400 text-xs leading-relaxed">{selectedProject.reasonToBuild}</p>
                   </div>
                 )}
                 {selectedProject.problemSolved && (
-                  <div className="bg-neu-bg p-6 rounded-3xl shadow-neu-inset border border-white/5">
-                    <h4 className="text-sm font-mono font-bold text-neu-accent uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800">
+                    <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-3 flex items-center gap-2">
                       <Target size={14} className="text-neu-accent" /> Business Problem Solved
                     </h4>
-                    <p className="text-neu-text-muted text-sm leading-relaxed">{selectedProject.problemSolved}</p>
+                    <p className="text-zinc-600 dark:text-zinc-400 text-xs leading-relaxed">{selectedProject.problemSolved}</p>
                   </div>
                 )}
               </div>
             )}
 
             <div>
-              <h4 className="text-sm font-mono font-bold text-neu-accent uppercase tracking-wider mb-4 flex items-center gap-2">
+              <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
                 <Code2 size={14} /> Technology Stack
               </h4>
-              <div className="flex flex-wrap gap-2.5">
+              <div className="flex flex-wrap gap-2">
                 {(selectedProject.tags || []).map((tag: string) => {
                   const { color, icon } = getTechIconAndColor(tag);
-                  const count = getTagProjectCount(tag);
+                  const count = getTagProjectCount(tag, activeProjects);
                   return (
-                    <div key={tag} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neu-base border border-neu-text/5 text-xs font-mono font-medium shadow-sm">
-                      <span className={cn("flex-shrink-0", color)}>{icon}</span>
-                      <span className="text-neu-text">{tag}</span>
-                      <span className="text-neu-accent text-[10px] ml-1">+{count} projects</span>
+                    <div key={tag} className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[10px] font-mono font-medium shadow-sm">
+                      <span className={cn("flex-shrink-0 w-3 h-3", color)}>{icon}</span>
+                      <span className="text-zinc-700 dark:text-zinc-300">{tag}</span>
                     </div>
                   );
                 })}
@@ -295,188 +277,298 @@ export default function ProjectModal({
 
       case 'markdown':
         return (
-          <div className="w-full h-full p-8 md:p-12 overflow-y-auto custom-scrollbar prose prose-slate max-w-none font-sans
-            prose-headings:font-display prose-headings:font-bold prose-headings:text-neu-text
-            prose-p:text-neu-text-muted prose-li:text-neu-text-muted prose-strong:text-neu-text
-            dark:prose-invert">
-            <h4 className="text-sm font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 not-prose border-b border-neu-text/10 pb-4">
-              <FileText size={14} /> System Specifications
+          <div className="w-full h-full flex flex-col">
+            <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 shrink-0">
+              <FileText size={14} /> System Specifications {total > 1 ? `(${index + 1}/${total})` : ''}
             </h4>
-            <ReactMarkdown
-              components={{
-                code({ className, children, ...props }: any) {
-                  const match = /language-(\w+)/.exec(className || "");
-                  if (!match) return <code className="bg-neu-base px-1.5 py-0.5 rounded text-pink-500 text-sm font-mono" {...props}>{children}</code>;
-                  if (match[1] === "mermaid") return <MermaidDiagram chart={String(children).replace(/\n$/, "")} />;
-                  return (
-                    <div className="relative group/code my-4 rounded-xl overflow-hidden border border-neu-text/10 bg-[#0d1117] not-prose">
-                      <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-white/10 text-[10px] font-mono text-gray-400">
-                        <span>{match[1]}</span>
-                        <button onClick={() => { navigator.clipboard.writeText(String(children)); setCopiedCode(String(children)); setTimeout(() => setCopiedCode(null), 2000); }} className="hover:text-white transition-colors">
-                          {copiedCode === String(children) ? <Check size={12} className="text-green-400" /> : <Copy size={12} />}
-                        </button>
-                      </div>
-                      <div className="p-4 overflow-x-auto text-sm font-mono text-gray-300">
-                        {String(children)}
-                      </div>
-                    </div>
-                  );
-                }
-              }}
-            >
-              {selectedProject.markdown}
-            </ReactMarkdown>
+            {content ? (
+              <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar prose prose-slate prose-sm max-w-none font-sans
+                prose-headings:font-display prose-headings:font-bold prose-headings:text-zinc-900 dark:prose-headings:text-white
+                prose-p:text-zinc-600 dark:prose-p:text-zinc-400 
+                prose-li:text-zinc-600 dark:prose-li:text-zinc-400 
+                prose-strong:text-zinc-900 dark:prose-strong:text-white
+                dark:prose-invert">
+                <ReactMarkdown
+                  components={{
+                    code({ className, children, ...props }: any) {
+                      const match = /language-(\w+)/.exec(className || "");
+                      if (!match) return <code className="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-pink-500 text-xs font-mono" {...props}>{children}</code>;
+                      if (match[1] === "mermaid") return <MermaidDiagram chart={String(children).replace(/\n$/, "")} />;
+                      return (
+                        <div className="relative group/code my-4 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-[#0d1117] not-prose">
+                          <div className="flex items-center justify-between px-4 py-2 bg-black/5 dark:bg-white/5 border-b border-zinc-200 dark:border-white/10 text-[10px] font-mono text-zinc-500 dark:text-gray-400">
+                            <span>{match[1]}</span>
+                            <button onClick={() => { navigator.clipboard.writeText(String(children)); setCopiedCode(String(children)); setTimeout(() => setCopiedCode(null), 2000); }} className="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                              {copiedCode === String(children) ? <Check size={12} className="text-green-500 dark:text-green-400" /> : <Copy size={12} />}
+                            </button>
+                          </div>
+                          <div className="p-4 overflow-x-auto text-xs font-mono text-zinc-700 dark:text-gray-300">
+                            {String(children)}
+                          </div>
+                        </div>
+                      );
+                    }
+                  }}
+                >{content}</ReactMarkdown>
+              </div>
+            ) : (
+              <p className="text-xs text-zinc-500 italic">No markdown specifications provided.</p>
+            )}
           </div>
         );
-
+      
       case 'architecture':
         return (
-          <div className="w-full h-full p-8 md:p-12 overflow-y-auto custom-scrollbar flex flex-col">
-            <h4 className="text-sm font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-neu-text/10 pb-4 shrink-0">
-              <Layers size={14} /> System Architecture
+          <div className="w-full h-full flex flex-col">
+            <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 shrink-0">
+              <Layers size={14} /> System Architecture {total > 1 ? `(${index + 1}/${total})` : ''}
             </h4>
-            <div className="flex-1 min-h-0">
-              <ProjectArchitectureDiagram project={selectedProject} isDark={isDark} />
+            <div className="flex-1 min-h-0 bg-white dark:bg-zinc-900/50 rounded-xl p-2 border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-inner flex items-center justify-center relative">
+              {content ? (
+                 <ProjectArchitectureDiagram project={selectedProject} isDark={isDark} imageUrl={content} />
+              ) : (
+                <p className="text-xs text-zinc-500 italic">No architecture diagram provided.</p>
+              )}
             </div>
           </div>
         );
 
       case 'lifecycle':
         return (
-          <div className="w-full h-full p-8 md:p-12 overflow-y-auto custom-scrollbar">
-            <h4 className="text-sm font-mono font-bold text-neu-accent uppercase tracking-wider mb-8 flex items-center gap-2 border-b border-neu-text/10 pb-4">
-              <Network size={14} /> Project Lifecycle Tracker
+          <div className="w-full h-full flex flex-col">
+            <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 shrink-0">
+              <Network size={14} /> Lifecycle Tracker
             </h4>
-            <ProjectLifecycleTracker projectId={selectedProject.id} spineColor={selectedProject.spineColor} />
+            <div className="flex-1 min-h-0 bg-white dark:bg-zinc-900/50 rounded-xl p-4 border border-zinc-200 dark:border-zinc-800 shadow-inner overflow-y-auto custom-scrollbar">
+               {selectedProject.projectLifecycles?.length > 0 ? (
+                 <ProjectLifecycleTracker projectId={selectedProject.id} spineColor={selectedProject.spineColor} />
+               ) : (
+                 <p className="text-xs text-zinc-500 italic text-center mt-4">No lifecycle data provided.</p>
+               )}
+            </div>
           </div>
         );
 
       case 'related':
         return (
-          <div className="w-full h-full p-8 md:p-12 overflow-y-auto custom-scrollbar">
-            <h4 className="text-sm font-mono font-bold text-neu-accent uppercase tracking-wider mb-8 flex items-center gap-2 border-b border-neu-text/10 pb-4">
-              <Sparkles size={14} /> Related Projects
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {getRelatedProjects(selectedProject).map((proj) => (
-                <div
-                  key={proj.id}
-                  onClick={(e) => { e.stopPropagation(); onSelectProject(proj); }}
-                  className="p-5 rounded-2xl glass-card hover:shadow-neu-sm border border-gray-300/10 dark:border-zinc-800 cursor-pointer group transition-all flex items-center gap-4 text-left"
-                >
-                  <div className={cn("w-12 h-16 rounded-md flex-shrink-0 flex items-center justify-center relative shadow-sm",
-                      !proj.spineColor?.startsWith("#") && !proj.spineColor?.startsWith("rgb") ? proj.spineColor : ""
-                    )}
-                    style={{ ...(proj.spineColor?.startsWith("#") || proj.spineColor?.startsWith("rgb") ? { backgroundColor: proj.spineColor } : {}) }}
-                  ></div>
-                  <div className="flex-1 min-w-0">
-                    <span className="text-[10px] font-mono text-neu-accent font-bold uppercase tracking-wider block">{proj.category}</span>
-                    <h5 className="text-sm font-bold text-neu-text truncate mt-1 group-hover:text-neu-accent transition-colors">{proj.title}</h5>
-                    <p className="text-xs text-neu-text-muted truncate mt-1">{proj.subtitle}</p>
+          <div className="w-full h-full flex flex-col justify-between">
+            <div>
+              <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                <Sparkles size={14} /> Related Projects
+              </h4>
+              <div className="grid grid-cols-1 gap-3">
+                {getRelatedProjects(selectedProject, activeProjects).slice(0, 4).map((proj) => (
+                  <div
+                    key={proj.id}
+                    onClick={(e) => { e.stopPropagation(); onSelectProject(proj); }}
+                    className="p-3 rounded-xl bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-800 hover:border-neu-accent/50 cursor-pointer group transition-all flex items-center gap-3 text-left"
+                  >
+                    <div className={cn("w-10 h-12 rounded-sm flex-shrink-0 flex items-center justify-center relative shadow-sm",
+                        !proj.spineColor?.startsWith("#") && !proj.spineColor?.startsWith("rgb") ? proj.spineColor : ""
+                      )}
+                      style={{ ...(proj.spineColor?.startsWith("#") || proj.spineColor?.startsWith("rgb") ? { backgroundColor: proj.spineColor } : {}) }}
+                    ></div>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[8px] font-mono text-neu-accent font-bold uppercase tracking-wider block">{proj.category}</span>
+                      <h5 className="text-xs font-bold text-zinc-900 dark:text-white truncate mt-0.5 group-hover:text-neu-accent transition-colors">{proj.title}</h5>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         );
 
-      case 'about':
-        return (
-          <div className="w-full h-full p-8 md:p-12 flex flex-col items-center justify-center text-center relative overflow-hidden">
-             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay pointer-events-none"></div>
-             <div className="w-24 h-24 rounded-full bg-neu-accent/10 border-2 border-neu-accent flex items-center justify-center mb-6 shadow-neu">
-                <User size={40} className="text-neu-accent" />
-             </div>
-             <h2 className="text-3xl font-display font-bold text-neu-text mb-4">About the Author</h2>
-             <p className="text-neu-text-muted max-w-md mx-auto leading-relaxed mb-8">
-               I am a passionate software engineer dedicated to building scalable and robust solutions. Every project here is crafted with attention to detail, performance, and best practices.
-             </p>
-             <button onClick={(e) => { e.stopPropagation(); onClose(); }} className="px-6 py-3 bg-neu-accent text-white rounded-xl font-mono text-sm font-bold shadow-md hover:scale-105 transition-transform">
-               Close Book
-             </button>
-          </div>
-        );
-
-      default:
-        return null;
+      default: return null;
     }
   };
 
+  const renderSpreadContent = (spread: any) => {
+    if (!selectedProject) return null;
+
+    if (spread.type === 'front-cover') {
+      return (
+        <div className="w-full h-full flex flex-col relative bg-zinc-900 rounded-r-[2rem] rounded-l-md overflow-hidden shadow-2xl border-l-4 border-l-black/50 border-y border-r border-white/10">
+           <div 
+             className={cn(
+               "absolute inset-0 z-0",
+               !selectedProject.coverColor?.startsWith("#") && !selectedProject.coverColor?.startsWith("rgb") ? selectedProject.coverColor : ""
+             )}
+             style={{
+               ...(selectedProject.coverColor?.startsWith("#") || selectedProject.coverColor?.startsWith("rgb") ? { backgroundColor: selectedProject.coverColor } : {})
+             }}
+           >
+             <img src={TECHNICAL_IMAGERY[selectedProject.id]?.featured || TECHNICAL_IMAGERY["auraflow-ai"]?.featured} alt="Cover" className="w-full h-full object-cover opacity-30 mix-blend-overlay" />
+             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10"></div>
+           </div>
+           
+           <div className="relative z-10 flex flex-col items-center justify-center h-full p-8 text-center border-[6px] border-white/5 m-6 rounded-2xl backdrop-blur-[2px]">
+             <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] font-mono font-bold text-white tracking-[0.2em] uppercase mb-6 shadow-sm border border-white/20">
+               {selectedProject.category}
+             </span>
+             <h1 className="font-display font-black text-3xl md:text-5xl text-white tracking-tight mb-4 drop-shadow-2xl leading-[1.1] uppercase">
+               {selectedProject.title}
+             </h1>
+             <div className="w-12 h-1 bg-neu-accent my-6 rounded-full shadow-[0_0_15px_rgba(var(--color-neu-accent),0.6)]"></div>
+             <p className="text-xs md:text-sm text-white/80 font-mono italic max-w-[250px] drop-shadow-md leading-relaxed">
+               {selectedProject.subtitle}
+             </p>
+
+             <div className="absolute bottom-6 left-0 right-0 flex flex-col items-center">
+               <span className="text-[9px] font-mono text-white/30 uppercase tracking-[0.3em] mb-1">Author</span>
+               <span className="text-[11px] font-mono text-white/80 font-bold uppercase tracking-[0.2em]">Awaluddin</span>
+             </div>
+           </div>
+           
+           {/* Book Spine Edge effect on the left side of the front cover */}
+           <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/70 via-black/20 to-transparent pointer-events-none"></div>
+           <div className="absolute left-[6px] top-0 bottom-0 w-[1px] bg-white/20 pointer-events-none"></div>
+        </div>
+      );
+    }
+
+    if (spread.type === 'back-cover') {
+       return (
+        <div className="w-full h-full flex flex-col relative bg-zinc-950 rounded-l-[2rem] rounded-r-md overflow-hidden shadow-2xl border-r-4 border-r-black/50 border-y border-l border-white/5">
+           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-linen-2.png')] opacity-30 mix-blend-overlay"></div>
+           <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/80"></div>
+           
+           <div className="relative z-10 flex flex-col items-center justify-center h-full p-10 text-center">
+              <div className="mb-12 p-6 rounded-3xl border border-white/5 bg-white/5 backdrop-blur-sm shadow-xl">
+                <Quote size={20} className="text-neu-accent mb-4 mx-auto opacity-60" />
+                <p className="text-[11px] md:text-xs text-white/60 font-mono italic leading-relaxed max-w-[220px]">
+                  "Software is a great combination between artistry and engineering. Every line of code is a brushstroke."
+                </p>
+              </div>
+
+              <div className="w-32 h-14 bg-white/90 rounded-sm mb-4 flex flex-col justify-around px-2 py-1.5 relative shadow-inner">
+                {/* Fake Barcode */}
+                <div className="flex gap-[1px] items-stretch h-full opacity-80 justify-center">
+                  {[...Array(28)].map((_, i) => (
+                    <div key={i} className="bg-black" style={{ width: Math.random() > 0.5 ? '2px' : '4px', height: '100%', opacity: Math.random() > 0.2 ? 1 : 0 }}></div>
+                  ))}
+                </div>
+              </div>
+              <span className="text-[7px] font-mono text-white/30 tracking-[0.4em]">ISBN 978-AWAL-PORTFOLIO</span>
+           </div>
+
+           {/* Book Spine Edge effect on the right side of the back cover */}
+           <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-black/70 via-black/20 to-transparent pointer-events-none"></div>
+           <div className="absolute right-[6px] top-0 bottom-0 w-[1px] bg-white/10 pointer-events-none"></div>
+        </div>
+       );
+    }
+
+    // Interior Spread (Double Page)
+    return (
+      <div className="w-full h-full flex flex-col md:flex-row bg-[#f8f9fa] dark:bg-[#1a1b1e] rounded-[1rem] md:rounded-[1.5rem] overflow-hidden shadow-2xl relative text-zinc-800 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800">
+        
+        {/* Left Page */}
+        <div className="flex-1 h-1/2 md:h-full overflow-y-auto custom-scrollbar p-6 md:p-10 relative bg-gradient-to-r from-transparent to-black/5 dark:to-black/30 border-b border-b-black/10 md:border-b-0">
+          {renderInteriorSection(spread.left)}
+          <div className="hidden md:flex absolute bottom-4 left-8 right-8 items-center justify-between text-[9px] font-mono text-black/30 dark:text-white/30">
+            <span>{currentPage * 2 - 1}</span>
+            <span className="uppercase tracking-widest opacity-70 truncate max-w-[200px]">{selectedProject.title}</span>
+          </div>
+        </div>
+
+        {/* Center Crease (Visible only on Desktop) */}
+        <div className="hidden md:block w-[2px] h-full bg-black/10 dark:bg-black/60 relative z-20 shrink-0">
+          <div className="absolute top-0 bottom-0 left-1/2 -ml-8 w-16 bg-gradient-to-r from-transparent via-black/10 dark:via-black/50 to-transparent pointer-events-none"></div>
+          <div className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-black/10 dark:from-black/40 to-transparent pointer-events-none"></div>
+          <div className="absolute top-0 bottom-0 right-0 w-3 bg-gradient-to-l from-black/10 dark:from-black/40 to-transparent pointer-events-none"></div>
+        </div>
+
+        {/* Right Page */}
+        <div className="flex-1 h-1/2 md:h-full overflow-y-auto custom-scrollbar p-6 md:p-10 relative bg-gradient-to-l from-transparent to-black/5 dark:to-black/30">
+          {renderInteriorSection(spread.right)}
+          <div className="hidden md:flex absolute bottom-4 left-8 right-8 items-center justify-between text-[9px] font-mono text-black/30 dark:text-white/30">
+            <span className="uppercase tracking-widest opacity-70 truncate max-w-[200px]">{selectedProject.title}</span>
+            <span>{currentPage * 2}</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  if (!selectedProject) return null;
+
+  // Determine container width based on current spread type
+  const isSinglePage = spreads[currentPage]?.type === 'front-cover' || spreads[currentPage]?.type === 'back-cover';
+
   return (
     <AnimatePresence>
-      {selectedProject && (
+      <motion.div
+        initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+        animate={{ opacity: 1, backdropFilter: "blur(8px)" }}
+        exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+        transition={{ duration: 0.4 }}
+        className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md"
+        onClick={onClose}
+      >
+        {/* Main Book Container */}
         <motion.div
-          initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-          animate={{ opacity: 1, backdropFilter: "blur(8px)" }}
-          exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-          transition={{ duration: 0.4 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
-          onClick={onClose}
+          layout
+          initial={{ scale: 0.8, rotateX: 10, y: 50, opacity: 0 }}
+          animate={{ scale: 1, rotateX: 0, y: 0, opacity: 1 }}
+          exit={{ scale: 0.8, rotateX: -10, y: -50, opacity: 0 }}
+          transition={{ type: "spring", stiffness: 200, damping: 25 }}
+          className={cn(
+            "w-full h-[85vh] max-h-[850px] relative perspective-[2000px] flex items-center justify-center transition-all duration-500",
+            isSinglePage ? "max-w-[380px] md:max-w-[550px] aspect-[2/3] md:aspect-[1/1.4]" : "max-w-[380px] md:max-w-[1100px]"
+          )}
+          onClick={(e) => e.stopPropagation()}
         >
-          {/* Main Book Container */}
-          <motion.div
-            initial={{ scale: 0.8, rotateX: 10, y: 50, opacity: 0 }}
-            animate={{ scale: 1, rotateX: 0, y: 0, opacity: 1 }}
-            exit={{ scale: 0.8, rotateX: -10, y: -50, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 200, damping: 25 }}
-            className="w-full max-w-lg md:max-w-xl h-[85vh] max-h-[850px] relative perspective-[2000px] flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
+          {/* Close Button Top Right */}
+          <button
+            onClick={(e) => { e.stopPropagation(); onClose(); }}
+            className="absolute -top-12 right-0 md:-right-12 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/20 transition-colors z-50 shadow-lg"
           >
-            {/* Close Button Top Right */}
+            <X size={20} />
+          </button>
+
+          {/* Pagination Controls */}
+          {currentPage > 0 && (
             <button
-              onClick={(e) => { e.stopPropagation(); onClose(); }}
-              className="absolute -top-12 right-0 md:-right-12 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/20 transition-colors z-50 shadow-lg"
+              onClick={(e) => { e.stopPropagation(); paginate(-1); }}
+              className="absolute left-2 md:-left-16 top-1/2 -translate-y-1/2 p-3 md:p-4 rounded-full bg-neu-bg/90 shadow-neu-sm text-neu-text hover:text-neu-accent hover:scale-110 active:scale-95 transition-all z-50 border border-neu-text/10"
             >
-              <X size={20} />
+              <ChevronLeft size={24} />
             </button>
+          )}
+          
+          {currentPage < spreads.length - 1 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); paginate(1); }}
+              className="absolute right-2 md:-right-16 top-1/2 -translate-y-1/2 p-3 md:p-4 rounded-full bg-neu-bg/90 shadow-neu-sm text-neu-text hover:text-neu-accent hover:scale-110 active:scale-95 transition-all z-50 border border-neu-text/10"
+            >
+              <ChevronRight size={24} />
+            </button>
+          )}
 
-            {/* Pagination Controls */}
-            {currentPage > 0 && (
-              <button
-                onClick={(e) => { e.stopPropagation(); paginate(-1); }}
-                className="absolute left-4 md:-left-16 top-1/2 -translate-y-1/2 p-4 rounded-full bg-neu-bg/90 shadow-neu-sm text-neu-text hover:text-neu-accent hover:scale-110 active:scale-95 transition-all z-50 border border-neu-text/10"
-              >
-                <ChevronLeft size={24} />
-              </button>
-            )}
-            
-            {currentPage < pages.length - 1 && (
-              <button
-                onClick={(e) => { e.stopPropagation(); paginate(1); }}
-                className="absolute right-4 md:-right-16 top-1/2 -translate-y-1/2 p-4 rounded-full bg-neu-bg/90 shadow-neu-sm text-neu-text hover:text-neu-accent hover:scale-110 active:scale-95 transition-all z-50 border border-neu-text/10"
-              >
-                <ChevronRight size={24} />
-              </button>
-            )}
-
-            {/* The Book Page Container */}
-            <div className="w-full h-full relative preserve-3d shadow-2xl rounded-l-[1rem] rounded-r-[2rem] overflow-hidden bg-neu-bg border-r-8 border-r-neu-text/5 border-l border-l-neu-text/20">
-               {/* Book Binding/Spine visual effect */}
-               <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/20 to-transparent z-40 pointer-events-none border-r border-black/5"></div>
-               
-               <AnimatePresence mode="popLayout" custom={direction} initial={false}>
-                  <motion.div
-                    key={currentPage}
-                    custom={direction}
-                    variants={pageVariants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    style={{ transformOrigin: direction > 0 ? "left center" : "right center" }}
-                    className="absolute inset-0 w-full h-full bg-neu-bg"
-                  >
-                    {renderPageContent(pages[currentPage])}
-                  </motion.div>
-               </AnimatePresence>
-
-               {/* Page Number Indicator */}
-               <div className="absolute bottom-4 right-8 z-50 text-xs font-mono font-bold text-neu-text-muted">
-                 Page {currentPage + 1} of {pages.length}
-               </div>
-            </div>
-          </motion.div>
+          {/* The Book Container */}
+          <div className="w-full h-full relative preserve-3d">
+             <AnimatePresence mode="wait" custom={direction} initial={false}>
+                <motion.div
+                  key={currentPage}
+                  custom={direction}
+                  variants={pageVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  style={{ 
+                    transformOrigin: direction > 0 ? "left center" : "right center",
+                    willChange: "transform, opacity",
+                    backfaceVisibility: "hidden"
+                  }}
+                  className="absolute inset-0 w-full h-full"
+                >
+                  {renderSpreadContent(spreads[currentPage])}
+                </motion.div>
+             </AnimatePresence>
+          </div>
         </motion.div>
-      )}
+      </motion.div>
     </AnimatePresence>
   );
 }

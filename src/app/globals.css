@@ -13,7 +13,7 @@
   --shadow-neu: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
   --shadow-neu-inset: inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
   --shadow-neu-sm: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
-  --shadow-neu-modal: 16px 16px 32px rgb(17 45 78 / 12%), -16px -16px 32px #fff;
+  --shadow-neu-modal: 16px 16px 40px rgb(17 45 78 / 20%);
 }
 
 .dark {
@@ -25,7 +25,7 @@
   --shadow-neu: 8px 8px 16px rgb(0 0 0 / 60%), -8px -8px 16px rgb(255 255 255 / 5%);
   --shadow-neu-inset: inset 6px 6px 12px rgb(0 0 0 / 60%), inset -6px -6px 12px rgb(255 255 255 / 5%);
   --shadow-neu-sm: 4px 4px 8px rgb(0 0 0 / 50%), -4px -4px 8px rgb(255 255 255 / 5%);
-  --shadow-neu-modal: 16px 16px 32px rgb(0 0 0 / 70%), -16px -16px 32px rgb(255 255 255 / 3%);
+  --shadow-neu-modal: 16px 16px 40px rgb(0 0 0 / 80%);
 }
 
 @theme {
@@ -203,6 +203,20 @@ body *,
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
+}
+
+@keyframes rainbow-color {
+  0% { color: #ff0055; }
+  20% { color: #00adb5; }
+  40% { color: #ffd700; }
+  60% { color: #ff8c00; }
+  80% { color: #8a2be2; }
+  100% { color: #ff0055; }
+}
+
+.hover-colorful:hover,
+.group:hover .group-hover\:colorful {
+  animation: rainbow-color 2s linear infinite !important;
 }
 
 .animate-marquee {

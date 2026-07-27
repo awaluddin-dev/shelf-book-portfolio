@@ -16,33 +16,29 @@ import P5Background from "@/shared/ui/P5Background";
 import SkillTree from "@/entities/skill/ui/SkillTree";
 import { cn } from "@/shared/lib/utils";
 
+import { usePortfolioStore } from "@/shared/store/portfolioStore";
+import { useState } from "react";
+
 interface ProficiencySectionProps {
-  dynamicProficiency: any[];
-  activeRoadmap: any[];
-  activeCurrentFocus: boolean;
   renderIcon: (
     iconName: string,
     isSavings: boolean,
     customSize?: number,
   ) => React.ReactNode;
-  selectedRoadmapIndex: number | null;
-  setSelectedRoadmapIndex: (idx: number | null) => void;
   isDark: boolean;
-  activeProficiency: any[];
-  isLoading: boolean;
 }
 
 export default function ProficiencySection({
-  dynamicProficiency,
-  activeRoadmap,
-  activeCurrentFocus,
   renderIcon,
-  selectedRoadmapIndex,
-  setSelectedRoadmapIndex,
   isDark,
-  activeProficiency,
-  isLoading,
 }: Readonly<ProficiencySectionProps>) {
+  const { 
+    dynamicProficiency: activeProficiency, 
+    dynamicRoadmap: activeRoadmap, 
+    isLoading 
+  } = usePortfolioStore();
+
+  const [selectedRoadmapIndex, setSelectedRoadmapIndex] = useState<number | null>(0);
   return (
     <>
       {/* Combined Section 2: Stack, Learning, Philosophy & Career */}
