@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css"; // Global styles
 import { ThemeProvider } from "@/shared/ui/ThemeProvider";
 import { ButtonSprinkles } from "@/shared/ui/ButtonSprinkles";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -73,6 +74,7 @@ export default function RootLayout({
           {children}
           <ButtonSprinkles />
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
