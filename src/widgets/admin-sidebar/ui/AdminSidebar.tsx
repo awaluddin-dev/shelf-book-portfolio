@@ -19,6 +19,7 @@ export function AdminSidebar() {
     { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { path: '/admin/projects', icon: BookOpen, label: 'Projects' },
     { path: '/admin/architecture', icon: Layers, label: 'Architecture' },
+    { path: '/admin/technical-imagery', icon: Palette, label: 'Tech Imagery' },
     { path: '/admin/lifecycle', icon: Milestone, label: 'Lifecycle' },
     { path: '/admin/testimoni', icon: MessageSquare, label: 'Testimonials' },
     { path: '/admin/work', icon: Briefcase, label: 'Work Exp.' },

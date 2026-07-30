@@ -54,8 +54,15 @@ export default function HeroSection({
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.1 }}
-                  className="flex flex-col gap-y-6 md:gap-y-8 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-6 md:p-10 rounded-3xl shadow-neu border border-black/5 dark:border-white/5"
+                  className="flex flex-col gap-y-6 md:gap-y-8 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-6 md:p-10 rounded-3xl shadow-neu border border-black/5 dark:border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-4 after:h-4 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-3xl after:opacity-70"
                 >
+                  {/* Chip Pins */}
+                  <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 flex gap-8">
+                    <div className="w-1.5 h-1.5 rounded-full bg-neu-accent/50 shadow-[0_0_4px_rgba(0,255,135,0.5)]"></div>
+                    <div className="w-1.5 h-1.5 rounded-full bg-neu-accent/50 shadow-[0_0_4px_rgba(0,255,135,0.5)]"></div>
+                    <div className="w-1.5 h-1.5 rounded-full bg-neu-accent/50 shadow-[0_0_4px_rgba(0,255,135,0.5)]"></div>
+                  </div>
+
                   {/* Headline */}
                   <div className="relative w-fit">
                     {/* Spotlight Glow */}
@@ -160,7 +167,7 @@ export default function HeroSection({
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="flex flex-col gap-4 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-5 rounded-3xl shadow-neu border border-black/5 dark:border-white/5"
+                  className="flex flex-col gap-4 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-5 rounded-3xl shadow-neu border border-black/5 dark:border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-4 after:h-4 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-3xl after:opacity-70"
                 >
                   <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-neu-accent mb-1">
                     <Terminal size={14} /> Connection Terminal
@@ -311,7 +318,7 @@ export default function HeroSection({
               transition={{ delay: 0.22 }}
               className="w-full mt-10 md:mt-16"
             >
-              <div className="flex flex-col w-full bg-neu-bg p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl shadow-neu border border-white/5">
+              <div className="flex flex-col w-full bg-neu-bg p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl shadow-neu border border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-2xl sm:before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-4 after:h-4 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-2xl sm:after:rounded-br-3xl after:opacity-70">
                 <div
                   className={cn(
                     "grid gap-3 sm:gap-4 md:gap-5",
