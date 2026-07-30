@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Briefcase, LogOut, LayoutDashboard, MessageSquare, ChevronRight, ChevronLeft, Network, Rocket, Layers, Cpu, ArrowLeft, BookOpen, Palette, Milestone } from "lucide-react";
+import { Briefcase, LogOut, LayoutDashboard, MessageSquare, ChevronRight, ChevronLeft, Network, Rocket, Layers, Cpu, ArrowLeft, BookOpen, Palette, Milestone, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/shared/lib/utils';
 
 export function AdminSidebar() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const router = useRouter();
   const activePath = usePathname();
 
@@ -27,17 +28,40 @@ export function AdminSidebar() {
     { path: '/admin/learning', icon: Rocket, label: 'Learning' },
     { path: '/admin/current', icon: Layers, label: 'Right Now' },
     { path: '/admin/proficiency', icon: Cpu, label: 'Proficiency' },
-    { path: '/admin/experiences', icon: Briefcase, label: 'Experiences' },
   ];
 
   return (
-    <div className="p-6 h-screen py-[10vh] flex flex-col justify-start sticky top-0">
-      <motion.aside 
-        animate={{ width: isExpanded ? 240 : 64 }}
-        transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        className="relative h-full flex flex-col p-1.5 rounded-2xl overflow-hidden z-10"
+    <>
+      <button 
+        className="md:hidden fixed top-4 left-4 z-[100] p-3 glass-card rounded-xl shadow-neu text-neu-accent"
+        onClick={() => setIsMobileOpen(true)}
       >
-        <div className="flex-1 flex flex-col p-1 overflow-hidden">
+        <Menu size={24} />
+      </button>
+
+      {isMobileOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-[90] backdrop-blur-sm"
+          onClick={() => setIsMobileOpen(false)}
+        />
+      )}
+
+      <div className={cn(
+        "h-screen md:py-[10vh] flex flex-col justify-start fixed md:sticky top-0 z-[95] transition-transform duration-300",
+        isMobileOpen ? "translate-x-0 p-6 py-[10vh]" : "-translate-x-full md:translate-x-0 md:p-6"
+      )}>
+        <motion.aside 
+          animate={{ width: isExpanded ? 240 : 64 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+          className="relative h-full flex flex-col p-1.5 rounded-2xl overflow-hidden z-10 glass-card md:bg-transparent md:border-none md:shadow-none"
+        >
+          <div className="flex-1 flex flex-col p-1 overflow-hidden relative">
+            <button 
+              onClick={() => setIsMobileOpen(false)}
+              className="md:hidden absolute top-2 right-2 p-1 text-neu-text-muted hover:text-neu-accent z-20"
+            >
+              <X size={18} />
+            </button>
           <button 
             onClick={() => setIsExpanded(!isExpanded)}
             className="h-10 rounded-xl flex items-center gap-3 px-2 text-neu-text hover:bg-black/5 dark:hover:bg-white/5 transition-colors overflow-hidden whitespace-nowrap"
@@ -89,5 +113,6 @@ export function AdminSidebar() {
         </div>
       </motion.aside>
     </div>
+    </>
   );
 }
