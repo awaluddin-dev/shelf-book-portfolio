@@ -52,7 +52,7 @@ export default function AdminAuthenticatedLayout({
   return (
     <div className="min-h-screen bg-neu-bg flex text-neu-text">
       <AdminSidebar />
-      <main className="flex-1 p-8 overflow-y-auto relative">
+      <main className="flex-1 p-8 pt-20 md:pt-8 overflow-y-auto relative">
         {children}
       </main>
     </div>

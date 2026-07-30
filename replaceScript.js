@@ -1,120 +1,20 @@
-"use client";
+const fs = require('fs');
+let content = fs.readFileSync('./src/shared/ui/CircuitBoardBg.tsx', 'utf8');
 
-import { useEffect, useState } from "react";
-
-export function CircuitBoardBg() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
-
-
-  return (
-    <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[100vw] h-[100vh] pointer-events-none z-0 overflow-hidden">
-      {/* Circuit Board SVG Background Pattern - Centered, Mirrored, Circular */}
-      <svg 
-        className="absolute inset-0 w-full h-full opacity-40 text-neu-accent pointer-events-none" 
-        viewBox="-500 -500 1000 1000"
-        preserveAspectRatio="xMidYMid slice"
-        style={{
-          maskImage: "radial-gradient(circle at 50% 50%, black 10%, transparent 80%)",
-          WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 10%, transparent 80%)"
-        }}
-      >
-        <defs>
-          <g id="circuit-quadrant">
-            {/* Center Processor Chip (Quarter) */}
-            <rect x="0" y="0" width="80" height="80" fill="currentColor" fillOpacity="0.05" stroke="currentColor" strokeWidth="2" />
-            <rect x="0" y="0" width="70" height="70" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
-            <rect x="10" y="10" width="45" height="45" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            <circle cx="32.5" cy="32.5" r="15" fill="currentColor" fillOpacity="0.1" stroke="currentColor" strokeWidth="1" />
-            
-            {/* Chip pins */}
-            <path d="M 80,15 L 95,15 M 80,35 L 95,35 M 80,55 L 95,55 M 80,75 L 95,75" stroke="currentColor" strokeWidth="2" />
-            <path d="M 15,80 L 15,95 M 35,80 L 35,95 M 55,80 L 55,95 M 75,80 L 75,95" stroke="currentColor" strokeWidth="2" />
-
-            {/* Glowing / Thick Data Buses */}
-            <path d="M 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" fill="none" stroke="currentColor" strokeWidth="2.5" />
-            <path d="M 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" fill="none" stroke="currentColor" strokeWidth="2.5" />
-
-            {/* Static Traces with pulsing glow */}
+const transforms = [
+  // Q1
+  {
+    find: `{/* Fast Amber */}
+          <g>
             <g>
-              <animate attributeName="opacity" values="0.1;1;0.1" dur="4s" repeatCount="indefinite" />
-              {/* Standard Traces */}
-              <path d="M 95,35 L 130,35 L 180,85 L 280,85 L 330,135 L 500,135" fill="none" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M 95,55 L 110,55 L 160,105 L 250,105 L 300,155 L 450,155 L 500,205" fill="none" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" fill="none" stroke="currentColor" strokeWidth="2" />
-              
-              <path d="M 35,95 L 35,130 L 85,180 L 85,280 L 135,330 L 135,500" fill="none" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M 55,95 L 55,110 L 105,160 L 105,250 L 155,300 L 155,450 L 205,500" fill="none" stroke="currentColor" strokeWidth="2" />
-              <path d="M 75,95 L 75,105 L 110,140 L 110,220 L 160,270 L 160,350 L 210,400 L 210,500" fill="none" stroke="currentColor" strokeWidth="1.5" />
-
-              {/* Dense 45-degree corner memory bus */}
-              <path d="M 200,200 L 250,250 L 500,250" fill="none" stroke="currentColor" strokeWidth="2" strokeOpacity="0.9" />
-              <path d="M 190,210 L 240,260 L 500,260" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.7" />
-              <path d="M 180,220 L 230,270 L 500,270" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.7" />
-              <path d="M 170,230 L 220,280 L 500,280" fill="none" stroke="currentColor" strokeWidth="2.5" strokeOpacity="0.9" />
-              <path d="M 160,240 L 210,290 L 500,290" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.7" />
-              
-              <path d="M 200,200 L 250,150 L 250,0" fill="none" stroke="currentColor" strokeWidth="2" strokeOpacity="0.9" />
-              <path d="M 210,190 L 260,140 L 260,0" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.7" />
-              <path d="M 220,180 L 270,130 L 270,0" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.7" />
-              <path d="M 230,170 L 280,120 L 280,0" fill="none" stroke="currentColor" strokeWidth="2.5" strokeOpacity="0.9" />
-              <path d="M 240,160 L 290,110 L 290,0" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.7" />
+              <circle r="4" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1.5" fill="#fff" />
+              <animateMotion dur="16s" repeatCount="indefinite" rotate="auto" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
             </g>
-
-            {/* Vias (Nodes/Circles) */}
-            <circle cx="500" cy="115" r="4" fill="currentColor" />
-            <circle cx="115" cy="500" r="4" fill="currentColor" />
-            <circle cx="500" cy="155" r="3" fill="currentColor" />
-            <circle cx="155" cy="450" r="3" fill="currentColor" />
-            <circle cx="280" cy="85" r="2.5" fill="currentColor" />
-            <circle cx="85" cy="280" r="2.5" fill="currentColor" />
-            <circle cx="200" cy="200" r="4" fill="none" stroke="currentColor" strokeWidth="2" />
-            <circle cx="200" cy="200" r="1.5" fill="currentColor" />
-
-            {/* Component Blocks */}
-            <rect x="320" y="320" width="40" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            <rect x="325" y="325" width="30" height="10" fill="currentColor" fillOpacity="0.2" />
-            
-            <rect x="300" y="400" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1" />
-            <circle cx="307.5" cy="407.5" r="3" fill="currentColor" />
-
-            <path d="M 400,320 L 400,280 L 450,230 L 500,230" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
-          </g>
-        </defs>
-
-        {/* 4-Way Symmetrical Rendering */}
-        <use href="#circuit-quadrant" />
-        <use href="#circuit-quadrant" transform="scale(-1, 1)" />
-        <use href="#circuit-quadrant" transform="scale(1, -1)" />
-        <use href="#circuit-quadrant" transform="scale(-1, -1)" />
-        
-        {/* Fake Lightweight Aura Glow (No blur filter used = fast performance) */}
-        <rect x="-86" y="-86" width="172" height="172" fill="none" stroke="currentColor" strokeWidth="8">
-          <animate attributeName="stroke-opacity" values="0;0.25;0" dur="3s" repeatCount="indefinite" />
-        </rect>
-        
-        {/* Central glowing processor accent */}
-        <rect x="-80" y="-80" width="160" height="160" fill="currentColor" stroke="currentColor" strokeWidth="4">
-          <animate attributeName="stroke-opacity" values="0.2;1;0.2" dur="3s" repeatCount="indefinite" />
-          <animate attributeName="fill-opacity" values="0.02;0.25;0.02" dur="3s" repeatCount="indefinite" />
-        </rect>
-      </svg>
-      {/* Animated Data Nodes Overlay - 100% Opacity, No Vignette Mask */}
-      <svg
-        className="absolute inset-0 w-full h-full pointer-events-none"
-        viewBox="-500 -500 1000 1000"
-        preserveAspectRatio="xMidYMid slice"
-      >
-        {/* Quadrant 1: Top Right */}
-        <g>
-          {/* Fast Emerald */}
+            <g>
+              <text x="0" y="-9" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>{\`{JSON}\`}</text>`,
+    replace: `{/* Fast Emerald */}
           <g>
             <g>
               <circle r="4" fill="#10b981" fillOpacity="0.5">
@@ -128,14 +28,21 @@ export function CircuitBoardBg() {
             <g>
               <text x="0" y="-9" fill="#10b981" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #10b981" }}>
                 <animate attributeName="fill" values="#10b981; #10b981; #00FF87; #00FF87; #10b981; #10b981" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="16s" repeatCount="indefinite" />
-                {`{JSON}`}
-              </text>
-              <animateMotion dur="16s" repeatCount="indefinite" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
+                {\`{JSON}\`}
+              </text>`
+  },
+  {
+    find: `{/* Slow Cyan */}
+          <g>
+            <g>
+              <circle r="5" fill="#22d3ee" fillOpacity="0.5" />
+              <circle r="2" fill="#fff" />
+              <animateMotion dur="22s" repeatCount="indefinite" rotate="auto" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
             </g>
-          </g>
-          
-          {/* Slow Rose */}
+            <g>
+              <text x="0" y="-10" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>[TENSOR]</text>`,
+    replace: `{/* Slow Cyan */}
           <g>
             <g>
               <circle r="5" fill="#22d3ee" fillOpacity="0.5">
@@ -150,13 +57,20 @@ export function CircuitBoardBg() {
               <text x="0" y="-10" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>
                 <animate attributeName="fill" values="#22d3ee; #22d3ee; #00FF87; #00FF87; #22d3ee; #22d3ee" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="22s" repeatCount="indefinite" />
                 [TENSOR]
-              </text>
-              <animateMotion dur="22s" repeatCount="indefinite" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite" />
+              </text>`
+  },
+  {
+    find: `{/* Medium Amber */}
+          <g>
+            <g>
+              <circle r="3" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1" fill="#fff" />
+              <animateMotion dur="18s" repeatCount="indefinite" rotate="auto" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
             </g>
-          </g>
-
-          {/* Medium Purple */}
+            <g>
+              <text x="0" y="-7" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 2px #fbbf24" }}>gRPC</text>`,
+    replace: `{/* Medium Amber */}
           <g>
             <g>
               <circle r="3" fill="#fbbf24" fillOpacity="0.5">
@@ -168,19 +82,25 @@ export function CircuitBoardBg() {
               <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
             </g>
             <g>
-              <text x="0" y="-7" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>
+              <text x="0" y="-7" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 2px #fbbf24" }}>
                 <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="18s" repeatCount="indefinite" />
                 gRPC
-              </text>
-              <animateMotion dur="18s" repeatCount="indefinite" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
-              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="2s" repeatCount="indefinite" />
+              </text>`
+  },
+  
+  // Q2
+  {
+    find: `{/* Fast Amber */}
+          <g>
+            <g>
+              <circle r="4" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1.5" fill="#fff" />
+              <animateMotion dur="17s" repeatCount="indefinite" rotate="auto" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
             </g>
-          </g>
-        </g>
-
-        {/* Quadrant 2: Top Left */}
-        <g transform="scale(-1, 1)">
-          {/* Fast Amber */}
+            <g>
+              <text transform="scale(-1, 1)" x="0" y="-9" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>REST</text>`,
+    replace: `{/* Fast Amber */}
           <g>
             <g>
               <circle r="4" fill="#fbbf24" fillOpacity="0.5">
@@ -195,13 +115,20 @@ export function CircuitBoardBg() {
               <text transform="scale(-1, 1)" x="0" y="-9" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>
                 <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="17s" repeatCount="indefinite" />
                 REST
-              </text>
-              <animateMotion dur="17s" repeatCount="indefinite" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
+              </text>`
+  },
+  {
+    find: `{/* Slow Cyan */}
+          <g>
+            <g>
+              <circle r="5" fill="#22d3ee" fillOpacity="0.5" />
+              <circle r="2" fill="#fff" />
+              <animateMotion dur="23s" repeatCount="indefinite" rotate="auto" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
             </g>
-          </g>
-          
-          {/* Slow Cyan */}
+            <g>
+              <text transform="scale(-1, 1)" x="0" y="-10" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>GraphQL</text>`,
+    replace: `{/* Slow Cyan */}
           <g>
             <g>
               <circle r="5" fill="#22d3ee" fillOpacity="0.5">
@@ -216,13 +143,20 @@ export function CircuitBoardBg() {
               <text transform="scale(-1, 1)" x="0" y="-10" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>
                 <animate attributeName="fill" values="#22d3ee; #22d3ee; #00FF87; #00FF87; #22d3ee; #22d3ee" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="23s" repeatCount="indefinite" />
                 GraphQL
-              </text>
-              <animateMotion dur="23s" repeatCount="indefinite" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite" />
+              </text>`
+  },
+  {
+    find: `{/* Medium Amber */}
+          <g>
+            <g>
+              <circle r="3" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1" fill="#fff" />
+              <animateMotion dur="19s" repeatCount="indefinite" rotate="auto" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
             </g>
-          </g>
-
-          {/* Medium Amber */}
+            <g>
+              <text transform="scale(-1, 1)" x="0" y="-7" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 2px #fbbf24" }}>Kafka</text>`,
+    replace: `{/* Medium Purple */}
           <g>
             <g>
               <circle r="3" fill="#8b5cf6" fillOpacity="0.5">
@@ -234,19 +168,25 @@ export function CircuitBoardBg() {
               <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
             </g>
             <g>
-              <text transform="scale(-1, 1)" x="0" y="-7" fill="#8b5cf6" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #8b5cf6" }}>
+              <text transform="scale(-1, 1)" x="0" y="-7" fill="#8b5cf6" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 2px #8b5cf6" }}>
                 <animate attributeName="fill" values="#8b5cf6; #8b5cf6; #00FF87; #00FF87; #8b5cf6; #8b5cf6" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="19s" repeatCount="indefinite" />
                 Kafka
-              </text>
-              <animateMotion dur="19s" repeatCount="indefinite" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
-              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="2s" repeatCount="indefinite" />
-            </g>
-          </g>
-        </g>
+              </text>`
+  },
 
-        {/* Quadrant 3: Bottom Right */}
-        <g transform="scale(1, -1)">
-          {/* Fast Amber */}
+  // Q3
+  {
+    find: `{/* Fast Amber */}
+          <g>
+            <g>
+              <circle r="4" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1.5" fill="#fff" />
+              <animateMotion dur="15s" repeatCount="indefinite" rotate="auto" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text transform="scale(1, -1)" x="0" y="15" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>Redis</text>`,
+    replace: `{/* Fast Amber */}
           <g>
             <g>
               <circle r="4" fill="#fbbf24" fillOpacity="0.5">
@@ -261,13 +201,20 @@ export function CircuitBoardBg() {
               <text transform="scale(1, -1)" x="0" y="15" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>
                 <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="15s" repeatCount="indefinite" />
                 Redis
-              </text>
-              <animateMotion dur="15s" repeatCount="indefinite" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
+              </text>`
+  },
+  {
+    find: `{/* Slow Cyan */}
+          <g>
+            <g>
+              <circle r="5" fill="#22d3ee" fillOpacity="0.5" />
+              <circle r="2" fill="#fff" />
+              <animateMotion dur="21s" repeatCount="indefinite" rotate="auto" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
             </g>
-          </g>
-          
-          {/* Slow Cyan */}
+            <g>
+              <text transform="scale(1, -1)" x="0" y="15" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>Docker</text>`,
+    replace: `{/* Slow Rose */}
           <g>
             <g>
               <circle r="5" fill="#f43f5e" fillOpacity="0.5">
@@ -282,13 +229,20 @@ export function CircuitBoardBg() {
               <text transform="scale(1, -1)" x="0" y="15" fill="#f43f5e" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #f43f5e" }}>
                 <animate attributeName="fill" values="#f43f5e; #f43f5e; #00FF87; #00FF87; #f43f5e; #f43f5e" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="21s" repeatCount="indefinite" />
                 Docker
-              </text>
-              <animateMotion dur="21s" repeatCount="indefinite" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite" />
+              </text>`
+  },
+  {
+    find: `{/* Medium Amber */}
+          <g>
+            <g>
+              <circle r="3" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1" fill="#fff" />
+              <animateMotion dur="17s" repeatCount="indefinite" rotate="auto" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
             </g>
-          </g>
-
-          {/* Medium Amber */}
+            <g>
+              <text transform="scale(1, -1)" x="0" y="12" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 2px #fbbf24" }}>SQL</text>`,
+    replace: `{/* Medium Amber */}
           <g>
             <g>
               <circle r="3" fill="#fbbf24" fillOpacity="0.5">
@@ -300,19 +254,25 @@ export function CircuitBoardBg() {
               <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
             </g>
             <g>
-              <text transform="scale(1, -1)" x="0" y="12" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>
+              <text transform="scale(1, -1)" x="0" y="12" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 2px #fbbf24" }}>
                 <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="17s" repeatCount="indefinite" />
                 SQL
-              </text>
-              <animateMotion dur="17s" repeatCount="indefinite" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
-              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="2s" repeatCount="indefinite" />
-            </g>
-          </g>
-        </g>
+              </text>`
+  },
 
-        {/* Quadrant 4: Bottom Left */}
-        <g transform="scale(-1, -1)">
-          {/* Fast Amber */}
+  // Q4
+  {
+    find: `{/* Fast Amber */}
+          <g>
+            <g>
+              <circle r="4" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1.5" fill="#fff" />
+              <animateMotion dur="16.5s" repeatCount="indefinite" rotate="auto" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <text transform="scale(-1, -1)" x="0" y="15" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>OAuth</text>`,
+    replace: `{/* Fast Amber */}
           <g>
             <g>
               <circle r="4" fill="#fbbf24" fillOpacity="0.5">
@@ -327,13 +287,20 @@ export function CircuitBoardBg() {
               <text transform="scale(-1, -1)" x="0" y="15" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>
                 <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="16.5s" repeatCount="indefinite" />
                 OAuth
-              </text>
-              <animateMotion dur="16.5s" repeatCount="indefinite" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
+              </text>`
+  },
+  {
+    find: `{/* Slow Cyan */}
+          <g>
+            <g>
+              <circle r="5" fill="#22d3ee" fillOpacity="0.5" />
+              <circle r="2" fill="#fff" />
+              <animateMotion dur="22.5s" repeatCount="indefinite" rotate="auto" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
             </g>
-          </g>
-          
-          {/* Slow Cyan */}
+            <g>
+              <text transform="scale(-1, -1)" x="0" y="15" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>CUDA</text>`,
+    replace: `{/* Slow Cyan */}
           <g>
             <g>
               <circle r="5" fill="#22d3ee" fillOpacity="0.5">
@@ -348,13 +315,20 @@ export function CircuitBoardBg() {
               <text transform="scale(-1, -1)" x="0" y="15" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>
                 <animate attributeName="fill" values="#22d3ee; #22d3ee; #00FF87; #00FF87; #22d3ee; #22d3ee" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="22.5s" repeatCount="indefinite" />
                 CUDA
-              </text>
-              <animateMotion dur="22.5s" repeatCount="indefinite" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite" />
+              </text>`
+  },
+  {
+    find: `{/* Medium Amber */}
+          <g>
+            <g>
+              <circle r="3" fill="#fbbf24" fillOpacity="0.5" />
+              <circle r="1" fill="#fff" />
+              <animateMotion dur="18.5s" repeatCount="indefinite" rotate="auto" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
             </g>
-          </g>
-
-          {/* Medium Amber */}
+            <g>
+              <text transform="scale(-1, -1)" x="0" y="12" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 2px #fbbf24" }}>Python</text>`,
+    replace: `{/* Medium Amber */}
           <g>
             <g>
               <circle r="3" fill="#fbbf24" fillOpacity="0.5">
@@ -366,16 +340,22 @@ export function CircuitBoardBg() {
               <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
             </g>
             <g>
-              <text transform="scale(-1, -1)" x="0" y="12" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>
+              <text transform="scale(-1, -1)" x="0" y="12" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 2px #fbbf24" }}>
                 <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="18.5s" repeatCount="indefinite" />
                 Python
-              </text>
-              <animateMotion dur="18.5s" repeatCount="indefinite" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
-              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="2s" repeatCount="indefinite" />
-            </g>
-          </g>
-        </g>
-      </svg>
-    </div>
-  );
+              </text>`
+  }
+];
+
+let replaced = 0;
+for (const t of transforms) {
+  if (content.includes(t.find)) {
+    content = content.replace(t.find, t.replace);
+    replaced++;
+  } else {
+    console.error('Could not find chunk:', t.find.split('\n')[0]);
+  }
 }
+
+fs.writeFileSync('./src/shared/ui/CircuitBoardBg.tsx', content);
+console.log(`Replaced ${replaced} out of ${transforms.length}`);
