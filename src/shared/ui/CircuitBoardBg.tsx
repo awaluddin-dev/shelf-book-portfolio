@@ -1,18 +1,119 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+
+const COLORS = ['#10b981', '#22d3ee', '#fbbf24', '#f43f5e', '#8b5cf6', '#00FF87'];
+
+function MovingNode({ path, duration, initialColor, label, textY, scale, circleR = 4 }: any) {
+  const [color, setColor] = useState(initialColor);
+  const animRef = useRef<SVGAnimateMotionElement>(null);
+
+  useEffect(() => {
+    const el = animRef.current;
+    if (!el) return;
+    const handleRepeat = () => {
+      const nextColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+      setColor(nextColor);
+    };
+    el.addEventListener('repeatEvent', handleRepeat);
+    return () => el.removeEventListener('repeatEvent', handleRepeat);
+  }, []);
+
+  return (
+    <g 
+      style={{ '--node-color': color } as React.CSSProperties}
+      transform={scale ? `scale(${scale[0]}, ${scale[1]})` : undefined}
+    >
+      <g className="circuit-moving-node">
+        <circle r={circleR} fill="var(--node-color)" fillOpacity="0.5">
+          <animate attributeName="r" values={`${circleR}; ${circleR}; ${circleR * 1.5}; ${circleR * 1.5}; ${circleR}; ${circleR}`} keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur={duration} repeatCount="indefinite" />
+        </circle>
+        <circle r={circleR * 0.4} fill="#fff" />
+        <animateMotion ref={animRef} dur={duration} repeatCount="indefinite" rotate="auto" path={path} />
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
+      </g>
+      <g>
+        <text 
+          x="0" 
+          y={textY > 0 ? -textY + 5 : textY} 
+          transform={scale ? `scale(${scale[0]}, ${scale[1]})` : undefined}
+          fill="var(--node-color)" 
+          fontSize={Math.max(6, circleR * 1.5)} 
+          fontFamily="monospace" 
+          fontWeight="bold" 
+          textAnchor="middle" 
+          style={{ textShadow: "0 0 3px var(--node-color)" }}
+        >
+          {label}
+        </text>
+        <animateMotion dur={duration} repeatCount="indefinite" path={path} />
+        <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
+      </g>
+    </g>
+  );
+}
 
 export function CircuitBoardBg() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
+  // Collision detection loop
+  useEffect(() => {
+    if (!mounted) return;
+    
+    let rafId: number;
+    const checkCollisions = () => {
+      const nodes = document.querySelectorAll('.circuit-moving-node');
+      const cards = document.querySelectorAll('[data-collision-target="true"]') as NodeListOf<HTMLElement>;
+      
+      if (nodes.length > 0 && cards.length > 0) {
+        const activeColors = new Map<HTMLElement, string>();
+
+        nodes.forEach(node => {
+          const rect = node.getBoundingClientRect();
+          // Find color from parent scope
+          const parentG = node.parentElement;
+          if (!parentG) return;
+          const color = parentG.style.getPropertyValue('--node-color');
+          if (!color) return;
+
+          cards.forEach(card => {
+            const cardRect = card.getBoundingClientRect();
+            // Check intersection
+            if (
+              rect.right > cardRect.left &&
+              rect.left < cardRect.right &&
+              rect.bottom > cardRect.top &&
+              rect.top < cardRect.bottom
+            ) {
+              activeColors.set(card, color);
+            }
+          });
+        });
+
+        cards.forEach(card => {
+          const color = activeColors.get(card);
+          if (color) {
+            card.style.borderColor = color;
+            card.style.boxShadow = `0 0 30px ${color}40, inset 0 0 20px ${color}10`;
+          } else {
+            card.style.borderColor = '';
+            card.style.boxShadow = '';
+          }
+        });
+      }
+
+      rafId = requestAnimationFrame(checkCollisions);
+    };
+
+    rafId = requestAnimationFrame(checkCollisions);
+    return () => cancelAnimationFrame(rafId);
+  }, [mounted]);
+
   if (!mounted) return null;
-
-
 
   return (
     <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[100vw] h-[100vh] pointer-events-none z-0 overflow-hidden">
@@ -106,6 +207,7 @@ export function CircuitBoardBg() {
           <animate attributeName="fill-opacity" values="0.02;0.25;0.02" dur="3s" repeatCount="indefinite" />
         </rect>
       </svg>
+      
       {/* Animated Data Nodes Overlay - 100% Opacity, No Vignette Mask */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none"
@@ -113,268 +215,60 @@ export function CircuitBoardBg() {
         preserveAspectRatio="xMidYMid slice"
       >
         {/* Quadrant 1: Top Right */}
-        <g>
-          {/* Fast Emerald */}
-          <g>
-            <g>
-              <circle r="4" fill="#10b981" fillOpacity="0.5">
-                <animate attributeName="fill" values="#10b981; #10b981; #00FF87; #00FF87; #10b981; #10b981" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="16s" repeatCount="indefinite" />
-                <animate attributeName="r" values="4; 4; 6; 6; 4; 4" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="16s" repeatCount="indefinite" />
-              </circle>
-              <circle r="1.5" fill="#fff" />
-              <animateMotion dur="16s" repeatCount="indefinite" rotate="auto" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
-              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
-            </g>
-            <g>
-              <text x="0" y="-9" fill="#10b981" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #10b981" }}>
-                <animate attributeName="fill" values="#10b981; #10b981; #00FF87; #00FF87; #10b981; #10b981" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="16s" repeatCount="indefinite" />
-                {`{JSON}`}
-              </text>
-              <animateMotion dur="16s" repeatCount="indefinite" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
-            </g>
-          </g>
-          
-          {/* Slow Rose */}
-          <g>
-            <g>
-              <circle r="5" fill="#22d3ee" fillOpacity="0.5">
-                <animate attributeName="fill" values="#22d3ee; #22d3ee; #00FF87; #00FF87; #22d3ee; #22d3ee" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="22s" repeatCount="indefinite" />
-                <animate attributeName="r" values="5; 5; 7.5; 7.5; 5; 5" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="22s" repeatCount="indefinite" />
-              </circle>
-              <circle r="2" fill="#fff" />
-              <animateMotion dur="22s" repeatCount="indefinite" rotate="auto" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
-              <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
-            </g>
-            <g>
-              <text x="0" y="-10" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>
-                <animate attributeName="fill" values="#22d3ee; #22d3ee; #00FF87; #00FF87; #22d3ee; #22d3ee" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="22s" repeatCount="indefinite" />
-                [TENSOR]
-              </text>
-              <animateMotion dur="22s" repeatCount="indefinite" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite" />
-            </g>
-          </g>
-
-          {/* Medium Purple */}
-          <g>
-            <g>
-              <circle r="3" fill="#fbbf24" fillOpacity="0.5">
-                <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="18s" repeatCount="indefinite" />
-                <animate attributeName="r" values="3; 3; 4.5; 4.5; 3; 3" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="18s" repeatCount="indefinite" />
-              </circle>
-              <circle r="1" fill="#fff" />
-              <animateMotion dur="18s" repeatCount="indefinite" rotate="auto" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
-              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
-            </g>
-            <g>
-              <text x="0" y="-7" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>
-                <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="18s" repeatCount="indefinite" />
-                gRPC
-              </text>
-              <animateMotion dur="18s" repeatCount="indefinite" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
-              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="2s" repeatCount="indefinite" />
-            </g>
-          </g>
-        </g>
+        <MovingNode 
+          label="{JSON}" textY="-9" initialColor="#10b981" duration="16s" circleR={4}
+          path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115"
+        />
+        <MovingNode 
+          label="[TENSOR]" textY="-10" initialColor="#22d3ee" duration="22s" circleR={5}
+          path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500"
+        />
+        <MovingNode 
+          label="gRPC" textY="-7" initialColor="#fbbf24" duration="18s" circleR={3}
+          path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210"
+        />
 
         {/* Quadrant 2: Top Left */}
-        <g transform="scale(-1, 1)">
-          {/* Fast Amber */}
-          <g>
-            <g>
-              <circle r="4" fill="#fbbf24" fillOpacity="0.5">
-                <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="17s" repeatCount="indefinite" />
-                <animate attributeName="r" values="4; 4; 6; 6; 4; 4" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="17s" repeatCount="indefinite" />
-              </circle>
-              <circle r="1.5" fill="#fff" />
-              <animateMotion dur="17s" repeatCount="indefinite" rotate="auto" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
-              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
-            </g>
-            <g>
-              <text transform="scale(-1, 1)" x="0" y="-9" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>
-                <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="17s" repeatCount="indefinite" />
-                REST
-              </text>
-              <animateMotion dur="17s" repeatCount="indefinite" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
-            </g>
-          </g>
-          
-          {/* Slow Cyan */}
-          <g>
-            <g>
-              <circle r="5" fill="#22d3ee" fillOpacity="0.5">
-                <animate attributeName="fill" values="#22d3ee; #22d3ee; #00FF87; #00FF87; #22d3ee; #22d3ee" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="23s" repeatCount="indefinite" />
-                <animate attributeName="r" values="5; 5; 7.5; 7.5; 5; 5" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="23s" repeatCount="indefinite" />
-              </circle>
-              <circle r="2" fill="#fff" />
-              <animateMotion dur="23s" repeatCount="indefinite" rotate="auto" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
-              <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
-            </g>
-            <g>
-              <text transform="scale(-1, 1)" x="0" y="-10" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>
-                <animate attributeName="fill" values="#22d3ee; #22d3ee; #00FF87; #00FF87; #22d3ee; #22d3ee" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="23s" repeatCount="indefinite" />
-                GraphQL
-              </text>
-              <animateMotion dur="23s" repeatCount="indefinite" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite" />
-            </g>
-          </g>
-
-          {/* Medium Amber */}
-          <g>
-            <g>
-              <circle r="3" fill="#8b5cf6" fillOpacity="0.5">
-                <animate attributeName="fill" values="#8b5cf6; #8b5cf6; #00FF87; #00FF87; #8b5cf6; #8b5cf6" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="19s" repeatCount="indefinite" />
-                <animate attributeName="r" values="3; 3; 4.5; 4.5; 3; 3" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="19s" repeatCount="indefinite" />
-              </circle>
-              <circle r="1" fill="#fff" />
-              <animateMotion dur="19s" repeatCount="indefinite" rotate="auto" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
-              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
-            </g>
-            <g>
-              <text transform="scale(-1, 1)" x="0" y="-7" fill="#8b5cf6" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #8b5cf6" }}>
-                <animate attributeName="fill" values="#8b5cf6; #8b5cf6; #00FF87; #00FF87; #8b5cf6; #8b5cf6" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="19s" repeatCount="indefinite" />
-                Kafka
-              </text>
-              <animateMotion dur="19s" repeatCount="indefinite" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
-              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="2s" repeatCount="indefinite" />
-            </g>
-          </g>
-        </g>
+        <MovingNode 
+          label="REST" textY="-9" initialColor="#fbbf24" duration="17s" circleR={4} scale={[-1, 1]}
+          path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115"
+        />
+        <MovingNode 
+          label="GraphQL" textY="-10" initialColor="#22d3ee" duration="23s" circleR={5} scale={[-1, 1]}
+          path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500"
+        />
+        <MovingNode 
+          label="Kafka" textY="-7" initialColor="#8b5cf6" duration="19s" circleR={3} scale={[-1, 1]}
+          path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210"
+        />
 
         {/* Quadrant 3: Bottom Right */}
-        <g transform="scale(1, -1)">
-          {/* Fast Amber */}
-          <g>
-            <g>
-              <circle r="4" fill="#fbbf24" fillOpacity="0.5">
-                <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="15s" repeatCount="indefinite" />
-                <animate attributeName="r" values="4; 4; 6; 6; 4; 4" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="15s" repeatCount="indefinite" />
-              </circle>
-              <circle r="1.5" fill="#fff" />
-              <animateMotion dur="15s" repeatCount="indefinite" rotate="auto" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
-              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
-            </g>
-            <g>
-              <text transform="scale(1, -1)" x="0" y="15" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>
-                <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="15s" repeatCount="indefinite" />
-                Redis
-              </text>
-              <animateMotion dur="15s" repeatCount="indefinite" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
-            </g>
-          </g>
-          
-          {/* Slow Cyan */}
-          <g>
-            <g>
-              <circle r="5" fill="#f43f5e" fillOpacity="0.5">
-                <animate attributeName="fill" values="#f43f5e; #f43f5e; #00FF87; #00FF87; #f43f5e; #f43f5e" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="21s" repeatCount="indefinite" />
-                <animate attributeName="r" values="5; 5; 7.5; 7.5; 5; 5" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="21s" repeatCount="indefinite" />
-              </circle>
-              <circle r="2" fill="#fff" />
-              <animateMotion dur="21s" repeatCount="indefinite" rotate="auto" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
-              <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
-            </g>
-            <g>
-              <text transform="scale(1, -1)" x="0" y="15" fill="#f43f5e" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #f43f5e" }}>
-                <animate attributeName="fill" values="#f43f5e; #f43f5e; #00FF87; #00FF87; #f43f5e; #f43f5e" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="21s" repeatCount="indefinite" />
-                Docker
-              </text>
-              <animateMotion dur="21s" repeatCount="indefinite" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite" />
-            </g>
-          </g>
-
-          {/* Medium Amber */}
-          <g>
-            <g>
-              <circle r="3" fill="#fbbf24" fillOpacity="0.5">
-                <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="17s" repeatCount="indefinite" />
-                <animate attributeName="r" values="3; 3; 4.5; 4.5; 3; 3" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="17s" repeatCount="indefinite" />
-              </circle>
-              <circle r="1" fill="#fff" />
-              <animateMotion dur="17s" repeatCount="indefinite" rotate="auto" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
-              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
-            </g>
-            <g>
-              <text transform="scale(1, -1)" x="0" y="12" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>
-                <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="17s" repeatCount="indefinite" />
-                SQL
-              </text>
-              <animateMotion dur="17s" repeatCount="indefinite" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
-              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="2s" repeatCount="indefinite" />
-            </g>
-          </g>
-        </g>
+        <MovingNode 
+          label="Redis" textY="15" initialColor="#fbbf24" duration="15s" circleR={4} scale={[1, -1]}
+          path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115"
+        />
+        <MovingNode 
+          label="Docker" textY="15" initialColor="#f43f5e" duration="21s" circleR={5} scale={[1, -1]}
+          path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500"
+        />
+        <MovingNode 
+          label="SQL" textY="12" initialColor="#fbbf24" duration="17s" circleR={3} scale={[1, -1]}
+          path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210"
+        />
 
         {/* Quadrant 4: Bottom Left */}
-        <g transform="scale(-1, -1)">
-          {/* Fast Amber */}
-          <g>
-            <g>
-              <circle r="4" fill="#fbbf24" fillOpacity="0.5">
-                <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="16.5s" repeatCount="indefinite" />
-                <animate attributeName="r" values="4; 4; 6; 6; 4; 4" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="16.5s" repeatCount="indefinite" />
-              </circle>
-              <circle r="1.5" fill="#fff" />
-              <animateMotion dur="16.5s" repeatCount="indefinite" rotate="auto" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
-              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
-            </g>
-            <g>
-              <text transform="scale(-1, -1)" x="0" y="15" fill="#fbbf24" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>
-                <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="16.5s" repeatCount="indefinite" />
-                OAuth
-              </text>
-              <animateMotion dur="16.5s" repeatCount="indefinite" path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
-            </g>
-          </g>
-          
-          {/* Slow Cyan */}
-          <g>
-            <g>
-              <circle r="5" fill="#22d3ee" fillOpacity="0.5">
-                <animate attributeName="fill" values="#22d3ee; #22d3ee; #00FF87; #00FF87; #22d3ee; #22d3ee" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="22.5s" repeatCount="indefinite" />
-                <animate attributeName="r" values="5; 5; 7.5; 7.5; 5; 5" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="22.5s" repeatCount="indefinite" />
-              </circle>
-              <circle r="2" fill="#fff" />
-              <animateMotion dur="22.5s" repeatCount="indefinite" rotate="auto" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
-              <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
-            </g>
-            <g>
-              <text transform="scale(-1, -1)" x="0" y="15" fill="#22d3ee" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #22d3ee" }}>
-                <animate attributeName="fill" values="#22d3ee; #22d3ee; #00FF87; #00FF87; #22d3ee; #22d3ee" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="22.5s" repeatCount="indefinite" />
-                CUDA
-              </text>
-              <animateMotion dur="22.5s" repeatCount="indefinite" path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500" />
-              <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite" />
-            </g>
-          </g>
-
-          {/* Medium Amber */}
-          <g>
-            <g>
-              <circle r="3" fill="#fbbf24" fillOpacity="0.5">
-                <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="18.5s" repeatCount="indefinite" />
-                <animate attributeName="r" values="3; 3; 4.5; 4.5; 3; 3" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="18.5s" repeatCount="indefinite" />
-              </circle>
-              <circle r="1" fill="#fff" />
-              <animateMotion dur="18.5s" repeatCount="indefinite" rotate="auto" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
-              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
-            </g>
-            <g>
-              <text transform="scale(-1, -1)" x="0" y="12" fill="#fbbf24" fontSize="6" fontFamily="monospace" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0 0 3px #fbbf24" }}>
-                <animate attributeName="fill" values="#fbbf24; #fbbf24; #00FF87; #00FF87; #fbbf24; #fbbf24" keyTimes="0; 0.35; 0.45; 0.55; 0.65; 1" dur="18.5s" repeatCount="indefinite" />
-                Python
-              </text>
-              <animateMotion dur="18.5s" repeatCount="indefinite" path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210" />
-              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="2s" repeatCount="indefinite" />
-            </g>
-          </g>
-        </g>
+        <MovingNode 
+          label="OAuth" textY="15" initialColor="#fbbf24" duration="16.5s" circleR={4} scale={[-1, -1]}
+          path="M 500,115 L 400,115 L 350,65 L 200,65 L 150,15 L 95,15 L 150,15 L 200,65 L 350,65 L 400,115 L 500,115"
+        />
+        <MovingNode 
+          label="CUDA" textY="15" initialColor="#22d3ee" duration="22.5s" circleR={5} scale={[-1, -1]}
+          path="M 115,500 L 115,400 L 65,350 L 65,200 L 15,150 L 15,95 L 15,150 L 65,200 L 65,350 L 115,400 L 115,500"
+        />
+        <MovingNode 
+          label="Python" textY="12" initialColor="#fbbf24" duration="18.5s" circleR={3} scale={[-1, -1]}
+          path="M 500,210 L 400,210 L 350,160 L 270,160 L 220,110 L 140,110 L 105,75 L 95,75 L 105,75 L 140,110 L 220,110 L 270,160 L 350,160 L 400,210 L 500,210"
+        />
       </svg>
     </div>
   );

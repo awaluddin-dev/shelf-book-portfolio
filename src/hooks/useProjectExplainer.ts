@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from "react";
 
 export interface ProjectPayload {
   id: string;
@@ -9,11 +9,13 @@ export interface ProjectPayload {
   role?: string;
 }
 
-type Status = 'idle' | 'loading' | 'streaming' | 'done' | 'error';
+type Status = "idle" | "loading" | "streaming" | "done" | "error";
+
+const explanationCache = new Map<string, string>();
 
 export function useProjectExplainer() {
-  const [text, setText] = useState('');
-  const [status, setStatus] = useState<Status>('idle');
+  const [text, setText] = useState("");
+  const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -23,16 +25,23 @@ export function useProjectExplainer() {
     const controller = new AbortController();
     abortRef.current = controller;
 
-    setText('');
+    setText("");
     setError(null);
-    setStatus('loading');
+
+    if (explanationCache.has(project.id)) {
+      setText(explanationCache.get(project.id)!);
+      setStatus("done");
+      return;
+    }
+
+    setStatus("loading");
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/ai/explain-project`,
+        `${process.env.NEXT_PUBLIC_API_URL}/ai/explain-project`,
         {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(project),
           signal: controller.signal,
         },
@@ -43,14 +52,15 @@ export function useProjectExplainer() {
       }
 
       if (!res.body) {
-        throw new Error('No response body received');
+        throw new Error("No response body received");
       }
 
-      setStatus('streaming');
+      setStatus("streaming");
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
-      let buffer = '';
+      let buffer = "";
+      let fullText = "";
 
       while (true) {
         const { done, value } = await reader.read();
@@ -59,20 +69,21 @@ export function useProjectExplainer() {
         buffer += decoder.decode(value, { stream: true });
 
         // Process complete SSE lines from buffer
-        const lines = buffer.split('\n');
-        buffer = lines.pop() ?? ''; // keep incomplete last line in buffer
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? ""; // keep incomplete last line in buffer
 
         for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
+          if (!line.startsWith("data: ")) continue;
 
           const data = line.slice(6).trim();
 
-          if (data === '[DONE]') {
-            setStatus('done');
+          if (data === "[DONE]") {
+            setStatus("done");
+            explanationCache.set(project.id, fullText);
             return;
           }
 
-          if (data.startsWith('[ERROR]')) {
+          if (data.startsWith("[ERROR]")) {
             throw new Error(data.slice(7).trim());
           }
 
@@ -80,6 +91,7 @@ export function useProjectExplainer() {
             const parsed = JSON.parse(data);
             const delta = parsed?.choices?.[0]?.delta?.content;
             if (delta) {
+              fullText += delta;
               setText((prev) => prev + delta);
             }
           } catch {
@@ -88,18 +100,18 @@ export function useProjectExplainer() {
         }
       }
 
-      setStatus('done');
+      setStatus("done");
     } catch (err) {
-      if ((err as Error).name === 'AbortError') return;
+      if ((err as Error).name === "AbortError") return;
       setError((err as Error).message);
-      setStatus('error');
+      setStatus("error");
     }
   }, []);
 
   const reset = useCallback(() => {
     abortRef.current?.abort();
-    setText('');
-    setStatus('idle');
+    setText("");
+    setStatus("idle");
     setError(null);
   }, []);
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { useProjectExplainer, ProjectPayload } from '@/hooks/useProjectExplainer';
 
 interface ProjectExplainerProps {
@@ -61,7 +62,9 @@ export function ProjectExplainer({ project, autoExplain = false }: ProjectExplai
           {/* Streaming / done text */}
           {(status === 'streaming' || status === 'done') && (
             <div className="relative">
-              <p className="text-sm leading-relaxed text-white/80">{text}</p>
+              <div className="prose prose-sm prose-invert max-w-none text-white/80 leading-relaxed marker:text-white/40 prose-a:text-neu-accent hover:prose-a:text-neu-accent/80 prose-headings:text-white/90 prose-strong:text-white/90 prose-th:text-white/70 prose-td:text-white/60">
+                <ReactMarkdown>{text}</ReactMarkdown>
+              </div>
               {status === 'streaming' && (
                 <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-white/60 align-middle" />
               )}
