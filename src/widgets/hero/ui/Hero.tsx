@@ -27,7 +27,13 @@ export default function HeroSection({
   isDark,
   renderIcon,
 }: Readonly<HeroSectionProps>) {
-  const { isLoading, dynamicHeroConfig, dynamicMetrics: activeMetrics, triggerToast, setShowInquiryModal } = usePortfolioStore();
+  const {
+    isLoading,
+    dynamicHeroConfig,
+    dynamicMetrics: activeMetrics,
+    triggerToast,
+    setShowInquiryModal,
+  } = usePortfolioStore();
 
   return (
     <>
@@ -55,7 +61,10 @@ export default function HeroSection({
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.1 }}
                   data-collision-target="true"
-                  style={{ transition: 'box-shadow 0.3s ease-out, border-color 0.3s ease-out' }}
+                  style={{
+                    transition:
+                      "box-shadow 0.3s ease-out, border-color 0.3s ease-out",
+                  }}
                   className="flex flex-col gap-y-6 md:gap-y-8 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-6 md:p-10 rounded-3xl shadow-neu border border-black/5 dark:border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-4 after:h-4 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-3xl after:opacity-70"
                 >
                   {/* Chip Pins */}
@@ -69,11 +78,11 @@ export default function HeroSection({
                   <div className="relative w-fit">
                     {/* Spotlight Glow */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-neu-accent/30 dark:bg-neu-accent/20 blur-[50px] md:blur-[70px] rounded-full -z-10 pointer-events-none"></div>
-                    
+
                     <motion.h1
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="text-5xl md:text-7xl font-display font-extrabold tracking-tight text-neu-text drop-shadow-sm transition-colors duration-300 relative"
+                      className="text-2xl md:text-4xl font-display font-extrabold tracking-tight text-neu-text drop-shadow-sm transition-colors duration-300 relative"
                     >
                       {dynamicHeroConfig?.name || "Awaluddin"}
                     </motion.h1>
@@ -170,7 +179,10 @@ export default function HeroSection({
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.2 }}
                   data-collision-target="true"
-                  style={{ transition: 'box-shadow 0.3s ease-out, border-color 0.3s ease-out' }}
+                  style={{
+                    transition:
+                      "box-shadow 0.3s ease-out, border-color 0.3s ease-out",
+                  }}
                   className="flex flex-col gap-4 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-5 rounded-3xl shadow-neu border border-black/5 dark:border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-4 after:h-4 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-3xl after:opacity-70"
                 >
                   <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-neu-accent mb-1">
@@ -322,9 +334,12 @@ export default function HeroSection({
               transition={{ delay: 0.22 }}
               className="w-full mt-10 md:mt-16"
             >
-              <div 
+              <div
                 data-collision-target="true"
-                style={{ transition: 'box-shadow 0.3s ease-out, border-color 0.3s ease-out' }}
+                style={{
+                  transition:
+                    "box-shadow 0.3s ease-out, border-color 0.3s ease-out",
+                }}
                 className="flex flex-col w-full bg-neu-bg p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl shadow-neu border border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-2xl sm:before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-4 after:h-4 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-2xl sm:after:rounded-br-3xl after:opacity-70"
               >
                 <div

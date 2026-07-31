@@ -392,7 +392,9 @@ export default function ExperienceSection({
                     </span>
                   </div>
                   <h3 className="text-xl font-bold text-neu-text tracking-tight">
-                    Git Activity & Contribution Frequency
+                    {chartType === "temporal" && "Git Activity & Contribution Frequency"}
+                    {chartType === "heatmap" && "Annual Coding Contribution Heatmap"}
+                    {chartType === "repository" && "Top Repositories by Activity"}
                   </h3>
                 </div>
 
@@ -569,125 +571,9 @@ export default function ExperienceSection({
                   
                   if (chartType === "heatmap") {
                     return (
-                      <div className="w-full h-full flex items-center justify-center pt-6 px-4">
-                        <div className="flex flex-col gap-1.5 w-full max-w-[100%] overflow-x-auto pb-4">
-                          <div className="flex gap-1.5 min-w-max">
-                            {heatmapData.map((week, wIdx) => (
-                              <div key={wIdx} className="flex flex-col gap-1.5">
-                                {week.map((day, dIdx) => (
-                                  <div
-                                    key={dIdx}
-                                    title={`${day.commits} contributions in ${day.month} (${day.date})`}
-                                    className={cn(
-                                      "w-3 h-3 rounded-sm transition-colors duration-300 cursor-pointer",
-                                      day.intensity === 0 && (isDark ? "bg-zinc-800/50" : "bg-gray-200/50"),
-                                      day.intensity === 1 && (isDark ? "bg-[#b2e4bc]" : "bg-[#d1fae5]"),
-                                      day.intensity === 2 && (isDark ? "bg-[#86d997]" : "bg-[#6ee7b7]"),
-                                      day.intensity === 3 && (isDark ? "bg-[#4ade80]" : "bg-[#10b981]"),
-                                      day.intensity === 4 && (isDark ? "bg-[#22c55e]" : "bg-[#047857]")
-                                    )}
-                                  />
-                                ))}
-                              </div>
-                            ))}
-                          </div>
-                          <div className="flex justify-between items-center mt-4 min-w-max text-[10px] text-neu-text-muted font-mono">
-                            <div className="flex gap-8">
-                              <span>Jan</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span>
-                            </div>
-                            <div className="flex items-center gap-2 pr-4">
-                              <span>Less</span>
-                              <div className="flex gap-1">
-                                <div className={cn("w-3 h-3 rounded-sm", isDark ? "bg-zinc-800/50" : "bg-gray-200/50")} />
-                                <div className={cn("w-3 h-3 rounded-sm", isDark ? "bg-[#b2e4bc]" : "bg-[#d1fae5]")} />
-                                <div className={cn("w-3 h-3 rounded-sm", isDark ? "bg-[#86d997]" : "bg-[#6ee7b7]")} />
-                                <div className={cn("w-3 h-3 rounded-sm", isDark ? "bg-[#4ade80]" : "bg-[#10b981]")} />
-                                <div className={cn("w-3 h-3 rounded-sm", isDark ? "bg-[#22c55e]" : "bg-[#047857]")} />
-                              </div>
-                              <span>More</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  }
-
-                  return (
-                    <ResponsiveContainer
-                      width="100%"
-                      height="100%"
-                      minWidth={1}
-                      minHeight={1}
-                    >
-                      <BarChart
-                        data={repoData}
-                        margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-                      >
-                        <CartesianGrid
-                          strokeDasharray="3 3"
-                          stroke={isDark ? "#2a2b2f" : "#cbd5e1"}
-                          opacity={0.3}
-                          vertical={false}
-                        />
-                        <XAxis
-                          dataKey="name"
-                          stroke={isDark ? "#b2e4bc" : "#4b5563"}
-                          fontSize={10}
-                          tickLine={false}
-                          axisLine={false}
-                          tickFormatter={(value) => value.split(" ")[0]}
-                        />
-                        <YAxis
-                          stroke={isDark ? "#b2e4bc" : "#4b5563"}
-                          fontSize={11}
-                          tickLine={false}
-                          axisLine={false}
-                        />
-                        <Tooltip contentStyle={customTooltipStyle} />
-                        <Legend
-                          iconType="circle"
-                          wrapperStyle={customLegendStyle}
-                        />
-                        <Bar
-                          name="Total Commits"
-                          dataKey="commits"
-                          fill={isDark ? "#4ade80" : "#4f46e5"}
-                          radius={[8, 8, 0, 0]}
-                        />
-                        <Bar
-                          name="Pull Requests"
-                          dataKey="pullRequests"
-                          fill={isDark ? "#22c55e" : "#3b82f6"}
-                          radius={[8, 8, 0, 0]}
-                        />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  );
-                })()}
-              </div>
-
-              {/* Dynamic summary phrase */}
-              <p className="text-xs font-mono text-neu-text-muted text-center pt-2 leading-relaxed">
-                {chartType === "temporal"
-                  ? "✓ Consistently high development velocity maintained throughout late 2025 and early 2026."
-                  : "✓ Highly balanced workload distribution across multiple critical repos and microservices."}
-              </p>
-
-              {/* GitHub-style Contribution Heatmap */}
-              <div className="pt-6 border-t border-gray-300/30 dark:border-gray-700/30">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                  <div>
-                    <h4 className="text-sm font-mono font-bold text-neu-accent uppercase tracking-wider flex items-center gap-2 pl-1 sm:pl-0">
-                      <Code2 size={14} /> Annual Coding Contribution Heatmap
-                    </h4>
-                    <p className="text-xs font-mono text-neu-text-muted mt-1 pl-1 sm:pl-0">
-                      Consistent development activity logged over the past 365
-                      days
-                    </p>
-                  </div>
-
-                  {/* Heatmap Stats */}
-                  <div className="flex flex-wrap gap-4 text-xs font-mono">
+                      <div className="w-full h-full flex flex-col pt-2">
+                        {/* Heatmap Stats */}
+                        <div className="flex flex-wrap gap-4 text-xs font-mono mb-4 justify-end">
                     <div className="px-3 py-1 rounded-lg glass-card-sm">
                       <span className="text-neu-text-muted">Total: </span>
                       <span className="text-neu-accent font-bold">
@@ -706,15 +592,14 @@ export default function ExperienceSection({
                         {heatmapStats.avgIntensity}%
                       </span>
                     </div>
-                  </div>
-                </div>
+                        </div>
 
-                {/* Heatmap Grid Wrapper */}
-                <div
-                  ref={heatmapRef}
-                  className="w-full relative p-3 sm:p-5 rounded-2xl glass-card-inset overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-                >
-                  <div className="min-w-[740px] flex flex-col pt-6">
+                        {/* Heatmap Grid Wrapper */}
+                        <div
+                          ref={heatmapRef as any}
+                          className="w-full relative rounded-2xl overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                        >
+                          <div className="min-w-[740px] flex flex-col">
                     <div className="flex w-full">
                       {/* Weekday labels */}
                       <div className="relative text-[9px] font-mono text-neu-text-muted w-8 pr-2 select-none flex-shrink-0 h-[146px] sm:h-[136px]">
@@ -1015,6 +900,69 @@ export default function ExperienceSection({
                   </div>
                 </div>
               </div>
+            );
+          }
+
+                  return (
+                    <ResponsiveContainer
+                      width="100%"
+                      height="100%"
+                      minWidth={1}
+                      minHeight={1}
+                    >
+                      <BarChart
+                        data={repoData}
+                        margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                      >
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          stroke={isDark ? "#2a2b2f" : "#cbd5e1"}
+                          opacity={0.3}
+                          vertical={false}
+                        />
+                        <XAxis
+                          dataKey="name"
+                          stroke={isDark ? "#b2e4bc" : "#4b5563"}
+                          fontSize={10}
+                          tickLine={false}
+                          axisLine={false}
+                          tickFormatter={(value) => value.split(" ")[0]}
+                        />
+                        <YAxis
+                          stroke={isDark ? "#b2e4bc" : "#4b5563"}
+                          fontSize={11}
+                          tickLine={false}
+                          axisLine={false}
+                        />
+                        <Tooltip contentStyle={customTooltipStyle} />
+                        <Legend
+                          iconType="circle"
+                          wrapperStyle={customLegendStyle}
+                        />
+                        <Bar
+                          name="Total Commits"
+                          dataKey="commits"
+                          fill={isDark ? "#4ade80" : "#4f46e5"}
+                          radius={[8, 8, 0, 0]}
+                        />
+                        <Bar
+                          name="Pull Requests"
+                          dataKey="pullRequests"
+                          fill={isDark ? "#22c55e" : "#3b82f6"}
+                          radius={[8, 8, 0, 0]}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  );
+                })()}
+              </div>
+
+              {/* Dynamic summary phrase */}
+              <p className="text-xs font-mono text-neu-text-muted text-center pt-2 leading-relaxed">
+                {chartType === "temporal"
+                  ? "✓ Consistently high development velocity maintained throughout late 2025 and early 2026."
+                  : "✓ Highly balanced workload distribution across multiple critical repos and microservices."}
+              </p>
             </div>
 
             {/* Most Used Languages Section */}
