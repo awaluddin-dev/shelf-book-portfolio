@@ -8,6 +8,8 @@ import {
   Code2,
   ChevronUp,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Sparkles,
   MessageCircle,
   MessageSquare,
@@ -70,6 +72,118 @@ export default function ExperienceSection({
   const heatmapRef = useRef<HTMLDivElement>(null);
   const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const fadeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const testimonialsRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const startScrollLeft = useRef(0);
+  const autoScrollRaf = useRef<number | null>(null);
+  const isHovered = useRef(false);
+  const isAnimatingScroll = useRef(false);
+
+  // Setup infinite loop scrolling logic
+  useEffect(() => {
+    if (testimonialsRef.current && (testimonialsList?.length || 0) > 0) {
+      setTimeout(() => {
+        if (testimonialsRef.current) {
+          testimonialsRef.current.scrollLeft = testimonialsRef.current.scrollWidth / 3;
+        }
+      }, 300);
+    }
+  }, [testimonialsList]);
+
+  // Auto-scroll loop
+  useEffect(() => {
+    const el = testimonialsRef.current;
+    if (!el) return;
+
+    const loop = () => {
+      if (!isDragging.current && !isHovered.current && !isAnimatingScroll.current) {
+        el.scrollLeft += 0.5; // Auto scroll speed
+        
+        // Infinite wrap logic
+        const third = el.scrollWidth / 3;
+        if (el.scrollLeft >= el.scrollWidth - el.clientWidth - 10) {
+          el.scrollLeft -= third;
+        }
+      }
+      autoScrollRaf.current = requestAnimationFrame(loop);
+    };
+
+    autoScrollRaf.current = requestAnimationFrame(loop);
+    return () => {
+      if (autoScrollRaf.current) cancelAnimationFrame(autoScrollRaf.current);
+    };
+  }, []);
+
+  const handleTestimonialsScroll = () => {
+    const el = testimonialsRef.current;
+    if (!el || isDragging.current) return;
+    const third = el.scrollWidth / 3;
+    if (el.scrollLeft < 20) {
+      el.scrollLeft += third;
+    } else if (el.scrollLeft > el.scrollWidth - el.clientWidth - 20) {
+      el.scrollLeft -= third;
+    }
+  };
+
+  const scrollTestimonials = (dir: "left" | "right") => {
+    if (testimonialsRef.current) {
+      isAnimatingScroll.current = true;
+      const scrollAmount = window.innerWidth > 640 ? 440 + 40 : window.innerWidth * 0.85 + 24; // card width + margin
+      testimonialsRef.current.scrollBy({
+        left: dir === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth"
+      });
+      setTimeout(() => {
+        isAnimatingScroll.current = false;
+      }, 600); // Pause auto-scroll while smooth scrolling completes
+    }
+  };
+
+  // Drag-to-scroll handlers
+  const onDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    isDragging.current = true;
+    if (!testimonialsRef.current) return;
+    testimonialsRef.current.style.cursor = 'grabbing';
+    
+    if ('pageX' in e) {
+      startX.current = e.pageX - testimonialsRef.current.offsetLeft;
+    } else {
+      startX.current = e.touches[0].pageX - testimonialsRef.current.offsetLeft;
+    }
+    startScrollLeft.current = testimonialsRef.current.scrollLeft;
+  };
+
+  const onDragEnd = () => {
+    isDragging.current = false;
+    if (testimonialsRef.current) {
+      testimonialsRef.current.style.cursor = 'grab';
+    }
+  };
+
+  const onDragMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDragging.current || !testimonialsRef.current) return;
+    e.preventDefault();
+    let currentX;
+    if ('pageX' in e) {
+      currentX = e.pageX - testimonialsRef.current.offsetLeft;
+    } else {
+      currentX = e.touches[0].pageX - testimonialsRef.current.offsetLeft;
+    }
+    const walk = (currentX - startX.current) * 1.5; // Drag speed multiplier
+    testimonialsRef.current.scrollLeft = startScrollLeft.current - walk;
+    
+    // Check boundaries manually during drag to loop seamlessly
+    const el = testimonialsRef.current;
+    const third = el.scrollWidth / 3;
+    if (el.scrollLeft < 10) {
+      el.scrollLeft += third;
+      startScrollLeft.current += third;
+    } else if (el.scrollLeft > el.scrollWidth - el.clientWidth - 10) {
+      el.scrollLeft -= third;
+      startScrollLeft.current -= third;
+    }
+  };
 
   const handleTouchStart = useCallback((dayDate: string) => {
     if (touchTimeoutRef.current) clearTimeout(touchTimeoutRef.current);
@@ -1130,9 +1244,38 @@ export default function ExperienceSection({
           </div>
         </div>
 
-        {/* Infinite CSS Marquee Viewport with generous vertical padding to prevent top/bottom clipping on hover scale & high-contrast glow shadows */}
-        <div className="relative w-full overflow-hidden py-24 -my-12 px-6">
-          <div className="animate-marquee flex gap-10 select-none">
+        <div className="relative w-full py-16 -my-8 px-0 md:px-0">
+          <div className="flex justify-between items-center px-4 mb-4 z-20 relative">
+            <button
+              onClick={() => scrollTestimonials("left")}
+              className="p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5 bg-neu-bg/80 backdrop-blur-md"
+              aria-label="Scroll Left"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              onClick={() => scrollTestimonials("right")}
+              className="p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5 bg-neu-bg/80 backdrop-blur-md"
+              aria-label="Scroll Right"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
+          
+          <div 
+            ref={testimonialsRef}
+            onScroll={handleTestimonialsScroll}
+            onMouseEnter={() => isHovered.current = true}
+            onMouseLeave={() => { isHovered.current = false; onDragEnd(); }}
+            onMouseDown={onDragStart}
+            onMouseUp={onDragEnd}
+            onMouseMove={onDragMove}
+            onTouchStart={onDragStart}
+            onTouchEnd={onDragEnd}
+            onTouchMove={onDragMove}
+            style={{ cursor: 'grab' }}
+            className="flex select-none overflow-x-auto scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] py-12 px-0"
+          >
             {[
               ...testimonialsList,
               ...testimonialsList,
@@ -1141,13 +1284,8 @@ export default function ExperienceSection({
               <div
                 key={`${t.id}-dup-${index}`}
                 className={cn(
-                  "flex-shrink-0 w-[85vw] sm:w-[440px] max-w-[400px] sm:max-w-none p-5 sm:p-8 rounded-3xl glass-card relative flex flex-col justify-between group transition-all duration-500 ease-out border border-white/5",
-                  "transform-gpu perspective-1000",
-                  // Alternating rotation to create a natural 3D cylindrical rotation look
-                  index % 2 === 0
-                    ? "rotate-y-4 -rotate-1"
-                    : "-rotate-y-4 rotate-1",
-                  "hover:rotate-y-0 hover:rotate-x-0 hover:scale-[1.05] hover:-translate-y-3 hover:z-30",
+                  "flex-shrink-0 w-[85vw] sm:w-[440px] max-w-[400px] sm:max-w-none p-5 sm:p-8 rounded-3xl glass-card relative flex flex-col justify-between group transition-all duration-300 ease-out border border-white/5 mr-6 sm:mr-10",
+                  "hover:scale-[1.03] hover:-translate-y-2 hover:z-30",
                   "hover:border-blue-500 hover:shadow-[0_25px_50px_-12px_rgba(59,130,246,0.3)] dark:hover:border-emerald-400 dark:hover:shadow-[0_25px_50px_-12px_rgba(74,222,128,0.3)]",
                 )}
               >
