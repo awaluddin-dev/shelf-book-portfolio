@@ -2,7 +2,7 @@ import { memo, useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Network } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import P5Background from "@/shared/ui/P5Background";
+
 
 interface SkillNode {
   id: string;
@@ -402,7 +402,7 @@ export default function SkillTree({
 
   return (
     <div className="p-8 rounded-3xl glass-card relative overflow-hidden border border-white/5">
-      <P5Background isDark={isDark} />
+
       {/* Background decoration elements */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-neu-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
       <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-neu-accent/5 rounded-full blur-[100px] pointer-events-none"></div>

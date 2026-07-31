@@ -63,7 +63,7 @@ export default function ExperienceSection({
   }, []);
 
   const [activeExpIdx, setActiveExpIdx] = useState<number | null>(0);
-  const [chartType, setChartType] = useState<"temporal" | "repository">("temporal");
+  const [chartType, setChartType] = useState<"temporal" | "heatmap" | "repository">("temporal");
   const [hoveredMonth, setHoveredMonth] = useState<number | null>(null);
   const [hoveredLang, setHoveredLang] = useState<string | null>(null);
   const [selectedLevelFilter, setSelectedLevelFilter] = useState<number | null>(null);
@@ -139,6 +139,41 @@ export default function ExperienceSection({
       }, 600); // Pause auto-scroll while smooth scrolling completes
     }
   };
+
+  const heatmapData = useMemo(() => {
+    if (!timelineData || timelineData.length === 0) return [];
+    
+    // Simulate 52 weeks x 7 days based on monthly timeline data
+    const totalCommits = timelineData.reduce((sum: number, item: any) => sum + (item.commits || 0), 0);
+    const weeks = [];
+    for (let w = 0; w < 52; w++) {
+      const days = [];
+      for (let d = 0; d < 7; d++) {
+        const monthIndex = Math.min(timelineData.length - 1, Math.floor(w / 4.33));
+        const monthData = timelineData[monthIndex];
+        
+        const monthWeight = monthData && totalCommits > 0 ? (monthData.commits / totalCommits) * 12 : 1;
+        let intensity = 0;
+        const rand = Math.random();
+        
+        if (monthData && monthData.commits > 0) {
+           if (rand < 0.2 * monthWeight) intensity = 4;
+           else if (rand < 0.4 * monthWeight) intensity = 3;
+           else if (rand < 0.7 * monthWeight) intensity = 2;
+           else if (rand < 0.9 * monthWeight) intensity = 1;
+        }
+        
+        days.push({
+          date: `Day ${w * 7 + d + 1}`,
+          intensity,
+          commits: intensity === 0 ? 0 : Math.floor(Math.random() * 5 * intensity) + 1,
+          month: monthData?.month || ''
+        });
+      }
+      weeks.push(days);
+    }
+    return weeks;
+  }, [timelineData]);
 
   // Drag-to-scroll handlers
   const onDragStart = (e: React.MouseEvent | React.TouchEvent) => {
@@ -378,6 +413,20 @@ export default function ExperienceSection({
                     <GitCommit size={14} /> Commit Timeline
                   </button>
                   <button
+                    onClick={() => setChartType("heatmap")}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") setChartType("heatmap");
+                    }}
+                    className={cn(
+                      "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
+                      chartType === "heatmap"
+                        ? "bg-neu-accent text-white shadow-neu-sm"
+                        : "text-neu-text-muted hover:text-neu-accent",
+                    )}
+                  >
+                    <Activity size={14} /> Heatmap
+                  </button>
+                  <button
                     onClick={() => setChartType("repository")}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") setChartType("repository");
@@ -517,6 +566,52 @@ export default function ExperienceSection({
                       </ResponsiveContainer>
                     );
                   }
+                  
+                  if (chartType === "heatmap") {
+                    return (
+                      <div className="w-full h-full flex items-center justify-center pt-6 px-4">
+                        <div className="flex flex-col gap-1.5 w-full max-w-[100%] overflow-x-auto pb-4">
+                          <div className="flex gap-1.5 min-w-max">
+                            {heatmapData.map((week, wIdx) => (
+                              <div key={wIdx} className="flex flex-col gap-1.5">
+                                {week.map((day, dIdx) => (
+                                  <div
+                                    key={dIdx}
+                                    title={`${day.commits} contributions in ${day.month} (${day.date})`}
+                                    className={cn(
+                                      "w-3 h-3 rounded-sm transition-colors duration-300 cursor-pointer",
+                                      day.intensity === 0 && (isDark ? "bg-zinc-800/50" : "bg-gray-200/50"),
+                                      day.intensity === 1 && (isDark ? "bg-[#b2e4bc]" : "bg-[#d1fae5]"),
+                                      day.intensity === 2 && (isDark ? "bg-[#86d997]" : "bg-[#6ee7b7]"),
+                                      day.intensity === 3 && (isDark ? "bg-[#4ade80]" : "bg-[#10b981]"),
+                                      day.intensity === 4 && (isDark ? "bg-[#22c55e]" : "bg-[#047857]")
+                                    )}
+                                  />
+                                ))}
+                              </div>
+                            ))}
+                          </div>
+                          <div className="flex justify-between items-center mt-4 min-w-max text-[10px] text-neu-text-muted font-mono">
+                            <div className="flex gap-8">
+                              <span>Jan</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span>
+                            </div>
+                            <div className="flex items-center gap-2 pr-4">
+                              <span>Less</span>
+                              <div className="flex gap-1">
+                                <div className={cn("w-3 h-3 rounded-sm", isDark ? "bg-zinc-800/50" : "bg-gray-200/50")} />
+                                <div className={cn("w-3 h-3 rounded-sm", isDark ? "bg-[#b2e4bc]" : "bg-[#d1fae5]")} />
+                                <div className={cn("w-3 h-3 rounded-sm", isDark ? "bg-[#86d997]" : "bg-[#6ee7b7]")} />
+                                <div className={cn("w-3 h-3 rounded-sm", isDark ? "bg-[#4ade80]" : "bg-[#10b981]")} />
+                                <div className={cn("w-3 h-3 rounded-sm", isDark ? "bg-[#22c55e]" : "bg-[#047857]")} />
+                              </div>
+                              <span>More</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
+
                   return (
                     <ResponsiveContainer
                       width="100%"
