@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect } from "react";
 import {
   Award,
   Box,
@@ -22,15 +22,7 @@ import {
 
 import { useTheme } from "@/shared/ui/ThemeProvider";
 import { getTechIconAndColor } from "@/shared/lib/tech-icons";
-import {
-  getTagProjectCount,
-  legendLevels,
-  getRelatedProjects,
-  TECHNICAL_IMAGERY,
-} from "@/shared/lib/helpers";
 import { motion, AnimatePresence, useSpring, useScroll } from "motion/react";
-
-import { Testimonial } from "@/shared/types";
 
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
 import HeroSection from "@/widgets/hero/ui/Hero";
@@ -45,7 +37,8 @@ import AdminPlayground from "@/views/admin-playground/ui/AdminPlayground";
 
 export default function Portfolio() {
   const { isDark } = useTheme();
-  const { isLoading, dynamicHeroConfig, initializeData, toastMessage } = usePortfolioStore();
+  const { dynamicHeroConfig, initializeData, toastMessage } =
+    usePortfolioStore();
 
   const [isPlaygroundOpen, setPlaygroundOpen] = useState(false);
 
@@ -153,8 +146,6 @@ export default function Portfolio() {
     }
   };
 
-
-
   return (
     <div className="min-h-screen bg-neu-bg text-neu-text px-6 pb-6 md:px-12 md:pb-12 lg:px-24 lg:pb-24 pt-[2.7rem] font-sans transition-colors duration-300 relative">
       {/* Animated Scroll Progress Bar */}
@@ -174,20 +165,10 @@ export default function Portfolio() {
         openPlayground={() => setPlaygroundOpen(true)}
       />
       {/* Extracted Sections */}
-      <HeroSection
-        isDark={isDark}
-        renderIcon={renderIcon}
-      />
-      <ProjectsSection
-        isDark={isDark}
-      />
-      <ProficiencySection
-        isDark={isDark}
-        renderIcon={renderIcon}
-      />
-      <ExperienceSection
-        isDark={isDark}
-      />
+      <HeroSection isDark={isDark} renderIcon={renderIcon} />
+      <ProjectsSection isDark={isDark} />
+      <ProficiencySection isDark={isDark} renderIcon={renderIcon} />
+      <ExperienceSection isDark={isDark} />
       {/* Footer */}
       <footer className="max-w-7xl mx-auto py-12 border-t border-gray-300/50 dark:border-gray-700/50 text-center text-xs font-mono text-neu-text-muted">
         <p>
@@ -195,10 +176,7 @@ export default function Portfolio() {
           All rights reserved.
         </p>
       </footer>
-      <ProjectModal
-        isDark={isDark}
-        getTechIconAndColor={getTechIconAndColor}
-      />
+      <ProjectModal isDark={isDark} getTechIconAndColor={getTechIconAndColor} />
       {/* Quick-Send Availability Inquiry Modal */}
       <ContactModal />
       {/* Premium Toast Notification */}
