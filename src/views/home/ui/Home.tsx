@@ -34,6 +34,7 @@ import ProjectModal from "@/widgets/project-modal/ui/ProjectModal";
 import DockNavigation from "@/widgets/dock-navigation/ui/DockNavigation";
 import TestimonialModal from "@/widgets/testimonial-modal/ui/TestimonialModal";
 import AdminPlayground from "@/views/admin-playground/ui/AdminPlayground";
+import { CoverLetterModal } from "@/widgets/cover-letter/CoverLetterModal";
 
 export default function Portfolio() {
   const { isDark } = useTheme();
@@ -194,6 +195,7 @@ export default function Portfolio() {
         )}
       </AnimatePresence>
       <TestimonialModal />
+      <CoverLetterModal />
       <AnimatePresence>
         {isPlaygroundOpen && (
           <AdminPlayground onClose={() => setPlaygroundOpen(false)} />

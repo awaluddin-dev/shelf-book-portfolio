@@ -1,23 +1,48 @@
 import { motion, AnimatePresence } from "motion/react";
 import { X, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/shared/lib/utils";
+import { useDraftInquiry } from "@/hooks/useDraftInquiry";
 
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
 
 export default function ContactModal() {
-  const { 
-    showInquiryModal: isOpen, 
-    setShowInquiryModal: onClose, 
-    portfolioStatus, 
-    triggerToast 
+  const {
+    showInquiryModal: isOpen,
+    setShowInquiryModal: onClose,
+    inquiryMessage,
+    setInquiryMessage,
+    draftInquirySource,
+    setDraftInquirySource,
+    portfolioStatus,
+    triggerToast,
   } = usePortfolioStore();
+
+  const { draft, status: draftStatus } = useDraftInquiry();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     projectType: "contract",
     message: "",
   });
+
+  // Handle Draft Inquiry AI generation
+  useEffect(() => {
+    if (isOpen && draftInquirySource) {
+      setFormData((prev) => ({ ...prev, message: "" })); // clear message before typing
+      draft(draftInquirySource, (chunk) => {
+        setFormData((prev) => ({ ...prev, message: prev.message + chunk }));
+      });
+      setDraftInquirySource(null); // consume source
+    }
+  }, [isOpen, draftInquirySource, draft, setDraftInquirySource]);
+
+  // Prefill message if inquiryMessage exists when modal opens
+  useEffect(() => {
+    if (isOpen && inquiryMessage) {
+      setFormData((prev) => ({ ...prev, message: inquiryMessage }));
+    }
+  }, [isOpen, inquiryMessage]);
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -46,6 +71,7 @@ export default function ContactModal() {
 
       triggerToast("Availability inquiry sent successfully! Thank you.");
       onClose(false);
+      setInquiryMessage(""); // clear message from store
       setFormData({
         name: "",
         email: "",
@@ -69,7 +95,10 @@ export default function ContactModal() {
             exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
             transition={{ type: "spring", stiffness: 100, damping: 15 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            onClick={() => onClose(false)}
+            onClick={() => {
+              onClose(false);
+              setInquiryMessage("");
+            }}
           >
             <motion.div
               initial={{ opacity: 0, y: 50, scale: 0.95 }}
@@ -81,7 +110,10 @@ export default function ContactModal() {
             >
               <button
                 type="button"
-                onClick={() => onClose(false)}
+                onClick={() => {
+                  onClose(false);
+                  setInquiryMessage("");
+                }}
                 className="absolute top-5 right-5 p-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-neu-text transition-colors"
                 title="Close"
               >
@@ -111,10 +143,8 @@ export default function ContactModal() {
                 >
                   {portfolioStatus === "available"
                     ? "Available for projects"
-                    : "Currently busy"}
+                    : "Currently busy. Submit your inquiry below and get a reply within 24 hours."}
                 </span>
-                {"//NOSONAR "}. Submit your inquiry below and get a reply within
-                24 hours.
               </p>
 
               <form className="space-y-4" onSubmit={handleSubmit}>
@@ -200,9 +230,15 @@ export default function ContactModal() {
                 <div>
                   <label
                     htmlFor="message-contact"
-                    className="block text-xs font-mono text-neu-text-muted mb-1.5 uppercase font-bold"
+                    className="block text-xs font-mono text-neu-text-muted mb-1.5 uppercase font-bold flex items-center gap-2"
                   >
                     Message
+                    {(draftStatus === "loading" ||
+                      draftStatus === "streaming") && (
+                      <span className="text-[10px] text-neu-accent animate-pulse normal-case font-normal flex items-center gap-1">
+                        <Sparkles size={10} /> AI is drafting...
+                      </span>
+                    )}
                   </label>
                   <textarea
                     id="message-contact"

@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   BookOpen,
   Download,
@@ -32,7 +32,9 @@ export default function HeroSection({
     dynamicHeroConfig,
     dynamicMetrics: activeMetrics,
     triggerToast,
+    showInquiryModal,
     setShowInquiryModal,
+    showConnectionTooltip,
   } = usePortfolioStore();
 
   return (
@@ -179,6 +181,7 @@ export default function HeroSection({
                   transition={{ delay: 0.2 }}
                   data-collision-target="true"
                   data-card-zone="terminal"
+                  id="connection-terminal"
                   style={{
                     transition:
                       "box-shadow 0.6s ease-out, border-color 0.6s ease-out",
@@ -188,6 +191,21 @@ export default function HeroSection({
                   <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold uppercase tracking-wider text-neu-accent mb-0">
                     <Terminal size={12} /> Connection Terminal
                   </div>
+
+                  <AnimatePresence>
+                    {showConnectionTooltip && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.9 }}
+                        className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap bg-neu-accent text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-lg z-10"
+                      >
+                        You can choose a platform to discuss
+                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-neu-accent rotate-45" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
                   <div className="flex flex-col gap-2 font-mono text-[11px]">
                     <a
                       href="https://github.com/awaluddin-dev"

@@ -44,6 +44,9 @@ export const metadata: Metadata = {
     title: "Awaluddin | Backend Engineer",
     description: "Backend Developer portfolio featuring system architecture and technical projects.",
   },
+  icons: {
+    icon: "/favicon.ico",
+  },
   robots: {
     index: true,
     follow: true,

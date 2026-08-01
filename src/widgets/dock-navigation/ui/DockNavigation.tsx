@@ -192,7 +192,6 @@ export default function DockNavigation({
                       className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
                     >
                       Projects
-                      <div className="absolute -top-[4.5px] left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-t border-l border-neu-accent/20" />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -254,7 +253,6 @@ export default function DockNavigation({
                       className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
                     >
                       Proficiency
-                      <div className="absolute -top-[4.5px] left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-t border-l border-neu-accent/20" />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -316,7 +314,6 @@ export default function DockNavigation({
                       className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
                     >
                       Experience
-                      <div className="absolute -top-[4.5px] left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-t border-l border-neu-accent/20" />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -359,7 +356,6 @@ export default function DockNavigation({
                   className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
                 >
                   {isOpen ? "Close Menu" : "Menu"}
-                  <div className="absolute -top-[4.5px] left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-t border-l border-neu-accent/20" />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -419,7 +415,6 @@ export default function DockNavigation({
                       className="absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
                     >
                       Endorse
-                      <div className="absolute -right-[4.5px] top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-r border-t border-neu-accent/20" />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -468,7 +463,6 @@ export default function DockNavigation({
                       className="absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
                     >
                       Theme Playground
-                      <div className="absolute -right-[4.5px] top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-r border-t border-neu-accent/20" />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -512,7 +506,6 @@ export default function DockNavigation({
                       className="absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
                     >
                       Back to Top
-                      <div className="absolute -right-[4.5px] top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-neu-bg/95 dark:bg-neu-bg/90 border-r border-t border-neu-accent/20" />
                     </motion.div>
                   )}
                 </AnimatePresence>
