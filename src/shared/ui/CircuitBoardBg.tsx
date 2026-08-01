@@ -30,7 +30,7 @@ function MovingNode({ path, duration, initialColor, label, textY, scale, circleR
         </circle>
         <circle r={circleR * 0.4} fill="#fff" />
         <animateMotion ref={animRef} dur={duration} repeatCount="indefinite" rotate="auto" path={path} />
-        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0;1;1;0.01;0.01;1;1;0" keyTimes="0; 0.1; 0.45; 0.48; 0.52; 0.55; 0.9; 1" dur={duration} repeatCount="indefinite" />
       </g>
       <g>
         <text 
@@ -47,7 +47,7 @@ function MovingNode({ path, duration, initialColor, label, textY, scale, circleR
           {label}
         </text>
         <animateMotion dur={duration} repeatCount="indefinite" path={path} />
-        <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0;0.9;0.9;0.01;0.01;0.9;0.9;0" keyTimes="0; 0.1; 0.45; 0.48; 0.52; 0.55; 0.9; 1" dur={duration} repeatCount="indefinite" />
       </g>
     </g>
   );
@@ -69,8 +69,11 @@ export function CircuitBoardBg() {
       const nodes = document.querySelectorAll('.circuit-moving-node');
       const cards = document.querySelectorAll('[data-collision-target="true"]') as NodeListOf<HTMLElement>;
       
-      if (nodes.length > 0 && cards.length > 0) {
+      if (nodes.length > 0) {
         const activeColors = new Map<HTMLElement, string>();
+        const processorSensor = document.getElementById('processor-sensor');
+        const circuitSvg = document.getElementById('circuit-board-svg');
+        let processorHitColor: string | null = null;
 
         nodes.forEach(node => {
           const rect = node.getBoundingClientRect();
@@ -80,14 +83,27 @@ export function CircuitBoardBg() {
           const color = parentG.style.getPropertyValue('--node-color');
           if (!color) return;
 
+          if (processorSensor) {
+            const procRect = processorSensor.getBoundingClientRect();
+            // Sensor div is 150x150, trigger when inside
+            if (
+              rect.right > procRect.left &&
+              rect.left < procRect.right &&
+              rect.bottom > procRect.top &&
+              rect.top < procRect.bottom
+            ) {
+              processorHitColor = color;
+            }
+          }
+
           cards.forEach(card => {
             const cardRect = card.getBoundingClientRect();
-            // Check intersection
+            // Huge intersection margins to magnetize the nodes
             if (
-              rect.right > cardRect.left &&
-              rect.left < cardRect.right &&
-              rect.bottom > cardRect.top &&
-              rect.top < cardRect.bottom
+              rect.right > cardRect.left - 100 &&
+              rect.left < cardRect.right + 100 &&
+              rect.bottom > cardRect.top - 150 &&
+              rect.top < cardRect.bottom + 150
             ) {
               activeColors.set(card, color);
             }
@@ -104,6 +120,16 @@ export function CircuitBoardBg() {
             card.style.boxShadow = '';
           }
         });
+
+        if (circuitSvg) {
+          if (processorHitColor) {
+            circuitSvg.style.setProperty('--processor-color', processorHitColor);
+            circuitSvg.style.setProperty('--processor-glow', `drop-shadow(0 0 30px ${processorHitColor})`);
+          } else {
+            circuitSvg.style.removeProperty('--processor-color');
+            circuitSvg.style.removeProperty('--processor-glow');
+          }
+        }
       }
 
       rafId = requestAnimationFrame(checkCollisions);
@@ -116,16 +142,25 @@ export function CircuitBoardBg() {
   if (!mounted) return null;
 
   return (
-    <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[100vw] h-[100vh] pointer-events-none z-0 overflow-hidden">
+    <div 
+      className="absolute left-1/2 -translate-x-1/2 top-0 w-[100vw] h-[100vh] pointer-events-none z-0 overflow-hidden"
+      style={{
+        maskImage: "radial-gradient(ellipse at 50% 50%, black 20%, transparent 75%)",
+        WebkitMaskImage: "radial-gradient(ellipse at 50% 50%, black 20%, transparent 75%)"
+      }}
+    >
+      {/* Invisible DOM Sensor for processor chip collision */}
+      <div 
+        id="processor-sensor"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -mt-12 md:-mt-20 lg:-mt-24 w-[160px] h-[160px] pointer-events-none border border-transparent"
+      />
+
       {/* Circuit Board SVG Background Pattern - Centered, Mirrored, Circular */}
       <svg 
+        id="circuit-board-svg"
         className="absolute inset-0 w-full h-full opacity-40 text-neu-accent pointer-events-none -translate-y-12 md:-translate-y-20 lg:-translate-y-24" 
         viewBox="-500 -500 1000 1000"
         preserveAspectRatio="xMidYMid slice"
-        style={{
-          maskImage: "radial-gradient(circle at 50% 50%, black 10%, transparent 80%)",
-          WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 10%, transparent 80%)"
-        }}
       >
         <defs>
           <g id="circuit-quadrant">
@@ -202,9 +237,18 @@ export function CircuitBoardBg() {
         </rect>
         
         {/* Central glowing processor accent */}
-        <rect x="-80" y="-80" width="160" height="160" fill="currentColor" stroke="currentColor" strokeWidth="4">
+        <rect 
+          x="-80" y="-80" width="160" height="160" 
+          fill="var(--processor-color, currentColor)" 
+          stroke="var(--processor-color, currentColor)" 
+          strokeWidth="4" 
+          style={{ 
+            transition: 'stroke 0.3s ease-out, fill 0.3s ease-out, filter 0.3s ease-out',
+            filter: 'var(--processor-glow, none)'
+          }}
+        >
           <animate attributeName="stroke-opacity" values="0.2;1;0.2" dur="3s" repeatCount="indefinite" />
-          <animate attributeName="fill-opacity" values="0.02;0.25;0.02" dur="3s" repeatCount="indefinite" />
+          <animate attributeName="fill-opacity" values="0.02;0.35;0.02" dur="3s" repeatCount="indefinite" />
         </rect>
       </svg>
       

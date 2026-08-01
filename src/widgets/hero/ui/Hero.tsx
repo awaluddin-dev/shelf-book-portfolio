@@ -43,14 +43,12 @@ export default function HeroSection({
         {/* Main Grid Content - equal-height containers on large screens */}
         <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-2 md:mt-4 lg:mt-0">
           {isLoading ? (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch animate-pulse">
-              <div className="lg:col-span-8 flex flex-col gap-8 h-full py-2">
-                <div className="h-20 bg-neu-accent/10 rounded-2xl w-2/3"></div>
-                <div className="h-32 bg-neu-accent/5 rounded-2xl w-full"></div>
-                <div className="h-12 bg-neu-accent/5 rounded-xl w-1/2"></div>
+            <div className="flex flex-col lg:flex-row justify-between items-stretch gap-12 animate-pulse w-full">
+              <div className="w-full lg:w-[32%] xl:w-[30%] flex flex-col py-2 min-h-[350px]">
+                <div className="w-full h-full bg-neu-accent/5 rounded-3xl border border-white/5"></div>
               </div>
-              <div className="lg:col-span-4 flex flex-col gap-6">
-                <div className="h-[400px] bg-neu-accent/5 rounded-3xl w-full"></div>
+              <div className="w-full lg:w-[32%] xl:w-[30%] flex flex-col py-2 min-h-[350px]">
+                <div className="w-full h-full bg-neu-accent/5 rounded-3xl border border-white/5"></div>
               </div>
             </div>
           ) : (
@@ -61,6 +59,10 @@ export default function HeroSection({
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.1 }}
                   data-collision-target="true"
+                  style={{
+                    transition:
+                      "box-shadow 0.6s ease-out, border-color 0.6s ease-out",
+                  }}
                   className="flex flex-col justify-between h-full gap-y-4 md:gap-y-5 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-5 md:p-7 rounded-3xl shadow-neu border border-black/5 dark:border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-4 after:h-4 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-3xl after:opacity-70"
                 >
                   {/* Chip Pins */}
@@ -175,6 +177,10 @@ export default function HeroSection({
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.2 }}
                   data-collision-target="true"
+                  style={{
+                    transition:
+                      "box-shadow 0.6s ease-out, border-color 0.6s ease-out",
+                  }}
                   className="flex flex-col justify-between h-full gap-3 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-4 md:p-5 rounded-3xl shadow-neu border border-black/5 dark:border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-4 after:h-4 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-3xl after:opacity-70"
                 >
                   <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold uppercase tracking-wider text-neu-accent mb-0">
@@ -328,6 +334,10 @@ export default function HeroSection({
             >
               <div
                 data-collision-target="true"
+                style={{
+                  transition:
+                    "box-shadow 0.6s ease-out, border-color 0.6s ease-out",
+                }}
                 className="flex flex-col w-full bg-neu-bg p-3 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl shadow-neu border border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-2xl sm:before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-4 after:h-4 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-2xl sm:after:rounded-br-3xl after:opacity-70"
               >
                 <div
