@@ -44,7 +44,7 @@ export default function DockNavigation({
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-          className="absolute -inset-[150%] opacity-40 dark:opacity-60 bg-[conic-gradient(from_0deg,var(--color-neu-accent),var(--color-neu-secondary),var(--color-neu-accent))]"
+          className="absolute -inset-[150%] opacity-90 dark:opacity-100 bg-[conic-gradient(from_0deg,transparent_0_75%,#3b82f6_80%,#8b5cf6_85%,#ec4899_90%,#ef4444_95%,#f59e0b_100%)]"
         />
         {/* Inner masking to keep only the thin border shining and preserve backdrop blur */}
         <div className="absolute inset-[1px] rounded-[15px] bg-neu-bg/90 backdrop-blur-md" />

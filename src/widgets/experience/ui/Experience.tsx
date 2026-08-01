@@ -18,9 +18,8 @@ import {
 } from "lucide-react";
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";
 import {
-  PieChart,
-  Pie,
-  Cell,
+  AreaChart,
+  Area,
   ResponsiveContainer,
   BarChart,
   CartesianGrid,
@@ -29,9 +28,7 @@ import {
   Tooltip,
   Legend,
   Bar,
-  AreaChart,
-  Area,
-} from "recharts"; // NOSONAR / Deprecated warning
+} from "recharts";
 import { cn } from "@/shared/lib/utils";
 import { Testimonial } from "@/shared/types";
 
@@ -53,7 +50,6 @@ export default function ExperienceSection({
     contributionData,
     timelineData,
     repoData,
-    languageData,
     isLoading
   } = usePortfolioStore();
 
@@ -65,7 +61,7 @@ export default function ExperienceSection({
   const [activeExpIdx, setActiveExpIdx] = useState<number | null>(0);
   const [chartType, setChartType] = useState<"temporal" | "heatmap" | "repository">("temporal");
   const [hoveredMonth, setHoveredMonth] = useState<number | null>(null);
-  const [hoveredLang, setHoveredLang] = useState<string | null>(null);
+  // State removed
   const [selectedLevelFilter, setSelectedLevelFilter] = useState<number | null>(null);
   const [activeTooltipDate, setActiveTooltipDate] = useState<string | null>(null);
   
@@ -965,117 +961,7 @@ export default function ExperienceSection({
               </p>
             </div>
 
-            {/* Most Used Languages Section */}
-            {languageData && languageData.length > 0 && (
-              <motion.div
-                className="mt-8 rounded-3xl glass-card-inset p-4 sm:p-6 md:p-8 relative"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5 }}
-              >
-                <div className="flex items-center justify-between mb-6 border-b border-gray-300/20 dark:border-zinc-800/20 pb-4">
-                  <div className="flex items-center gap-2">
-                    <Code2 size={16} className="text-neu-accent" />
-                    <h3 className="text-lg font-display font-bold text-neu-text tracking-tight">
-                      Most Used Languages
-                    </h3>
-                  </div>
-                  <span className="text-[10px] font-mono text-neu-text-muted bg-neu-bg/50 px-2 py-1 rounded-md">
-                    Live from GitHub
-                  </span>
-                </div>
-
-                {/* Donut Chart & Language Cards */}
-                <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-6">
-                  <div className="w-full md:w-1/3 flex justify-center items-center h-[240px] relative">
-                    <PieChart width={240} height={240}>
-                      <Pie
-                        data={languageData}
-                        cx={120}
-                        cy={120}
-                        innerRadius={0}
-                        outerRadius={105}
-                        paddingAngle={2}
-                        dataKey="percentage"
-                        stroke="none"
-                        isAnimationActive={true}
-                      >
-                        {languageData.map((entry, index) => {
-                          const isHovered = hoveredLang === entry.name;
-                          const isOtherHovered =
-                            hoveredLang !== null && !isHovered;
-                          return (
-                            <Cell
-                              key={`cell-${index}`}
-                              fill={entry.color}
-                              className="cursor-pointer focus:outline-none"
-                              style={{
-                                outline: "none",
-                                transition:
-                                  "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                                opacity: isOtherHovered ? 0.3 : 1,
-                                filter: isHovered
-                                  ? `brightness(1.2) drop-shadow(0px 0px 8px ${entry.color})`
-                                  : "none",
-                                transform: isHovered
-                                  ? "scale(1.05)"
-                                  : "scale(1)",
-                                transformOrigin: "120px 120px",
-                              }}
-                              onMouseEnter={() => setHoveredLang(entry.name)}
-                              onMouseLeave={() => setHoveredLang(null)}
-                            />
-                          );
-                        })}
-                      </Pie>
-                    </PieChart>
-                  </div>
-
-                  <div className="w-full md:w-2/3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4">
-                    {languageData.map((lang, idx) => {
-                      const isHovered = hoveredLang === lang.name;
-                      const isOtherHovered = hoveredLang !== null && !isHovered;
-                      return (
-                        <motion.div
-                          key={idx}
-                          whileHover={{ y: -2 }}
-                          onMouseEnter={() => setHoveredLang(lang.name)}
-                          onMouseLeave={() => setHoveredLang(null)}
-                          className={cn(
-                            "relative flex flex-col gap-1 p-3 rounded-2xl border shadow-sm transition-all duration-200 hover:shadow-md cursor-pointer group",
-                            isHovered
-                              ? "border-neu-accent bg-neu-accent/5 scale-[1.02]"
-                              : "bg-neu-bg border-gray-200/50 dark:border-zinc-800/30",
-                            isOtherHovered ? "opacity-40" : "opacity-100",
-                          )}
-                        >
-                          {idx === 0 && (
-                            <div className="absolute -top-2 -right-2 bg-neu-accent text-white font-mono text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm z-10 flex items-center gap-1">
-                              TOP 1
-                            </div>
-                          )}
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1.5">
-                              <span
-                                className="w-2.5 h-2.5 rounded-full shadow-sm"
-                                style={{ backgroundColor: lang.color }}
-                              />
-                              <span className="text-xs font-bold text-neu-text group-hover:text-neu-accent transition-colors">
-                                {lang.name}
-                              </span>
-                            </div>
-                          </div>
-                          <span className="text-[10px] font-mono text-neu-text-muted">
-                            {lang.percentage.toFixed(1)}%
-                          </span>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </motion.div>
-            )}
+            {/* Most Used Languages Section has been moved to Proficiency.tsx */}
 
             <motion.div
               className="mt-10 rounded-3xl glass-card-inset p-4 sm:p-6 md:p-8 space-y-1 relative"
