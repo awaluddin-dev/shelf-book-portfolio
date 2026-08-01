@@ -22,7 +22,6 @@ interface SkillNodeProps {
   anyActive: boolean;
   connectedToActive: boolean;
   isDark: boolean;
-  isMobile: boolean;
   coords: { x: number; y: number };
   colors: { bg: string; text: string; stroke: string; gradient: string };
   shortTitle: string;
@@ -36,7 +35,6 @@ const SkillTreeNode = memo(function SkillTreeNode({
   anyActive,
   connectedToActive,
   isDark,
-  isMobile,
   coords,
   colors,
   shortTitle,
@@ -65,7 +63,7 @@ const SkillTreeNode = memo(function SkillTreeNode({
       <circle
         cx={coords.x}
         cy={coords.y}
-        r={active ? 20 : 12}
+        r={active ? 30 : 18}
         className={cn(
           "transition-all duration-300 fill-none",
           active
@@ -79,7 +77,7 @@ const SkillTreeNode = memo(function SkillTreeNode({
       <circle
         cx={coords.x}
         cy={coords.y}
-        r={active ? 12 : 7}
+        r={active ? 16 : 10}
         fill={fillGradient}
         className={cn(
           "transition-all duration-300 shadow-lg",
@@ -88,16 +86,15 @@ const SkillTreeNode = memo(function SkillTreeNode({
       />
 
       {/* Interactive Larger Invisible Circle for generous hover target */}
-      <circle cx={coords.x} cy={coords.y} r={24} fill="transparent" />
+      <circle cx={coords.x} cy={coords.y} r={40} fill="transparent" />
 
       {/* Floating Node Label */}
       <text
         x={coords.x}
-        y={coords.y - (isMobile ? 14 : 16)}
+        y={coords.y - 24}
         textAnchor="middle"
         className={cn(
-          "font-mono font-bold tracking-tight select-none pointer-events-none transition-all duration-300",
-          isMobile ? "text-[8px]" : "text-[10px]",
+          "font-mono font-bold tracking-tight select-none pointer-events-none transition-all duration-300 text-[14px]",
           active ? "fill-current " + colors.text : opacityLabel,
         )}
         fill={isDark ? "#EEEEEE" : "#112D4E"}
@@ -162,85 +159,46 @@ export default function SkillTree({
   }, []);
 
   const [hoveredNode, setHoveredNode] = useState<SkillNode | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   const getBezierPath = useCallback(
     (x1: number, y1: number, x2: number, y2: number) => {
-      if (isMobile) {
-        const dy = (y2 - y1) * 0.5;
-        return `M ${x1} ${y1} C ${x1} ${y1 + dy}, ${x2} ${y2 - dy}, ${x2} ${y2}`;
-      } else {
-        const dx = (x2 - x1) * 0.5;
-        return `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
-      }
+      const dy = (y2 - y1) * 0.5;
+      return `M ${x1} ${y1} C ${x1} ${y1 + dy}, ${x2} ${y2 - dy}, ${x2} ${y2}`;
     },
-    [isMobile],
+    [],
   );
 
   const getNodeCoords = useCallback(
     (node: SkillNode) => {
-      if (!isMobile) {
-        return { x: node.x, y: node.y };
-      }
+      // Use predefined coordinates since DB x/y are largely unseeded/0.
+      // Layout is designed to be vertical, fitting perfectly into the 60% wide container.
       switch (node.id) {
-        case "nodejs":
-          return { x: 75, y: 60 };
-        case "go":
-          return { x: 245, y: 60 };
-        case "typescript":
-          return { x: 75, y: 140 };
-        case "dist-systems":
-          return { x: 245, y: 140 };
-        case "nestjs":
-          return { x: 75, y: 220 };
-        case "rest-api":
-          return { x: 245, y: 220 };
-        case "postgres":
-          return { x: 75, y: 300 };
-        case "docker":
-          return { x: 245, y: 300 };
-        case "redis":
-          return { x: 75, y: 380 };
-        case "k8s":
-          return { x: 245, y: 380 };
-        case "bullmq":
-          return { x: 75, y: 460 };
-        case "argocd":
-          return { x: 245, y: 460 };
-        case "azure-servicebus":
-          return { x: 75, y: 540 };
-        case "azure-apim":
-          return { x: 245, y: 540 };
-        case "python":
-          return { x: 75, y: 620 };
-        case "sap-integration":
-          return { x: 245, y: 620 };
-        case "langchain":
-          return { x: 75, y: 700 };
-        case "mekari-talenta":
-          return { x: 245, y: 700 };
-        case "langgraph":
-          return { x: 75, y: 780 };
-        case "llm-router":
-          return { x: 245, y: 780 };
-        case "claude-api":
-          return { x: 75, y: 860 };
-        case "vectordb":
-          return { x: 245, y: 860 };
-        default:
-          return { x: node.x, y: node.y };
+        case "nodejs": return { x: 150, y: 80 };
+        case "go": return { x: 450, y: 80 };
+        case "typescript": return { x: 150, y: 160 };
+        case "dist-systems": return { x: 450, y: 160 };
+        case "nestjs": return { x: 150, y: 240 };
+        case "rest-api": return { x: 450, y: 240 };
+        case "postgres": return { x: 150, y: 320 };
+        case "docker": return { x: 450, y: 320 };
+        case "redis": return { x: 150, y: 400 };
+        case "k8s": return { x: 450, y: 400 };
+        case "bullmq": return { x: 150, y: 480 };
+        case "argocd": return { x: 450, y: 480 };
+        case "azure-servicebus": return { x: 150, y: 560 };
+        case "azure-apim": return { x: 450, y: 560 };
+        case "python": return { x: 150, y: 640 };
+        case "sap-integration": return { x: 450, y: 640 };
+        case "langchain": return { x: 150, y: 720 };
+        case "mekari-talenta": return { x: 450, y: 720 };
+        case "langgraph": return { x: 150, y: 800 };
+        case "llm-router": return { x: 450, y: 800 };
+        case "claude-api": return { x: 150, y: 880 };
+        case "vectordb": return { x: 450, y: 880 };
+        default: return { x: 300, y: 960 };
       }
     },
-    [isMobile],
+    [],
   );
 
   const getShortTitle = (node: SkillNode): string => {
@@ -452,18 +410,14 @@ export default function SkillTree({
       <div className="absolute top-0 right-0 w-64 h-64 bg-neu-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
       <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-neu-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
 
-      <div className="relative z-10">
+      <div className="relative z-10 w-full flex flex-col">
         {/* Responsive SVG Container wrapping the interactive map */}
-        <div className="relative w-full select-none py-4 flex justify-center">
-          <div
-            className={cn(
-              "relative",
-              isMobile ? "w-full max-w-[320px] h-[940px]" : "w-full h-[420px]",
-            )}
-          >
+        <div className="relative w-full select-none py-2 flex justify-center overflow-visible">
+          <div className="relative w-full max-w-[600px] h-[45vh] min-h-[300px] mx-auto flex items-center justify-center">
             <svg
-              viewBox={isMobile ? "0 0 320 940" : "0 0 1260 400"}
-              className="w-full h-full absolute inset-0 z-0 overflow-visible"
+              viewBox="0 0 600 960"
+              preserveAspectRatio="xMidYMid meet"
+              className="w-full h-full object-contain z-0 overflow-visible"
             >
               <defs>
                 <linearGradient
@@ -571,7 +525,6 @@ export default function SkillTree({
                     anyActive={anyActive}
                     connectedToActive={connectedToActive}
                     isDark={isDark}
-                    isMobile={isMobile}
                     coords={coords}
                     colors={colors}
                     shortTitle={shortTitle}
