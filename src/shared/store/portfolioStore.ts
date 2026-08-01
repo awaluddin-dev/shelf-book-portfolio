@@ -26,11 +26,29 @@ interface PortfolioState {
   showInquiryModal: boolean;
   setShowInquiryModal: (show: boolean) => void;
 
+  inquiryMessage: string;
+  setInquiryMessage: (msg: string) => void;
+  draftInquirySource: string | null;
+  setDraftInquirySource: (source: string | null) => void;
+
+  showConnectionTooltip: boolean;
+  setShowConnectionTooltip: (show: boolean) => void;
+
   toastMessage: string | null;
   triggerToast: (msg: string) => void;
 
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
+
+  // --- Cover Letter Global State ---
+  coverLetterText: string;
+  setCoverLetterText: (text: string | ((prev: string) => string)) => void;
+  coverLetterStatus: 'idle' | 'loading' | 'streaming' | 'done' | 'error';
+  setCoverLetterStatus: (status: 'idle' | 'loading' | 'streaming' | 'done' | 'error') => void;
+  coverLetterError: string | null;
+  setCoverLetterError: (err: string | null) => void;
+  coverLetterJobDesc: string;
+  setCoverLetterJobDesc: (desc: string) => void;
 
   // --- API Data State ---
   dynamicRoadmap: any[];
@@ -75,6 +93,19 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
   showInquiryModal: false,
   setShowInquiryModal: (show) => set({ showInquiryModal: show }),
 
+  inquiryMessage: "",
+  setInquiryMessage: (msg) => set({ inquiryMessage: msg }),
+  draftInquirySource: null,
+  setDraftInquirySource: (source) => set({ draftInquirySource: source }),
+
+  showConnectionTooltip: false,
+  setShowConnectionTooltip: (show) => {
+    set({ showConnectionTooltip: show });
+    if (show) {
+      setTimeout(() => set({ showConnectionTooltip: false }), 5000);
+    }
+  },
+
   toastMessage: null,
   triggerToast: (msg) => {
     set({ toastMessage: msg });
@@ -85,6 +116,18 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
 
   isLoading: true,
   setIsLoading: (isLoading) => set({ isLoading }),
+
+  // --- Cover Letter Global State ---
+  coverLetterText: "",
+  setCoverLetterText: (text) => set((state) => ({ 
+    coverLetterText: typeof text === "function" ? text(state.coverLetterText) : text 
+  })),
+  coverLetterStatus: "idle",
+  setCoverLetterStatus: (status) => set({ coverLetterStatus: status }),
+  coverLetterError: null,
+  setCoverLetterError: (error) => set({ coverLetterError: error }),
+  coverLetterJobDesc: "",
+  setCoverLetterJobDesc: (desc) => set({ coverLetterJobDesc: desc }),
 
   // --- API Data State ---
   dynamicRoadmap: [],

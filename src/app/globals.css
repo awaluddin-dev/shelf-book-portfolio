@@ -288,53 +288,7 @@ body *,
   animation-play-state: paused;
 }
 
-@media print {
-  .fixed,
-  button,
-  form,
-  .no-print,
-  [role="dialog"],
-  iframe {
-    display: none !important;
-  }
 
-  body,
-  html,
-  .min-h-screen {
-    background: #fff !important;
-    color: #111 !important;
-    font-size: 11pt !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  section {
-    break-inside: avoid;
-    margin-top: 1.5rem !important;
-    margin-bottom: 1.5rem !important;
-    padding: 0 !important;
-  }
-
-  .shadow-neu,
-  .shadow-neu-inset,
-  .shadow-neu-sm,
-  .shadow-neu-modal {
-    box-shadow: none !important;
-    border: 1px solid #e4e4e7 !important;
-    background: #fff !important;
-  }
-
-  .text-neu-text-muted,
-  .text-zinc-400,
-  .text-gray-400,
-  .text-neutral-400 {
-    color: #4b5563 !important;
-  }
-
-  .print-text-neu-accent {
-    color: #3b82f6 !important;
-  }
-}
 
 /* Glassy Gradients Implementation */
 .glass-card {
@@ -526,3 +480,6 @@ select option {
     scroll-behavior: auto !important;
   }
 }
+
+
+
