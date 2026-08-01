@@ -8,6 +8,8 @@ import {
   Code2,
   ChevronUp,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Sparkles,
   MessageCircle,
   MessageSquare,
@@ -16,9 +18,8 @@ import {
 } from "lucide-react";
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";
 import {
-  PieChart,
-  Pie,
-  Cell,
+  AreaChart,
+  Area,
   ResponsiveContainer,
   BarChart,
   CartesianGrid,
@@ -27,9 +28,7 @@ import {
   Tooltip,
   Legend,
   Bar,
-  AreaChart,
-  Area,
-} from "recharts"; // NOSONAR / Deprecated warning
+} from "recharts";
 import { cn } from "@/shared/lib/utils";
 import { Testimonial } from "@/shared/types";
 
@@ -51,7 +50,6 @@ export default function ExperienceSection({
     contributionData,
     timelineData,
     repoData,
-    languageData,
     isLoading
   } = usePortfolioStore();
 
@@ -61,15 +59,162 @@ export default function ExperienceSection({
   }, []);
 
   const [activeExpIdx, setActiveExpIdx] = useState<number | null>(0);
-  const [chartType, setChartType] = useState<"temporal" | "repository">("temporal");
+  const [chartType, setChartType] = useState<"temporal" | "heatmap" | "repository">("temporal");
   const [hoveredMonth, setHoveredMonth] = useState<number | null>(null);
-  const [hoveredLang, setHoveredLang] = useState<string | null>(null);
+  // State removed
   const [selectedLevelFilter, setSelectedLevelFilter] = useState<number | null>(null);
   const [activeTooltipDate, setActiveTooltipDate] = useState<string | null>(null);
   
   const heatmapRef = useRef<HTMLDivElement>(null);
   const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const fadeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const testimonialsRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const startScrollLeft = useRef(0);
+  const autoScrollRaf = useRef<number | null>(null);
+  const isHovered = useRef(false);
+  const isAnimatingScroll = useRef(false);
+
+  // Setup infinite loop scrolling logic
+  useEffect(() => {
+    if (testimonialsRef.current && (testimonialsList?.length || 0) > 0) {
+      setTimeout(() => {
+        if (testimonialsRef.current) {
+          testimonialsRef.current.scrollLeft = testimonialsRef.current.scrollWidth / 3;
+        }
+      }, 300);
+    }
+  }, [testimonialsList]);
+
+  // Auto-scroll loop
+  useEffect(() => {
+    const el = testimonialsRef.current;
+    if (!el) return;
+
+    const loop = () => {
+      if (!isDragging.current && !isHovered.current && !isAnimatingScroll.current) {
+        el.scrollLeft += 0.5; // Auto scroll speed
+        
+        // Infinite wrap logic
+        const third = el.scrollWidth / 3;
+        if (el.scrollLeft >= el.scrollWidth - el.clientWidth - 10) {
+          el.scrollLeft -= third;
+        }
+      }
+      autoScrollRaf.current = requestAnimationFrame(loop);
+    };
+
+    autoScrollRaf.current = requestAnimationFrame(loop);
+    return () => {
+      if (autoScrollRaf.current) cancelAnimationFrame(autoScrollRaf.current);
+    };
+  }, []);
+
+  const handleTestimonialsScroll = () => {
+    const el = testimonialsRef.current;
+    if (!el || isDragging.current) return;
+    const third = el.scrollWidth / 3;
+    if (el.scrollLeft < 20) {
+      el.scrollLeft += third;
+    } else if (el.scrollLeft > el.scrollWidth - el.clientWidth - 20) {
+      el.scrollLeft -= third;
+    }
+  };
+
+  const scrollTestimonials = (dir: "left" | "right") => {
+    if (testimonialsRef.current) {
+      isAnimatingScroll.current = true;
+      const scrollAmount = window.innerWidth > 640 ? 440 + 40 : window.innerWidth * 0.85 + 24; // card width + margin
+      testimonialsRef.current.scrollBy({
+        left: dir === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth"
+      });
+      setTimeout(() => {
+        isAnimatingScroll.current = false;
+      }, 600); // Pause auto-scroll while smooth scrolling completes
+    }
+  };
+
+  const heatmapData = useMemo(() => {
+    if (!timelineData || timelineData.length === 0) return [];
+    
+    // Simulate 52 weeks x 7 days based on monthly timeline data
+    const totalCommits = timelineData.reduce((sum: number, item: any) => sum + (item.commits || 0), 0);
+    const weeks = [];
+    for (let w = 0; w < 52; w++) {
+      const days = [];
+      for (let d = 0; d < 7; d++) {
+        const monthIndex = Math.min(timelineData.length - 1, Math.floor(w / 4.33));
+        const monthData = timelineData[monthIndex];
+        
+        const monthWeight = monthData && totalCommits > 0 ? (monthData.commits / totalCommits) * 12 : 1;
+        let intensity = 0;
+        const rand = Math.random();
+        
+        if (monthData && monthData.commits > 0) {
+           if (rand < 0.2 * monthWeight) intensity = 4;
+           else if (rand < 0.4 * monthWeight) intensity = 3;
+           else if (rand < 0.7 * monthWeight) intensity = 2;
+           else if (rand < 0.9 * monthWeight) intensity = 1;
+        }
+        
+        days.push({
+          date: `Day ${w * 7 + d + 1}`,
+          intensity,
+          commits: intensity === 0 ? 0 : Math.floor(Math.random() * 5 * intensity) + 1,
+          month: monthData?.month || ''
+        });
+      }
+      weeks.push(days);
+    }
+    return weeks;
+  }, [timelineData]);
+
+  // Drag-to-scroll handlers
+  const onDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    isDragging.current = true;
+    if (!testimonialsRef.current) return;
+    testimonialsRef.current.style.cursor = 'grabbing';
+    
+    if ('pageX' in e) {
+      startX.current = e.pageX - testimonialsRef.current.offsetLeft;
+    } else {
+      startX.current = e.touches[0].pageX - testimonialsRef.current.offsetLeft;
+    }
+    startScrollLeft.current = testimonialsRef.current.scrollLeft;
+  };
+
+  const onDragEnd = () => {
+    isDragging.current = false;
+    if (testimonialsRef.current) {
+      testimonialsRef.current.style.cursor = 'grab';
+    }
+  };
+
+  const onDragMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDragging.current || !testimonialsRef.current) return;
+    e.preventDefault();
+    let currentX;
+    if ('pageX' in e) {
+      currentX = e.pageX - testimonialsRef.current.offsetLeft;
+    } else {
+      currentX = e.touches[0].pageX - testimonialsRef.current.offsetLeft;
+    }
+    const walk = (currentX - startX.current) * 1.5; // Drag speed multiplier
+    testimonialsRef.current.scrollLeft = startScrollLeft.current - walk;
+    
+    // Check boundaries manually during drag to loop seamlessly
+    const el = testimonialsRef.current;
+    const third = el.scrollWidth / 3;
+    if (el.scrollLeft < 10) {
+      el.scrollLeft += third;
+      startScrollLeft.current += third;
+    } else if (el.scrollLeft > el.scrollWidth - el.clientWidth - 10) {
+      el.scrollLeft -= third;
+      startScrollLeft.current -= third;
+    }
+  };
 
   const handleTouchStart = useCallback((dayDate: string) => {
     if (touchTimeoutRef.current) clearTimeout(touchTimeoutRef.current);
@@ -243,7 +388,9 @@ export default function ExperienceSection({
                     </span>
                   </div>
                   <h3 className="text-xl font-bold text-neu-text tracking-tight">
-                    Git Activity & Contribution Frequency
+                    {chartType === "temporal" && "Git Activity & Contribution Frequency"}
+                    {chartType === "heatmap" && "Annual Coding Contribution Heatmap"}
+                    {chartType === "repository" && "Top Repositories by Activity"}
                   </h3>
                 </div>
 
@@ -262,6 +409,20 @@ export default function ExperienceSection({
                     )}
                   >
                     <GitCommit size={14} /> Commit Timeline
+                  </button>
+                  <button
+                    onClick={() => setChartType("heatmap")}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") setChartType("heatmap");
+                    }}
+                    className={cn(
+                      "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
+                      chartType === "heatmap"
+                        ? "bg-neu-accent text-white shadow-neu-sm"
+                        : "text-neu-text-muted hover:text-neu-accent",
+                    )}
+                  >
+                    <Activity size={14} /> Heatmap
                   </button>
                   <button
                     onClick={() => setChartType("repository")}
@@ -403,82 +564,12 @@ export default function ExperienceSection({
                       </ResponsiveContainer>
                     );
                   }
-                  return (
-                    <ResponsiveContainer
-                      width="100%"
-                      height="100%"
-                      minWidth={1}
-                      minHeight={1}
-                    >
-                      <BarChart
-                        data={repoData}
-                        margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-                      >
-                        <CartesianGrid
-                          strokeDasharray="3 3"
-                          stroke={isDark ? "#2a2b2f" : "#cbd5e1"}
-                          opacity={0.3}
-                          vertical={false}
-                        />
-                        <XAxis
-                          dataKey="name"
-                          stroke={isDark ? "#b2e4bc" : "#4b5563"}
-                          fontSize={10}
-                          tickLine={false}
-                          axisLine={false}
-                          tickFormatter={(value) => value.split(" ")[0]}
-                        />
-                        <YAxis
-                          stroke={isDark ? "#b2e4bc" : "#4b5563"}
-                          fontSize={11}
-                          tickLine={false}
-                          axisLine={false}
-                        />
-                        <Tooltip contentStyle={customTooltipStyle} />
-                        <Legend
-                          iconType="circle"
-                          wrapperStyle={customLegendStyle}
-                        />
-                        <Bar
-                          name="Total Commits"
-                          dataKey="commits"
-                          fill={isDark ? "#4ade80" : "#4f46e5"}
-                          radius={[8, 8, 0, 0]}
-                        />
-                        <Bar
-                          name="Pull Requests"
-                          dataKey="pullRequests"
-                          fill={isDark ? "#22c55e" : "#3b82f6"}
-                          radius={[8, 8, 0, 0]}
-                        />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  );
-                })()}
-              </div>
-
-              {/* Dynamic summary phrase */}
-              <p className="text-xs font-mono text-neu-text-muted text-center pt-2 leading-relaxed">
-                {chartType === "temporal"
-                  ? "✓ Consistently high development velocity maintained throughout late 2025 and early 2026."
-                  : "✓ Highly balanced workload distribution across multiple critical repos and microservices."}
-              </p>
-
-              {/* GitHub-style Contribution Heatmap */}
-              <div className="pt-6 border-t border-gray-300/30 dark:border-gray-700/30">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                  <div>
-                    <h4 className="text-sm font-mono font-bold text-neu-accent uppercase tracking-wider flex items-center gap-2 pl-1 sm:pl-0">
-                      <Code2 size={14} /> Annual Coding Contribution Heatmap
-                    </h4>
-                    <p className="text-xs font-mono text-neu-text-muted mt-1 pl-1 sm:pl-0">
-                      Consistent development activity logged over the past 365
-                      days
-                    </p>
-                  </div>
-
-                  {/* Heatmap Stats */}
-                  <div className="flex flex-wrap gap-4 text-xs font-mono">
+                  
+                  if (chartType === "heatmap") {
+                    return (
+                      <div className="w-full h-full flex flex-col pt-2">
+                        {/* Heatmap Stats */}
+                        <div className="flex flex-wrap gap-4 text-xs font-mono mb-4 justify-end">
                     <div className="px-3 py-1 rounded-lg glass-card-sm">
                       <span className="text-neu-text-muted">Total: </span>
                       <span className="text-neu-accent font-bold">
@@ -497,15 +588,14 @@ export default function ExperienceSection({
                         {heatmapStats.avgIntensity}%
                       </span>
                     </div>
-                  </div>
-                </div>
+                        </div>
 
-                {/* Heatmap Grid Wrapper */}
-                <div
-                  ref={heatmapRef}
-                  className="w-full relative p-3 sm:p-5 rounded-2xl glass-card-inset overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-                >
-                  <div className="min-w-[740px] flex flex-col pt-6">
+                        {/* Heatmap Grid Wrapper */}
+                        <div
+                          ref={heatmapRef as any}
+                          className="w-full relative rounded-2xl overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                        >
+                          <div className="min-w-[740px] flex flex-col">
                     <div className="flex w-full">
                       {/* Weekday labels */}
                       <div className="relative text-[9px] font-mono text-neu-text-muted w-8 pr-2 select-none flex-shrink-0 h-[146px] sm:h-[136px]">
@@ -806,119 +896,72 @@ export default function ExperienceSection({
                   </div>
                 </div>
               </div>
+            );
+          }
+
+                  return (
+                    <ResponsiveContainer
+                      width="100%"
+                      height="100%"
+                      minWidth={1}
+                      minHeight={1}
+                    >
+                      <BarChart
+                        data={repoData}
+                        margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                      >
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          stroke={isDark ? "#2a2b2f" : "#cbd5e1"}
+                          opacity={0.3}
+                          vertical={false}
+                        />
+                        <XAxis
+                          dataKey="name"
+                          stroke={isDark ? "#b2e4bc" : "#4b5563"}
+                          fontSize={10}
+                          tickLine={false}
+                          axisLine={false}
+                          tickFormatter={(value) => value.split(" ")[0]}
+                        />
+                        <YAxis
+                          stroke={isDark ? "#b2e4bc" : "#4b5563"}
+                          fontSize={11}
+                          tickLine={false}
+                          axisLine={false}
+                        />
+                        <Tooltip contentStyle={customTooltipStyle} />
+                        <Legend
+                          iconType="circle"
+                          wrapperStyle={customLegendStyle}
+                        />
+                        <Bar
+                          name="Total Commits"
+                          dataKey="commits"
+                          fill={isDark ? "#4ade80" : "#4f46e5"}
+                          radius={[8, 8, 0, 0]}
+                        />
+                        <Bar
+                          name="Pull Requests"
+                          dataKey="pullRequests"
+                          fill={isDark ? "#22c55e" : "#3b82f6"}
+                          radius={[8, 8, 0, 0]}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  );
+                })()}
+              </div>
+
+              {/* Dynamic summary phrase */}
+              <p className="text-xs font-mono text-neu-text-muted text-center pt-2 leading-relaxed">
+                {chartType === "temporal"
+                  ? "✓ Consistently high development velocity maintained throughout late 2025 and early 2026."
+                  : "✓ Highly balanced workload distribution across multiple critical repos and microservices."}
+              </p>
             </div>
 
-            {/* Most Used Languages Section */}
-            {languageData && languageData.length > 0 && (
-              <motion.div
-                className="mt-8 rounded-3xl glass-card-inset p-4 sm:p-6 md:p-8 relative"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5 }}
-              >
-                <div className="flex items-center justify-between mb-6 border-b border-gray-300/20 dark:border-zinc-800/20 pb-4">
-                  <div className="flex items-center gap-2">
-                    <Code2 size={16} className="text-neu-accent" />
-                    <h3 className="text-lg font-display font-bold text-neu-text tracking-tight">
-                      Most Used Languages
-                    </h3>
-                  </div>
-                  <span className="text-[10px] font-mono text-neu-text-muted bg-neu-bg/50 px-2 py-1 rounded-md">
-                    Live from GitHub
-                  </span>
-                </div>
-
-                {/* Donut Chart & Language Cards */}
-                <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-6">
-                  <div className="w-full md:w-1/3 flex justify-center items-center h-[240px] relative">
-                    <PieChart width={240} height={240}>
-                      <Pie
-                        data={languageData}
-                        cx={120}
-                        cy={120}
-                        innerRadius={0}
-                        outerRadius={105}
-                        paddingAngle={2}
-                        dataKey="percentage"
-                        stroke="none"
-                        isAnimationActive={true}
-                      >
-                        {languageData.map((entry, index) => {
-                          const isHovered = hoveredLang === entry.name;
-                          const isOtherHovered =
-                            hoveredLang !== null && !isHovered;
-                          return (
-                            <Cell
-                              key={`cell-${index}`}
-                              fill={entry.color}
-                              className="cursor-pointer focus:outline-none"
-                              style={{
-                                outline: "none",
-                                transition:
-                                  "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                                opacity: isOtherHovered ? 0.3 : 1,
-                                filter: isHovered
-                                  ? `brightness(1.2) drop-shadow(0px 0px 8px ${entry.color})`
-                                  : "none",
-                                transform: isHovered
-                                  ? "scale(1.05)"
-                                  : "scale(1)",
-                                transformOrigin: "120px 120px",
-                              }}
-                              onMouseEnter={() => setHoveredLang(entry.name)}
-                              onMouseLeave={() => setHoveredLang(null)}
-                            />
-                          );
-                        })}
-                      </Pie>
-                    </PieChart>
-                  </div>
-
-                  <div className="w-full md:w-2/3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4">
-                    {languageData.map((lang, idx) => {
-                      const isHovered = hoveredLang === lang.name;
-                      const isOtherHovered = hoveredLang !== null && !isHovered;
-                      return (
-                        <motion.div
-                          key={idx}
-                          whileHover={{ y: -2 }}
-                          onMouseEnter={() => setHoveredLang(lang.name)}
-                          onMouseLeave={() => setHoveredLang(null)}
-                          className={cn(
-                            "relative flex flex-col gap-1 p-3 rounded-2xl border shadow-sm transition-all duration-200 hover:shadow-md cursor-pointer group",
-                            isHovered
-                              ? "border-neu-accent bg-neu-accent/5 scale-[1.02]"
-                              : "bg-neu-bg border-gray-200/50 dark:border-zinc-800/30",
-                            isOtherHovered ? "opacity-40" : "opacity-100",
-                          )}
-                        >
-                          {idx === 0 && (
-                            <div className="absolute -top-2 -right-2 bg-neu-accent text-white font-mono text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm z-10 flex items-center gap-1">
-                              TOP 1
-                            </div>
-                          )}
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1.5">
-                              <span
-                                className="w-2.5 h-2.5 rounded-full shadow-sm"
-                                style={{ backgroundColor: lang.color }}
-                              />
-                              <span className="text-xs font-bold text-neu-text group-hover:text-neu-accent transition-colors">
-                                {lang.name}
-                              </span>
-                            </div>
-                          </div>
-                          <span className="text-[10px] font-mono text-neu-text-muted">
-                            {lang.percentage.toFixed(1)}%
-                          </span>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </motion.div>
-            )}
+            {/* Most Used Languages Section has been moved to Proficiency.tsx */}
 
             <motion.div
               className="mt-10 rounded-3xl glass-card-inset p-4 sm:p-6 md:p-8 space-y-1 relative"
@@ -1130,9 +1173,38 @@ export default function ExperienceSection({
           </div>
         </div>
 
-        {/* Infinite CSS Marquee Viewport with generous vertical padding to prevent top/bottom clipping on hover scale & high-contrast glow shadows */}
-        <div className="relative w-full overflow-hidden py-24 -my-12 px-6">
-          <div className="animate-marquee flex gap-10 select-none">
+        <div className="relative w-full py-16 -my-8 px-0 md:px-0">
+          <div className="flex justify-between items-center px-4 mb-4 z-20 relative">
+            <button
+              onClick={() => scrollTestimonials("left")}
+              className="p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5 bg-neu-bg/80 backdrop-blur-md"
+              aria-label="Scroll Left"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              onClick={() => scrollTestimonials("right")}
+              className="p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5 bg-neu-bg/80 backdrop-blur-md"
+              aria-label="Scroll Right"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
+          
+          <div 
+            ref={testimonialsRef}
+            onScroll={handleTestimonialsScroll}
+            onMouseEnter={() => isHovered.current = true}
+            onMouseLeave={() => { isHovered.current = false; onDragEnd(); }}
+            onMouseDown={onDragStart}
+            onMouseUp={onDragEnd}
+            onMouseMove={onDragMove}
+            onTouchStart={onDragStart}
+            onTouchEnd={onDragEnd}
+            onTouchMove={onDragMove}
+            style={{ cursor: 'grab' }}
+            className="flex select-none overflow-x-auto scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] py-12 px-0"
+          >
             {[
               ...testimonialsList,
               ...testimonialsList,
@@ -1141,13 +1213,8 @@ export default function ExperienceSection({
               <div
                 key={`${t.id}-dup-${index}`}
                 className={cn(
-                  "flex-shrink-0 w-[85vw] sm:w-[440px] max-w-[400px] sm:max-w-none p-5 sm:p-8 rounded-3xl glass-card relative flex flex-col justify-between group transition-all duration-500 ease-out border border-white/5",
-                  "transform-gpu perspective-1000",
-                  // Alternating rotation to create a natural 3D cylindrical rotation look
-                  index % 2 === 0
-                    ? "rotate-y-4 -rotate-1"
-                    : "-rotate-y-4 rotate-1",
-                  "hover:rotate-y-0 hover:rotate-x-0 hover:scale-[1.05] hover:-translate-y-3 hover:z-30",
+                  "flex-shrink-0 w-[85vw] sm:w-[440px] max-w-[400px] sm:max-w-none p-5 sm:p-8 rounded-3xl glass-card relative flex flex-col justify-between group transition-all duration-300 ease-out border border-white/5 mr-6 sm:mr-10",
+                  "hover:scale-[1.03] hover:-translate-y-2 hover:z-30",
                   "hover:border-blue-500 hover:shadow-[0_25px_50px_-12px_rgba(59,130,246,0.3)] dark:hover:border-emerald-400 dark:hover:shadow-[0_25px_50px_-12px_rgba(74,222,128,0.3)]",
                 )}
               >

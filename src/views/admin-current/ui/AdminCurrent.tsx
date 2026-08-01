@@ -1,9 +1,20 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AdminCrudTable } from '@/widgets/admin-crud-table/ui/AdminCrudTable';
 
 export default function AdminCurrent() {
+  const [roadmaps, setRoadmaps] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch('/api/learning')
+      .then(res => res.json())
+      .then(data => {
+         const rm = data.data?.learning || data.learning || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []));
+         setRoadmaps(rm);
+      })
+      .catch(err => console.error(err));
+  }, []);
   return (
     <AdminCrudTable
       title="Right Now Focus"
@@ -16,7 +27,7 @@ export default function AdminCurrent() {
         if (Array.isArray(data)) return data;
         return [];
       }}
-      defaultFormData={{ title: '', icon: 'PenTool', description: '', link: '', linkText: '' }}
+      defaultFormData={{ title: '', icon: 'PenTool', description: '', link: '', linkText: '', roadmapId: '' }}
       columns={[
         {
           header: 'Focus Area',
@@ -35,6 +46,17 @@ export default function AdminCurrent() {
               <div className="text-xs text-neu-text-muted">{item.link}</div>
             </>
           )
+        },
+        {
+          header: 'Linked Roadmap',
+          render: (item: any) => {
+            const linked = roadmaps.find(r => r.id === item.roadmapId);
+            return (
+              <div className="text-xs text-neu-text-muted">
+                {linked ? <span className="text-neu-accent">{linked.tech}</span> : 'Not Linked'}
+              </div>
+            );
+          }
         }
       ]}
       renderForm={(formData, setFormData) => (
@@ -62,6 +84,15 @@ export default function AdminCurrent() {
                   <label className="text-xs font-mono text-neu-text-muted">Link Text</label>
                   <input required value={formData.linkText || ''} onChange={e => setFormData({...formData, linkText: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Read on dev.to" />
               </div>
+          </div>
+          <div className="space-y-1">
+              <label className="text-xs font-mono text-neu-text-muted">Linked Roadmap (Upcoming Tech)</label>
+              <select value={formData.roadmapId || ''} onChange={e => setFormData({...formData, roadmapId: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none">
+                 <option value="">-- No Roadmap Linked --</option>
+                 {roadmaps.map(rm => (
+                   <option key={rm.id} value={rm.id}>{rm.tech} ({rm.quarter})</option>
+                 ))}
+              </select>
           </div>
         </>
       )}
