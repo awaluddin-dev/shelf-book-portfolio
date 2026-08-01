@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from "motion/react";
 import { Network } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 
-
 interface SkillNode {
   id: string;
   title: string;
   category: string;
+  categoryId?: string;
+  proficiencySkillId?: string;
   level: string;
   x: number;
   y: number;
@@ -42,9 +43,11 @@ const SkillTreeNode = memo(function SkillTreeNode({
   onMouseEnter,
   onMouseLeave,
 }: SkillNodeProps) {
-  let fillGradient = "url(#emerald-grad)";
-  if (node.category === "Infrastructure") fillGradient = "url(#blue-grad)";
-  if (node.category === "AI & Integrations") fillGradient = "url(#purple-grad)";
+  const catLower = (node.category || "").toLowerCase();
+  let fillGradient = "url(#ai-grad)";
+  if (catLower.includes("backend")) fillGradient = "url(#backend-grad)";
+  else if (catLower.includes("infra") || catLower.includes("data"))
+    fillGradient = "url(#infra-grad)";
   let opacityLabel = "opacity-90";
   if (anyActive && !connectedToActive && !active) {
     opacityLabel = "opacity-30";
@@ -108,9 +111,15 @@ const SkillTreeNode = memo(function SkillTreeNode({
 export default function SkillTree({
   isDark,
   isLoading,
+  externalHoveredNodeId,
+  externalHoveredCategory,
+  activeProficiency,
 }: {
   isDark: boolean;
   isLoading?: boolean;
+  externalHoveredNodeId?: string | null;
+  externalHoveredCategory?: string | null;
+  activeProficiency?: any[];
 }) {
   const [nodes, setNodes] = useState<SkillNode[]>([]);
 
@@ -132,10 +141,15 @@ export default function SkillTree({
       .then((res) => res.json())
       .then((data) => {
         let skillsArray = [];
-        if (data.data?.skills) { skillsArray = data.data.skills; }
-        else if (data.skills) { skillsArray = data.skills; }
-        else if (Array.isArray(data.data)) { skillsArray = data.data; }
-        else if (Array.isArray(data)) { skillsArray = data; }
+        if (data.data?.skills) {
+          skillsArray = data.data.skills;
+        } else if (data.skills) {
+          skillsArray = data.skills;
+        } else if (Array.isArray(data.data)) {
+          skillsArray = data.data;
+        } else if (Array.isArray(data)) {
+          skillsArray = data;
+        }
         const parsed = (skillsArray || []).map((n: any) => ({
           ...n,
           connections: parseConnections(n.connections),
@@ -257,11 +271,38 @@ export default function SkillTree({
     return labels[node.id] ?? node.title.split(" ")[0];
   };
 
+  const getEffectiveHoveredNode = () => {
+    if (hoveredNode) return hoveredNode;
+    if (externalHoveredNodeId) {
+      // Find the node that matches the external proficiencySkillId relation
+      const matched = nodes.find(
+        (n) => n.proficiencySkillId === externalHoveredNodeId,
+      );
+      if (matched) return matched;
+    }
+    return null;
+  };
+
   const isConnected = (sourceId: string, targetId: string) => {
-    if (!hoveredNode) return false;
+    const effectiveNode = getEffectiveHoveredNode();
+    if (!effectiveNode && !externalHoveredCategory) return false;
+
+    // If an external category is hovered, show connections between nodes in that category
+    if (externalHoveredCategory && !effectiveNode) {
+      const sourceNode = nodes.find((n) => n.id === sourceId);
+      const targetNode = nodes.find((n) => n.id === targetId);
+      if (
+        sourceNode?.categoryId === externalHoveredCategory &&
+        targetNode?.categoryId === externalHoveredCategory
+      ) {
+        return true;
+      }
+      return false;
+    }
+
     if (
-      hoveredNode.id === sourceId &&
-      hoveredNode.connections.includes(targetId)
+      effectiveNode?.id === sourceId &&
+      effectiveNode.connections.includes(targetId)
     )
       return true;
 
@@ -269,7 +310,7 @@ export default function SkillTree({
     if (
       sourceNode &&
       sourceNode.connections.includes(targetId) &&
-      (hoveredNode.id === targetId || hoveredNode.id === sourceId)
+      (effectiveNode?.id === targetId || effectiveNode?.id === sourceId)
     ) {
       return true;
     }
@@ -277,28 +318,28 @@ export default function SkillTree({
   };
 
   const getCategoryColor = useCallback((category: string) => {
-    switch (category) {
-      case "Core Backend":
-        return {
-          bg: "bg-emerald-500/10 border-emerald-500/30 dark:border-emerald-500/40",
-          text: "text-emerald-500 dark:text-emerald-400",
-          stroke: "#10B981",
-          gradient: "from-emerald-500 to-emerald-700",
-        };
-      case "Infrastructure":
-        return {
-          bg: "bg-blue-500/10 border-blue-500/30 dark:border-blue-500/40",
-          text: "text-blue-500 dark:text-blue-400",
-          stroke: "#3B82F6",
-          gradient: "from-blue-500 to-blue-700",
-        };
-      default:
-        return {
-          bg: "bg-purple-500/10 border-purple-500/30 dark:border-purple-500/40",
-          text: "text-purple-500 dark:text-purple-400",
-          stroke: "#A855F7",
-          gradient: "from-purple-500 to-purple-700",
-        };
+    const catLower = (category || "").toLowerCase();
+    if (catLower.includes("backend")) {
+      return {
+        bg: "bg-[rgba(251,191,36,0.1)] border-[rgba(251,191,36,0.3)] dark:border-[rgba(251,191,36,0.4)]",
+        text: "text-[#fbbf24]",
+        stroke: "#fbbf24",
+        gradient: "from-[#fbbf24] to-[#d97706]",
+      };
+    } else if (catLower.includes("infra") || catLower.includes("data")) {
+      return {
+        bg: "bg-[rgba(244,63,94,0.1)] border-[rgba(244,63,94,0.3)] dark:border-[rgba(244,63,94,0.4)]",
+        text: "text-[#f43f5e]",
+        stroke: "#f43f5e",
+        gradient: "from-[#f43f5e] to-[#be123c]",
+      };
+    } else {
+      return {
+        bg: "bg-[rgba(139,92,246,0.1)] border-[rgba(139,92,246,0.3)] dark:border-[rgba(139,92,246,0.4)]",
+        text: "text-[#8b5cf6]",
+        stroke: "#8b5cf6",
+        gradient: "from-[#8b5cf6] to-[#6d28d9]",
+      };
     }
   }, []);
 
@@ -317,7 +358,12 @@ export default function SkillTree({
       if (!target) return null;
       const targetCoords = getNodeCoords(target);
       const coords = getNodeCoords(node);
-      const path = getBezierPath(coords.x, coords.y, targetCoords.x, targetCoords.y);
+      const path = getBezierPath(
+        coords.x,
+        coords.y,
+        targetCoords.x,
+        targetCoords.y,
+      );
       return {
         id: `${node.id}-${connId}`,
         sourceId: node.id,
@@ -329,8 +375,8 @@ export default function SkillTree({
 
     return nodes.flatMap((node) =>
       node.connections
-        .map(connId => buildPath(node, connId))
-        .filter((item): item is NonNullable<typeof item> => item !== null)
+        .map((connId) => buildPath(node, connId))
+        .filter((item): item is NonNullable<typeof item> => item !== null),
     );
   }, [nodes, getBezierPath, getCategoryColor, getNodeCoords]);
 
@@ -402,48 +448,11 @@ export default function SkillTree({
 
   return (
     <div className="p-8 rounded-3xl glass-card relative overflow-hidden border border-white/5">
-
       {/* Background decoration elements */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-neu-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
       <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-neu-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
 
       <div className="relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-300/30 dark:border-gray-700/30 pb-6 mb-8">
-          <div>
-            <div className="flex items-center gap-2 text-neu-accent mb-1">
-              <Network size={18} />
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
-                Career Map & Blueprint
-              </span>
-            </div>
-            <h2 className="text-3xl font-display font-bold text-neu-text tracking-tight">
-              Interactive Skill Tree
-            </h2>
-            <p className="text-xs text-neu-text-muted font-mono mt-1">
-              ✦ Hover over individual nodes to inspect connections, production
-              usages, and metrics.
-            </p>
-          </div>
-
-          {/* Legend */}
-          <div className="flex flex-wrap gap-4 text-xs font-mono">
-            <div className="flex items-center gap-2">
-              <span className="w-3.5 h-3.5 rounded-full shadow-sm bg-emerald-500"></span>
-              <span className="text-neu-text font-medium">Core Backend</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-3.5 h-3.5 rounded-full shadow-sm bg-blue-500"></span>
-              <span className="text-neu-text font-medium">Infrastructure</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-3.5 h-3.5 rounded-full shadow-sm bg-purple-500"></span>
-              <span className="text-neu-text font-medium">
-                AI & Integrations
-              </span>
-            </div>
-          </div>
-        </div>
-
         {/* Responsive SVG Container wrapping the interactive map */}
         <div className="relative w-full select-none py-4 flex justify-center">
           <div
@@ -458,42 +467,42 @@ export default function SkillTree({
             >
               <defs>
                 <linearGradient
-                  id="emerald-grad"
+                  id="backend-grad"
                   x1="0%"
                   y1="0%"
                   x2="100%"
                   y2="100%"
                 >
-                  <stop offset="0%" stopColor="#10B981" />
+                  <stop offset="0%" stopColor="#fbbf24" />
                   <stop
                     offset="100%"
-                    stopColor={isDark ? "#064E3B" : "#A7F3D0"}
+                    stopColor={isDark ? "#b45309" : "#fcd34d"}
                   />
                 </linearGradient>
                 <linearGradient
-                  id="blue-grad"
+                  id="infra-grad"
                   x1="0%"
                   y1="0%"
                   x2="100%"
                   y2="100%"
                 >
-                  <stop offset="0%" stopColor="#3B82F6" />
+                  <stop offset="0%" stopColor="#f43f5e" />
                   <stop
                     offset="100%"
-                    stopColor={isDark ? "#1E3A8A" : "#BFDBFE"}
+                    stopColor={isDark ? "#be123c" : "#fda4af"}
                   />
                 </linearGradient>
                 <linearGradient
-                  id="purple-grad"
+                  id="ai-grad"
                   x1="0%"
                   y1="0%"
                   x2="100%"
                   y2="100%"
                 >
-                  <stop offset="0%" stopColor="#A855F7" />
+                  <stop offset="0%" stopColor="#8b5cf6" />
                   <stop
                     offset="100%"
-                    stopColor={isDark ? "#581C87" : "#E9D5FF"}
+                    stopColor={isDark ? "#6d28d9" : "#c4b5fd"}
                   />
                 </linearGradient>
               </defs>
@@ -528,13 +537,27 @@ export default function SkillTree({
 
               {/* Render all interactive nodes */}
               {nodes.map((node) => {
-                const active = hoveredNode?.id === node.id;
-                const anyActive = hoveredNode !== null;
-                const connectedToActive = hoveredNode
-                  ? hoveredNode.connections.includes(node.id) ||
-                    node.connections.includes(hoveredNode.id) ||
-                    hoveredNode.id === node.id
-                  : false;
+                const effectiveNode = getEffectiveHoveredNode();
+
+                // A node is active if it's the effective hovered node, OR if it belongs to the external hovered category (and no specific node is hovered)
+                let active = effectiveNode?.id === node.id;
+                if (!effectiveNode && externalHoveredCategory) {
+                  active = node.categoryId === externalHoveredCategory;
+                }
+
+                const anyActive =
+                  effectiveNode !== null || externalHoveredCategory !== null;
+
+                let connectedToActive = false;
+                if (effectiveNode) {
+                  connectedToActive =
+                    effectiveNode.connections.includes(node.id) ||
+                    node.connections.includes(effectiveNode.id) ||
+                    effectiveNode.id === node.id;
+                } else if (externalHoveredCategory) {
+                  connectedToActive =
+                    node.categoryId === externalHoveredCategory;
+                }
 
                 const colors = getCategoryColor(node.category);
                 const coords = getNodeCoords(node);
@@ -564,9 +587,9 @@ export default function SkillTree({
         {/* Dynamic Proficiency Details card below tree */}
         <div className="mt-6 p-5 rounded-2xl glass-card-inset relative min-h-[110px] flex flex-col justify-center border border-white/5">
           <AnimatePresence mode="wait">
-            {hoveredNode ? (
+            {getEffectiveHoveredNode() ? (
               <motion.div
-                key={hoveredNode.id}
+                key={getEffectiveHoveredNode()?.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
@@ -577,16 +600,17 @@ export default function SkillTree({
                   <span
                     className={cn(
                       "text-[10px] font-mono font-bold uppercase tracking-wider block mb-1",
-                      getCategoryColor(hoveredNode.category).text,
+                      getCategoryColor(getEffectiveHoveredNode()!.category)
+                        .text,
                     )}
                   >
-                    {hoveredNode.category}
+                    {getEffectiveHoveredNode()!.category}
                   </span>
                   <h4 className="text-lg font-bold text-neu-text tracking-tight leading-tight mb-1">
-                    {hoveredNode.title}
+                    {getEffectiveHoveredNode()!.title}
                   </h4>
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-1 glass-card rounded-xl text-[10px] font-mono font-bold text-neu-accent mt-1">
-                    Proficiency: {hoveredNode.level}
+                    Proficiency: {getEffectiveHoveredNode()!.level}
                   </div>
                 </div>
                 <div className="md:col-span-3 pl-2">
@@ -594,7 +618,7 @@ export default function SkillTree({
                     TECHNICAL APPLICATION & DEPLOYED CONCEPTS
                   </span>
                   <p className="text-sm text-neu-text-muted leading-relaxed font-sans font-light">
-                    {hoveredNode.details}
+                    {getEffectiveHoveredNode()!.details}
                   </p>
                 </div>
               </motion.div>
@@ -606,9 +630,9 @@ export default function SkillTree({
               >
                 <p className="text-xs font-mono text-neu-text-muted italic flex items-center justify-center gap-2">
                   <span>
-                    ✦ Hover over any skill node in the progressive blueprint to
-                    reveal technical proficiencies and infrastructure
-                    deployments.
+                    {externalHoveredCategory
+                      ? `✦ Highlighting ${activeProficiency?.find((p) => p.id === externalHoveredCategory)?.title || "Selected"} category infrastructure.`
+                      : `✦ Hover over any skill node in the progressive blueprint to reveal technical proficiencies and infrastructure deployments.`}
                   </span>
                 </p>
               </motion.div>
