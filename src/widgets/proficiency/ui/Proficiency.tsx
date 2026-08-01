@@ -129,16 +129,8 @@ export default function ProficiencySection({
                         {category.skills?.map((skill: any, skillIdx: number) => (
                           <div
                             key={skillIdx as number}
-                            onMouseEnter={(e) => {
-                              e.stopPropagation();
-                              setHoveredSkillId(skill.id);
-                              setHoveredCategory(category.id);
-                            }}
-                            onMouseLeave={(e) => {
-                              e.stopPropagation();
-                              setHoveredSkillId(null);
-                              setHoveredCategory(category.id);
-                            }}
+                            onMouseEnter={() => setHoveredSkillId(skill.id)}
+                            onMouseLeave={() => setHoveredSkillId(null)}
                             className="py-4 border-b border-gray-200/5 dark:border-zinc-800/20 last:border-b-0 flex justify-between items-center gap-4 group/item cursor-pointer"
                           >
                             <div className="flex items-start gap-3">
