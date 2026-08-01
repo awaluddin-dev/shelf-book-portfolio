@@ -96,7 +96,7 @@ export default function DockNavigation({
 
         {/* Glass Background */}
         <div 
-          className="absolute inset-0 bg-neu-bg/80 dark:bg-neu-bg/90 backdrop-blur-xl shadow-2xl pointer-events-auto transition-colors duration-300"
+          className="absolute inset-0 bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md shadow-2xl pointer-events-auto transition-colors duration-300"
           style={{ clipPath: "url(#l-shape-clip)", WebkitClipPath: "url(#l-shape-clip)" }}
         />
       </div>

@@ -11,30 +11,35 @@
 
 :root {
   --shadow-neu: 8px 8px 16px rgb(17 45 78 / 8%), -8px -8px 16px #fff;
-  --shadow-neu-inset: inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
+  --shadow-neu-inset:
+    inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
   --shadow-neu-sm: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
   --shadow-neu-modal: 16px 16px 40px rgb(17 45 78 / 20%);
 }
 
 .dark {
   --color-neu-bg: #222831;
-  --color-neu-secondary: #393E46;
-  --color-neu-text: #EEE;
+  --color-neu-secondary: #393e46;
+  --color-neu-text: #eee;
   --color-neu-text-muted: rgb(238 238 238 / 60%);
-  --color-neu-accent: #00ADB5;
-  --shadow-neu: 8px 8px 16px rgb(0 0 0 / 60%), -8px -8px 16px rgb(255 255 255 / 5%);
-  --shadow-neu-inset: inset 6px 6px 12px rgb(0 0 0 / 60%), inset -6px -6px 12px rgb(255 255 255 / 5%);
-  --shadow-neu-sm: 4px 4px 8px rgb(0 0 0 / 50%), -4px -4px 8px rgb(255 255 255 / 5%);
+  --color-neu-accent: #00adb5;
+  --shadow-neu:
+    8px 8px 16px rgb(0 0 0 / 60%), -8px -8px 16px rgb(255 255 255 / 5%);
+  --shadow-neu-inset:
+    inset 6px 6px 12px rgb(0 0 0 / 60%),
+    inset -6px -6px 12px rgb(255 255 255 / 5%);
+  --shadow-neu-sm:
+    4px 4px 8px rgb(0 0 0 / 50%), -4px -4px 8px rgb(255 255 255 / 5%);
   --shadow-neu-modal: 16px 16px 40px rgb(0 0 0 / 80%);
 }
 
 @theme {
   --color-test-1: #123456;
-  --color-neu-bg: #F9F7F7;
-  --color-neu-secondary: #DBE2EF;
-  --color-neu-text: #112D4E;
+  --color-neu-bg: #f9f7f7;
+  --color-neu-secondary: #dbe2ef;
+  --color-neu-text: #112d4e;
   --color-neu-text-muted: rgb(17 45 78 / 65%);
-  --color-neu-accent: #3F72AF;
+  --color-neu-accent: #3f72af;
 }
 
 body {
@@ -46,37 +51,50 @@ body {
 @media screen and (width >= 1280px) and (width <= 1439px) {
   html {
     font-size: 14px; /* Slightly reduce base font size to fit more content */
-    zoom: 0.9;       /* Chrome/Safari specific scaling to mimic larger screens */
+    zoom: 0.9; /* Chrome/Safari specific scaling to mimic larger screens */
   }
 }
 
 /* Explicit neumorphic transitions to prevent jumping on theme change */
 .shadow-neu {
   box-shadow: var(--shadow-neu);
-  transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .shadow-neu-inset {
   box-shadow: var(--shadow-neu-inset);
-  transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .shadow-neu-sm {
   box-shadow: var(--shadow-neu-sm);
-  transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .shadow-neu-modal {
   box-shadow: var(--shadow-neu-modal);
-  transition: box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1), background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Smooth global transition for light/dark theme properties */
-body, 
+body,
 body *,
 .min-h-screen,
 .min-h-screen * {
-  transition-property: background-color, color, border-color, text-decoration-color, fill, stroke;
+  transition-property:
+    background-color, color, border-color, text-decoration-color, fill, stroke;
   transition-duration: 500ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -115,7 +133,9 @@ body *,
   }
 
   /* Standard page layout override for printing */
-  body, html, .min-h-screen {
+  body,
+  html,
+  .min-h-screen {
     background: #fff !important;
     color: #111 !important;
     font-size: 11pt !important;
@@ -154,11 +174,6 @@ body *,
   }
 }
 
-
-
-
-
-
 /* Custom smooth metric card transitions */
 .metric-card-normal {
   box-shadow: var(--shadow-neu);
@@ -167,12 +182,16 @@ body *,
 
 .metric-card-normal:hover {
   border-color: var(--color-neu-accent) !important;
-  box-shadow: 0 10px 25px -5px rgb(63 114 175 / 22%), var(--shadow-neu) !important;
+  box-shadow:
+    0 10px 25px -5px rgb(63 114 175 / 22%),
+    var(--shadow-neu) !important;
 }
 
 .dark .metric-card-normal:hover {
   border-color: var(--color-neu-accent) !important;
-  box-shadow: 0 10px 25px -5px rgb(0 173 181 / 25%), var(--shadow-neu) !important;
+  box-shadow:
+    0 10px 25px -5px rgb(0 173 181 / 25%),
+    var(--shadow-neu) !important;
 }
 
 .metric-card-savings {
@@ -182,42 +201,69 @@ body *,
 
 .metric-card-savings:hover {
   border-color: rgb(16 185 129 / 45%) !important;
-  box-shadow: 0 10px 25px -5px rgb(16 185 129 / 25%), var(--shadow-neu) !important;
+  box-shadow:
+    0 10px 25px -5px rgb(16 185 129 / 25%),
+    var(--shadow-neu) !important;
 }
 
 .dark .metric-card-savings:hover {
   border-color: rgb(16 185 129 / 45%) !important;
-  box-shadow: 0 10px 25px -5px rgb(16 185 129 / 25%), var(--shadow-neu) !important;
+  box-shadow:
+    0 10px 25px -5px rgb(16 185 129 / 25%),
+    var(--shadow-neu) !important;
 }
 
 /* Smooth global transition for light/dark theme properties */
-body, 
+body,
 body *,
 .min-h-screen,
 .min-h-screen * {
-  transition-property: background-color, color, border-color, text-decoration-color, fill, stroke;
+  transition-property:
+    background-color, color, border-color, text-decoration-color, fill, stroke;
   transition-duration: 500ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes rainbow-color {
-  0% { color: #ff0055; }
-  20% { color: #00adb5; }
-  40% { color: #ffd700; }
-  60% { color: #ff8c00; }
-  80% { color: #8a2be2; }
-  100% { color: #ff0055; }
+  0% {
+    color: #ff0055;
+  }
+  20% {
+    color: #00adb5;
+  }
+  40% {
+    color: #ffd700;
+  }
+  60% {
+    color: #ff8c00;
+  }
+  80% {
+    color: #8a2be2;
+  }
+  100% {
+    color: #ff0055;
+  }
 }
 
 @keyframes gradient-x {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .animate-gradient-x {
@@ -243,9 +289,18 @@ body *,
 }
 
 @media print {
-  .fixed, button, form, .no-print, [role="dialog"], iframe { display: none !important; }
+  .fixed,
+  button,
+  form,
+  .no-print,
+  [role="dialog"],
+  iframe {
+    display: none !important;
+  }
 
-  body, html, .min-h-screen {
+  body,
+  html,
+  .min-h-screen {
     background: #fff !important;
     color: #111 !important;
     font-size: 11pt !important;
@@ -260,13 +315,19 @@ body *,
     padding: 0 !important;
   }
 
-  .shadow-neu, .shadow-neu-inset, .shadow-neu-sm, .shadow-neu-modal {
+  .shadow-neu,
+  .shadow-neu-inset,
+  .shadow-neu-sm,
+  .shadow-neu-modal {
     box-shadow: none !important;
     border: 1px solid #e4e4e7 !important;
     background: #fff !important;
   }
 
-  .text-neu-text-muted, .text-zinc-400, .text-gray-400, .text-neutral-400 {
+  .text-neu-text-muted,
+  .text-zinc-400,
+  .text-gray-400,
+  .text-neutral-400 {
     color: #4b5563 !important;
   }
 
@@ -277,7 +338,11 @@ body *,
 
 /* Glassy Gradients Implementation */
 .glass-card {
-  background: linear-gradient(135deg, rgb(219 226 239 / 40%) 0%, rgb(249 247 247 / 60%) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(219 226 239 / 40%) 0%,
+    rgb(249 247 247 / 60%) 100%
+  );
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgb(255 255 255 / 50%);
@@ -290,7 +355,11 @@ body *,
 }
 
 .dark .glass-card {
-  background: linear-gradient(135deg, rgb(57 62 70 / 40%) 0%, rgb(34 40 49 / 70%) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(57 62 70 / 40%) 0%,
+    rgb(34 40 49 / 70%) 100%
+  );
   border: 1px solid rgb(238 238 238 / 8%);
   box-shadow: 0 8px 32px 0 rgb(0 0 0 / 40%);
 }
@@ -306,7 +375,11 @@ body *,
 }
 
 .glass-card-inset {
-  background: linear-gradient(135deg, rgb(219 226 239 / 20%) 0%, rgb(249 247 247 / 40%) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(219 226 239 / 20%) 0%,
+    rgb(249 247 247 / 40%) 100%
+  );
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgb(255 255 255 / 20%);
@@ -319,22 +392,38 @@ body *,
 }
 
 .dark .glass-card-inset {
-  background: linear-gradient(135deg, rgb(57 62 70 / 20%) 0%, rgb(34 40 49 / 50%) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(57 62 70 / 20%) 0%,
+    rgb(34 40 49 / 50%) 100%
+  );
   border: 1px solid rgb(238 238 238 / 3%);
   box-shadow: inset 2px 2px 8px rgb(0 0 0 / 30%);
 }
 
 .glass-card-inset:hover {
-  background: linear-gradient(135deg, rgb(219 226 239 / 30%) 0%, rgb(249 247 247 / 50%) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(219 226 239 / 30%) 0%,
+    rgb(249 247 247 / 50%) 100%
+  );
 }
 
 .dark .glass-card-inset:hover {
-  background: linear-gradient(135deg, rgb(57 62 70 / 30%) 0%, rgb(34 40 49 / 60%) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(57 62 70 / 30%) 0%,
+    rgb(34 40 49 / 60%) 100%
+  );
 }
 
 /* Let's redefine glass-card-highlighted to match inset styling for simplicity, since home_content uses it */
 .glass-card-highlighted {
-  background: linear-gradient(135deg, rgb(219 226 239 / 50%) 0%, rgb(249 247 247 / 70%) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(219 226 239 / 50%) 0%,
+    rgb(249 247 247 / 70%) 100%
+  );
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgb(255 255 255 / 50%);
@@ -347,11 +436,14 @@ body *,
 }
 
 .dark .glass-card-highlighted {
-  background: linear-gradient(135deg, rgb(57 62 70 / 50%) 0%, rgb(34 40 49 / 80%) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(57 62 70 / 50%) 0%,
+    rgb(34 40 49 / 80%) 100%
+  );
   border: 1px solid rgb(238 238 238 / 10%);
   box-shadow: 0 8px 32px 0 rgb(0 0 0 / 40%);
 }
-
 
 /* Custom styling for dropdown options to match theme without affecting the transparent select box */
 select {
@@ -390,7 +482,7 @@ select option {
     background: transparent !important;
     border: 2px solid #000 !important;
   }
-  
+
   .dark .glass-card,
   .dark .glass-card-inset,
   .dark .glass-card-highlighted,
