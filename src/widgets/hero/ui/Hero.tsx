@@ -63,7 +63,7 @@ export default function HeroSection({
                     transition:
                       "box-shadow 0.6s ease-out, border-color 0.6s ease-out",
                   }}
-                  className="flex flex-col justify-between h-full gap-y-4 md:gap-y-5 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-5 md:p-7 rounded-3xl shadow-neu border border-black/5 dark:border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-4 after:h-4 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-3xl after:opacity-70"
+                  className="flex flex-col justify-between h-full gap-y-4 md:gap-y-5 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-5 md:p-7 rounded-3xl shadow-neu border border-black/5 dark:border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-3 before:h-3 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-3 after:h-3 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-3xl after:opacity-70"
                 >
                   {/* Chip Pins */}
                   <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 flex gap-8">
@@ -181,7 +181,7 @@ export default function HeroSection({
                     transition:
                       "box-shadow 0.6s ease-out, border-color 0.6s ease-out",
                   }}
-                  className="flex flex-col justify-between h-full gap-3 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-4 md:p-5 rounded-3xl shadow-neu border border-black/5 dark:border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-4 after:h-4 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-3xl after:opacity-70"
+                  className="flex flex-col justify-between h-full gap-3 w-full bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md p-4 md:p-5 rounded-3xl shadow-neu border border-black/5 dark:border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-3 before:h-3 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-3 after:h-3 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-3xl after:opacity-70"
                 >
                   <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold uppercase tracking-wider text-neu-accent mb-0">
                     <Terminal size={12} /> Connection Terminal
@@ -338,7 +338,7 @@ export default function HeroSection({
                   transition:
                     "box-shadow 0.6s ease-out, border-color 0.6s ease-out",
                 }}
-                className="flex flex-col w-full bg-neu-bg p-3 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl shadow-neu border border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-2xl sm:before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-4 after:h-4 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-2xl sm:after:rounded-br-3xl after:opacity-70"
+                className="flex flex-col w-full bg-neu-bg p-3 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl shadow-neu border border-white/5 relative before:absolute before:content-[''] before:top-0 before:left-0 before:w-3 before:h-3 before:border-t-2 before:border-l-2 before:border-neu-accent/50 before:rounded-tl-2xl sm:before:rounded-tl-3xl before:opacity-70 after:absolute after:content-[''] after:bottom-0 after:right-0 after:w-3 after:h-3 after:border-b-2 after:border-r-2 after:border-neu-accent/50 after:rounded-br-2xl sm:after:rounded-br-3xl after:opacity-70"
               >
                 <div
                   className={cn(
