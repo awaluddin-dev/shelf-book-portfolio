@@ -162,8 +162,8 @@ export default function SkillTree({
 
   const getBezierPath = useCallback(
     (x1: number, y1: number, x2: number, y2: number) => {
-      const dy = (y2 - y1) * 0.5;
-      return `M ${x1} ${y1} C ${x1} ${y1 + dy}, ${x2} ${y2 - dy}, ${x2} ${y2}`;
+      const dx = (x2 - x1) * 0.5;
+      return `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
     },
     [],
   );
@@ -171,31 +171,31 @@ export default function SkillTree({
   const getNodeCoords = useCallback(
     (node: SkillNode) => {
       // Use predefined coordinates since DB x/y are largely unseeded/0.
-      // Layout is designed to be vertical, fitting perfectly into the 60% wide container.
+      // Layout is designed to be horizontal.
       switch (node.id) {
-        case "nodejs": return { x: 150, y: 80 };
-        case "go": return { x: 450, y: 80 };
-        case "typescript": return { x: 150, y: 160 };
-        case "dist-systems": return { x: 450, y: 160 };
-        case "nestjs": return { x: 150, y: 240 };
-        case "rest-api": return { x: 450, y: 240 };
-        case "postgres": return { x: 150, y: 320 };
-        case "docker": return { x: 450, y: 320 };
-        case "redis": return { x: 150, y: 400 };
-        case "k8s": return { x: 450, y: 400 };
-        case "bullmq": return { x: 150, y: 480 };
-        case "argocd": return { x: 450, y: 480 };
-        case "azure-servicebus": return { x: 150, y: 560 };
-        case "azure-apim": return { x: 450, y: 560 };
-        case "python": return { x: 150, y: 640 };
-        case "sap-integration": return { x: 450, y: 640 };
-        case "langchain": return { x: 150, y: 720 };
-        case "mekari-talenta": return { x: 450, y: 720 };
-        case "langgraph": return { x: 150, y: 800 };
-        case "llm-router": return { x: 450, y: 800 };
-        case "claude-api": return { x: 150, y: 880 };
-        case "vectordb": return { x: 450, y: 880 };
-        default: return { x: 300, y: 960 };
+        case "nodejs": return { y: 200, x: 80 };
+        case "go": return { y: 400, x: 80 };
+        case "typescript": return { y: 200, x: 160 };
+        case "dist-systems": return { y: 400, x: 160 };
+        case "nestjs": return { y: 200, x: 240 };
+        case "rest-api": return { y: 400, x: 240 };
+        case "postgres": return { y: 200, x: 320 };
+        case "docker": return { y: 400, x: 320 };
+        case "redis": return { y: 200, x: 400 };
+        case "k8s": return { y: 400, x: 400 };
+        case "bullmq": return { y: 200, x: 480 };
+        case "argocd": return { y: 400, x: 480 };
+        case "azure-servicebus": return { y: 200, x: 560 };
+        case "azure-apim": return { y: 400, x: 560 };
+        case "python": return { y: 200, x: 640 };
+        case "sap-integration": return { y: 400, x: 640 };
+        case "langchain": return { y: 200, x: 720 };
+        case "mekari-talenta": return { y: 400, x: 720 };
+        case "langgraph": return { y: 200, x: 800 };
+        case "llm-router": return { y: 400, x: 800 };
+        case "claude-api": return { y: 200, x: 880 };
+        case "vectordb": return { y: 400, x: 880 };
+        default: return { y: 300, x: 960 };
       }
     },
     [],
@@ -413,9 +413,9 @@ export default function SkillTree({
       <div className="relative z-10 w-full flex flex-col">
         {/* Responsive SVG Container wrapping the interactive map */}
         <div className="relative w-full select-none py-2 flex justify-center overflow-visible">
-          <div className="relative w-full max-w-[600px] h-[45vh] min-h-[300px] mx-auto flex items-center justify-center">
+          <div className="relative w-full h-[45vh] min-h-[400px] flex items-center justify-center">
             <svg
-              viewBox="0 0 600 960"
+              viewBox="0 0 960 600"
               preserveAspectRatio="xMidYMid meet"
               className="w-full h-full object-contain z-0 overflow-visible"
             >

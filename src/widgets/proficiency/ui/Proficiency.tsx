@@ -192,17 +192,35 @@ export default function ProficiencySection({
                 </div>
                 
                 {/* Legend with Tooltips */}
-                <div className="relative flex flex-wrap items-center gap-x-5 gap-y-2.5 font-mono text-xs px-4 py-2.5 rounded-2xl select-none self-start md:self-auto z-10 group/legend bg-neu-bg/50 border border-white/5 dark:border-zinc-800/50">
-                  <div className="relative group cursor-help flex items-center gap-1.5">
+                <div className="relative flex flex-wrap items-center gap-x-5 gap-y-2.5 font-mono text-xs px-4 py-2.5 rounded-2xl select-none self-start md:self-auto z-10 group/legend shadow-sm">
+                  {/* Glowing SVG Border mimicking DockNavigation */}
+                  <svg width="100%" height="100%" className="absolute inset-0 pointer-events-none rounded-2xl z-0 overflow-visible">
+                    <defs>
+                      <linearGradient id="legend-glow" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="300" y2="40">
+                        <stop offset="0%" stopColor="transparent" />
+                        <stop offset="50%" stopColor="transparent" />
+                        <stop offset="75%" stopColor="#3b82f6" />
+                        <stop offset="85%" stopColor="#8b5cf6" />
+                        <stop offset="95%" stopColor="#ec4899" />
+                        <stop offset="100%" stopColor="#f59e0b" />
+                        <animateTransform attributeName="gradientTransform" type="rotate" from="0 150 20" to="360 150 20" dur="4s" repeatCount="indefinite"/>
+                      </linearGradient>
+                    </defs>
+                    <rect x="0" y="0" width="100%" height="100%" rx="16" fill="none" stroke="url(#legend-glow)" strokeWidth="3" />
+                    <rect x="0" y="0" width="100%" height="100%" rx="16" fill="none" stroke={isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"} strokeWidth="1.5" />
+                  </svg>
+                  <div className="absolute inset-0 bg-neu-bg/80 dark:bg-neu-bg/90 backdrop-blur-xl rounded-2xl -z-10" />
+
+                  <div className="relative group cursor-help flex items-center gap-1.5 z-10">
                     <span className="w-2 h-2 rounded-full bg-emerald-500" />
                     <span className="text-neu-text font-medium text-[10px] sm:text-[11px]">
                       Production-ready
                     </span>
                     {/* Tooltip */}
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-3 rounded-xl bg-zinc-950/95 dark:bg-white/95 text-zinc-100 dark:text-zinc-900 shadow-xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none text-left text-[11px] font-sans leading-relaxed border border-white/10 dark:border-zinc-200/50 z-50">
+                    <div className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-56 p-3 rounded-xl bg-zinc-950/95 dark:bg-white/95 text-zinc-100 dark:text-zinc-900 shadow-xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none text-left text-[11px] font-sans leading-relaxed border border-white/10 dark:border-zinc-200/50 z-50">
                       <p className="font-semibold text-emerald-400 dark:text-emerald-600 mb-0.5">Production-ready</p>
                       <p className="text-zinc-300 dark:text-zinc-600">Used in real-world production environments</p>
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-zinc-950/95 dark:border-t-white/95" />
+                      <div className="absolute bottom-[100%] left-1/2 -translate-x-1/2 mb-0 border-4 border-transparent border-b-zinc-950/95 dark:border-b-white/95" />
                     </div>
                   </div>
 
@@ -212,10 +230,10 @@ export default function ProficiencySection({
                       In Use
                     </span>
                     {/* Tooltip */}
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-3 rounded-xl bg-zinc-950/95 dark:bg-white/95 text-zinc-100 dark:text-zinc-900 shadow-xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none text-left text-[11px] font-sans leading-relaxed border border-white/10 dark:border-zinc-200/50 z-50">
+                    <div className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-56 p-3 rounded-xl bg-zinc-950/95 dark:bg-white/95 text-zinc-100 dark:text-zinc-900 shadow-xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none text-left text-[11px] font-sans leading-relaxed border border-white/10 dark:border-zinc-200/50 z-50">
                       <p className="font-semibold text-blue-400 dark:text-blue-600 mb-0.5">In Use</p>
                       <p className="text-zinc-300 dark:text-zinc-600">Actively used in current projects</p>
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-zinc-950/95 dark:border-t-white/95" />
+                      <div className="absolute bottom-[100%] left-1/2 -translate-x-1/2 mb-0 border-4 border-transparent border-b-zinc-950/95 dark:border-b-white/95" />
                     </div>
                   </div>
 
@@ -225,10 +243,10 @@ export default function ProficiencySection({
                       Building
                     </span>
                     {/* Tooltip */}
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-3 rounded-xl bg-zinc-950/95 dark:bg-white/95 text-zinc-100 dark:text-zinc-900 shadow-xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none text-left text-[11px] font-sans leading-relaxed border border-white/10 dark:border-zinc-200/50 z-50">
+                    <div className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-56 p-3 rounded-xl bg-zinc-950/95 dark:bg-white/95 text-zinc-100 dark:text-zinc-900 shadow-xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none text-left text-[11px] font-sans leading-relaxed border border-white/10 dark:border-zinc-200/50 z-50">
                       <p className="font-semibold text-purple-400 dark:text-purple-600 mb-0.5">Building</p>
                       <p className="text-zinc-300 dark:text-zinc-600">Currently learning through active projects</p>
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-zinc-950/95 dark:border-t-white/95" />
+                      <div className="absolute bottom-[100%] left-1/2 -translate-x-1/2 mb-0 border-4 border-transparent border-b-zinc-950/95 dark:border-b-white/95" />
                     </div>
                   </div>
                 </div>
