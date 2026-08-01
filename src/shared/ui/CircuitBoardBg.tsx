@@ -119,7 +119,7 @@ export function CircuitBoardBg() {
     <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[100vw] h-[100vh] pointer-events-none z-0 overflow-hidden">
       {/* Circuit Board SVG Background Pattern - Centered, Mirrored, Circular */}
       <svg 
-        className="absolute inset-0 w-full h-full opacity-40 text-neu-accent pointer-events-none" 
+        className="absolute inset-0 w-full h-full opacity-40 text-neu-accent pointer-events-none -translate-y-12 md:-translate-y-20 lg:-translate-y-24" 
         viewBox="-500 -500 1000 1000"
         preserveAspectRatio="xMidYMid slice"
         style={{
@@ -210,7 +210,7 @@ export function CircuitBoardBg() {
       
       {/* Animated Data Nodes Overlay - 100% Opacity, No Vignette Mask */}
       <svg
-        className="absolute inset-0 w-full h-full pointer-events-none"
+        className="absolute inset-0 w-full h-full pointer-events-none -translate-y-12 md:-translate-y-20 lg:-translate-y-24"
         viewBox="-500 -500 1000 1000"
         preserveAspectRatio="xMidYMid slice"
       >
