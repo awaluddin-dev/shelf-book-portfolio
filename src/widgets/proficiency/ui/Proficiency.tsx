@@ -129,16 +129,8 @@ export default function ProficiencySection({
                         {category.skills?.map((skill: any, skillIdx: number) => (
                           <div
                             key={skillIdx as number}
-                            onMouseEnter={(e) => {
-                              e.stopPropagation();
-                              setHoveredSkillId(skill.id);
-                              setHoveredCategory(category.id);
-                            }}
-                            onMouseLeave={(e) => {
-                              e.stopPropagation();
-                              setHoveredSkillId(null);
-                              setHoveredCategory(category.id);
-                            }}
+                            onMouseEnter={() => setHoveredSkillId(skill.id)}
+                            onMouseLeave={() => setHoveredSkillId(null)}
                             className="py-4 border-b border-gray-200/5 dark:border-zinc-800/20 last:border-b-0 flex justify-between items-center gap-4 group/item cursor-pointer"
                           >
                             <div className="flex items-start gap-3">
@@ -661,10 +653,15 @@ export default function ProficiencySection({
                       {/* Topics & Target Projects */}
                       <div className="lg:col-span-5 space-y-6">
                         {/* Core Topics */}
-                        <div className="p-5 rounded-2xl bg-white/20 dark:bg-black/10 border border-white/10">
-                          <span className="block font-mono text-[10px] text-neu-accent font-extrabold uppercase tracking-widest mb-3">
-                            Core Topics to Master
-                          </span>
+                        <div className="p-5 sm:p-6 rounded-2xl glass-card group hover:shadow-neu-sm transition-all border border-white/5 bg-white/5 dark:bg-black/20">
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 glass-card-inset rounded-lg text-neu-accent">
+                              <LucideIcons.BookOpen size={18} />
+                            </div>
+                            <h3 className="text-base font-bold text-neu-text">
+                              Core Topics to Master
+                            </h3>
+                          </div>
                           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-neu-text-muted">
                             {activeRoadmap[selectedRoadmapIndex!].topics.map(
                               (topic: any, i: number) => (
@@ -681,10 +678,15 @@ export default function ProficiencySection({
                         </div>
 
                         {/* Target Projects */}
-                        <div className="p-5 rounded-2xl bg-white/20 dark:bg-black/10 border border-white/10">
-                          <span className="block font-mono text-[10px] text-neu-accent font-extrabold uppercase tracking-widest mb-3">
-                            Planned Prototype Projects
-                          </span>
+                        <div className="p-5 sm:p-6 rounded-2xl glass-card group hover:shadow-neu-sm transition-all border border-white/5 bg-white/5 dark:bg-black/20">
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 glass-card-inset rounded-lg text-neu-accent">
+                              <LucideIcons.Rocket size={18} />
+                            </div>
+                            <h3 className="text-base font-bold text-neu-text">
+                              Planned Prototype Projects
+                            </h3>
+                          </div>
                           <ul className="space-y-2 text-xs text-neu-text-muted font-mono">
                             {(
                               activeRoadmap[selectedRoadmapIndex!].projects ||

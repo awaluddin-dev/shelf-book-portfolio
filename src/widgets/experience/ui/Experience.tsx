@@ -1214,7 +1214,8 @@ export default function ExperienceSection({
                 key={`${t.id}-dup-${index}`}
                 className={cn(
                   "flex-shrink-0 w-[85vw] sm:w-[440px] max-w-[400px] sm:max-w-none p-5 sm:p-8 rounded-3xl glass-card relative flex flex-col justify-between group transition-all duration-300 ease-out border border-white/5 mr-6 sm:mr-10",
-                  "hover:scale-[1.03] hover:-translate-y-2 hover:z-30",
+                  index % 2 === 0 ? "-rotate-2" : "rotate-2",
+                  "hover:rotate-0 hover:scale-[1.03] hover:-translate-y-2 hover:z-30",
                   "hover:border-blue-500 hover:shadow-[0_25px_50px_-12px_rgba(59,130,246,0.3)] dark:hover:border-emerald-400 dark:hover:shadow-[0_25px_50px_-12px_rgba(74,222,128,0.3)]",
                 )}
               >

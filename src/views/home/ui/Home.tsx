@@ -73,7 +73,7 @@ export default function Portfolio() {
   }, []);
 
   useEffect(() => {
-    const sections = ["hero", "proficiency", "experience", "endorse"];
+    const sections = ["hero", "projects", "proficiency", "experience", "endorse"];
     const observerOptions = {
       root: null,
       rootMargin: "-30% 0px -40% 0px",
