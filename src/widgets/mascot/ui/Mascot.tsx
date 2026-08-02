@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 export function Mascot() {
   const [isVisible, setIsVisible] = useState(false);
   const [expression, setExpression] = useState<
-    "greet" | "normal" | "blink" | "happy"
+    "greet" | "normal" | "blink" | "happy" | "goodbye"
   >("greet");
   const [speechText, setSpeechText] = useState("");
   const [showButton, setShowButton] = useState(false);
@@ -39,12 +39,22 @@ export function Mascot() {
 
       // T=12s
       setTimeout(() => {
+       // Keep showing button in normal/blink loops
         setShowButton(true);
       }, 12000);
     }, timeSpawn);
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleClose = () => {
+    setShowButton(false);
+    setSpeechText("See you!");
+    setExpression("goodbye");
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 2000);
+  };
 
   // Framer Motion Variants
   const mascotVariants: Variants = {
@@ -65,10 +75,38 @@ export function Mascot() {
     normal: { opacity: 1, scale: 1 },
     blink: { opacity: 1, scale: 1 },
     happy: { opacity: 1, scale: 1 },
+    goodbye: { opacity: 0, scale: 0 },
   };
 
   const sapaWingVariants = {
-    greet: { opacity: 1, scale: 1 },
+    greet: { 
+      opacity: 1, 
+      scale: 1,
+      rotate: [0, -15, 0, -15, 0],
+      originX: 1,
+      originY: 0.5,
+      transition: {
+        rotate: {
+          repeat: Infinity,
+          duration: 1.5,
+          ease: "easeInOut"
+        }
+      }
+    },
+    goodbye: { 
+      opacity: 1, 
+      scale: 1,
+      rotate: [0, -15, 0, -15, 0],
+      originX: 1,
+      originY: 0.5,
+      transition: {
+        rotate: {
+          repeat: Infinity,
+          duration: 1.5,
+          ease: "easeInOut"
+        }
+      }
+    },
     normal: { opacity: 0, scale: 0 },
     blink: { opacity: 0, scale: 0 },
     happy: { opacity: 0, scale: 0 },
@@ -80,6 +118,7 @@ export function Mascot() {
     normal: { opacity: 1 },
     blink: { opacity: 1 },
     happy: { opacity: 0 },
+    goodbye: { opacity: 1 },
   };
 
   // Left Eye Normal (MataKanan_2)
@@ -88,6 +127,7 @@ export function Mascot() {
     normal: { opacity: 1 },
     blink: { opacity: 0 },
     happy: { opacity: 0 },
+    goodbye: { opacity: 1 },
   };
 
   // Right Eye Happy (MataKananHappy)
@@ -96,6 +136,7 @@ export function Mascot() {
     normal: { opacity: 0 },
     blink: { opacity: 0 },
     happy: { opacity: 1 },
+    goodbye: { opacity: 0 },
   };
 
   // Left Eye Happy (MataKiriHappy)
@@ -104,6 +145,7 @@ export function Mascot() {
     normal: { opacity: 0 },
     blink: { opacity: 1 },
     happy: { opacity: 1 },
+    goodbye: { opacity: 0 },
   };
 
   return (
@@ -120,7 +162,7 @@ export function Mascot() {
             <SpeechBubble
               text={speechText}
               showButton={showButton}
-              onClose={() => setIsVisible(false)}
+              onClose={handleClose}
             />
 
             <motion.div animate={expression} className="w-full h-full">
