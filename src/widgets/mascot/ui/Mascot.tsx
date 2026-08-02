@@ -70,7 +70,7 @@ export function Mascot() {
     },
   };
 
-  const normalWingVariants = {
+  const normalWingVariants: Variants = {
     greet: { opacity: 0, scale: 0 },
     normal: { opacity: 1, scale: 1 },
     blink: { opacity: 1, scale: 1 },
@@ -78,7 +78,7 @@ export function Mascot() {
     goodbye: { opacity: 0, scale: 0 },
   };
 
-  const sapaWingVariants = {
+  const sapaWingVariants: Variants = {
     greet: { 
       opacity: 1, 
       scale: 1,
@@ -113,7 +113,7 @@ export function Mascot() {
   };
 
   // Right Eye Normal (MataKanan)
-  const normalEyeVariants = {
+  const normalEyeVariants: Variants = {
     greet: { opacity: 1 },
     normal: { opacity: 1 },
     blink: { opacity: 1 },
@@ -122,7 +122,7 @@ export function Mascot() {
   };
 
   // Left Eye Normal (MataKanan_2)
-  const normalLeftEyeVariants = {
+  const normalLeftEyeVariants: Variants = {
     greet: { opacity: 1 },
     normal: { opacity: 1 },
     blink: { opacity: 0 },
@@ -131,7 +131,7 @@ export function Mascot() {
   };
 
   // Right Eye Happy (MataKananHappy)
-  const happyEyeVariants = {
+  const happyEyeVariants: Variants = {
     greet: { opacity: 0 },
     normal: { opacity: 0 },
     blink: { opacity: 0 },
@@ -140,7 +140,7 @@ export function Mascot() {
   };
 
   // Left Eye Happy (MataKiriHappy)
-  const happyLeftEyeVariants = {
+  const happyLeftEyeVariants: Variants = {
     greet: { opacity: 0 },
     normal: { opacity: 0 },
     blink: { opacity: 1 },
