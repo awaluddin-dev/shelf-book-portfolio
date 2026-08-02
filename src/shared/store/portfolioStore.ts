@@ -41,6 +41,8 @@ interface PortfolioState {
   setIsLoading: (isLoading: boolean) => void;
 
   // --- Cover Letter Global State ---
+  showCoverLetterModal: boolean;
+  setShowCoverLetterModal: (show: boolean) => void;
   coverLetterText: string;
   setCoverLetterText: (text: string | ((prev: string) => string)) => void;
   coverLetterStatus: 'idle' | 'loading' | 'streaming' | 'done' | 'error';
@@ -118,6 +120,8 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
   setIsLoading: (isLoading) => set({ isLoading }),
 
   // --- Cover Letter Global State ---
+  showCoverLetterModal: false,
+  setShowCoverLetterModal: (show) => set({ showCoverLetterModal: show }),
   coverLetterText: "",
   setCoverLetterText: (text) => set((state) => ({ 
     coverLetterText: typeof text === "function" ? text(state.coverLetterText) : text 
