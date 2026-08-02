@@ -8,7 +8,7 @@ import {
   Linkedin,
   PenTool,
   Mail,
-} from "lucide-react"; // NOSONAR / Deprecated warning
+} from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { CircuitBoardBg } from "@/shared/ui/CircuitBoardBg";
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";
@@ -32,7 +32,6 @@ export default function HeroSection({
     dynamicHeroConfig,
     dynamicMetrics: activeMetrics,
     triggerToast,
-    showInquiryModal,
     setShowInquiryModal,
     showConnectionTooltip,
   } = usePortfolioStore();
