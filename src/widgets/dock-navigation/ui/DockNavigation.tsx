@@ -10,7 +10,10 @@ import {
   Menu,
   X,
   BookOpen,
+  Sun,
+  Moon,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 
 interface DockNavigationProps {
   isDark: boolean;
@@ -27,6 +30,7 @@ export default function DockNavigation({
 }: Readonly<DockNavigationProps>) {
   const [hoveredDockId, setHoveredDockId] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(true);
+  const { setTheme } = useTheme();
 
   // Initialize state based on screen size on first mount
   useEffect(() => {
@@ -35,17 +39,17 @@ export default function DockNavigation({
     }
   }, []);
 
-  // Full SVG Path for the Top-Right L-Shape (240x240) - 4 rows tall
+  // Full SVG Path for the Top-Right L-Shape (300x240) - 4 rows tall, 5 cols wide
   const lShapePathFull =
-    "M 20 0 L 220 0 A 20 20 0 0 1 240 20 L 240 220 A 20 20 0 0 1 220 240 L 200 240 A 20 20 0 0 1 180 220 L 180 80 A 20 20 0 0 0 160 60 L 20 60 A 20 20 0 0 1 0 40 L 0 20 A 20 20 0 0 1 20 0 Z";
+    "M 20 0 L 280 0 A 20 20 0 0 1 300 20 L 300 220 A 20 20 0 0 1 280 240 L 260 240 A 20 20 0 0 1 240 220 L 240 80 A 20 20 0 0 0 220 60 L 20 60 A 20 20 0 0 1 0 40 L 0 20 A 20 20 0 0 1 20 0 Z";
 
-  // Short SVG Path when Back To Top is hidden (240x180) - 3 rows tall
+  // Short SVG Path when Back To Top is hidden (300x180) - 3 rows tall
   const lShapePathShort =
-    "M 20 0 L 220 0 A 20 20 0 0 1 240 20 L 240 160 A 20 20 0 0 1 220 180 L 200 180 A 20 20 0 0 1 180 160 L 180 80 A 20 20 0 0 0 160 60 L 20 60 A 20 20 0 0 1 0 40 L 0 20 A 20 20 0 0 1 20 0 Z";
+    "M 20 0 L 280 0 A 20 20 0 0 1 300 20 L 300 160 A 20 20 0 0 1 280 180 L 260 180 A 20 20 0 0 1 240 160 L 240 80 A 20 20 0 0 0 220 60 L 20 60 A 20 20 0 0 1 0 40 L 0 20 A 20 20 0 0 1 20 0 Z";
 
   // Square SVG Path when menu is closed (60x60 at top-right corner)
   const lShapePathSquare =
-    "M 200 0 L 220 0 A 20 20 0 0 1 240 20 L 240 40 A 20 20 0 0 1 220 60 L 200 60 A 20 20 0 0 1 180 40 L 180 20 A 20 20 0 0 0 180 20 L 180 20 A 20 20 0 0 1 180 20 L 180 20 A 20 20 0 0 1 200 0 Z";
+    "M 260 0 L 280 0 A 20 20 0 0 1 300 20 L 300 40 A 20 20 0 0 1 280 60 L 260 60 A 20 20 0 0 1 240 40 L 240 20 A 20 20 0 0 0 240 20 L 240 20 A 20 20 0 0 1 240 20 L 240 20 A 20 20 0 0 1 260 0 Z";
 
   const activePath = !isOpen
     ? lShapePathSquare
@@ -61,14 +65,14 @@ export default function DockNavigation({
       initial={{ y: -100, x: 100, opacity: 0 }}
       animate={{ y: 0, x: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      className="fixed top-6 right-6 z-50 w-[240px] h-[240px] pointer-events-none group"
+      className="fixed top-6 right-6 z-50 w-[300px] h-[240px] pointer-events-none group"
     >
       {/* Background and Border */}
       <div className="absolute inset-0 z-0">
         <svg
-          width="240"
+          width="300"
           height="240"
-          viewBox="0 0 240 240"
+          viewBox="0 0 300 240"
           className="absolute inset-0 overflow-visible pointer-events-none"
         >
           <defs>
@@ -84,7 +88,7 @@ export default function DockNavigation({
               gradientUnits="userSpaceOnUse"
               x1="0"
               y1="0"
-              x2="240"
+              x2="300"
               y2="240"
             >
               <stop offset="0%" stopColor="transparent" />
@@ -138,7 +142,7 @@ export default function DockNavigation({
       </div>
 
       {/* Grid Layout for Buttons */}
-      <div className="absolute inset-0 grid grid-cols-4 grid-rows-4 z-10 pointer-events-none">
+      <div className="absolute inset-0 grid grid-cols-5 grid-rows-4 z-10 pointer-events-none">
         {/* Top Left: Projects */}
         <AnimatePresence>
           {isOpen && (
@@ -322,8 +326,69 @@ export default function DockNavigation({
           )}
         </AnimatePresence>
 
+        {/* Top Col 4: Endorse */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
+              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
+              transition={{ duration: 0.2 }}
+              className="col-start-4 row-start-1 flex items-center justify-center pointer-events-auto"
+            >
+              <button
+                onClick={() =>
+                  document
+                    .getElementById("endorse")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+                onMouseEnter={() => setHoveredDockId("endorse")}
+                onMouseLeave={() => setHoveredDockId(null)}
+                className="group relative flex items-center justify-center w-12 h-12 rounded-xl hover:bg-neu-secondary/50 dark:hover:bg-neu-secondary/30 active:scale-90 transition-all cursor-pointer"
+                aria-label="Endorse"
+              >
+                {activeSection === "endorse" && (
+                  <motion.div
+                    layoutId="activeDockButton"
+                    className="absolute inset-0 bg-neu-secondary/80 dark:bg-neu-secondary/60 rounded-xl border border-neu-accent/30"
+                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                  />
+                )}
+                <div
+                  className={cn(
+                    "relative z-10 transition-transform duration-300 group-hover:scale-110",
+                    activeSection === "endorse"
+                      ? "text-neu-accent"
+                      : "text-neu-text-muted group-hover:text-neu-accent",
+                  )}
+                >
+                  <MessageSquare size={18} />
+                </div>
+                {/* Tooltip BOTTOM */}
+                <AnimatePresence>
+                  {hoveredDockId === "endorse" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10, x: "-50%", scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+                      exit={{ opacity: 0, y: -6, x: "-50%", scale: 0.8 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 450,
+                        damping: 24,
+                      }}
+                      className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
+                    >
+                      Endorse
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Top Right (Corner): Hamburger Toggle */}
-        <div className="col-start-4 row-start-1 flex items-center justify-center pointer-events-auto">
+        <div className="col-start-5 row-start-1 flex items-center justify-center pointer-events-auto">
           <button
             onClick={() => setIsOpen(!isOpen)}
             onMouseEnter={() => setHoveredDockId("menu-toggle")}
@@ -362,7 +427,7 @@ export default function DockNavigation({
           </button>
         </div>
 
-        {/* Row 2 Col 3: Endorse */}
+        {/* Row 2 Col 5: Theme Playground */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -370,68 +435,7 @@ export default function DockNavigation({
               animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
               exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
               transition={{ duration: 0.2, delay: 0.05 }}
-              className="col-start-4 row-start-2 flex items-center justify-center pointer-events-auto"
-            >
-              <button
-                onClick={() =>
-                  document
-                    .getElementById("endorse")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-                onMouseEnter={() => setHoveredDockId("endorse")}
-                onMouseLeave={() => setHoveredDockId(null)}
-                className="group relative flex items-center justify-center w-12 h-12 rounded-xl hover:bg-neu-secondary/50 dark:hover:bg-neu-secondary/30 active:scale-90 transition-all cursor-pointer"
-                aria-label="Endorse"
-              >
-                {activeSection === "endorse" && (
-                  <motion.div
-                    layoutId="activeDockButton"
-                    className="absolute inset-0 bg-neu-secondary/80 dark:bg-neu-secondary/60 rounded-xl border border-neu-accent/30"
-                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                  />
-                )}
-                <div
-                  className={cn(
-                    "relative z-10 transition-transform duration-300 group-hover:scale-110",
-                    activeSection === "endorse"
-                      ? "text-neu-accent"
-                      : "text-neu-text-muted group-hover:text-neu-accent",
-                  )}
-                >
-                  <MessageSquare size={18} />
-                </div>
-                {/* Tooltip LEFT */}
-                <AnimatePresence>
-                  {hoveredDockId === "endorse" && (
-                    <motion.div
-                      initial={{ opacity: 0, x: 10, y: "-50%", scale: 0.8 }}
-                      animate={{ opacity: 1, x: 0, y: "-50%", scale: 1 }}
-                      exit={{ opacity: 0, x: 6, y: "-50%", scale: 0.8 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 450,
-                        damping: 24,
-                      }}
-                      className="absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
-                    >
-                      Endorse
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Row 3 Col 3: Theme Playground */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              transition={{ duration: 0.2, delay: 0.1 }}
-              className="col-start-4 row-start-3 flex items-center justify-center pointer-events-auto"
+              className="col-start-5 row-start-2 flex items-center justify-center pointer-events-auto"
             >
               <button
                 onClick={openPlayground}
@@ -471,7 +475,55 @@ export default function DockNavigation({
           )}
         </AnimatePresence>
 
-        {/* Row 4 Col 3: Back to Top */}
+        {/* Row 3 Col 5: Theme Toggle */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
+              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
+              transition={{ duration: 0.2, delay: 0.10 }}
+              className="col-start-5 row-start-3 flex items-center justify-center pointer-events-auto"
+            >
+              <button
+                onClick={() => setTheme(isDark ? 'light' : 'dark')}
+                onMouseEnter={() => setHoveredDockId("theme-toggle")}
+                onMouseLeave={() => setHoveredDockId(null)}
+                className="group relative flex items-center justify-center w-12 h-12 rounded-xl hover:bg-neu-secondary/50 dark:hover:bg-neu-secondary/30 active:scale-90 transition-all cursor-pointer"
+                aria-label="Toggle Theme"
+              >
+                <div
+                  className={cn(
+                    "relative z-10 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110",
+                    "text-neu-text-muted group-hover:text-neu-accent",
+                  )}
+                >
+                  {isDark ? <Sun size={18} /> : <Moon size={18} />}
+                </div>
+                {/* Tooltip LEFT */}
+                <AnimatePresence>
+                  {hoveredDockId === "theme-toggle" && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 10, y: "-50%", scale: 0.8 }}
+                      animate={{ opacity: 1, x: 0, y: "-50%", scale: 1 }}
+                      exit={{ opacity: 0, x: 6, y: "-50%", scale: 0.8 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 450,
+                        damping: 24,
+                      }}
+                      className="absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
+                    >
+                      {isDark ? 'Light Mode' : 'Dark Mode'}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Row 4 Col 5: Back to Top */}
         <AnimatePresence>
           {isOpen && showBackToTop && (
             <motion.div
@@ -479,7 +531,7 @@ export default function DockNavigation({
               animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
               exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
               transition={{ duration: 0.2, delay: 0.15 }}
-              className="col-start-4 row-start-4 flex items-center justify-center pointer-events-auto"
+              className="col-start-5 row-start-4 flex items-center justify-center pointer-events-auto"
             >
               <button
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -513,6 +565,8 @@ export default function DockNavigation({
             </motion.div>
           )}
         </AnimatePresence>
+
+
       </div>
     </motion.div>
   );
