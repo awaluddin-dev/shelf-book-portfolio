@@ -52,6 +52,10 @@ interface PortfolioState {
   coverLetterJobDesc: string;
   setCoverLetterJobDesc: (desc: string) => void;
 
+  // --- AI Chat State ---
+  isChatOpen: boolean;
+  setIsChatOpen: (show: boolean) => void;
+
   // --- API Data State ---
   dynamicRoadmap: any[];
   dynamicProficiency: any[];
@@ -132,6 +136,10 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
   setCoverLetterError: (error) => set({ coverLetterError: error }),
   coverLetterJobDesc: "",
   setCoverLetterJobDesc: (desc) => set({ coverLetterJobDesc: desc }),
+
+  // --- AI Chat State ---
+  isChatOpen: false,
+  setIsChatOpen: (show) => set({ isChatOpen: show }),
 
   // --- API Data State ---
   dynamicRoadmap: [],
