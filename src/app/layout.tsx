@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/shared/ui/ThemeProvider";
 import { ButtonSprinkles } from "@/shared/ui/ButtonSprinkles";
 import { ChatWidget } from "@/widgets/chat/ChatWidget";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -79,6 +80,7 @@ export default function RootLayout({
           <ButtonSprinkles />
           <ChatWidget />
         </ThemeProvider>
+        <Analytics />
         <SpeedInsights />
       </body>
     </html>
