@@ -25,7 +25,24 @@ export interface Project {
   phases?: { date: string; title: string; description: string }[];
   markdown?: string;
   projectLifecycles?: any[];
-  systemArchitectures?: any[];
+  systemArchitectures?: {
+    id?: string;
+    imageUrl: string;
+    order: number;
+    description?: string;
+  }[];
+  projectDatabaseSchemas?: {
+    id?: string;
+    imageUrl: string;
+    order: number;
+    description?: string;
+  }[];
+  projectErds?: {
+    id?: string;
+    imageUrl: string;
+    order: number;
+    description?: string;
+  }[];
   technicalImagery?: {
     featured: string;
     blueprint: string;
@@ -33,9 +50,5 @@ export interface Project {
     featuredCaption: string;
     blueprintCaption: string;
     metricsCaption: string;
-  };
-  projectDatabase?: {
-    schemaImageUrl: string;
-    erdImageUrl: string;
   };
 }
