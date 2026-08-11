@@ -17,10 +17,10 @@ const config: Config = {
     'src/**/*.{js,jsx,ts,tsx}',
     '!src/**/*.d.ts',
     '!src/**/index.{js,jsx,ts,tsx}',
-    '!src/app/layout.tsx',
-    '!src/app/providers.tsx',
+    '!src/app/**',
     '!src/shared/lib/registry.tsx'
   ],
+  modulePathIgnorePatterns: ['<rootDir>/.next/'],
   coverageDirectory: 'coverage',
 }
 

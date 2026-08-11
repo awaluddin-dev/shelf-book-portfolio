@@ -70,23 +70,7 @@ class IntersectionObserver {
 }
 window.IntersectionObserver = IntersectionObserver as any
 
-// Mock framer-motion useScroll to avoid DOM errors in jsdom
-jest.mock('motion/react', () => {
-  const actual = jest.requireActual('motion/react')
-  return {
-    ...actual,
-    useScroll: () => ({ scrollYProgress: { get: () => 0 } }),
-    useSpring: () => ({ get: () => 0 }),
-    motion: {
-      div: ({ children, className, ...props }: any) => (
-        <div className={className} data-testid="motion-div" {...props}>
-          {children}
-        </div>
-      )
-    },
-    AnimatePresence: ({ children }: any) => <>{children}</>
-  }
-})
+
 
 describe('Home Page View', () => {
   beforeEach(() => {
@@ -135,7 +119,7 @@ describe('Home Page View', () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Stack & Insights')).toBeInTheDocument()
+      expect(screen.getByLabelText('Proficiency')).toBeInTheDocument()
       expect(screen.getByLabelText('Experience')).toBeInTheDocument()
       expect(screen.getByLabelText('Endorse')).toBeInTheDocument()
       expect(screen.getByLabelText('Toggle Theme')).toBeInTheDocument()

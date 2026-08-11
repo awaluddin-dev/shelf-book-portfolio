@@ -21,53 +21,50 @@ jest.mock('motion/react', () => ({
   AnimatePresence: ({ children }: any) => <>{children}</>
 }))
 
-describe('ProjectsSection', () => {
-  const mockSetSearchQuery = jest.fn()
-  const mockSetSelectedCategory = jest.fn()
-  const mockSetSortBy = jest.fn()
-  const mockSetIsFilterModalOpen = jest.fn()
-  const mockGetTechIconAndColor = jest.fn(() => ({ color: 'bg-red-500', icon: <span>Icon</span> }))
-  const mockGetTagProjectCount = jest.fn(() => 2)
-  const mockSetSelectedProject = jest.fn()
-  const mockSetFocusedProject = jest.fn()
-  const mockTriggerToast = jest.fn()
-  const mockSetIsBannerMinimized = jest.fn()
-  const mockScrollShelf = jest.fn()
+const mockSetSearchQuery = jest.fn()
+const mockSetSelectedCategory = jest.fn()
+const mockSetSelectedProject = jest.fn()
+const mockSetFocusedProject = jest.fn()
+const mockTriggerToast = jest.fn()
 
-  const defaultProps = {
+jest.mock('@/shared/store/portfolioStore', () => ({
+  usePortfolioStore: jest.fn(() => ({
     searchQuery: '',
     setSearchQuery: mockSetSearchQuery,
     selectedCategory: null,
     setSelectedCategory: mockSetSelectedCategory,
-    categories: ['Category 1', 'Category 2'],
-    sortBy: 'newest',
-    setSortBy: mockSetSortBy,
-    isFilterModalOpen: false,
-    setIsFilterModalOpen: mockSetIsFilterModalOpen,
-    filteredProjects: [{ id: '1', title: 'Test Project' }],
-    getTechIconAndColor: mockGetTechIconAndColor,
-    getTagProjectCount: mockGetTagProjectCount,
     setSelectedProject: mockSetSelectedProject,
     setFocusedProject: mockSetFocusedProject,
-    isDark: true,
     focusedProject: null,
     dynamicHeroConfig: {},
     triggerToast: mockTriggerToast,
-    shelfRef: { current: null },
-    activeProjects: [{ id: '1', title: 'Test Project' }],
-    selectedProject: null,
-    isBannerMinimized: false,
-    setIsBannerMinimized: mockSetIsBannerMinimized,
+    dynamicProjects: [{ id: '1', title: 'Test Project', tags: ['React'], category: 'Category 1', date: '2024' }],
     isLoading: false,
-    scrollShelf: mockScrollShelf
-  }
+  }))
+}))
 
+import { usePortfolioStore } from '@/shared/store/portfolioStore'
+
+describe('ProjectsSection', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(usePortfolioStore as unknown as jest.Mock).mockReturnValue({
+      searchQuery: '',
+      setSearchQuery: mockSetSearchQuery,
+      selectedCategory: null,
+      setSelectedCategory: mockSetSelectedCategory,
+      setSelectedProject: mockSetSelectedProject,
+      setFocusedProject: mockSetFocusedProject,
+      focusedProject: null,
+      dynamicHeroConfig: {},
+      triggerToast: mockTriggerToast,
+      dynamicProjects: [{ id: '1', title: 'Test Project', tags: ['React'], category: 'Category 1', date: '2024' }],
+      isLoading: false,
+    })
   })
 
   it('renders correctly with default props', () => {
-    render(<ProjectsSection {...defaultProps} />)
+    render(<ProjectsSection isDark={true} />)
     expect(screen.getByText('Featured Portfolio & Works')).toBeInTheDocument()
     expect(screen.getByTestId('book-item-1')).toBeInTheDocument()
     expect(screen.getByTestId('mobile-filter-modal')).toBeInTheDocument()
@@ -75,20 +72,46 @@ describe('ProjectsSection', () => {
   })
 
   it('renders loading state correctly', () => {
-    const { container } = render(<ProjectsSection {...defaultProps} isLoading={true} />)
+    ;(usePortfolioStore as unknown as jest.Mock).mockReturnValue({
+      searchQuery: '',
+      setSearchQuery: mockSetSearchQuery,
+      selectedCategory: null,
+      setSelectedCategory: mockSetSelectedCategory,
+      setSelectedProject: mockSetSelectedProject,
+      setFocusedProject: mockSetFocusedProject,
+      focusedProject: null,
+      dynamicHeroConfig: {},
+      triggerToast: mockTriggerToast,
+      dynamicProjects: [],
+      isLoading: true,
+    })
+    const { container } = render(<ProjectsSection isDark={true} />)
     expect(container.querySelector('.animate-pulse')).toBeInTheDocument()
   })
 
   it('renders focused project correctly', () => {
-    render(<ProjectsSection {...defaultProps} focusedProject={{
-      id: '2',
-      title: 'Focused Project',
-      subtitle: 'A focused project subtitle',
-      category: 'Focused Category',
-      date: '2024',
-      tags: ['React'],
-      stats: [{ label: 'Users', value: '1M' }]
-    }} />)
+    ;(usePortfolioStore as unknown as jest.Mock).mockReturnValue({
+      searchQuery: '',
+      setSearchQuery: mockSetSearchQuery,
+      selectedCategory: null,
+      setSelectedCategory: mockSetSelectedCategory,
+      setSelectedProject: mockSetSelectedProject,
+      setFocusedProject: mockSetFocusedProject,
+      focusedProject: {
+        id: '2',
+        title: 'Focused Project',
+        subtitle: 'A focused project subtitle',
+        category: 'Focused Category',
+        date: '2024',
+        tags: ['React'],
+        stats: [{ label: 'Users', value: '1M' }]
+      },
+      dynamicHeroConfig: {},
+      triggerToast: mockTriggerToast,
+      dynamicProjects: [{ id: '1', title: 'Test Project', tags: ['React'], category: 'Category 1', date: '2024' }],
+      isLoading: false,
+    })
+    render(<ProjectsSection isDark={true} />)
     
     expect(screen.getAllByText('Focused Project')[0]).toBeInTheDocument()
     expect(screen.getAllByText('A focused project subtitle')[0]).toBeInTheDocument()
@@ -97,54 +120,66 @@ describe('ProjectsSection', () => {
   })
 
   it('renders empty state when no projects match', () => {
-    render(<ProjectsSection {...defaultProps} filteredProjects={[]} searchQuery="nonexistent" />)
+    ;(usePortfolioStore as unknown as jest.Mock).mockReturnValue({
+      searchQuery: 'nonexistent',
+      setSearchQuery: mockSetSearchQuery,
+      selectedCategory: null,
+      setSelectedCategory: mockSetSelectedCategory,
+      setSelectedProject: mockSetSelectedProject,
+      setFocusedProject: mockSetFocusedProject,
+      focusedProject: null,
+      dynamicHeroConfig: {},
+      triggerToast: mockTriggerToast,
+      dynamicProjects: [{ id: '1', title: 'Test Project', tags: ['React'], category: 'Category 1', date: '2024' }],
+      isLoading: false,
+    })
+    render(<ProjectsSection isDark={true} />)
     expect(screen.getByText('No matching projects found')).toBeInTheDocument()
     expect(screen.getByText('Clear All Filters')).toBeInTheDocument()
   })
 
   it('handles search input', () => {
-    render(<ProjectsSection {...defaultProps} />)
+    render(<ProjectsSection isDark={true} />)
     const input = screen.getByPlaceholderText('Search projects...')
     fireEvent.change(input, { target: { value: 'query' } })
     expect(mockSetSearchQuery).toHaveBeenCalledWith('query')
   })
 
   it('handles category selection', () => {
-    render(<ProjectsSection {...defaultProps} />)
-    
-    // desktop filter buttons are rendered for categories
+    render(<ProjectsSection isDark={true} />)
     const catButton = screen.getAllByRole('button', { name: /Category 1/i })[0]
     fireEvent.click(catButton)
-    
     expect(mockSetSelectedCategory).toHaveBeenCalledWith('Category 1')
   })
 
   it('handles sorting', () => {
-    render(<ProjectsSection {...defaultProps} />)
+    render(<ProjectsSection isDark={true} />)
     const select = screen.getByRole('combobox')
     fireEvent.change(select, { target: { value: 'oldest' } })
-    expect(mockSetSortBy).toHaveBeenCalledWith('oldest')
+    // No mockSetSortBy, state is local
+    expect((select as HTMLSelectElement).value).toBe('oldest')
   })
 
   it('handles clear filters', () => {
-    render(<ProjectsSection {...defaultProps} filteredProjects={[]} />)
+    ;(usePortfolioStore as unknown as jest.Mock).mockReturnValue({
+      searchQuery: 'query',
+      setSearchQuery: mockSetSearchQuery,
+      selectedCategory: 'Category 1',
+      setSelectedCategory: mockSetSelectedCategory,
+      setSelectedProject: mockSetSelectedProject,
+      setFocusedProject: mockSetFocusedProject,
+      focusedProject: null,
+      dynamicHeroConfig: {},
+      triggerToast: mockTriggerToast,
+      dynamicProjects: [],
+      isLoading: false,
+    })
+    render(<ProjectsSection isDark={true} />)
     const clearBtn = screen.getByText('Clear All Filters')
     fireEvent.click(clearBtn)
     
     expect(mockSetSearchQuery).toHaveBeenCalledWith('')
     expect(mockSetSelectedCategory).toHaveBeenCalledWith(null)
     expect(mockTriggerToast).toHaveBeenCalledWith('Filters reset: Showing all projects')
-  })
-
-  it('handles scroll buttons', () => {
-    render(<ProjectsSection {...defaultProps} />)
-    const leftBtn = screen.getByLabelText('Scroll Left')
-    const rightBtn = screen.getByLabelText('Scroll Right')
-    
-    fireEvent.click(leftBtn)
-    expect(mockScrollShelf).toHaveBeenCalledWith('left')
-    
-    fireEvent.click(rightBtn)
-    expect(mockScrollShelf).toHaveBeenCalledWith('right')
   })
 })

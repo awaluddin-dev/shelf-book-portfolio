@@ -25,6 +25,17 @@ jest.mock('motion/react', () => {
   }
 })
 
+import { usePortfolioStore } from '@/shared/store/portfolioStore'
+import { useDraftInquiry } from '@/hooks/useDraftInquiry'
+
+jest.mock('@/shared/store/portfolioStore', () => ({
+  usePortfolioStore: jest.fn()
+}))
+
+jest.mock('@/hooks/useDraftInquiry', () => ({
+  useDraftInquiry: jest.fn(() => ({ draft: jest.fn(), status: 'idle' }))
+}))
+
 describe('ContactModal', () => {
   const mockOnClose = jest.fn()
   const mockTriggerToast = jest.fn()
@@ -33,6 +44,17 @@ describe('ContactModal', () => {
     global.fetch = jest.fn()
     // Reset localStorage
     localStorage.clear()
+    
+    ;(usePortfolioStore as unknown as jest.Mock).mockReturnValue({
+      showInquiryModal: true,
+      setShowInquiryModal: mockOnClose,
+      inquiryMessage: '',
+      setInquiryMessage: jest.fn(),
+      draftInquirySource: null,
+      setDraftInquirySource: jest.fn(),
+      portfolioStatus: 'available',
+      triggerToast: mockTriggerToast,
+    })
   })
 
   afterEach(() => {
@@ -40,12 +62,22 @@ describe('ContactModal', () => {
   })
 
   it('renders nothing when isOpen is false', () => {
-    render(<ContactModal isOpen={false} onClose={mockOnClose} portfolioStatus="available" triggerToast={mockTriggerToast} />)
+    ;(usePortfolioStore as unknown as jest.Mock).mockReturnValue({
+      showInquiryModal: false,
+      setShowInquiryModal: mockOnClose,
+      inquiryMessage: '',
+      setInquiryMessage: jest.fn(),
+      draftInquirySource: null,
+      setDraftInquirySource: jest.fn(),
+      portfolioStatus: 'available',
+      triggerToast: mockTriggerToast,
+    })
+    render(<ContactModal />)
     expect(screen.queryByText('Availability Inquiry')).not.toBeInTheDocument()
   })
 
   it('renders correctly when isOpen is true', () => {
-    render(<ContactModal isOpen={true} onClose={mockOnClose} portfolioStatus="available" triggerToast={mockTriggerToast} />)
+    render(<ContactModal />)
     expect(screen.getByText('Availability Inquiry')).toBeInTheDocument()
     expect(screen.getByText('Available for projects')).toBeInTheDocument()
   })
@@ -59,7 +91,7 @@ describe('ContactModal', () => {
       }
     })
 
-    render(<ContactModal isOpen={true} onClose={mockOnClose} portfolioStatus="available" triggerToast={mockTriggerToast} />)
+    render(<ContactModal />)
     
     // Fill form
     fireEvent.change(screen.getByPlaceholderText('E.g., Sarah Jenkins'), { target: { value: 'Test User' } })
@@ -92,7 +124,7 @@ describe('ContactModal', () => {
       headers: { get: () => null }
     })
 
-    render(<ContactModal isOpen={true} onClose={mockOnClose} portfolioStatus="available" triggerToast={mockTriggerToast} />)
+    render(<ContactModal />)
     
     fireEvent.submit(screen.getByText('Send Inquiry').closest('form') as HTMLFormElement)
     
@@ -108,7 +140,7 @@ describe('ContactModal', () => {
       headers: { get: () => null }
     })
 
-    render(<ContactModal isOpen={true} onClose={mockOnClose} portfolioStatus="available" triggerToast={mockTriggerToast} />)
+    render(<ContactModal />)
     
     fireEvent.submit(screen.getByText('Send Inquiry').closest('form') as HTMLFormElement)
     
@@ -126,7 +158,7 @@ describe('ContactModal', () => {
       headers: { get: () => null }
     })
 
-    render(<ContactModal isOpen={true} onClose={mockOnClose} portfolioStatus="available" triggerToast={mockTriggerToast} />)
+    render(<ContactModal />)
     
     fireEvent.submit(screen.getByText('Send Inquiry').closest('form') as HTMLFormElement)
     

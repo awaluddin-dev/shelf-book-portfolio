@@ -1,10 +1,11 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { AdminSidebar } from '@/widgets/admin-sidebar/ui/AdminSidebar'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
-// Mock useRouter
+// Mock useRouter and usePathname
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  usePathname: jest.fn(() => '/admin'),
 }))
 
 // Mock motion to render normally without animations in tests
@@ -50,7 +51,9 @@ describe('AdminSidebar', () => {
     // Wait, AnimatePresence mock just renders children, so the component's internal state determines if it renders.
     const { container } = render(<AdminSidebar  />)
     
-    const toggleButton = container.querySelector('button')
+    const buttons = container.querySelectorAll('button')
+    // Mobile open (0), Mobile close (1), Desktop toggle (2)
+    const toggleButton = buttons[2]
     expect(toggleButton).toBeInTheDocument()
     
     // Default is collapsed, so 'Collapse' text shouldn't be there
@@ -69,14 +72,11 @@ describe('AdminSidebar', () => {
   it('navigates to different paths on nav item click', () => {
     const { container } = render(<AdminSidebar  />)
     
-    // Dashboard is the first link after toggle
-    const buttons = container.querySelectorAll('button')
-    // buttons[0] is toggle, buttons[1] is Dashboard, buttons[2] is Projects, etc.
-    const projectsBtn = buttons[2]
+    const links = container.querySelectorAll('a')
+    // Find the projects link by href
+    const projectsLink = Array.from(links).find(a => a.getAttribute('href') === '/admin/projects')
     
-    fireEvent.click(projectsBtn)
-    
-    expect(mockPush).toHaveBeenCalledWith('/admin/projects')
+    expect(projectsLink).toBeInTheDocument()
   })
 
   it('handles logout', () => {
@@ -92,25 +92,19 @@ describe('AdminSidebar', () => {
     expect(mockPush).toHaveBeenCalledWith('/admin/login')
   })
 
-  it('renders Back to Portfolio button only on dashboard', () => {
+  it('renders Back to Portfolio link only on dashboard', () => {
+    // Default mock path is /admin
+    ;(usePathname as jest.Mock).mockReturnValue('/admin/dashboard')
     const { container: dashboardContainer } = render(<AdminSidebar  />)
     
-    // We can't find by text easily if collapsed, but it's the second to last button when on dashboard
-    let buttons = Array.from(dashboardContainer.querySelectorAll('button'))
-    let backBtn = buttons[buttons.length - 2]
-    
-    fireEvent.click(backBtn)
-    expect(mockPush).toHaveBeenCalledWith('/')
+    let backLink = Array.from(dashboardContainer.querySelectorAll('a')).find(a => a.getAttribute('href') === '/')
+    expect(backLink).toBeInTheDocument()
 
     // Test on another path
-    mockPush.mockClear()
+    ;(usePathname as jest.Mock).mockReturnValue('/admin/projects')
     const { container: otherContainer } = render(<AdminSidebar  />)
     
-    // If we click the second to last button here, it should be the last nav item, not Back to Portfolio
-    buttons = Array.from(otherContainer.querySelectorAll('button'))
-    backBtn = buttons[buttons.length - 2]
-    
-    fireEvent.click(backBtn)
-    expect(mockPush).not.toHaveBeenCalledWith('/')
+    backLink = Array.from(otherContainer.querySelectorAll('a')).find(a => a.getAttribute('href') === '/')
+    expect(backLink).toBeUndefined()
   })
 })
