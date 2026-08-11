@@ -24,4 +24,18 @@ export interface Project {
   stats?: { label: string; value: string }[];
   phases?: { date: string; title: string; description: string }[];
   markdown?: string;
+  projectLifecycles?: any[];
+  systemArchitectures?: any[];
+  technicalImagery?: {
+    featured: string;
+    blueprint: string;
+    metrics: string;
+    featuredCaption: string;
+    blueprintCaption: string;
+    metricsCaption: string;
+  };
+  projectDatabase?: {
+    schemaImageUrl: string;
+    erdImageUrl: string;
+  };
 }

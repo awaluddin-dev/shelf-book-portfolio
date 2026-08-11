@@ -16,7 +16,8 @@ import {
   Code2,
   Check,
   Copy,
-  Quote
+  Quote,
+  Database
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import ReactMarkdown from "react-markdown";
@@ -122,6 +123,7 @@ export default function ProjectModal({
 
     // Add tail pages
     interiorPages.push({ type: 'lifecycle' });
+    interiorPages.push({ type: 'database' });
     interiorPages.push({ type: 'related' });
 
     // Pair interiorPages into spreads (2 pages per spread)
@@ -344,6 +346,35 @@ export default function ProjectModal({
                  <ProjectLifecycleTracker projectId={selectedProject.id} spineColor={selectedProject.spineColor} />
                ) : (
                  <p className="text-xs text-zinc-500 italic text-center mt-4">No lifecycle data provided.</p>
+               )}
+            </div>
+          </div>
+        );
+
+      case 'database':
+        return (
+          <div className="w-full h-full flex flex-col">
+            <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 shrink-0">
+              <Database size={14} /> Database & ERD
+            </h4>
+            <div className="flex-1 min-h-0 bg-white dark:bg-zinc-900/50 rounded-xl p-4 border border-zinc-200 dark:border-zinc-800 shadow-inner overflow-y-auto custom-scrollbar flex flex-col gap-6">
+               {selectedProject.projectDatabase?.schemaImageUrl || selectedProject.projectDatabase?.erdImageUrl ? (
+                 <>
+                   {selectedProject.projectDatabase.schemaImageUrl && (
+                     <div className="space-y-2">
+                       <h5 className="text-[10px] font-mono font-bold text-zinc-600 dark:text-zinc-400 uppercase">Schema Diagram</h5>
+                       <img src={selectedProject.projectDatabase.schemaImageUrl} alt="Schema" className="w-full h-auto rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-sm" />
+                     </div>
+                   )}
+                   {selectedProject.projectDatabase.erdImageUrl && (
+                     <div className="space-y-2">
+                       <h5 className="text-[10px] font-mono font-bold text-zinc-600 dark:text-zinc-400 uppercase">Entity Relationship Diagram</h5>
+                       <img src={selectedProject.projectDatabase.erdImageUrl} alt="ERD" className="w-full h-auto rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-sm" />
+                     </div>
+                   )}
+                 </>
+               ) : (
+                 <p className="text-xs text-zinc-500 italic text-center mt-4">No database schema or ERD provided.</p>
                )}
             </div>
           </div>
