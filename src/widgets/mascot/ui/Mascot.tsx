@@ -13,7 +13,7 @@ export function Mascot() {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
 
-  const timeSpawn = 30000;
+  const timeSpawn = 600000;
 
   useEffect(() => {
     // Global timer to show the mascot
@@ -39,7 +39,7 @@ export function Mascot() {
 
       // T=12s
       setTimeout(() => {
-       // Keep showing button in normal/blink loops
+        // Keep showing button in normal/blink loops
         setShowButton(true);
       }, 12000);
     }, timeSpawn);
@@ -79,8 +79,8 @@ export function Mascot() {
   };
 
   const sapaWingVariants: Variants = {
-    greet: { 
-      opacity: 1, 
+    greet: {
+      opacity: 1,
       scale: 1,
       rotate: [0, -15, 0, -15, 0],
       originX: 1,
@@ -89,12 +89,12 @@ export function Mascot() {
         rotate: {
           repeat: Infinity,
           duration: 1.5,
-          ease: "easeInOut"
-        }
-      }
+          ease: "easeInOut",
+        },
+      },
     },
-    goodbye: { 
-      opacity: 1, 
+    goodbye: {
+      opacity: 1,
       scale: 1,
       rotate: [0, -15, 0, -15, 0],
       originX: 1,
@@ -103,9 +103,9 @@ export function Mascot() {
         rotate: {
           repeat: Infinity,
           duration: 1.5,
-          ease: "easeInOut"
-        }
-      }
+          ease: "easeInOut",
+        },
+      },
     },
     normal: { opacity: 0, scale: 0 },
     blink: { opacity: 0, scale: 0 },

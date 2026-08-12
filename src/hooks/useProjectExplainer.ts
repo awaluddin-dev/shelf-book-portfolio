@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from "react";
+import { parseSSEStream } from "@/shared/lib/sse";
 
 export interface ProjectPayload {
   id: string;
@@ -57,48 +58,12 @@ export function useProjectExplainer() {
 
       setStatus("streaming");
 
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
       let fullText = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-
-        // Process complete SSE lines from buffer
-        const lines = buffer.split("\n");
-        buffer = lines.pop() ?? ""; // keep incomplete last line in buffer
-
-        for (const line of lines) {
-          if (!line.startsWith("data: ")) continue;
-
-          const data = line.slice(6).trim();
-
-          if (data === "[DONE]") {
-            setStatus("done");
-            explanationCache.set(project.id, fullText);
-            return;
-          }
-
-          if (data.startsWith("[ERROR]")) {
-            throw new Error(data.slice(7).trim());
-          }
-
-          try {
-            const parsed = JSON.parse(data);
-            const delta = parsed?.choices?.[0]?.delta?.content;
-            if (delta) {
-              fullText += delta;
-              setText((prev) => prev + delta);
-            }
-          } catch {
-            // Non-JSON SSE line — skip silently
-          }
-        }
-      }
+      await parseSSEStream(res.body, (delta) => {
+        fullText += delta;
+        setText((prev) => prev + delta);
+      });
+      explanationCache.set(project.id, fullText);
 
       setStatus("done");
     } catch (err) {

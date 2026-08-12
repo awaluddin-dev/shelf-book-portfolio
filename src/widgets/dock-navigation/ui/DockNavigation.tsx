@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { DockItem } from "./DockItem";
 import { cn } from "@/shared/lib/utils";
 import {
   ArrowUp,
@@ -146,247 +147,109 @@ export default function DockNavigation({
 
       {/* Interactive Grid Container */}
       <div className="absolute inset-0 grid grid-cols-5 grid-rows-5 z-10 pointer-events-none">
-        {/* Row 1 Col 1: Projects */}
+        {/* Dock Items */}
         <AnimatePresence>
           {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              transition={{ duration: 0.2 }}
-              className="col-start-1 row-start-1 flex items-center justify-center pointer-events-auto"
-            >
-              <button
-                onClick={() =>
-                  document
-                    .getElementById("projects")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-                onMouseEnter={() => setHoveredDockId("projects")}
-                onMouseLeave={() => setHoveredDockId(null)}
-                className="group relative flex items-center justify-center w-12 h-12 rounded-xl hover:bg-neu-secondary/50 dark:hover:bg-neu-secondary/30 active:scale-90 transition-all cursor-pointer"
-                aria-label="Projects"
-              >
-                {activeSection === "projects" && (
-                  <motion.div
-                    layoutId="activeDockButton"
-                    className="absolute inset-0 bg-neu-secondary/80 dark:bg-neu-secondary/60 rounded-xl border border-neu-accent/30"
-                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                  />
-                )}
-                <div
-                  className={cn(
-                    "relative z-10 transition-transform duration-300 group-hover:scale-110",
-                    activeSection === "projects"
-                      ? "text-neu-accent"
-                      : "text-neu-text-muted group-hover:text-neu-accent",
-                  )}
-                >
-                  <BookOpen size={18} />
-                </div>
-                {/* Tooltip BOTTOM */}
-                <AnimatePresence>
-                  {hoveredDockId === "projects" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10, x: "-50%", scale: 0.8 }}
-                      animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
-                      exit={{ opacity: 0, y: -6, x: "-50%", scale: 0.8 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 450,
-                        damping: 24,
-                      }}
-                      className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
-                    >
-                      Projects
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Top Col 2: Proficiency */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              transition={{ duration: 0.2 }}
-              className="col-start-2 row-start-1 flex items-center justify-center pointer-events-auto"
-            >
-              <button
-                onClick={() =>
-                  document
-                    .getElementById("proficiency")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-                onMouseEnter={() => setHoveredDockId("proficiency")}
-                onMouseLeave={() => setHoveredDockId(null)}
-                className="group relative flex items-center justify-center w-12 h-12 rounded-xl hover:bg-neu-secondary/50 dark:hover:bg-neu-secondary/30 active:scale-90 transition-all cursor-pointer"
-                aria-label="Proficiency"
-              >
-                {activeSection === "proficiency" && (
-                  <motion.div
-                    layoutId="activeDockButton"
-                    className="absolute inset-0 bg-neu-secondary/80 dark:bg-neu-secondary/60 rounded-xl border border-neu-accent/30"
-                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                  />
-                )}
-                <div
-                  className={cn(
-                    "relative z-10 transition-transform duration-300 group-hover:scale-110",
-                    activeSection === "proficiency"
-                      ? "text-neu-accent"
-                      : "text-neu-text-muted group-hover:text-neu-accent",
-                  )}
-                >
-                  <Cpu size={18} />
-                </div>
-                {/* Tooltip BOTTOM */}
-                <AnimatePresence>
-                  {hoveredDockId === "proficiency" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10, x: "-50%", scale: 0.8 }}
-                      animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
-                      exit={{ opacity: 0, y: -6, x: "-50%", scale: 0.8 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 450,
-                        damping: 24,
-                      }}
-                      className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
-                    >
-                      Proficiency
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Top Middle: Experience */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              transition={{ duration: 0.2 }}
-              className="col-start-3 row-start-1 flex items-center justify-center pointer-events-auto"
-            >
-              <button
-                onClick={() =>
-                  document
-                    .getElementById("experience")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-                onMouseEnter={() => setHoveredDockId("experience")}
-                onMouseLeave={() => setHoveredDockId(null)}
-                className="group relative flex items-center justify-center w-12 h-12 rounded-xl hover:bg-neu-secondary/50 dark:hover:bg-neu-secondary/30 active:scale-90 transition-all cursor-pointer"
-                aria-label="Experience"
-              >
-                {activeSection === "experience" && (
-                  <motion.div
-                    layoutId="activeDockButton"
-                    className="absolute inset-0 bg-neu-secondary/80 dark:bg-neu-secondary/60 rounded-xl border border-neu-accent/30"
-                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                  />
-                )}
-                <div
-                  className={cn(
-                    "relative z-10 transition-transform duration-300 group-hover:scale-110",
-                    activeSection === "experience"
-                      ? "text-neu-accent"
-                      : "text-neu-text-muted group-hover:text-neu-accent",
-                  )}
-                >
-                  <Briefcase size={18} />
-                </div>
-                {/* Tooltip BOTTOM */}
-                <AnimatePresence>
-                  {hoveredDockId === "experience" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10, x: "-50%", scale: 0.8 }}
-                      animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
-                      exit={{ opacity: 0, y: -6, x: "-50%", scale: 0.8 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 450,
-                        damping: 24,
-                      }}
-                      className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
-                    >
-                      Experience
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Top Col 4: Endorse */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              transition={{ duration: 0.2 }}
-              className="col-start-4 row-start-1 flex items-center justify-center pointer-events-auto"
-            >
-              <button
-                onClick={() =>
-                  document
-                    .getElementById("endorse")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-                onMouseEnter={() => setHoveredDockId("endorse")}
-                onMouseLeave={() => setHoveredDockId(null)}
-                className="group relative flex items-center justify-center w-12 h-12 rounded-xl hover:bg-neu-secondary/50 dark:hover:bg-neu-secondary/30 active:scale-90 transition-all cursor-pointer"
-                aria-label="Endorse"
-              >
-                {activeSection === "endorse" && (
-                  <motion.div
-                    layoutId="activeDockButton"
-                    className="absolute inset-0 bg-neu-secondary/80 dark:bg-neu-secondary/60 rounded-xl border border-neu-accent/30"
-                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                  />
-                )}
-                <div
-                  className={cn(
-                    "relative z-10 transition-transform duration-300 group-hover:scale-110",
-                    activeSection === "endorse"
-                      ? "text-neu-accent"
-                      : "text-neu-text-muted group-hover:text-neu-accent",
-                  )}
-                >
-                  <MessageSquare size={18} />
-                </div>
-                {/* Tooltip BOTTOM */}
-                <AnimatePresence>
-                  {hoveredDockId === "endorse" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10, x: "-50%", scale: 0.8 }}
-                      animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
-                      exit={{ opacity: 0, y: -6, x: "-50%", scale: 0.8 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 450,
-                        damping: 24,
-                      }}
-                      className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
-                    >
-                      Endorse
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </button>
-            </motion.div>
+            <>
+              <DockItem
+                id="projects"
+                label="Projects"
+                icon={<BookOpen size={18} />}
+                isActive={activeSection === "projects"}
+                onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
+                wrapperClassName="col-start-1 row-start-1 flex items-center justify-center pointer-events-auto"
+                hoveredDockId={hoveredDockId}
+                setHoveredDockId={setHoveredDockId}
+              />
+              <DockItem
+                id="proficiency"
+                label="Proficiency"
+                icon={<Cpu size={18} />}
+                isActive={activeSection === "proficiency"}
+                onClick={() => document.getElementById("proficiency")?.scrollIntoView({ behavior: "smooth" })}
+                wrapperClassName="col-start-2 row-start-1 flex items-center justify-center pointer-events-auto"
+                hoveredDockId={hoveredDockId}
+                setHoveredDockId={setHoveredDockId}
+              />
+              <DockItem
+                id="experience"
+                label="Experience"
+                icon={<Briefcase size={18} />}
+                isActive={activeSection === "experience"}
+                onClick={() => document.getElementById("experience")?.scrollIntoView({ behavior: "smooth" })}
+                wrapperClassName="col-start-3 row-start-1 flex items-center justify-center pointer-events-auto"
+                hoveredDockId={hoveredDockId}
+                setHoveredDockId={setHoveredDockId}
+              />
+              <DockItem
+                id="endorse"
+                label="Endorse"
+                icon={<MessageSquare size={18} />}
+                isActive={activeSection === "endorse"}
+                onClick={() => document.getElementById("endorse")?.scrollIntoView({ behavior: "smooth" })}
+                wrapperClassName="col-start-4 row-start-1 flex items-center justify-center pointer-events-auto"
+                hoveredDockId={hoveredDockId}
+                setHoveredDockId={setHoveredDockId}
+              />
+              
+              <DockItem
+                id="theme-playground"
+                label="Theme Playground"
+                icon={<Palette size={18} />}
+                onClick={openPlayground}
+                wrapperClassName="col-start-5 row-start-2 flex items-center justify-center pointer-events-auto"
+                delay={0.05}
+                tooltipPos="LEFT"
+                hoverAnimation="group-hover:rotate-12 group-hover:scale-110"
+                hoverColor="group-hover:colorful"
+                hoveredDockId={hoveredDockId}
+                setHoveredDockId={setHoveredDockId}
+              />
+              
+              <DockItem
+                id="theme-toggle"
+                label={isDark ? "Light Mode" : "Dark Mode"}
+                ariaLabel="Toggle Theme"
+                icon={isDark ? <Sun size={18} /> : <Moon size={18} />}
+                onClick={() => setTheme(isDark ? 'light' : 'dark')}
+                wrapperClassName="col-start-5 row-start-3 flex items-center justify-center pointer-events-auto"
+                delay={0.10}
+                tooltipPos="LEFT"
+                hoverAnimation="group-hover:rotate-12 group-hover:scale-110"
+                hoveredDockId={hoveredDockId}
+                setHoveredDockId={setHoveredDockId}
+              />
+              
+              <DockItem
+                id="chat-toggle"
+                label="AI Chat"
+                ariaLabel="Ask about Awaluddin"
+                icon={<Sparkles size={18} />}
+                onClick={() => setIsChatOpen(true)}
+                wrapperClassName="col-start-5 row-start-4 flex items-center justify-center pointer-events-auto"
+                delay={0.15}
+                tooltipPos="LEFT"
+                hoverAnimation="group-hover:rotate-12 group-hover:scale-110"
+                hoveredDockId={hoveredDockId}
+                setHoveredDockId={setHoveredDockId}
+              />
+              
+              {showBackToTop && (
+                <DockItem
+                  id="scroll-top"
+                  label="Back to Top"
+                  ariaLabel="Scroll to Top"
+                  icon={<ArrowUp size={18} />}
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  wrapperClassName="col-start-5 row-start-5 flex items-center justify-center pointer-events-auto"
+                  delay={0.20}
+                  tooltipPos="LEFT"
+                  hoverAnimation="group-hover:-translate-y-0.5"
+                  hoveredDockId={hoveredDockId}
+                  setHoveredDockId={setHoveredDockId}
+                />
+              )}
+            </>
           )}
         </AnimatePresence>
 
@@ -429,193 +292,6 @@ export default function DockNavigation({
             </AnimatePresence>
           </button>
         </div>
-
-        {/* Row 2 Col 5: Theme Playground */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              transition={{ duration: 0.2, delay: 0.05 }}
-              className="col-start-5 row-start-2 flex items-center justify-center pointer-events-auto"
-            >
-              <button
-                onClick={openPlayground}
-                onMouseEnter={() => setHoveredDockId("theme-playground")}
-                onMouseLeave={() => setHoveredDockId(null)}
-                className="group relative flex items-center justify-center w-12 h-12 rounded-xl hover:bg-neu-secondary/50 dark:hover:bg-neu-secondary/30 active:scale-90 transition-all cursor-pointer"
-                aria-label="Theme Playground"
-              >
-                <div
-                  className={cn(
-                    "relative z-10 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110",
-                    "text-neu-text-muted group-hover:colorful",
-                  )}
-                >
-                  <Palette size={18} />
-                </div>
-                {/* Tooltip LEFT */}
-                <AnimatePresence>
-                  {hoveredDockId === "theme-playground" && (
-                    <motion.div
-                      initial={{ opacity: 0, x: 10, y: "-50%", scale: 0.8 }}
-                      animate={{ opacity: 1, x: 0, y: "-50%", scale: 1 }}
-                      exit={{ opacity: 0, x: 6, y: "-50%", scale: 0.8 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 450,
-                        damping: 24,
-                      }}
-                      className="absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
-                    >
-                      Theme Playground
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Row 3 Col 5: Theme Toggle */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              transition={{ duration: 0.2, delay: 0.10 }}
-              className="col-start-5 row-start-3 flex items-center justify-center pointer-events-auto"
-            >
-              <button
-                onClick={() => setTheme(isDark ? 'light' : 'dark')}
-                onMouseEnter={() => setHoveredDockId("theme-toggle")}
-                onMouseLeave={() => setHoveredDockId(null)}
-                className="group relative flex items-center justify-center w-12 h-12 rounded-xl hover:bg-neu-secondary/50 dark:hover:bg-neu-secondary/30 active:scale-90 transition-all cursor-pointer"
-                aria-label="Toggle Theme"
-              >
-                <div
-                  className={cn(
-                    "relative z-10 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110",
-                    "text-neu-text-muted group-hover:text-neu-accent",
-                  )}
-                >
-                  {isDark ? <Sun size={18} /> : <Moon size={18} />}
-                </div>
-                {/* Tooltip LEFT */}
-                <AnimatePresence>
-                  {hoveredDockId === "theme-toggle" && (
-                    <motion.div
-                      initial={{ opacity: 0, x: 10, y: "-50%", scale: 0.8 }}
-                      animate={{ opacity: 1, x: 0, y: "-50%", scale: 1 }}
-                      exit={{ opacity: 0, x: 6, y: "-50%", scale: 0.8 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 450,
-                        damping: 24,
-                      }}
-                      className="absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
-                    >
-                      {isDark ? 'Light Mode' : 'Dark Mode'}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Row 4 Col 5: AI Chat */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              transition={{ duration: 0.2, delay: 0.15 }}
-              className="col-start-5 row-start-4 flex items-center justify-center pointer-events-auto"
-            >
-              <button
-                onClick={() => setIsChatOpen(true)}
-                onMouseEnter={() => setHoveredDockId("chat-toggle")}
-                onMouseLeave={() => setHoveredDockId(null)}
-                className="group relative flex items-center justify-center w-12 h-12 rounded-xl hover:bg-neu-secondary/50 dark:hover:bg-neu-secondary/30 active:scale-90 transition-all cursor-pointer"
-                aria-label="Ask about Awaluddin"
-              >
-                <div
-                  className={cn(
-                    "relative z-10 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110",
-                    "text-neu-text-muted group-hover:text-neu-accent",
-                  )}
-                >
-                  <Sparkles size={18} />
-                </div>
-                {/* Tooltip LEFT */}
-                <AnimatePresence>
-                  {hoveredDockId === "chat-toggle" && (
-                    <motion.div
-                      initial={{ opacity: 0, x: 10, y: "-50%", scale: 0.8 }}
-                      animate={{ opacity: 1, x: 0, y: "-50%", scale: 1 }}
-                      exit={{ opacity: 0, x: 6, y: "-50%", scale: 0.8 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 450,
-                        damping: 24,
-                      }}
-                      className="absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
-                    >
-                      AI Chat
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Row 5 Col 5: Back to Top */}
-        <AnimatePresence>
-          {isOpen && showBackToTop && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
-              transition={{ duration: 0.2, delay: 0.2 }}
-              className="col-start-5 row-start-5 flex items-center justify-center pointer-events-auto"
-            >
-              <button
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                onMouseEnter={() => setHoveredDockId("scroll-top")}
-                onMouseLeave={() => setHoveredDockId(null)}
-                className="group relative flex items-center justify-center w-12 h-12 rounded-xl hover:bg-neu-secondary/50 dark:hover:bg-neu-secondary/30 active:scale-90 transition-all cursor-pointer"
-                aria-label="Scroll to Top"
-              >
-                <div className="relative z-10 transition-transform duration-300 group-hover:-translate-y-0.5 text-neu-text-muted group-hover:text-neu-accent">
-                  <ArrowUp size={18} />
-                </div>
-                {/* Tooltip LEFT */}
-                <AnimatePresence>
-                  {hoveredDockId === "scroll-top" && (
-                    <motion.div
-                      initial={{ opacity: 0, x: 10, y: "-50%", scale: 0.8 }}
-                      animate={{ opacity: 1, x: 0, y: "-50%", scale: 1 }}
-                      exit={{ opacity: 0, x: 6, y: "-50%", scale: 0.8 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 450,
-                        damping: 24,
-                      }}
-                      className="absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
-                    >
-                      Back to Top
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
 
       </div>

@@ -19,7 +19,7 @@ import {
   Quote,
   Database
 } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
+import { cn, secureMathRandom } from "@/shared/lib/utils";
 import ReactMarkdown from "react-markdown";
 import MermaidDiagram from "@/shared/ui/MermaidDiagram";
 import ProjectLifecycleTracker from "@/entities/project/ui/ProjectLifecycleTracker";
@@ -509,7 +509,7 @@ export default function ProjectModal({
                 {/* Fake Barcode */}
                 <div className="flex gap-[1px] items-stretch h-full opacity-80 justify-center">
                   {[...Array(28)].map((_, i) => (
-                    <div key={i} className="bg-black" style={{ width: Math.random() > 0.5 ? '2px' : '4px', height: '100%', opacity: Math.random() > 0.2 ? 1 : 0 }}></div>
+                    <div key={i} className="bg-black" style={{ width: secureMathRandom() > 0.5 ? '2px' : '4px', height: '100%', opacity: secureMathRandom() > 0.2 ? 1 : 0 }}></div>
                   ))}
                 </div>
               </div>

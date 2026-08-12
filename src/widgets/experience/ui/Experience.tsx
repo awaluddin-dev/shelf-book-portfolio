@@ -29,7 +29,7 @@ import {
   Legend,
   Bar,
 } from "recharts";
-import { cn } from "@/shared/lib/utils";
+import { cn, secureMathRandom } from "@/shared/lib/utils";
 import { Testimonial } from "@/shared/types";
 
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
@@ -58,7 +58,33 @@ export default function ExperienceSection({
     setMounted(true);
   }, []);
 
-  const [activeExpIdx, setActiveExpIdx] = useState<number | null>(0);
+  const [selectedWorkIndex, setSelectedWorkIndex] = useState<number | null>(null);
+  const [windowStartIndex, setWindowStartIndex] = useState<number>(0);
+
+  const timelineWork = useMemo(() => {
+    return [...activeWork].reverse();
+  }, [activeWork]);
+
+  useEffect(() => {
+    if (timelineWork.length > 0 && selectedWorkIndex === null) {
+      setSelectedWorkIndex(timelineWork.length - 1);
+      setWindowStartIndex(Math.max(0, timelineWork.length - MAX_VISIBLE));
+    }
+  }, [timelineWork, selectedWorkIndex]);
+  const MAX_VISIBLE = 4;
+
+  const handleSelectWorkNode = (index: number) => {
+    setSelectedWorkIndex(index);
+    if (
+      index === windowStartIndex + MAX_VISIBLE - 1 &&
+      index < activeWork.length - 1
+    ) {
+      setWindowStartIndex(windowStartIndex + 1);
+    }
+    if (index === windowStartIndex && index > 0) {
+      setWindowStartIndex(windowStartIndex - 1);
+    }
+  };
   const [chartType, setChartType] = useState<"temporal" | "heatmap" | "repository">("temporal");
   const [hoveredMonth, setHoveredMonth] = useState<number | null>(null);
   // State removed
@@ -150,7 +176,7 @@ export default function ExperienceSection({
         
         const monthWeight = monthData && totalCommits > 0 ? (monthData.commits / totalCommits) * 12 : 1;
         let intensity = 0;
-        const rand = Math.random();
+        const rand = secureMathRandom();
         
         if (monthData && monthData.commits > 0) {
            if (rand < 0.2 * monthWeight) intensity = 4;
@@ -162,7 +188,7 @@ export default function ExperienceSection({
         days.push({
           date: `Day ${w * 7 + d + 1}`,
           intensity,
-          commits: intensity === 0 ? 0 : Math.floor(Math.random() * 5 * intensity) + 1,
+          commits: intensity === 0 ? 0 : Math.floor(secureMathRandom() * 5 * intensity) + 1,
           month: monthData?.month || ''
         });
       }
@@ -963,176 +989,241 @@ export default function ExperienceSection({
 
             {/* Most Used Languages Section has been moved to Proficiency.tsx */}
 
+            {/* Timeline Graph Visualization */}
             <motion.div
-              className="mt-10 rounded-3xl glass-card-inset p-4 sm:p-6 md:p-8 space-y-1 relative"
+              className="mt-10 p-5 sm:p-8 rounded-3xl glass-card-inset space-y-6 max-w-full overflow-hidden relative"
               variants={{
                 hidden: { opacity: 0 },
-                show: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.1,
-                  },
-                },
+                show: { opacity: 1, transition: { staggerChildren: 0.1 } },
               }}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, margin: "-100px" }}
             >
-              {/* Table Headers (Visible only on desktop) */}
-              <div className="hidden md:grid grid-cols-12 gap-4 px-6 pb-4 border-b border-gray-300/20 dark:border-zinc-800/20 text-[10px] font-mono font-bold tracking-[0.2em] text-neu-text-muted uppercase">
-                <div className="col-span-3">Year / Duration</div>
-                <div className="col-span-3">Company</div>
-                <div className="col-span-4">Role & Tech Stack</div>
-                <div className="col-span-2 text-right">
-                  Key Impact Highlight
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-300/30 dark:border-zinc-800/30 pb-6">
+                <div>
+                  <div className="flex items-center gap-2 text-neu-accent mb-1">
+                    <Briefcase size={18} />
+                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
+                      Career Timeline
+                    </span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-display font-bold text-neu-text tracking-tight">
+                    Professional Experience
+                  </h2>
                 </div>
               </div>
 
-              {activeWork.map((job, idx) => {
-                const isActive = activeExpIdx === idx;
-                const isPresent = job.years.toLowerCase().includes("present");
-                return (
-                  <div
-                    key={idx}
-                    className="block"
-                    onMouseEnter={() => setActiveExpIdx(idx)}
-                  >
-                    <div
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => setActiveExpIdx(isActive ? null : idx)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ")
-                          setActiveExpIdx(isActive ? null : idx);
+              <div className="relative min-h-[400px]">
+                {/* Timeline track (Horizontal on desktop, vertical list on narrow screens) */}
+                <div className="relative mt-8 mb-16 px-12 hidden md:block">
+                  <div className="relative h-20 w-full">
+                    {/* Connecting Line */}
+                    <div className="absolute top-1/2 left-0 right-0 h-[3px] bg-gray-300 dark:bg-zinc-800/80 -translate-y-1/2 rounded-full" />
+
+                    {/* Dynamic filled progress track */}
+                    <motion.div
+                      className="absolute top-1/2 left-0 h-[3px] bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 animate-gradient-x -translate-y-1/2 rounded-full origin-left"
+                      initial={{ width: "0%" }}
+                      animate={{
+                        width:
+                          timelineWork.length > 1
+                            ? `${(Math.max(0, Math.min(selectedWorkIndex! - windowStartIndex, MAX_VISIBLE - 1)) / (Math.min(timelineWork.length - windowStartIndex, MAX_VISIBLE) - 1)) * 100}%`
+                            : "0%",
                       }}
-                      className={cn(
-                        "grid grid-cols-1 md:grid-cols-12 gap-4 items-center py-6 px-6 rounded-2xl cursor-pointer transition-all duration-300 group relative border-b border-gray-300/10 dark:border-zinc-800/10 last:border-0",
-                        isActive
-                          ? "bg-white/80 dark:bg-zinc-800/30 shadow-neu border-transparent"
-                          : "hover:bg-white/40 dark:hover:bg-zinc-800/10",
-                        isPresent && !isActive
-                          ? "bg-neu-accent/5 border border-neu-accent/20"
-                          : "",
-                      )}
-                    >
-                      {/* Highlight Badge for Present */}
-                      {isPresent && (
-                        <div className="absolute -top-2 -left-2 bg-neu-accent text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded-full shadow-md z-10 flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-                          CURRENT
-                        </div>
-                      )}
+                      transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                    />
 
-                      {/* Column 1: Dates & Duration */}
-                      <div className="col-span-3 flex flex-col justify-center text-left">
-                        <span
-                          className={cn(
-                            "font-mono font-bold text-sm sm:text-base group-hover:text-neu-accent transition-colors",
-                            isPresent ? "text-neu-accent" : "text-neu-text",
-                          )}
+                    {/* Milestones wrapper */}
+                    {(timelineWork || []).map((item: any, globalIndex: number) => {
+                      const isSelected = selectedWorkIndex === globalIndex;
+                      const isPast = globalIndex <= selectedWorkIndex!;
+
+                      const localIndex = globalIndex - windowStartIndex;
+                      const isVisible = localIndex >= 0 && localIndex < MAX_VISIBLE;
+
+                      const visibleCount = Math.min(timelineWork.length, MAX_VISIBLE);
+                      let percent = 50;
+                      if (visibleCount > 1) {
+                        percent = (localIndex / (visibleCount - 1)) * 100;
+                      }
+
+                      const isPresent = item.years?.toLowerCase().includes("present");
+
+                      return (
+                        <motion.button
+                          key={globalIndex as number}
+                          onClick={() => isVisible && handleSelectWorkNode(globalIndex)}
+                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center group cursor-pointer z-10 focus:outline-none w-32"
+                          initial={false}
+                          animate={{
+                            left: `${percent}%`,
+                            opacity: isVisible ? 1 : 0,
+                            scale: isVisible ? 1 : 0.8,
+                          }}
+                          style={{
+                            pointerEvents: isVisible ? "auto" : "none",
+                          }}
+                          transition={{ type: "spring", stiffness: 120, damping: 20 }}
                         >
-                          {job.years}
-                        </span>
-                        <span className="text-[10px] font-mono text-neu-text-muted mt-0.5 uppercase tracking-wider">
-                          {job.duration}
-                        </span>
-                      </div>
+                          {/* Years Label & Present Badge */}
+                          <div className="absolute bottom-[100%] mb-3 flex flex-col items-center gap-1">
+                            <span
+                              className={cn(
+                                "font-mono text-[11px] font-bold tracking-wider transition-colors duration-300 uppercase whitespace-nowrap",
+                                isSelected
+                                  ? "text-neu-accent font-extrabold"
+                                  : "text-neu-text-muted group-hover:text-neu-text",
+                              )}
+                            >
+                              {item.years}
+                            </span>
+                            {isPresent && (
+                              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20 leading-none">
+                                CURRENT
+                              </span>
+                            )}
+                          </div>
 
-                      {/* Column 2: Company */}
-                      <div className="col-span-3 flex flex-col justify-center text-left">
-                        <span className="font-display font-extrabold text-base sm:text-lg text-neu-text tracking-tight uppercase">
-                          {job.company}
-                        </span>
-                      </div>
-
-                      {/* Column 3: Role & Stack */}
-                      <div className="col-span-4 flex items-center text-left">
-                        <span className="font-mono text-xs sm:text-sm text-neu-text-muted">
-                          <strong className="text-neu-text font-bold font-sans text-sm">
-                            {job.role}
-                          </strong>
-                          {" | "}
-                          <span className="text-neu-accent font-medium">
-                            {job.stack}
-                          </span>
-                        </span>
-                      </div>
-
-                      {/* Column 4: Primary Impact Teaser */}
-                      <div className="col-span-2 text-right hidden md:block">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-mono font-bold bg-neu-accent/10 text-neu-accent border border-neu-accent/15 tracking-tight">
-                          ✦ {job.teaser}
-                        </span>
-                      </div>
-
-                      {/* Expand Icon */}
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 md:hidden">
-                        {isActive ? (
-                          <ChevronUp size={16} className="text-neu-accent" />
-                        ) : (
-                          <ChevronDown
-                            size={16}
-                            className="text-neu-text-muted"
-                          />
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Expanded Content with Framer Motion */}
-                    <AnimatePresence initial={false}>
-                      {isActive && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-6 pb-6 pt-2 bg-white/20 dark:bg-zinc-800/10 rounded-b-2xl border-t border-gray-300/10 dark:border-zinc-800/10">
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-4">
-                              {/* Left: Quantifiable Impact Box */}
-                              <div className="lg:col-span-4 p-4 rounded-xl bg-neu-bg border border-white/10 dark:border-zinc-800/50 shadow-neu-inset flex flex-col justify-center">
-                                <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-neu-accent mb-1.5 flex items-center gap-1">
-                                  <Sparkles
-                                    size={12}
-                                    className="text-neu-accent animate-pulse"
-                                  />{" "}
-                                  Business Impact
-                                </span>
-                                <p className="text-xs sm:text-sm font-sans font-extrabold text-neu-text leading-snug">
-                                  {job.fullImpact}
-                                </p>
-                              </div>
-
-                              {/* Right: Detailed Accomplishments */}
-                              <div className="lg:col-span-8">
-                                <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-neu-text-muted mb-2 block">
-                                  Core Contributions & Technical Delivery
-                                </span>
-                                <ul className="space-y-2.5">
-                                  {job.bullets.map(
-                                    (bullet: string, bIdx: number) => (
-                                      <li
-                                        key={bIdx}
-                                        className="flex items-start gap-2.5 text-xs sm:text-sm text-neu-text-muted leading-relaxed font-light"
-                                      >
-                                        <span className="text-neu-accent font-bold mt-1 shrink-0">
-                                          ✦
-                                        </span>
-                                        <span>{bullet}</span>
-                                      </li>
-                                    ),
-                                  )}
-                                </ul>
-                              </div>
+                          {/* Interactive Circle Node */}
+                          <div className="relative flex items-center justify-center h-8 w-8">
+                            {isSelected && (
+                              <motion.div
+                                layoutId="activeWorkRing"
+                                className="absolute w-8 h-8 rounded-full border-2 border-neu-accent bg-neu-accent/10"
+                                transition={{ type: "spring", stiffness: 220, damping: 20 }}
+                              />
+                            )}
+                            <div
+                              className={cn(
+                                "w-4 h-4 rounded-full flex items-center justify-center border-2 transition-all duration-300 relative z-10",
+                                (() => {
+                                  if (isSelected) return "bg-neu-accent border-neu-accent scale-110 shadow-lg";
+                                  if (isPast) return "bg-neu-bg border-neu-accent";
+                                  return "bg-neu-bg border-gray-400 dark:border-zinc-700 group-hover:border-neu-text";
+                                })(),
+                              )}
+                            >
+                              <div
+                                className={cn(
+                                  "w-1.5 h-1.5 rounded-full",
+                                  (() => {
+                                    if (isSelected) return "bg-neu-bg";
+                                    if (isPast) return "bg-gradient-to-r from-pink-500 to-cyan-500";
+                                    return "bg-transparent";
+                                })(),
+                                )}
+                              />
                             </div>
                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+
+                          {/* Company Name below */}
+                          <span
+                            className={cn(
+                              "absolute top-[100%] mt-3 text-xs font-bold tracking-tight text-center transition-colors duration-300 w-full",
+                              isSelected ? "text-neu-text" : "text-neu-text-muted group-hover:text-neu-text",
+                            )}
+                          >
+                            {item.company}
+                          </span>
+                        </motion.button>
+                      );
+                    })}
                   </div>
-                );
-              })}
+                </div>
+
+                {/* Mobile simplified timeline view */}
+                <div className="flex md:hidden flex-wrap gap-2 justify-center mb-6">
+                  {(timelineWork || []).map((item: any, index: number) => {
+                    const isSelected = selectedWorkIndex === index;
+                    const isPresent = item.years?.toLowerCase().includes("present");
+                    return (
+                      <button
+                        key={index as number}
+                        onClick={() => handleSelectWorkNode(index)}
+                        className={cn(
+                          "px-3 py-2 rounded-xl text-xs font-mono font-bold uppercase transition-all flex items-center gap-1.5 border cursor-pointer",
+                          isSelected
+                            ? "glass-card-inset text-neu-accent border-neu-accent/30"
+                            : "glass-card border-transparent text-neu-text-muted hover:text-neu-text",
+                        )}
+                      >
+                        <span className="opacity-60">{item.years.split(' ')[0]}:</span>
+                        <span>{item.company}</span>
+                        {isPresent && (
+                          <span className="ml-1 text-[9px] px-1 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-bold leading-none">
+                            ✓
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Details panel for the selected work item */}
+                <AnimatePresence mode="wait">
+                  {timelineWork.length > 0 && selectedWorkIndex !== null && timelineWork[selectedWorkIndex] && (
+                    <motion.div
+                      key={`work-details-${selectedWorkIndex}`}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -15 }}
+                      transition={{ duration: 0.35, ease: "easeInOut" }}
+                      className="mt-6 p-6 sm:p-8 rounded-3xl glass-card-inset border border-gray-300/30 dark:border-gray-800/40 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+                    >
+                      {/* Left: Role Info & Impact Box */}
+                      <div className="lg:col-span-5 space-y-5">
+                        <div className="flex flex-col gap-1">
+                          <h4 className="text-xl sm:text-2xl font-display font-extrabold text-neu-text tracking-tight uppercase">
+                            {timelineWork[selectedWorkIndex].role}
+                          </h4>
+                          <div className="flex items-center flex-wrap gap-2 font-mono text-sm text-neu-text-muted mt-1">
+                            <span>{timelineWork[selectedWorkIndex].company}</span>
+                            <span className="opacity-50">|</span>
+                            <span>{timelineWork[selectedWorkIndex].duration}</span>
+                            {timelineWork[selectedWorkIndex].teaser && (
+                              <span className="ml-1 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-neu-accent/10 text-neu-accent border border-neu-accent/20 tracking-tight uppercase">
+                                ✦ {timelineWork[selectedWorkIndex].teaser}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {(Array.isArray(timelineWork[selectedWorkIndex].stack) ? timelineWork[selectedWorkIndex].stack : (timelineWork[selectedWorkIndex].stack || "").split(',')).map((tech: string, i: number) => (
+                            <span key={i} className="px-2 py-1 bg-neu-accent/10 border border-neu-accent/20 rounded-md text-[10px] font-mono text-neu-accent uppercase">
+                              {tech.trim()}
+                            </span>
+                          ))}
+                        </div>
+                        
+                        <div className="p-4 rounded-xl bg-neu-bg border border-white/10 dark:border-zinc-800/50 shadow-neu-inset flex flex-col justify-center mt-6">
+                          <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-neu-accent mb-1.5 flex items-center gap-1">
+                            <Sparkles size={12} className="text-neu-accent animate-pulse" /> Business Impact
+                          </span>
+                          <p className="text-xs sm:text-sm font-sans font-extrabold text-neu-text leading-snug">
+                            {timelineWork[selectedWorkIndex].fullImpact}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Right: Detailed Accomplishments */}
+                      <div className="lg:col-span-7">
+                        <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-neu-text-muted mb-2 block">
+                          Core Contributions & Technical Delivery
+                        </span>
+                        <ul className="space-y-3">
+                          {timelineWork[selectedWorkIndex].bullets.map((bullet: string, bIdx: number) => (
+                            <li key={bIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-neu-text-muted leading-relaxed font-light">
+                              <span className="text-neu-accent font-bold mt-1 shrink-0">✦</span>
+                              <span>{bullet}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </motion.div>
           </div>
         </motion.div>

@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from "react";
+import { parseSSEStream } from "@/shared/lib/sse";
 
 type Status = "idle" | "loading" | "streaming" | "done" | "error";
 
@@ -34,45 +35,12 @@ export function useDraftInquiry() {
 
       setStatus("streaming");
 
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
       let currentText = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n");
-        buffer = lines.pop() ?? "";
-
-        for (const line of lines) {
-          if (!line.startsWith("data: ")) continue;
-          const data = line.slice(6).trim();
-
-          if (data === "[DONE]") {
-            if (currentText.trim() === "") throw new Error("EMPTY_RESPONSE");
-            setStatus("done");
-            return;
-          }
-          if (data.startsWith("[ERROR]")) {
-            throw new Error(data.slice(7).trim());
-          }
-
-          try {
-            const parsed = JSON.parse(data);
-            const delta = parsed?.choices?.[0]?.delta?.content;
-            if (delta) {
-              currentText += delta;
-              setText(currentText);
-              if (onUpdate) onUpdate(delta);
-            }
-          } catch (e) {
-            /* non-JSON SSE line */
-          }
-        }
-      }
+      await parseSSEStream(res.body, (delta) => {
+        currentText += delta;
+        setText(currentText);
+        if (onUpdate) onUpdate(delta);
+      });
       
       if (currentText.trim() === "") throw new Error("EMPTY_RESPONSE");
       setStatus("done");

@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
+import { parseSSEStream } from '@/shared/lib/sse';
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
@@ -48,42 +49,16 @@ export function useChat() {
 
       setStatus('streaming');
 
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() ?? '';
-
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          const data = line.slice(6).trim();
-
-          if (data === '[DONE]') { setStatus('idle'); return; }
-          if (data.startsWith('[ERROR]')) throw new Error(data.slice(7).trim());
-
-          try {
-            const parsed = JSON.parse(data);
-            const delta = parsed?.choices?.[0]?.delta?.content;
-            if (delta) {
-              // Update last message (assistant placeholder) in place
-              setMessages((prev) => {
-                const updated = [...prev];
-                updated[updated.length - 1] = {
-                  role: 'assistant',
-                  content: updated[updated.length - 1].content + delta,
-                };
-                return updated;
-              });
-            }
-          } catch { /* non-JSON SSE line */ }
-        }
-      }
+      await parseSSEStream(res.body, (delta) => {
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[updated.length - 1] = {
+            role: 'assistant',
+            content: updated[updated.length - 1].content + delta,
+          };
+          return updated;
+        });
+      });
 
       setStatus('idle');
     } catch (err) {
