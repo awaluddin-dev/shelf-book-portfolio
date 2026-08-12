@@ -41,10 +41,8 @@ describe('AdminArchitecture', () => {
               {
                 id: 'a1',
                 projectId: 'p1',
-                name: 'gateway',
-                title: 'NestJS Gateway',
+                imageUrl: '/assets/arch1.png',
                 description: 'API Gateway component.',
-                metrics: 'Response: <12ms',
                 order: 0
               }
             ] 
@@ -83,12 +81,9 @@ describe('AdminArchitecture', () => {
     fireEvent.change(projectSelect, { target: { value: 'p1' } })
 
     await waitFor(() => {
-      expect(screen.getByText('NestJS Gateway')).toBeInTheDocument()
+      expect(screen.getByText('API Gateway component.')).toBeInTheDocument()
     })
     
-    expect(screen.getByText('gateway')).toBeInTheDocument()
-    expect(screen.getByText('API Gateway component.')).toBeInTheDocument()
-    expect(screen.getByText('Response: <12ms')).toBeInTheDocument()
     expect(screen.getByText('0')).toBeInTheDocument()
   })
 
@@ -111,8 +106,8 @@ describe('AdminArchitecture', () => {
     expect(screen.getAllByText('Add New Item')[0]).toBeInTheDocument()
 
     // Fill fields
-    const nameInput = screen.getByPlaceholderText('Node ID (e.g. gateway)')
-    fireEvent.change(nameInput, { target: { value: 'backend' } })
-    expect(screen.getByDisplayValue('backend')).toBeInTheDocument()
+    const imgInput = screen.getByPlaceholderText('Image URL (e.g. /assets/arch1.png)')
+    fireEvent.change(imgInput, { target: { value: '/new/img.png' } })
+    expect(screen.getByDisplayValue('/new/img.png')).toBeInTheDocument()
   })
 })

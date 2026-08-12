@@ -16,7 +16,8 @@ import {
   Code2,
   Check,
   Copy,
-  Quote
+  Quote,
+  Database
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import ReactMarkdown from "react-markdown";
@@ -99,9 +100,9 @@ export default function ProjectModal({
       .map((p: string) => p.trim())
       .filter(Boolean);
 
-    const archImages = selectedProject.systemArchitectures?.length > 0 
-      ? selectedProject.systemArchitectures.map((arch: any) => arch.imageUrl).filter(Boolean)
-      : [];
+    const architectures = selectedProject.systemArchitectures || [];
+    const schemas = selectedProject.projectDatabaseSchemas || [];
+    const erds = selectedProject.projectErds || [];
 
     // Flatten ALL interior pages into a single continuous array
     // This prevents any blank pages in the middle of the book
@@ -116,8 +117,18 @@ export default function ProjectModal({
     });
 
     // Add all architecture pages
-    archImages.forEach((imgUrl: string, i: number) => {
-        interiorPages.push({ type: 'architecture', content: imgUrl, index: i, total: archImages.length });
+    architectures.forEach((arch: any, i: number) => {
+        interiorPages.push({ type: 'architecture', content: arch, index: i, total: architectures.length });
+    });
+
+    // Add all schema pages
+    schemas.forEach((schema: any, i: number) => {
+        interiorPages.push({ type: 'schema', content: schema, index: i, total: schemas.length });
+    });
+
+    // Add all ERD pages
+    erds.forEach((erd: any, i: number) => {
+        interiorPages.push({ type: 'erd', content: erd, index: i, total: erds.length });
     });
 
     // Add tail pages
@@ -323,11 +334,18 @@ export default function ProjectModal({
             <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 shrink-0">
               <Layers size={14} /> System Architecture {total > 1 ? `(${index + 1}/${total})` : ''}
             </h4>
-            <div className="flex-1 min-h-0 bg-white dark:bg-zinc-900/50 rounded-xl p-2 border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-inner flex items-center justify-center relative">
-              {content ? (
-                 <ProjectArchitectureDiagram project={selectedProject} isDark={isDark} imageUrl={content} />
-              ) : (
-                <p className="text-xs text-zinc-500 italic">No architecture diagram provided.</p>
+            <div className="flex-1 min-h-0 bg-white dark:bg-zinc-900/50 rounded-xl p-2 border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-inner flex flex-col relative gap-2">
+              <div className="flex-1 w-full flex items-center justify-center overflow-hidden">
+                {content?.imageUrl ? (
+                   <ProjectArchitectureDiagram project={selectedProject} isDark={isDark} imageUrl={content.imageUrl} />
+                ) : (
+                  <p className="text-xs text-zinc-500 italic">No architecture diagram provided.</p>
+                )}
+              </div>
+              {content?.description && (
+                <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg shrink-0 overflow-y-auto max-h-[40%] custom-scrollbar text-xs text-zinc-600 dark:text-zinc-400 whitespace-pre-wrap">
+                  {content.description}
+                </div>
               )}
             </div>
           </div>
@@ -345,6 +363,52 @@ export default function ProjectModal({
                ) : (
                  <p className="text-xs text-zinc-500 italic text-center mt-4">No lifecycle data provided.</p>
                )}
+            </div>
+          </div>
+        );
+
+      case 'schema':
+        return (
+          <div className="w-full h-full flex flex-col">
+            <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 shrink-0">
+              <Database size={14} /> Database Schema {total > 1 ? `(${index + 1}/${total})` : ''}
+            </h4>
+            <div className="flex-1 min-h-0 bg-white dark:bg-zinc-900/50 rounded-xl p-2 border border-zinc-200 dark:border-zinc-800 shadow-inner overflow-hidden flex flex-col relative gap-2">
+              <div className="flex-1 w-full flex items-center justify-center overflow-hidden bg-zinc-50 dark:bg-[#0d1117] rounded-lg">
+                {content?.imageUrl ? (
+                  <img src={content.imageUrl} alt="Schema Diagram" className="w-full h-full object-contain" />
+                ) : (
+                  <p className="text-xs text-zinc-500 italic">No schema diagram provided.</p>
+                )}
+              </div>
+              {content?.description && (
+                <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg shrink-0 overflow-y-auto max-h-[40%] custom-scrollbar text-xs text-zinc-600 dark:text-zinc-400 whitespace-pre-wrap">
+                  {content.description}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+
+      case 'erd':
+        return (
+          <div className="w-full h-full flex flex-col">
+            <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 shrink-0">
+              <Database size={14} /> Entity Relationship Diagram {total > 1 ? `(${index + 1}/${total})` : ''}
+            </h4>
+            <div className="flex-1 min-h-0 bg-white dark:bg-zinc-900/50 rounded-xl p-2 border border-zinc-200 dark:border-zinc-800 shadow-inner overflow-hidden flex flex-col relative gap-2">
+              <div className="flex-1 w-full flex items-center justify-center overflow-hidden bg-zinc-50 dark:bg-[#0d1117] rounded-lg">
+                {content?.imageUrl ? (
+                  <img src={content.imageUrl} alt="ERD Diagram" className="w-full h-full object-contain" />
+                ) : (
+                  <p className="text-xs text-zinc-500 italic">No ERD diagram provided.</p>
+                )}
+              </div>
+              {content?.description && (
+                <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg shrink-0 overflow-y-auto max-h-[40%] custom-scrollbar text-xs text-zinc-600 dark:text-zinc-400 whitespace-pre-wrap">
+                  {content.description}
+                </div>
+              )}
             </div>
           </div>
         );

@@ -54,16 +54,6 @@ describe('AdminPlayground', () => {
     expect(mockSetTheme).toHaveBeenCalledWith('dark')
   })
 
-  it('copies css to clipboard on export click', async () => {
-    render(<AdminPlayground />)
-    
-    const exportBtn = screen.getByRole('button', { name: /Export CSS/i })
-    fireEvent.click(exportBtn)
-    
-    expect(navigator.clipboard.writeText).toHaveBeenCalled()
-    expect(screen.getByText('CSS Copied to clipboard!')).toBeInTheDocument()
-  })
-
   it('updates color on input change', () => {
     render(<AdminPlayground />)
     

@@ -11,9 +11,9 @@ jest.mock('next/navigation', () => ({
 jest.mock('@marsidev/react-turnstile', () => ({
   Turnstile: ({ onSuccess, onError, onExpire }: any) => (
     <div data-testid="turnstile">
-      <button data-testid="turnstile-success" onClick={() => onSuccess('test-token')}>Success</button>
-      <button data-testid="turnstile-error" onClick={onError}>Error</button>
-      <button data-testid="turnstile-expire" onClick={onExpire}>Expire</button>
+      <button type="button" data-testid="turnstile-success" onClick={() => onSuccess('test-token')}>Success</button>
+      <button type="button" data-testid="turnstile-error" onClick={onError}>Error</button>
+      <button type="button" data-testid="turnstile-expire" onClick={onExpire}>Expire</button>
     </div>
   )
 }))

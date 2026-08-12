@@ -9,6 +9,12 @@ jest.mock('@/shared/ui/AnimatedDivider', () => ({
   AnimatedDivider: ({ quote }: any) => <div data-testid="animated-divider">{quote}</div>
 }))
 
+// Mock usePortfolioStore
+const mockUsePortfolioStore = jest.fn();
+jest.mock('@/shared/store/portfolioStore', () => ({
+  usePortfolioStore: () => mockUsePortfolioStore()
+}))
+
 // Mock framer-motion
 jest.mock('motion/react', () => {
   const actual = jest.requireActual('motion/react')
@@ -32,26 +38,31 @@ describe('HeroSection', () => {
   const mockSetShowInquiryModal = jest.fn()
 
   const defaultProps = {
-    isLoading: false,
     isDark: true,
-    dynamicHeroConfig: {
-      name: 'Test Name',
-      role: 'Test Role',
-      openForWork: true,
-      availableFrom: 'Today'
-    },
-    activeMetrics: [
-      { label: 'Metric 1', value: '100', icon: 'test1', isSavings: false },
-      { label: 'Metric 2', val: '200', icon: 'test2', isSavings: true }
-    ],
     renderIcon: mockRenderIcon,
-    triggerToast: mockTriggerToast,
-    setShowInquiryModal: mockSetShowInquiryModal
   }
 
   beforeEach(() => {
     jest.clearAllMocks()
     
+    // Default store mock
+    mockUsePortfolioStore.mockReturnValue({
+      isLoading: false,
+      dynamicHeroConfig: {
+        name: 'Test Name',
+        role: 'Test Role',
+        openForWork: true,
+        availableFrom: 'Today'
+      },
+      dynamicMetrics: [
+        { label: 'Metric 1', value: '100', icon: 'test1', isSavings: false },
+        { label: 'Metric 2', val: '200', icon: 'test2', isSavings: true }
+      ],
+      triggerToast: mockTriggerToast,
+      setShowInquiryModal: mockSetShowInquiryModal,
+      showConnectionTooltip: false
+    });
+
     // Mock scrollIntoView
     window.HTMLElement.prototype.scrollIntoView = jest.fn()
     
@@ -60,12 +71,20 @@ describe('HeroSection', () => {
   })
 
   it('renders loading state correctly', () => {
-    const { container } = render(<HeroSection {...defaultProps} isLoading={true} />)
+    mockUsePortfolioStore.mockReturnValueOnce({ isLoading: true });
+    const { container } = render(<HeroSection {...defaultProps} />)
     expect(container.querySelector('.animate-pulse')).toBeInTheDocument()
   })
 
   it('renders correctly with default values when config is missing', () => {
-    render(<HeroSection {...defaultProps} dynamicHeroConfig={null} activeMetrics={[]} />)
+    mockUsePortfolioStore.mockReturnValue({
+      isLoading: false,
+      dynamicHeroConfig: null,
+      dynamicMetrics: [],
+      triggerToast: mockTriggerToast,
+      setShowInquiryModal: mockSetShowInquiryModal
+    });
+    render(<HeroSection {...defaultProps} />)
     expect(screen.getByText('Awaluddin')).toBeInTheDocument()
     expect(screen.getByText(/Backend Engineer/i)).toBeInTheDocument()
     expect(screen.getByText('Closed to Opportunities')).toBeInTheDocument()
