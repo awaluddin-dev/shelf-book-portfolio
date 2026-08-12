@@ -1000,6 +1000,20 @@ export default function ExperienceSection({
               whileInView="show"
               viewport={{ once: true, margin: "-100px" }}
             >
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-300/30 dark:border-zinc-800/30 pb-6">
+                <div>
+                  <div className="flex items-center gap-2 text-neu-accent mb-1">
+                    <Briefcase size={18} />
+                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
+                      Career Timeline
+                    </span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-display font-bold text-neu-text tracking-tight">
+                    Professional Experience
+                  </h2>
+                </div>
+              </div>
+
               <div className="relative min-h-[400px]">
                 {/* Timeline track (Horizontal on desktop, vertical list on narrow screens) */}
                 <div className="relative mt-8 mb-16 px-12 hidden md:block">
