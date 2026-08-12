@@ -14,6 +14,7 @@ interface MovingNodeProps {
   scale?: [number, number];
   circleR?: number;
   cardZone?: CardZone;
+  initialColor?: string;
 }
 
 const NODE_PALETTE = [
@@ -37,9 +38,10 @@ function MovingNode({
   scale,
   circleR = 4,
   cardZone,
+  initialColor,
 }: Readonly<MovingNodeProps>) {
   // Random color on mount
-  const [nodeColor] = useState(() => NODE_PALETTE[Math.floor(secureMathRandom() * NODE_PALETTE.length)]);
+  const [nodeColor] = useState(() => initialColor || NODE_PALETTE[Math.floor(secureMathRandom() * NODE_PALETTE.length)]);
 
   // OPSI A hot-zone window: the node "charges" to the accent color while
   // passing behind the cards (SVG center zone), then returns to its

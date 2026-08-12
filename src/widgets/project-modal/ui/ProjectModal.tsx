@@ -165,7 +165,7 @@ const ProjectArchitecturePage = ({ content, index, total, selectedProject, isDar
     <div className="flex-1 min-h-0 bg-white dark:bg-zinc-900/50 rounded-xl p-2 border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-inner flex flex-col relative gap-2">
       <div className="flex-1 w-full flex items-center justify-center overflow-hidden">
         {content?.imageUrl ? (
-           <ProjectArchitectureDiagram project={selectedProject} isDark={isDark} imageUrl={content.imageUrl} />
+           <ProjectArchitectureDiagram imageUrl={content.imageUrl} />
         ) : (
           <p className="text-xs text-zinc-500 italic">No architecture diagram provided.</p>
         )}
