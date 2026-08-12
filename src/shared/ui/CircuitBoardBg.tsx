@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { secureMathRandom } from "@/shared/lib/utils";
+
 type CardZone = "main" | "terminal" | "metrics";
 
 interface MovingNodeProps {
@@ -38,7 +40,7 @@ function MovingNode({
   cardZone,
 }: MovingNodeProps) {
   // Random color on mount
-  const [nodeColor] = useState(() => NODE_PALETTE[Math.floor(Math.random() * NODE_PALETTE.length)]);
+  const [nodeColor] = useState(() => NODE_PALETTE[Math.floor(secureMathRandom() * NODE_PALETTE.length)]);
 
   // OPSI A hot-zone window: the node "charges" to the accent color while
   // passing behind the cards (SVG center zone), then returns to its

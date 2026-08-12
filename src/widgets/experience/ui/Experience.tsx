@@ -29,7 +29,7 @@ import {
   Legend,
   Bar,
 } from "recharts";
-import { cn } from "@/shared/lib/utils";
+import { cn, secureMathRandom } from "@/shared/lib/utils";
 import { Testimonial } from "@/shared/types";
 
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
@@ -150,7 +150,7 @@ export default function ExperienceSection({
         
         const monthWeight = monthData && totalCommits > 0 ? (monthData.commits / totalCommits) * 12 : 1;
         let intensity = 0;
-        const rand = Math.random();
+        const rand = secureMathRandom();
         
         if (monthData && monthData.commits > 0) {
            if (rand < 0.2 * monthWeight) intensity = 4;
@@ -162,7 +162,7 @@ export default function ExperienceSection({
         days.push({
           date: `Day ${w * 7 + d + 1}`,
           intensity,
-          commits: intensity === 0 ? 0 : Math.floor(Math.random() * 5 * intensity) + 1,
+          commits: intensity === 0 ? 0 : Math.floor(secureMathRandom() * 5 * intensity) + 1,
           month: monthData?.month || ''
         });
       }
