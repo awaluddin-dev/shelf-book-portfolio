@@ -1,3 +1,32 @@
+const processSSELine = (
+  line: string,
+  onDelta: (delta: string) => void,
+  onDone?: () => void
+): boolean => {
+  if (!line.startsWith("data: ")) return false;
+  const data = line.slice(6).trim();
+
+  if (data === "[DONE]") {
+    if (onDone) onDone();
+    return true; // indicates done
+  }
+  
+  if (data.startsWith("[ERROR]")) {
+    throw new Error(data.slice(7).trim());
+  }
+
+  try {
+    const parsed = JSON.parse(data);
+    const delta = parsed?.choices?.[0]?.delta?.content;
+    if (delta) {
+      onDelta(delta);
+    }
+  } catch {
+    /* non-JSON SSE line */
+  }
+  return false;
+};
+
 export async function parseSSEStream(
   body: ReadableStream<Uint8Array>,
   onDelta: (delta: string) => void,
@@ -16,30 +45,10 @@ export async function parseSSEStream(
     buffer = lines.pop() ?? "";
 
     for (const line of lines) {
-      if (!line.startsWith("data: ")) continue;
-      const data = line.slice(6).trim();
-
-      if (data === "[DONE]") {
-        if (onDone) onDone();
-        return;
-      }
-      
-      if (data.startsWith("[ERROR]")) {
-        throw new Error(data.slice(7).trim());
-      }
-
-      try {
-        const parsed = JSON.parse(data);
-        const delta = parsed?.choices?.[0]?.delta?.content;
-        if (delta) {
-          onDelta(delta);
-        }
-      } catch {
-        /* non-JSON SSE line */
-      }
+      const isDone = processSSELine(line, onDelta, onDone);
+      if (isDone) return;
     }
   }
   
-  // Call onDone if stream ends without [DONE] message
   if (onDone) onDone();
 }

@@ -38,6 +38,7 @@ function ZoomControls() {
         <ZoomOut size={14} />
       </button>
       <button
+        type="button"
         onClick={() => resetTransform()}
         title="Reset View"
         className="p-2 rounded-xl bg-neu-bg/80 backdrop-blur-md border border-white/10 text-neu-text hover:text-neu-accent hover:border-neu-accent/40 transition-all duration-200 shadow-neu-sm"
@@ -122,11 +123,9 @@ function FullscreenViewer({
 // --- Main Component ---
 export default function ProjectArchitectureDiagram({
   imageUrl,
-}: {
+}: Readonly<{
   imageUrl: string;
-  project?: any; // Kept for backwards compatibility if passed, though unused
-  isDark?: boolean; // Kept for backwards compatibility if passed, though unused
-}) {
+}>) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   if (!imageUrl) return null;
@@ -138,18 +137,14 @@ export default function ProjectArchitectureDiagram({
           <Move size={10} /> Drag · Scroll to zoom
         </div>
 
-        <div
-          role="button"
-          tabIndex={0}
+        <button
+          type="button"
           onClick={() => setIsFullscreen(true)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") setIsFullscreen(true);
-          }}
           title="Open Fullscreen"
           className="absolute top-3 right-3 z-10 p-2 rounded-xl bg-black/60 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:border-white/30 transition-all duration-200 opacity-0 group-hover:opacity-100"
         >
           <Maximize2 size={13} />
-        </div>
+        </button>
 
         <TransformWrapper
           initialScale={1}

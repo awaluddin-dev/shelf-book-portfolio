@@ -9,7 +9,6 @@ type CardZone = "main" | "terminal" | "metrics";
 interface MovingNodeProps {
   path: string;
   duration: string;
-  initialColor?: string;
   label: string;
   textY: string;
   scale?: [number, number];
@@ -38,7 +37,7 @@ function MovingNode({
   scale,
   circleR = 4,
   cardZone,
-}: MovingNodeProps) {
+}: Readonly<MovingNodeProps>) {
   // Random color on mount
   const [nodeColor] = useState(() => NODE_PALETTE[Math.floor(secureMathRandom() * NODE_PALETTE.length)]);
 
@@ -183,7 +182,7 @@ export function CircuitBoardBg() {
         if (!anim) return;
         const d = anim.getAttribute("path");
         if (!d) return;
-        const dur = parseFloat(anim.getAttribute("dur") ?? "0");
+        const dur = Number.parseFloat(anim.getAttribute("dur") ?? "0");
         if (!dur) return;
 
         let start = 0;

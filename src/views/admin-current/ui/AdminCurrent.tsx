@@ -10,7 +10,11 @@ export default function AdminCurrent() {
     fetch('/api/learning')
       .then(res => res.json())
       .then(data => {
-         const rm = data.data?.learning || data.learning || (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []));
+         let rm = [];
+         if (data.data?.learning) rm = data.data.learning;
+         else if (data.learning) rm = data.learning;
+         else if (Array.isArray(data.data)) rm = data.data;
+         else if (Array.isArray(data)) rm = data;
          setRoadmaps(rm);
       })
       .catch(err => console.error(err));
@@ -63,31 +67,31 @@ export default function AdminCurrent() {
         <>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-                <label className="text-xs font-mono text-neu-text-muted">Title</label>
-                <input required value={formData.title || ''} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Writing" />
+                <label htmlFor="ac-title" className="text-xs font-mono text-neu-text-muted">Title</label>
+                <input id="ac-title" required value={formData.title || ''} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Writing" />
             </div>
             <div className="space-y-1">
-                <label className="text-xs font-mono text-neu-text-muted">Icon (Lucide name)</label>
-                <input required value={formData.icon || ''} onChange={e => setFormData({...formData, icon: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="PenTool" />
+                <label htmlFor="ac-icon" className="text-xs font-mono text-neu-text-muted">Icon (Lucide name)</label>
+                <input id="ac-icon" required value={formData.icon || ''} onChange={e => setFormData({...formData, icon: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="PenTool" />
             </div>
           </div>
           <div className="space-y-1">
-              <label className="text-xs font-mono text-neu-text-muted">Description (1-2 sentences)</label>
-              <textarea required value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} rows={2} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none resize-none" placeholder="What I'm doing right now..." />
+              <label htmlFor="ac-desc" className="text-xs font-mono text-neu-text-muted">Description (1-2 sentences)</label>
+              <textarea id="ac-desc" required value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} rows={2} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none resize-none" placeholder="What I'm doing right now..." />
           </div>
           <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
-                  <label className="text-xs font-mono text-neu-text-muted">Link URL</label>
-                  <input required value={formData.link || ''} onChange={e => setFormData({...formData, link: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="https://..." />
+                  <label htmlFor="ac-link" className="text-xs font-mono text-neu-text-muted">Link URL</label>
+                  <input id="ac-link" required value={formData.link || ''} onChange={e => setFormData({...formData, link: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="https://..." />
               </div>
               <div className="space-y-1">
-                  <label className="text-xs font-mono text-neu-text-muted">Link Text</label>
-                  <input required value={formData.linkText || ''} onChange={e => setFormData({...formData, linkText: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Read on dev.to" />
+                  <label htmlFor="ac-linktext" className="text-xs font-mono text-neu-text-muted">Link Text</label>
+                  <input id="ac-linktext" required value={formData.linkText || ''} onChange={e => setFormData({...formData, linkText: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Read on dev.to" />
               </div>
           </div>
           <div className="space-y-1">
-              <label className="text-xs font-mono text-neu-text-muted">Linked Roadmap (Upcoming Tech)</label>
-              <select value={formData.roadmapId || ''} onChange={e => setFormData({...formData, roadmapId: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none">
+              <label htmlFor="ac-roadmap" className="text-xs font-mono text-neu-text-muted">Linked Roadmap (Upcoming Tech)</label>
+              <select id="ac-roadmap" value={formData.roadmapId || ''} onChange={e => setFormData({...formData, roadmapId: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none">
                  <option value="">-- No Roadmap Linked --</option>
                  {roadmaps.map(rm => (
                    <option key={rm.id} value={rm.id}>{rm.tech} ({rm.quarter})</option>

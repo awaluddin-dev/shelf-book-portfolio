@@ -4,7 +4,7 @@ import { cn } from '@/shared/lib/utils';
 import { Code2, Compass, Layers, Activity, Milestone, ExternalLink } from 'lucide-react';
 import EmptyState from '@/shared/ui/EmptyState';
 
-export default function ProjectLifecycleTracker({ projectId, spineColor }: { projectId: string; spineColor: string }) {
+export default function ProjectLifecycleTracker({ projectId, spineColor }: Readonly<{ projectId: string; spineColor: string }>) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [phases, setPhases] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

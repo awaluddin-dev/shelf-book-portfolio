@@ -3,6 +3,22 @@ import { parseSSEStream } from "@/shared/lib/sse";
 
 type Status = "idle" | "loading" | "streaming" | "done" | "error";
 
+async function fetchDraftInquiryStream(coverLetter: string, signal: AbortSignal) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ai/draft-inquiry`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ coverLetter }),
+    signal,
+  });
+
+  if (!res.ok) {
+    throw new Error(`Request failed: ${res.status} ${res.statusText}`);
+  }
+
+  if (!res.body) throw new Error("No response body received");
+  return res.body;
+}
+
 export function useDraftInquiry() {
   const [text, setText] = useState("");
   const [status, setStatus] = useState<Status>("idle");
@@ -20,23 +36,11 @@ export function useDraftInquiry() {
     setStatus("loading");
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ai/draft-inquiry`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ coverLetter }),
-        signal: controller.signal,
-      });
-
-      if (!res.ok) {
-        throw new Error(`Request failed: ${res.status} ${res.statusText}`);
-      }
-
-      if (!res.body) throw new Error("No response body received");
-
+      const body = await fetchDraftInquiryStream(coverLetter, controller.signal);
       setStatus("streaming");
 
       let currentText = "";
-      await parseSSEStream(res.body, (delta) => {
+      await parseSSEStream(body, (delta) => {
         currentText += delta;
         setText(currentText);
         if (onUpdate) onUpdate(delta);
@@ -44,16 +48,18 @@ export function useDraftInquiry() {
       
       if (currentText.trim() === "") throw new Error("EMPTY_RESPONSE");
       setStatus("done");
-    } catch (err) {
-      if ((err as Error).name === "AbortError") return;
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === "AbortError") return;
       
-      if ((err as Error).message === "EMPTY_RESPONSE" && retryCount < 3) {
+      console.error(err);
+      
+      if (err instanceof Error && err.message === "EMPTY_RESPONSE" && retryCount < 3) {
         // Auto retry after a short delay
         setTimeout(() => draft(coverLetter, onUpdate, retryCount + 1), 500);
         return;
       }
 
-      setError((err as Error).message);
+      setError(err instanceof Error ? err.message : String(err));
       setStatus("error");
     }
   }, []);

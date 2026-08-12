@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { fetchWithRetry, warmupDatabase } from "@/shared/lib/fetchUtils";
 
-type AnyOrNullType = any | null;
+type AnyOrNullType = any; // NOSONAR
 
 interface PortfolioState {
   // --- UI State ---
@@ -179,8 +179,8 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
               if (!a.quarter || !b.quarter) return 0;
               const partsA = a.quarter.split(" ");
               const partsB = b.quarter.split(" ");
-              const yA = parseInt(partsA[1]) || 0;
-              const yB = parseInt(partsB[1]) || 0;
+              const yA = Number.parseInt(partsA[1], 10) || 0;
+              const yB = Number.parseInt(partsB[1], 10) || 0;
               if (yA !== yB) return yA - yB;
               return partsA[0].localeCompare(partsB[0]);
             });
@@ -247,10 +247,10 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
         const startB = b.years.split("-")[0].trim();
         const dateA =
           new Date(startA).getTime() ||
-          Number.parseInt(startA.match(/\d{4}/)?.[0] || "0");
+          Number.parseInt(startA.match(/\d{4}/)?.[0] || "0", 10);
         const dateB =
           new Date(startB).getTime() ||
-          Number.parseInt(startB.match(/\d{4}/)?.[0] || "0");
+          Number.parseInt(startB.match(/\d{4}/)?.[0] || "0", 10);
         return dateB - dateA;
       };
 

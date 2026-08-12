@@ -8,9 +8,9 @@ import { Loader } from "@/shared/ui/Loader";
 
 export default function AdminAuthenticatedLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const router = useRouter();
   const pathname = usePathname();
   const [isValidating, setIsValidating] = useState(true);

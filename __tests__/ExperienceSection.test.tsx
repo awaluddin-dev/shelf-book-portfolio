@@ -46,6 +46,9 @@ jest.mock('motion/react', () => ({
         {children}
       </section>
     ),
+    button: ({ children, ...props }: any) => (
+      <button {...props}>{children}</button>
+    ),
   },
   AnimatePresence: ({ children }: any) => <>{children}</>
 }))
