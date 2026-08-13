@@ -95,6 +95,7 @@ export default function ContactModal() {
             exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
             transition={{ type: "spring", stiffness: 100, damping: 15 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            role="presentation"
             onClick={() => {
               onClose(false);
               setInquiryMessage("");
@@ -105,6 +106,8 @@ export default function ContactModal() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.95 }}
               transition={{ type: "spring", stiffness: 160, damping: 22 }}
+              role="dialog"
+              aria-modal="true"
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
               className="bg-neu-bg rounded-3xl shadow-neu-modal w-full max-w-lg p-6 sm:p-8 relative border border-white/5"
             >

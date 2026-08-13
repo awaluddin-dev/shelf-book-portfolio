@@ -70,6 +70,7 @@ function FullscreenViewer({
     >
       <div
         className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0"
+        role="presentation"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => {
           if (e.key === "Enter") e.stopPropagation();
@@ -89,6 +90,7 @@ function FullscreenViewer({
 
       <div
         className="flex-1 overflow-hidden"
+        role="presentation"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => {
           if (e.key === "Enter") e.stopPropagation();

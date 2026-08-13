@@ -14,38 +14,53 @@ export function Mascot() {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
 
-  const timeSpawn = 600000;
+  const timeSpawn = 60000;
 
   useEffect(() => {
-    // Global timer to show the mascot
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-      setExpression("greet");
-      setSpeechText("Hello, I think you like this portfolio!");
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
 
-      // T=5s
+    // Global timer to show the mascot
+    timeouts.push(
+      setTimeout(() => {
+        setIsVisible(true);
+        setExpression("greet");
+        setSpeechText("Hello, I think you like this portfolio!");
+      }, timeSpawn)
+    );
+
+    // T=5s
+    timeouts.push(
       setTimeout(() => {
         setExpression("normal");
         setSpeechText("Are you looking for a backend engineer?");
-      }, 5000);
+      }, timeSpawn + 5000)
+    );
 
-      // T=10s
+    // T=10s
+    timeouts.push(
       setTimeout(() => {
         setExpression("blink");
-        setTimeout(() => {
-          setExpression("happy");
-          setSpeechText("I highly recommend trying my Cover Letter Generator!");
-        }, 300); // 300ms blink
-      }, 10000);
+      }, timeSpawn + 10000)
+    );
 
-      // T=12s
+    timeouts.push(
+      setTimeout(() => {
+        setExpression("happy");
+        setSpeechText("I highly recommend trying my Cover Letter Generator!");
+      }, timeSpawn + 10300) // 10s + 300ms blink
+    );
+
+    // T=12s
+    timeouts.push(
       setTimeout(() => {
         // Keep showing button in normal/blink loops
         setShowButton(true);
-      }, 12000);
-    }, timeSpawn);
+      }, timeSpawn + 12000)
+    );
 
-    return () => clearTimeout(timer);
+    return () => {
+      timeouts.forEach((t) => clearTimeout(t));
+    };
   }, []);
 
   const handleClose = () => {
