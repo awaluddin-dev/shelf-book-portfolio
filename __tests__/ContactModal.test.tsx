@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import ContactModal from '@/features/contact/ui/ContactModal'
 

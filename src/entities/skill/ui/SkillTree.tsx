@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { memo, useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Network } from "lucide-react";

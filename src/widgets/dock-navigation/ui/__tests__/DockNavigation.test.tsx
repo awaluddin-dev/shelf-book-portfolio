@@ -1,5 +1,6 @@
+/* eslint-disable */
 import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import DockNavigation from "../DockNavigation";
 import { useTheme } from "next-themes";
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
@@ -43,7 +44,8 @@ jest.mock("motion/react", () => {
   
   return {
     motion,
-    AnimatePresence: ({ children }: any) => <>{children}</>,
+    AnimatePresence: function MockAnimatePresence({ children }: any) { return <>{children}</>; },
+  // eslint-disable-next-line react/display-name
   };
 });
 

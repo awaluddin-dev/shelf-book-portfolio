@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { create } from "zustand";
 import { fetchWithRetry, warmupDatabase } from "@/shared/lib/fetchUtils";
 

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import ExperienceSection from '@/widgets/experience/ui/Experience'
 

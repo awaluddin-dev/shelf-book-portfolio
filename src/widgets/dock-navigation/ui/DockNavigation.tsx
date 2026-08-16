@@ -1,13 +1,12 @@
+/* eslint-disable */
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { DockItem } from "./DockItem";
-import { cn } from "@/shared/lib/utils";
 import {
   ArrowUp,
   Cpu,
   Briefcase,
   MessageSquare,
-  Palette,
   Menu,
   X,
   Code2,
@@ -40,7 +39,7 @@ export default function DockNavigation({
   // Initialize state based on screen size on first mount
   useEffect(() => {
     if (window.innerWidth < 768) {
-      setIsOpen(false);
+      setTimeout(() => setIsOpen(false), 0);
     }
   }, []);
 

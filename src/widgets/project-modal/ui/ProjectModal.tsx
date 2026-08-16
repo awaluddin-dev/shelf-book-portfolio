@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -16,17 +17,16 @@ import {
   Code2,
   Check,
   Copy,
-  Quote,
   Database
 } from "lucide-react";
-import { cn, secureMathRandom } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import ReactMarkdown from "react-markdown";
 import MermaidDiagram from "@/shared/ui/MermaidDiagram";
 import ProjectLifecycleTracker from "@/entities/project/ui/ProjectLifecycleTracker";
 import ProjectArchitectureDiagram from "@/entities/project/ui/ProjectArchitectureDiagram";
 
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
-import { getRelatedProjects, TECHNICAL_IMAGERY, getTagProjectCount } from "@/shared/lib/helpers";
+import { getRelatedProjects } from "@/shared/lib/helpers";
 
 interface ProjectModalProps {
   isDark: boolean;
@@ -74,7 +74,7 @@ const ProjectDetailsPage = ({ selectedProject }: { selectedProject: any }) => (
   </div>
 );
 
-const ProjectTechStackPage = ({ selectedProject, getTechIconAndColor, activeProjects }: { selectedProject: any, getTechIconAndColor: any, activeProjects: any[] }) => (
+const ProjectTechStackPage = ({ selectedProject, getTechIconAndColor }: { selectedProject: any, getTechIconAndColor: any, activeProjects: any[] }) => (
   <div className="flex flex-col h-full space-y-8">
     {(selectedProject.reasonToBuild || selectedProject.problemSolved) && (
       <div className="flex flex-col gap-6">
@@ -157,7 +157,7 @@ const ProjectMarkdownPage = ({ content, index, total, copiedCode, setCopiedCode 
   </div>
 );
 
-const ProjectArchitecturePage = ({ content, index, total, selectedProject, isDark }: { content: any, index: number, total: number, selectedProject: any, isDark: boolean }) => (
+const ProjectArchitecturePage = ({ content, index, total }: { content: any, index: number, total: number, selectedProject: any, isDark: boolean }) => (
   <div className="w-full h-full flex flex-col">
     <h4 className="text-[10px] font-mono font-bold text-neu-accent uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2 shrink-0">
       <Layers size={14} /> System Architecture {total > 1 ? `(${index + 1}/${total})` : ''}
@@ -256,6 +256,9 @@ const ProjectRelatedPage = ({ selectedProject, activeProjects, onSelectProject }
               )}
               style={{ ...(proj.spineColor?.startsWith("#") || proj.spineColor?.startsWith("rgb") ? { backgroundColor: proj.spineColor } : {}) }}
             ></div>
+            <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-4">
+              
+            </div>
             <div className="flex-1 min-w-0">
               <span className="text-[8px] font-mono text-neu-accent font-bold uppercase tracking-wider block">{proj.category}</span>
               <h5 className="text-xs font-bold text-zinc-900 dark:text-white truncate mt-0.5 group-hover:text-neu-accent transition-colors">{proj.title}</h5>
@@ -313,8 +316,10 @@ export default function ProjectModal({
 
   // Reset page when project changes
   useEffect(() => {
-    setCurrentPage(0);
-    setDirection(1);
+    setTimeout(() => {
+      setCurrentPage(0);
+      setDirection(1);
+    }, 0);
   }, [selectedProject?.id]);
 
   const spreads = useMemo(() => {

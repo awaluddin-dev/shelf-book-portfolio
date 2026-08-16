@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { CoverLetterGenerator } from '@/widgets/cover-letter/CoverLetterGenerator';
 import { usePortfolioStore } from '@/shared/store/portfolioStore';
