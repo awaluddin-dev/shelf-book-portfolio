@@ -33,7 +33,8 @@ import {
 import { cn, secureMathRandom } from "@/shared/lib/utils";
 
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
-import { useState, useRef, useMemo, useEffect } from "react";
+import { useState, useRef, useMemo, useCallback, useEffect } from "react";
+import { legendLevels } from "@/shared/lib/helpers";
 
 interface ExperienceSectionProps {
   isDark: boolean;

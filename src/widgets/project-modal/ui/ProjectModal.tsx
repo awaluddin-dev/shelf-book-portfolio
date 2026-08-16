@@ -17,16 +17,17 @@ import {
   Code2,
   Check,
   Copy,
+  Quote,
   Database
 } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
+import { cn, secureMathRandom } from "@/shared/lib/utils";
 import ReactMarkdown from "react-markdown";
 import MermaidDiagram from "@/shared/ui/MermaidDiagram";
 import ProjectLifecycleTracker from "@/entities/project/ui/ProjectLifecycleTracker";
 import ProjectArchitectureDiagram from "@/entities/project/ui/ProjectArchitectureDiagram";
 
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
-import { getRelatedProjects } from "@/shared/lib/helpers";
+import { getRelatedProjects, TECHNICAL_IMAGERY } from "@/shared/lib/helpers";
 
 interface ProjectModalProps {
   isDark: boolean;
