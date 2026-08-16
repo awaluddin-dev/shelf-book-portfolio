@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import DockNavigation from "../DockNavigation";
 import { useTheme } from "next-themes";
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
@@ -99,7 +99,7 @@ describe("DockNavigation", () => {
     expect(screen.getByLabelText("Scroll to Top")).toBeInTheDocument();
   });
 
-  it("renders correctly on mobile (closed by default)", () => {
+  it("renders correctly on mobile (closed by default)", async () => {
     // Set window width to mobile
     Object.defineProperty(window, 'innerWidth', { value: 500 });
     
@@ -109,7 +109,9 @@ describe("DockNavigation", () => {
     expect(screen.getByLabelText("Toggle Navigation")).toBeInTheDocument();
     
     // Other buttons should not be in the document (since AnimatePresence children won't render if isOpen is false)
-    expect(screen.queryByLabelText("Projects")).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByLabelText("Projects")).not.toBeInTheDocument();
+    });
   });
 
   it("toggles menu when hamburger is clicked", () => {
