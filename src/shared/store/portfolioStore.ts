@@ -1,8 +1,7 @@
-/* eslint-disable */
 import { create } from "zustand";
 import { fetchWithRetry, warmupDatabase } from "@/shared/lib/fetchUtils";
 
-type AnyOrNullType = any; // NOSONAR
+type AnyOrNullType = any | null; // NOSONAR
 
 interface PortfolioState {
   // --- UI State ---
@@ -46,8 +45,10 @@ interface PortfolioState {
   setShowCoverLetterModal: (show: boolean) => void;
   coverLetterText: string;
   setCoverLetterText: (text: string | ((prev: string) => string)) => void;
-  coverLetterStatus: 'idle' | 'loading' | 'streaming' | 'done' | 'error';
-  setCoverLetterStatus: (status: 'idle' | 'loading' | 'streaming' | 'done' | 'error') => void;
+  coverLetterStatus: "idle" | "loading" | "streaming" | "done" | "error";
+  setCoverLetterStatus: (
+    status: "idle" | "loading" | "streaming" | "done" | "error",
+  ) => void;
   coverLetterError: string | null;
   setCoverLetterError: (err: string | null) => void;
   coverLetterJobDesc: string;
@@ -128,9 +129,11 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
   showCoverLetterModal: false,
   setShowCoverLetterModal: (show) => set({ showCoverLetterModal: show }),
   coverLetterText: "",
-  setCoverLetterText: (text) => set((state) => ({ 
-    coverLetterText: typeof text === "function" ? text(state.coverLetterText) : text 
-  })),
+  setCoverLetterText: (text) =>
+    set((state) => ({
+      coverLetterText:
+        typeof text === "function" ? text(state.coverLetterText) : text,
+    })),
   coverLetterStatus: "idle",
   setCoverLetterStatus: (status) => set({ coverLetterStatus: status }),
   coverLetterError: null,

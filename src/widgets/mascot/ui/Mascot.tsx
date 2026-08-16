@@ -17,46 +17,36 @@ export function Mascot() {
   const timeSpawn = 60000;
 
   useEffect(() => {
-    const timeouts: ReturnType<typeof setTimeout>[] = [];
-
-    // Global timer to show the mascot
-    timeouts.push(
+    const timeouts: ReturnType<typeof setTimeout>[] = [
+      // Global timer to show the mascot
       setTimeout(() => {
         setIsVisible(true);
         setExpression("greet");
         setSpeechText("Hello, I think you like this portfolio!");
-      }, timeSpawn)
-    );
+      }, timeSpawn),
 
-    // T=5s
-    timeouts.push(
+      // T=5s
       setTimeout(() => {
         setExpression("normal");
         setSpeechText("Are you looking for a backend engineer?");
-      }, timeSpawn + 5000)
-    );
+      }, timeSpawn + 5000),
 
-    // T=10s
-    timeouts.push(
+      // T=10s
       setTimeout(() => {
         setExpression("blink");
-      }, timeSpawn + 10000)
-    );
+      }, timeSpawn + 10000),
 
-    timeouts.push(
       setTimeout(() => {
         setExpression("happy");
         setSpeechText("I highly recommend trying my Cover Letter Generator!");
-      }, timeSpawn + 10300) // 10s + 300ms blink
-    );
+      }, timeSpawn + 10300), // 10s + 300ms blink
 
-    // T=12s
-    timeouts.push(
+      // T=12s
       setTimeout(() => {
         // Keep showing button in normal/blink loops
         setShowButton(true);
-      }, timeSpawn + 12000)
-    );
+      }, timeSpawn + 12000),
+    ];
 
     return () => {
       timeouts.forEach((t) => clearTimeout(t));
