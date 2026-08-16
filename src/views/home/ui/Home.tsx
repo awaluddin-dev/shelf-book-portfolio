@@ -36,10 +36,11 @@ import TestimonialModal from "@/widgets/testimonial-modal/ui/TestimonialModal";
 import AdminPlayground from "@/views/admin-playground/ui/AdminPlayground";
 import { CoverLetterModal } from "@/widgets/cover-letter/CoverLetterModal";
 import { Mascot } from "@/widgets/mascot/ui/Mascot";
+import { Loader } from "@/shared/ui/Loader";
 
 export default function Portfolio() {
   const { isDark } = useTheme();
-  const { dynamicHeroConfig, initializeData, toastMessage } =
+  const { dynamicHeroConfig, initializeData, toastMessage, isLoading } =
     usePortfolioStore();
 
   const [isPlaygroundOpen, setPlaygroundOpen] = useState(false);
@@ -149,60 +150,74 @@ export default function Portfolio() {
   };
 
   return (
-    <div className="min-h-screen bg-neu-bg text-neu-text px-6 pb-6 md:px-12 md:pb-12 lg:px-24 lg:pb-24 pt-[2.7rem] font-sans transition-colors duration-300 relative">
-      {/* Animated Scroll Progress Bar */}
-      <motion.div
-        id="scroll-progress"
-        role="progressbar"
-        aria-label="Scroll Progress"
-        suppressHydrationWarning
-        className="fixed top-0 left-0 right-0 h-[4px] bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 animate-gradient-x z-[100] origin-left"
-        style={{ scaleX }}
-      />
-      {/* Sticky bottom dock navigation */}
-      <DockNavigation
-        isDark={isDark}
-        showBackToTop={showBackToTop}
-        activeSection={activeSection}
-        openPlayground={() => setPlaygroundOpen(true)}
-      />
-      {/* Extracted Sections */}
-      <HeroSection isDark={isDark} renderIcon={renderIcon} />
-      <ProjectsSection isDark={isDark} />
-      <ProficiencySection isDark={isDark} renderIcon={renderIcon} />
-      <ExperienceSection isDark={isDark} />
-      {/* Footer */}
-      <footer className="max-w-7xl mx-auto py-12 border-t border-gray-300/50 dark:border-gray-700/50 text-center text-xs font-mono text-neu-text-muted">
-        <p>
-          © {new Date().getFullYear()} {dynamicHeroConfig?.name || "Awaluddin"}.
-          All rights reserved.
-        </p>
-      </footer>
-      <ProjectModal isDark={isDark} getTechIconAndColor={getTechIconAndColor} />
-      {/* Quick-Send Availability Inquiry Modal */}
-      <ContactModal />
-      {/* Premium Toast Notification */}
+    <>
       <AnimatePresence>
-        {toastMessage && (
+        {isLoading && (
           <motion.div
-            initial={{ opacity: 0, y: -50, x: "-50%", scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
-            exit={{ opacity: 0, y: -20, x: "-50%", scale: 0.9 }}
-            className="fixed top-8 left-1/2 z-[150] px-6 py-3.5 rounded-2xl bg-black/90 dark:bg-neutral-950 text-white font-mono text-xs shadow-neu border border-white/10 flex items-center gap-2.5 backdrop-blur-md"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="fixed inset-0 z-[999] flex items-center justify-center bg-neu-bg"
           >
-            <Sparkles className="text-neu-accent animate-pulse" size={14} />
-            <span>{toastMessage}</span>
+            <Loader size={100} />
           </motion.div>
         )}
       </AnimatePresence>
-      <TestimonialModal />
-      <CoverLetterModal />
-      <Mascot />
-      <AnimatePresence>
-        {isPlaygroundOpen && (
-          <AdminPlayground onClose={() => setPlaygroundOpen(false)} />
-        )}
-      </AnimatePresence>
-    </div>
+      <div className="min-h-screen bg-neu-bg text-neu-text px-6 pb-6 md:px-12 md:pb-12 lg:px-24 lg:pb-24 pt-[2.7rem] font-sans transition-colors duration-300 relative">
+        {/* Animated Scroll Progress Bar */}
+        <motion.div
+          id="scroll-progress"
+          role="progressbar"
+          aria-label="Scroll Progress"
+          suppressHydrationWarning
+          className="fixed top-0 left-0 right-0 h-[4px] bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 animate-gradient-x z-[100] origin-left"
+          style={{ scaleX }}
+        />
+        {/* Sticky bottom dock navigation */}
+        <DockNavigation
+          isDark={isDark}
+          showBackToTop={showBackToTop}
+          activeSection={activeSection}
+          openPlayground={() => setPlaygroundOpen(true)}
+        />
+        {/* Extracted Sections */}
+        <HeroSection isDark={isDark} renderIcon={renderIcon} />
+        <ProjectsSection isDark={isDark} />
+        <ProficiencySection isDark={isDark} renderIcon={renderIcon} />
+        <ExperienceSection isDark={isDark} />
+        {/* Footer */}
+        <footer className="max-w-7xl mx-auto py-12 border-t border-gray-300/50 dark:border-gray-700/50 text-center text-xs font-mono text-neu-text-muted">
+          <p>
+            © {new Date().getFullYear()} {dynamicHeroConfig?.name || "Awaluddin"}.
+            All rights reserved.
+          </p>
+        </footer>
+        <ProjectModal isDark={isDark} getTechIconAndColor={getTechIconAndColor} />
+        {/* Quick-Send Availability Inquiry Modal */}
+        <ContactModal />
+        {/* Premium Toast Notification */}
+        <AnimatePresence>
+          {toastMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -50, x: "-50%", scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+              exit={{ opacity: 0, y: -20, x: "-50%", scale: 0.9 }}
+              className="fixed top-8 left-1/2 z-[150] px-6 py-3.5 rounded-2xl bg-black/90 dark:bg-neutral-950 text-white font-mono text-xs shadow-neu border border-white/10 flex items-center gap-2.5 backdrop-blur-md"
+            >
+              <Sparkles className="text-neu-accent animate-pulse" size={14} />
+              <span>{toastMessage}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <TestimonialModal />
+        <CoverLetterModal />
+        <Mascot />
+        <AnimatePresence>
+          {isPlaygroundOpen && (
+            <AdminPlayground onClose={() => setPlaygroundOpen(false)} />
+          )}
+        </AnimatePresence>
+      </div>
+    </>
   );
 }
