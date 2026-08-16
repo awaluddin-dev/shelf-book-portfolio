@@ -58,7 +58,7 @@ describe('AdminTechnicalImagery Component', () => {
     const { container } = render(<>{props.renderForm(formData, setFormData)}</>);
     
     const inputs = container.querySelectorAll('input');
-    expect(inputs.length).toBe(6);
+    expect(inputs).toHaveLength(6);
 
     // Testing change in featured URL
     fireEvent.change(inputs[0], { target: { value: 'new-feat.png' } });
@@ -130,9 +130,9 @@ describe('AdminTechnicalImagery Component', () => {
     render(<>{props.renderCardDisplay(item)}</>);
     
     const noImageElements = screen.getAllByText('No image');
-    expect(noImageElements.length).toBe(3);
+    expect(noImageElements).toHaveLength(3);
     
     const noCaptionElements = screen.getAllByText('No caption');
-    expect(noCaptionElements.length).toBe(3);
+    expect(noCaptionElements).toHaveLength(3);
   });
 });

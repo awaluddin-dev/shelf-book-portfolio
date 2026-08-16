@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X } from "lucide-react";

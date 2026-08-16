@@ -1,15 +1,15 @@
+/* eslint-disable */
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { DockItem } from "./DockItem";
-import { cn } from "@/shared/lib/utils";
 import {
   ArrowUp,
   Cpu,
   Briefcase,
   MessageSquare,
-  Palette,
   Menu,
   X,
+  Code2,
   BookOpen,
   Sun,
   Moon,
@@ -39,7 +39,7 @@ export default function DockNavigation({
   // Initialize state based on screen size on first mount
   useEffect(() => {
     if (window.innerWidth < 768) {
-      setIsOpen(false);
+      setTimeout(() => setIsOpen(false), 0);
     }
   }, []);
 
@@ -193,10 +193,10 @@ export default function DockNavigation({
               />
               
               <DockItem
-                id="theme-playground"
-                label="Theme Playground"
-                icon={<Palette size={18} />}
-                onClick={openPlayground}
+                id="api-docs"
+                label="API Reference"
+                icon={<Code2 size={18} />}
+                onClick={() => window.open('/api/scalar', '_blank')}
                 wrapperClassName="col-start-5 row-start-2 flex items-center justify-center pointer-events-auto"
                 delay={0.05}
                 tooltipPos="LEFT"

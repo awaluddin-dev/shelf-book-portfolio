@@ -5,18 +5,19 @@ export function parseJwt(token: string) {
     const jsonPayload = decodeURIComponent(
       window.atob(base64)
         .split('')
-        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .map((c) => '%' + ('00' + c.codePointAt(0)?.toString(16)).slice(-2))
         .join('')
     );
     return JSON.parse(jsonPayload);
-  } catch (error) {
+  } catch (error: unknown) {
+    console.error("Failed to parse JWT", error);
     return null;
   }
 }
 
 export function isTokenExpired(token: string): boolean {
   const decoded = parseJwt(token);
-  if (!decoded || !decoded.exp) return true;
+  if (!decoded?.exp) return true;
   
   const currentTime = Math.floor(Date.now() / 1000);
   // Add a 10 seconds buffer

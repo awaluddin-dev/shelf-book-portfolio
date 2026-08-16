@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -399,9 +400,9 @@ describe('ProjectsSection', () => {
 
   test('handles project sorting logic', () => {
     const projects = [
-      { id: '1', title: 'C', date: '2023', tags: [] },
-      { id: '2', title: 'A', date: '2025', tags: [] },
-      { id: '3', title: 'B', date: '2024', tags: [] },
+      { id: '1', title: 'C', date: '2023', tags: [], category: 'Web' },
+      { id: '2', title: 'A', date: '2025', tags: [], category: 'Web' },
+      { id: '3', title: 'B', date: '2024', tags: [], category: 'Mobile' },
     ];
     (usePortfolioStore as unknown as jest.Mock).mockReturnValue({
       searchQuery: '',

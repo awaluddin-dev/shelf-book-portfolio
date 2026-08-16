@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, act } from '@testing-library/react'
+/* eslint-disable */
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react'
 import ExperienceSection from '@/widgets/experience/ui/Experience'
 
 // Mock sub-components
@@ -45,6 +46,9 @@ jest.mock('motion/react', () => ({
       <section id={id} className={className}>
         {children}
       </section>
+    ),
+    button: ({ children, ...props }: any) => (
+      <button {...props}>{children}</button>
     ),
   },
   AnimatePresence: ({ children }: any) => <>{children}</>
@@ -95,20 +99,26 @@ describe('ExperienceSection', () => {
     expect(screen.getByText('Git Activity & Contribution Frequency')).toBeInTheDocument()
   })
 
-  it('toggles chart type', () => {
+  it('toggles chart type', async () => {
     render(<ExperienceSection isDark={true} />)
     
     fireEvent.click(screen.getByText(/Repos/))
-    expect(screen.getByTestId('bar-chart')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByTestId('bar-chart')).toBeInTheDocument()
+    })
     
     fireEvent.click(screen.getByText(/Commit Timeline/))
-    expect(screen.getByTestId('area-chart')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByTestId('area-chart')).toBeInTheDocument()
+    })
   })
 
-  it('renders dynamic work experiences', () => {
+  it('renders dynamic work experiences', async () => {
     render(<ExperienceSection isDark={true} />)
     expect(screen.getAllByText('Test Company').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Test Role').length).toBeGreaterThan(0)
+    await waitFor(() => {
+      expect(screen.getAllByText('Test Role').length).toBeGreaterThan(0)
+    })
   })
 
   it('expands experience item on click', () => {

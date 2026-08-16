@@ -5,7 +5,8 @@ A highly interactive, modern developer portfolio built with **Next.js 15**, **Ta
 ## 🌟 Key Features
 
 - **Interactive UI & Animations:** Fluid page transitions, animated scroll progress bars, and a dynamic sliding "Learning Roadmap" powered by Motion.
-- **Dynamic Theme Playground:** A built-in admin playground to customize themes (colors, shadows, glassmorphism) in real-time and export custom CSS variables.
+- **API Reference (Scalar):** Integrated API documentation accessible directly from the Dock Navigation, proxying seamlessly to the backend backend `/api/scalar`.
+- **Memory Optimized Animations:** Heavy P5.js canvas instantiations and hundreds of SVG animations (`CircuitBoardBg`) are meticulously memoized and refactored to prevent Chromium "Aw, Snap!" memory leaks and GC overhead.
 - **Architecture Flipbook Viewer:** Interactive presentation of system architecture diagrams (Mermaid + SVG) with native support for dark-mode inversion.
 - **AI Assistants (SSE streaming):**
   - **Portfolio Chat Widget** — RAG-backed chat that answers questions about Awaluddin's experience, skills, and projects.
@@ -29,7 +30,7 @@ A highly interactive, modern developer portfolio built with **Next.js 15**, **Ta
 - **Visuals:** P5.js, Mermaid (architecture diagrams), Recharts (contribution charts)
 - **Forms / Security:** Cloudflare Turnstile (contact form), DOMPurify (sanitization)
 - **Diagrams:** react-zoom-pan-pinch (architecture flipbook)
-- **Quality:** ESLint, Stylelint, SonarQube, Jest + Testing Library
+- **Quality:** ESLint, Stylelint, SonarQube, Jest + Testing Library, GitHub Actions CI/CD
 
 ## 🚀 Getting Started
 
@@ -97,7 +98,7 @@ __tests__/                  # Jest + Testing Library tests
 
 ## 🔧 Customization
 
-- **Theming:** Use the built-in _Theme Playground_ (accessible via the Dock Navigation) to tweak the UI variables and generate a new neumorphic configuration for `globals.css`.
+- **Theming:** Use CSS variables in `globals.css` to tweak the UI (colors, shadows, glassmorphism) and adapt the neumorphic configuration.
 - **Data Source:** Most portfolio content (Roadmap, Projects, Work Experience, Hero, Testimonials) is pulled dynamically from the backend APIs (e.g., `/api/projects`, `/api/learning`) and managed through the `/admin` CMS.
 
 ## 🧪 Testing & Quality
@@ -108,6 +109,8 @@ pnpm test:cov      # coverage report
 pnpm lint          # ESLint
 pnpm lint:css      # Stylelint
 pnpm sonar         # SonarQube scanner
+
+**CI/CD:** A GitHub Actions workflow (`.github/workflows/ci.yml`) automatically runs linting, tests, and build verification on every Pull Request.
 ```
 
 ## 🚢 Deployment

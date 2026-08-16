@@ -46,43 +46,43 @@ export default function AdminLearning() {
         <>
           <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
-                  <label className="text-xs font-mono text-neu-text-muted">Technology Name</label>
-                  <input required value={formData.tech || ''} onChange={e => setFormData({...formData, tech: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Agentic AI" />
+                  <label htmlFor="al-tech" className="text-xs font-mono text-neu-text-muted">Technology Name</label>
+                  <input id="al-tech" required value={formData.tech || ''} onChange={e => setFormData({...formData, tech: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Agentic AI" />
               </div>
               <div className="space-y-1">
-                  <label className="text-xs font-mono text-neu-text-muted">Quarter / Target</label>
-                  <input required value={formData.quarter || ''} onChange={e => setFormData({...formData, quarter: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Q3 2026" />
+                  <label htmlFor="al-quarter" className="text-xs font-mono text-neu-text-muted">Quarter / Target</label>
+                  <input id="al-quarter" required value={formData.quarter || ''} onChange={e => setFormData({...formData, quarter: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Q3 2026" />
               </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
-                  <label className="text-xs font-mono text-neu-text-muted">Status</label>
-                  <select value={formData.status || 'Planned'} onChange={e => setFormData({...formData, status: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none">
+                  <label htmlFor="al-status" className="text-xs font-mono text-neu-text-muted">Status</label>
+                  <select id="al-status" value={formData.status || 'Planned'} onChange={e => setFormData({...formData, status: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none">
                       <option value="Planned">Planned</option>
                       <option value="In Progress">In Progress</option>
                       <option value="Completed">Completed</option>
                   </select>
               </div>
               <div className="space-y-1">
-                  <label className="text-xs font-mono text-neu-text-muted">Depth Target</label>
-                  <input required value={formData.depth || ''} onChange={e => setFormData({...formData, depth: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Intermediate" />
+                  <label htmlFor="al-depth" className="text-xs font-mono text-neu-text-muted">Depth Target</label>
+                  <input id="al-depth" required value={formData.depth || ''} onChange={e => setFormData({...formData, depth: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Intermediate" />
               </div>
           </div>
           <div className="space-y-1">
-              <label className="text-xs font-mono text-neu-text-muted">Icon (Lucide name)</label>
-              <input required value={formData.icon || ''} onChange={e => setFormData({...formData, icon: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="BrainCircuit" />
+              <label htmlFor="al-icon" className="text-xs font-mono text-neu-text-muted">Icon (Lucide name)</label>
+              <input id="al-icon" required value={formData.icon || ''} onChange={e => setFormData({...formData, icon: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="BrainCircuit" />
           </div>
           <div className="space-y-1">
-              <label className="text-xs font-mono text-neu-text-muted">Description</label>
-              <textarea required value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} rows={2} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none resize-none" placeholder="Details about this goal..." />
+              <label htmlFor="al-desc" className="text-xs font-mono text-neu-text-muted">Description</label>
+              <textarea id="al-desc" required value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} rows={2} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none resize-none" placeholder="Details about this goal..." />
           </div>
           <div className="space-y-1">
-              <label className="text-xs font-mono text-neu-text-muted">Topics (comma separated)</label>
-              <input required value={formData.topics || ''} onChange={e => setFormData({...formData, topics: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Stateful Agents, RAG" />
+              <label htmlFor="al-topics" className="text-xs font-mono text-neu-text-muted">Topics (comma separated)</label>
+              <input id="al-topics" required value={formData.topics || ''} onChange={e => setFormData({...formData, topics: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="Stateful Agents, RAG" />
           </div>
           <div className="space-y-1">
-              <label className="text-xs font-mono text-neu-text-muted">Projects (comma separated)</label>
-              <input required value={formData.projects || ''} onChange={e => setFormData({...formData, projects: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="AuraFlow AI Backend" />
+              <label htmlFor="al-projects" className="text-xs font-mono text-neu-text-muted">Projects (comma separated)</label>
+              <input id="al-projects" required value={formData.projects || ''} onChange={e => setFormData({...formData, projects: e.target.value})} className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none" placeholder="AuraFlow AI Backend" />
           </div>
         </>
       )}

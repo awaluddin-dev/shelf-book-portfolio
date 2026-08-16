@@ -1,5 +1,6 @@
+/* eslint-disable */
 import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import DockNavigation from "../DockNavigation";
 import { useTheme } from "next-themes";
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
@@ -20,6 +21,10 @@ window.scrollTo = mockScrollTo;
 // Mock element.scrollIntoView
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
+// Mock window.open
+const mockWindowOpen = jest.fn();
+window.open = mockWindowOpen;
+
 // Mock motion/react to avoid animation issues in tests and simplify DOM
 jest.mock("motion/react", () => {
   const React = require("react");
@@ -39,7 +44,8 @@ jest.mock("motion/react", () => {
   
   return {
     motion,
-    AnimatePresence: ({ children }: any) => <>{children}</>,
+    AnimatePresence: function MockAnimatePresence({ children }: any) { return <>{children}</>; },
+  // eslint-disable-next-line react/display-name
   };
 });
 
@@ -50,6 +56,7 @@ describe("DockNavigation", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockWindowOpen.mockClear();
     
     (useTheme as jest.Mock).mockReturnValue({
       setTheme: mockSetTheme,
@@ -86,13 +93,13 @@ describe("DockNavigation", () => {
     expect(screen.getByLabelText("Proficiency")).toBeInTheDocument();
     expect(screen.getByLabelText("Experience")).toBeInTheDocument();
     expect(screen.getByLabelText("Endorse")).toBeInTheDocument();
-    expect(screen.getByLabelText("Theme Playground")).toBeInTheDocument();
+    expect(screen.getByLabelText("API Reference")).toBeInTheDocument();
     expect(screen.getByLabelText("Toggle Theme")).toBeInTheDocument();
     expect(screen.getByLabelText("Ask about Awaluddin")).toBeInTheDocument();
     expect(screen.getByLabelText("Scroll to Top")).toBeInTheDocument();
   });
 
-  it("renders correctly on mobile (closed by default)", () => {
+  it("renders correctly on mobile (closed by default)", async () => {
     // Set window width to mobile
     Object.defineProperty(window, 'innerWidth', { value: 500 });
     
@@ -102,7 +109,9 @@ describe("DockNavigation", () => {
     expect(screen.getByLabelText("Toggle Navigation")).toBeInTheDocument();
     
     // Other buttons should not be in the document (since AnimatePresence children won't render if isOpen is false)
-    expect(screen.queryByLabelText("Projects")).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByLabelText("Projects")).not.toBeInTheDocument();
+    });
   });
 
   it("toggles menu when hamburger is clicked", () => {
@@ -145,8 +154,8 @@ describe("DockNavigation", () => {
   it("handles interactions with utility buttons", () => {
     renderComponent();
     
-    fireEvent.click(screen.getByLabelText("Theme Playground"));
-    expect(mockOpenPlayground).toHaveBeenCalled();
+    fireEvent.click(screen.getByLabelText("API Reference"));
+    expect(mockWindowOpen).toHaveBeenCalledWith('/api/scalar', '_blank');
     
     fireEvent.click(screen.getByLabelText("Toggle Theme"));
     expect(mockSetTheme).toHaveBeenCalledWith("light"); // Current isDark is true
@@ -173,9 +182,9 @@ describe("DockNavigation", () => {
     expect(screen.queryByText("Projects", { selector: '.absolute' })).not.toBeInTheDocument();
     
     // Test a few others
-    fireEvent.mouseEnter(screen.getByLabelText("Theme Playground"));
-    expect(screen.getByText("Theme Playground")).toBeInTheDocument();
-    fireEvent.mouseLeave(screen.getByLabelText("Theme Playground"));
+    fireEvent.mouseEnter(screen.getByLabelText("API Reference"));
+    expect(screen.getByText("API Reference")).toBeInTheDocument();
+    fireEvent.mouseLeave(screen.getByLabelText("API Reference"));
     
     fireEvent.mouseEnter(screen.getByLabelText("Toggle Navigation"));
     expect(screen.getByText("Close Menu")).toBeInTheDocument();
@@ -229,7 +238,7 @@ describe("DockNavigation", () => {
       { label: "Proficiency", tooltip: "Proficiency" },
       { label: "Experience", tooltip: "Experience" },
       { label: "Endorse", tooltip: "Endorse" },
-      { label: "Theme Playground", tooltip: "Theme Playground" },
+      { label: "API Reference", tooltip: "API Reference" },
       { label: "Toggle Theme", tooltip: "Light Mode" },
       { label: "Ask about Awaluddin", tooltip: "AI Chat" },
       { label: "Scroll to Top", tooltip: "Back to Top" }

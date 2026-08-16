@@ -6,8 +6,10 @@ describe('utils', () => {
       expect(cn('class1', 'class2')).toBe('class1 class2');
     });
 
-    it('should handle conditional class names', () => {
-      expect(cn('class1', true && 'class2', false && 'class3')).toBe('class1 class2');
+    it('conditionally applies classes', () => {
+      const isTrue = true;
+      const isFalse = false;
+      expect(cn('class1', isTrue && 'class2', isFalse && 'class3')).toBe('class1 class2');
     });
 
     it('should merge tailwind classes properly using tailwind-merge', () => {

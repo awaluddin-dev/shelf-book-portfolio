@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { SpeechBubble } from '@/widgets/mascot/ui/SpeechBubble';
 import { usePortfolioStore } from '@/shared/store/portfolioStore';

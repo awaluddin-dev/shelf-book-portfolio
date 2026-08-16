@@ -71,6 +71,11 @@ class Orb {
 
 const P5Background: React.FC<P5BackgroundProps> = ({ isDark }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isDarkRef = useRef(isDark);
+
+  useEffect(() => {
+    isDarkRef.current = isDark;
+  }, [isDark]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -94,7 +99,7 @@ const P5Background: React.FC<P5BackgroundProps> = ({ isDark }) => {
         p.clear();
         for (const orb of orbs) {
           orb.update(p);
-          orb.display(p, isDark);
+          orb.display(p, isDarkRef.current);
         }
       };
 
@@ -113,7 +118,7 @@ const P5Background: React.FC<P5BackgroundProps> = ({ isDark }) => {
         p5Instance.remove();
       }
     };
-  }, [isDark]);
+  }, []);
 
   return (
     <div 
