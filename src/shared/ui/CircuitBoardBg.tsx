@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { secureMathRandom } from "@/shared/lib/utils";
 
@@ -121,7 +121,7 @@ function MovingNode({
   );
 }
 
-export function CircuitBoardBg() {
+export const CircuitBoardBg = React.memo(function CircuitBoardBg() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -711,4 +711,4 @@ export function CircuitBoardBg() {
       </svg>
     </div>
   );
-}
+});

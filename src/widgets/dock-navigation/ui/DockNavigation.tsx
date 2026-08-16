@@ -10,6 +10,7 @@ import {
   Palette,
   Menu,
   X,
+  Code2,
   BookOpen,
   Sun,
   Moon,
@@ -193,10 +194,10 @@ export default function DockNavigation({
               />
               
               <DockItem
-                id="theme-playground"
-                label="Theme Playground"
-                icon={<Palette size={18} />}
-                onClick={openPlayground}
+                id="api-docs"
+                label="API Reference"
+                icon={<Code2 size={18} />}
+                onClick={() => window.open('/api/scalar', '_blank')}
                 wrapperClassName="col-start-5 row-start-2 flex items-center justify-center pointer-events-auto"
                 delay={0.05}
                 tooltipPos="LEFT"
