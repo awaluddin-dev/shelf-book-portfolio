@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { SiGithub } from "@/shared/ui/icons/BrandIcons";

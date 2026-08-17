@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Quote } from "lucide-react";

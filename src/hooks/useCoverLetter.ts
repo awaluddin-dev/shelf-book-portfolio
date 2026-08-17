@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useCallback, useRef } from "react";
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
 import { parseSSEStream } from "@/shared/lib/sse";

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { motion, AnimatePresence } from "motion/react";
 import { X, Sparkles } from "lucide-react";
 import { useState, useEffect } from "react";

@@ -17,9 +17,9 @@ jest.mock('recharts', () => {
 
 // Mock ResizeObserver
 global.ResizeObserver = class {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+  observe() { /* empty */ }
+  unobserve() { /* empty */ }
+  disconnect() { /* empty */ }
 };
 
 describe('ExperienceSection', () => {

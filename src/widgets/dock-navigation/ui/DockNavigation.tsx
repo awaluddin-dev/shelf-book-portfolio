@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { DockItem } from "./DockItem";

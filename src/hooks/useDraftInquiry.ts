@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useState, useCallback, useRef } from "react";
 import { parseSSEStream } from "@/shared/lib/sse";
 

@@ -1,4 +1,3 @@
-/* eslint-disable */
 /* eslint-disable sonarjs/cognitive-complexity, sonarjs/no-nested-functions */
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";

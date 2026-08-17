@@ -71,7 +71,7 @@ describe('CircuitBoardBg', () => {
     document.body.appendChild(parentG);
 
     const card = document.createElement('div');
-    card.setAttribute('data-card-zone', 'main');
+    card.dataset.cardZone = 'main';
     card.getBoundingClientRect = () => ({ left: 0, top: 0, right: 50, bottom: 50, width: 50, height: 50, x: 0, y: 0, toJSON: () => {} } as DOMRect);
     document.body.appendChild(card);
 
