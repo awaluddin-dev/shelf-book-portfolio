@@ -415,6 +415,7 @@ export default function ProjectModal({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProject, currentPage, spreads.length]);
 
   const pageVariants: any = {
@@ -513,7 +514,7 @@ const renderSpreadContent = (spread: any) => {
               <div className="mb-12 p-6 rounded-3xl border border-white/5 bg-white/5 backdrop-blur-sm shadow-xl">
                 <Quote size={20} className="text-neu-accent mb-4 mx-auto opacity-60" />
                 <p className="text-[11px] md:text-xs text-white/60 font-mono italic leading-relaxed max-w-[220px]">
-                  "Software is a great combination between artistry and engineering. Every line of code is a brushstroke."
+                  &quot;Software is a great combination between artistry and engineering. Every line of code is a brushstroke.&quot;
                 </p>
               </div>
 

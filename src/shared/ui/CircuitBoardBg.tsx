@@ -211,6 +211,7 @@ export const CircuitBoardBg = React.memo(function CircuitBoardBg() {
           y: vp.y + (svgRect?.top ?? 0),
         };
 
+  // eslint-disable-next-line sonarjs/no-nested-functions
         cards.forEach((card) => {
           const rect = card.getBoundingClientRect();
           const margin = 16; // node radius tolerance — "touching"

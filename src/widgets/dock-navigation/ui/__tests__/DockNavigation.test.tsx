@@ -28,17 +28,25 @@ window.open = mockWindowOpen;
 jest.mock("motion/react", () => {
   const React = require("react");
   // Simple mock for motion components
-  const motion = {
-    div: React.forwardRef(({ children, layoutId, initial, animate, exit, transition, ...props }: any, ref: any) => (
+  const MockDiv = React.forwardRef(function MockDivComp({ children, layoutId, initial, animate, exit, transition, ...props }: any, ref: any) {
+    return (
       <div ref={ref} data-testid="motion-div" {...props}>
         {children}
       </div>
-    )),
-    path: React.forwardRef(({ children, initial, animate, transition, ...props }: any, ref: any) => (
+    );
+  });
+
+  const MockPath = React.forwardRef(function MockPathComp({ children, initial, animate, transition, ...props }: any, ref: any) {
+    return (
       <path ref={ref} data-testid="motion-path" {...props}>
         {children}
       </path>
-    )),
+    );
+  });
+
+  const motion = {
+    div: MockDiv,
+    path: MockPath,
   };
   
   return {

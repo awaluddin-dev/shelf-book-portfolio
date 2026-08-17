@@ -100,7 +100,7 @@ export function ChatWidget() {
             {!hasMessages && (
               <div className="space-y-4 pt-2">
                 <p className="text-xs text-white/40 text-center">
-                  Ask me anything about Awaluddin's experience, skills, or availability.
+                  Ask me anything about Awaluddin&apos;s experience, skills, or availability.
                 </p>
                 <div className="space-y-2">
                   {SUGGESTED_QUESTIONS.map((q) => (

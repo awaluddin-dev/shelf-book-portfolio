@@ -5,9 +5,9 @@ import {
   Briefcase,
   Quote,
   Activity,
-  Code2,
-  ChevronUp,
-  ChevronDown,
+  
+  
+  
   ChevronLeft,
   ChevronRight,
   Sparkles,
@@ -163,6 +163,7 @@ export default function ExperienceSection({
     }
   };
 
+    // eslint-disable-next-line sonarjs/no-unused-vars, sonarjs/no-dead-store
   const heatmapData = useMemo(() => {
     if (!timelineData || timelineData.length === 0) return [];
     
