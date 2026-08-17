@@ -1,4 +1,4 @@
-import { getTagProjectCount, getRelatedProjects, legendLevels, TECHNICAL_IMAGERY } from '@/shared/lib/helpers'
+import { getTagProjectCount, getRelatedProjects, legendLevels } from '@/shared/lib/helpers'
 
 describe('helpers', () => {
   const mockProjects: any[] = [
@@ -39,13 +39,7 @@ describe('helpers', () => {
     })
   })
 
-  describe('TECHNICAL_IMAGERY', () => {
-    it('contains imagery for known projects', () => {
-      expect(TECHNICAL_IMAGERY['auraflow-ai']).toBeDefined()
-      expect(TECHNICAL_IMAGERY['sera-migration']).toBeDefined()
-      expect(TECHNICAL_IMAGERY['ledgerflow']).toBeDefined()
-    })
-  })
+
 
   describe('getTagProjectCount', () => {
     it('returns the correct count of projects containing a tag, case-insensitive', () => {

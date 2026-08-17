@@ -26,7 +26,7 @@ import ProjectLifecycleTracker from "@/entities/project/ui/ProjectLifecycleTrack
 import ProjectArchitectureDiagram from "@/entities/project/ui/ProjectArchitectureDiagram";
 
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
-import { getRelatedProjects, TECHNICAL_IMAGERY } from "@/shared/lib/helpers";
+import { getRelatedProjects } from "@/shared/lib/helpers";
 
 interface ProjectModalProps {
   isDark: boolean;
@@ -708,8 +708,7 @@ export default function ProjectModal({
             <img
               src={
                 selectedProject.technicalImagery?.featured ||
-                TECHNICAL_IMAGERY[selectedProject.id]?.featured ||
-                TECHNICAL_IMAGERY["auraflow-ai"]?.featured
+                "/assets/cover-book/default.png"
               }
               alt="Cover"
               className="w-full h-full object-cover opacity-30 mix-blend-overlay"
