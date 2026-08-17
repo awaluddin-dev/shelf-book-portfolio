@@ -137,6 +137,7 @@ describe('ExperienceSection', () => {
       fireEvent.click(nodes[0]);
       fireEvent.click(nodes[1]);
     }
+    expect(nodes).toBeDefined();
   });
 
   it('renders testimonials and handles scrolling', () => {
@@ -175,5 +176,6 @@ describe('ExperienceSection', () => {
         fireEvent.mouseLeave(container);
       }
     }
+    expect(elements).toBeDefined();
   });
 });

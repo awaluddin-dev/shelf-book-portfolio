@@ -4,11 +4,15 @@ import { MascotSvg } from '../MascotSvg';
 
 jest.mock('motion/react', () => {
   const React = require('react');
+  const G = React.forwardRef(({ children, ...props }: any, ref: any) => React.createElement('g', { ...props, ref }, children));
+  G.displayName = 'motion.g';
+  const Path = React.forwardRef(({ children, ...props }: any, ref: any) => React.createElement('path', { ...props, ref }, children));
+  Path.displayName = 'motion.path';
   return {
     __esModule: true,
     motion: {
-      g: React.forwardRef(({ children, ...props }: any, ref: any) => React.createElement('g', { ...props, ref }, children)),
-      path: React.forwardRef(({ children, ...props }: any, ref: any) => React.createElement('path', { ...props, ref }, children)),
+      g: G,
+      path: Path,
     }
   };
 });
