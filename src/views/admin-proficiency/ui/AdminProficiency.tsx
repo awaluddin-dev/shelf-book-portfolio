@@ -71,14 +71,10 @@ export default function AdminProficiency() {
         return (
           <>
             <div className="space-y-1">
-              <label
-                htmlFor="category-input"
-                className="text-xs font-mono text-neu-text-muted"
-              >
+              <span className="text-xs font-mono text-neu-text-muted">
                 Category Title (e.g., CORE BACKEND)
-              </label>
+              </span>
               <input
-                id="category-input"
                 required
                 value={formData.title || ""}
                 onChange={(e) =>
@@ -91,17 +87,14 @@ export default function AdminProficiency() {
 
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label
-                  htmlFor="skill-input"
-                  className="text-xs font-mono text-neu-text-muted"
-                >
+                <span className="text-xs font-mono text-neu-text-muted">
                   Skills List
-                </label>
+                </span>
                 <button
-                  id="skill-input"
                   type="button"
                   onClick={handleAddSkill}
                   className="text-xs font-bold text-neu-accent hover:underline flex items-center gap-1"
+                  name="Add Skill"
                 >
                   <Plus size={14} /> Add Skill
                 </button>
@@ -122,14 +115,10 @@ export default function AdminProficiency() {
                     </button>
                     <div className="grid grid-cols-2 gap-3 mb-3">
                       <div className="space-y-1">
-                        <label
-                          htmlFor="skill-name"
-                          className="text-[10px] font-mono text-neu-text-muted"
-                        >
+                        <span className="text-[10px] font-mono text-neu-text-muted">
                           Skill Name
-                        </label>
+                        </span>
                         <input
-                          id="skill-name"
                           required
                           value={skill.name}
                           onChange={(e) =>
@@ -140,14 +129,10 @@ export default function AdminProficiency() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label
-                          htmlFor="skill-status"
-                          className="text-[10px] font-mono text-neu-text-muted"
-                        >
+                        <span className="text-[10px] font-mono text-neu-text-muted">
                           Status
-                        </label>
+                        </span>
                         <select
-                          id="skill-status"
                           value={skill.status}
                           onChange={(e) =>
                             handleUpdateSkill(index, "status", e.target.value)
@@ -163,14 +148,10 @@ export default function AdminProficiency() {
                       </div>
                     </div>
                     <div className="space-y-1">
-                      <label
-                        htmlFor="skill-subtext"
-                        className="text-[10px] font-mono text-neu-text-muted"
-                      >
+                      <span className="text-[10px] font-mono text-neu-text-muted">
                         Subtext (Experience / Context)
-                      </label>
+                      </span>
                       <input
-                        id="skill-subtext"
                         required
                         value={skill.subtext}
                         onChange={(e) =>

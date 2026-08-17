@@ -247,14 +247,10 @@ export default function AdminDashboard() {
               {/* Name & Role */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label
-                    htmlFor="hc-name"
-                    className="text-xs font-mono text-neu-text-muted"
-                  >
+                  <span className="text-xs font-mono text-neu-text-muted">
                     Display Name
-                  </label>
+                  </span>
                   <input
-                    id="hc-name"
                     value={heroConfig.name || ""}
                     onChange={(e) =>
                       setHeroConfig({ ...heroConfig, name: e.target.value })
@@ -264,14 +260,10 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label
-                    htmlFor="hc-role"
-                    className="text-xs font-mono text-neu-text-muted"
-                  >
+                  <span className="text-xs font-mono text-neu-text-muted">
                     Role / Title
-                  </label>
+                  </span>
                   <input
-                    id="hc-role"
                     value={heroConfig.role || ""}
                     onChange={(e) =>
                       setHeroConfig({ ...heroConfig, role: e.target.value })
@@ -281,14 +273,10 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label
-                    htmlFor="hc-avail"
-                    className="text-xs font-mono text-neu-text-muted"
-                  >
+                  <span className="text-xs font-mono text-neu-text-muted">
                     Available From
-                  </label>
+                  </span>
                   <input
-                    id="hc-avail"
                     value={heroConfig.availableFrom || ""}
                     onChange={(e) =>
                       setHeroConfig({
@@ -305,17 +293,14 @@ export default function AdminDashboard() {
               {/* Metric Strip Form */}
               <div className="pt-6 border-t border-white/5 space-y-4">
                 <div className="flex items-center justify-between">
-                  <label
-                    htmlFor="id-metric-btn"
-                    className="text-xs font-mono text-neu-text-muted"
-                  >
+                  <span className="text-xs font-mono text-neu-text-muted">
                     Metric Strip Items (Max 4 recommended)
-                  </label>
+                  </span>
                   <button
                     type="button"
                     onClick={addMetric}
                     className="text-xs font-bold text-neu-accent hover:underline flex items-center gap-1"
-                    id="id-metric-btn"
+                    name="Add Metric"
                   >
                     <Plus size={14} /> Add Metric
                   </button>
@@ -336,14 +321,10 @@ export default function AdminDashboard() {
                       <div className="space-y-3">
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-1">
-                            <label
-                              htmlFor={`m-val-${idx}`}
-                              className="text-[10px] font-mono text-neu-text-muted"
-                            >
+                            <span className="text-[10px] font-mono text-neu-text-muted">
                               Value (e.g. 5+ Years)
-                            </label>
+                            </span>
                             <input
-                              id={`m-val-${idx}`}
                               value={m.value || ""}
                               onChange={(e) =>
                                 handleMetricChange(idx, "value", e.target.value)
@@ -352,14 +333,10 @@ export default function AdminDashboard() {
                             />
                           </div>
                           <div className="space-y-1">
-                            <label
-                              htmlFor={`m-lbl-${idx}`}
-                              className="text-[10px] font-mono text-neu-text-muted"
-                            >
+                            <span className="text-[10px] font-mono text-neu-text-muted">
                               Label (e.g. EXPERIENCE)
-                            </label>
+                            </span>
                             <input
-                              id={`m-lbl-${idx}`}
                               value={m.label}
                               onChange={(e) =>
                                 handleMetricChange(idx, "label", e.target.value)
@@ -370,14 +347,10 @@ export default function AdminDashboard() {
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-1">
-                            <label
-                              htmlFor={`m-ico-${idx}`}
-                              className="text-[10px] font-mono text-neu-text-muted"
-                            >
+                            <span className="text-[10px] font-mono text-neu-text-muted">
                               Icon Name
-                            </label>
+                            </span>
                             <select
-                              id={`m-ico-${idx}`}
                               value={m.icon}
                               onChange={(e) =>
                                 handleMetricChange(idx, "icon", e.target.value)
