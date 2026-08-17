@@ -95,7 +95,6 @@ describe("DockNavigation", () => {
     expect(screen.getByLabelText("Endorse")).toBeInTheDocument();
     expect(screen.getByLabelText("API Reference")).toBeInTheDocument();
     expect(screen.getByLabelText("Toggle Theme")).toBeInTheDocument();
-    expect(screen.getByLabelText("Ask about Awaluddin")).toBeInTheDocument();
     expect(screen.getByLabelText("Scroll to Top")).toBeInTheDocument();
   });
 
@@ -159,9 +158,6 @@ describe("DockNavigation", () => {
     
     fireEvent.click(screen.getByLabelText("Toggle Theme"));
     expect(mockSetTheme).toHaveBeenCalledWith("light"); // Current isDark is true
-    
-    fireEvent.click(screen.getByLabelText("Ask about Awaluddin"));
-    expect(mockSetIsChatOpen).toHaveBeenCalledWith(true);
     
     fireEvent.click(screen.getByLabelText("Scroll to Top"));
     expect(mockScrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
@@ -240,7 +236,6 @@ describe("DockNavigation", () => {
       { label: "Endorse", tooltip: "Endorse" },
       { label: "API Reference", tooltip: "API Reference" },
       { label: "Toggle Theme", tooltip: "Light Mode" },
-      { label: "Ask about Awaluddin", tooltip: "AI Chat" },
       { label: "Scroll to Top", tooltip: "Back to Top" }
     ];
 

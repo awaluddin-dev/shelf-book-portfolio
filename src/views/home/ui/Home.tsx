@@ -35,7 +35,11 @@ import DockNavigation from "@/widgets/dock-navigation/ui/DockNavigation";
 import TestimonialModal from "@/widgets/testimonial-modal/ui/TestimonialModal";
 import AdminPlayground from "@/views/admin-playground/ui/AdminPlayground";
 import { CoverLetterModal } from "@/widgets/cover-letter/CoverLetterModal";
-import { Mascot } from "@/widgets/mascot/ui/Mascot";
+import dynamic from 'next/dynamic';
+
+const Mascot = dynamic(() => import('@/widgets/mascot/ui/Mascot').then(mod => mod.Mascot), {
+  ssr: false
+});
 import { Loader } from "@/shared/ui/Loader";
 
 export default function Portfolio() {
