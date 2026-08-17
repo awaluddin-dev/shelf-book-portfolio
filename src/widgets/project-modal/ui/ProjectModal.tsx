@@ -708,7 +708,7 @@ export default function ProjectModal({
             <img
               src={
                 selectedProject.technicalImagery?.featured ||
-                "/assets/cover-book/default.png"
+                "/assets/cover-book/default.webp"
               }
               alt="Cover"
               className="w-full h-full object-cover opacity-30 mix-blend-overlay"
