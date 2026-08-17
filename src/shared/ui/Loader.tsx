@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface LoaderProps {
   fullScreen?: boolean;
@@ -15,16 +15,16 @@ const defaultDynamicTexts = [
   "Compiling metrics...",
   "Synchronizing state...",
   "Rendering UI...",
-  "Almost there..."
+  "Almost there...",
 ];
 
-export function Loader({ 
-  fullScreen = false, 
-  size = 64, 
-  className = '', 
+export function Loader({
+  fullScreen = false,
+  size = 64,
+  className = "",
   text,
-  dynamicTexts = defaultDynamicTexts 
-}: LoaderProps) {
+  dynamicTexts = defaultDynamicTexts,
+}: Readonly<LoaderProps>) {
   const [progress, setProgress] = useState(0);
   const [textIndex, setTextIndex] = useState(0);
 
@@ -55,11 +55,16 @@ export function Loader({
   const offset = circumference - (progress / 100) * circumference;
 
   const content = (
-    <div className={`flex flex-col items-center justify-center gap-6 ${className}`}>
-      <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+    <div
+      className={`flex flex-col items-center justify-center gap-6 ${className}`}
+    >
+      <div
+        className="relative flex items-center justify-center"
+        style={{ width: size, height: size }}
+      >
         {/* Glow effect */}
         <div className="absolute inset-0 rounded-full blur-2xl bg-neu-accent/30 dark:bg-neu-accent/20 animate-pulse"></div>
-        
+
         {/* SVG Circle */}
         <svg
           className="transform -rotate-90 relative z-10"
@@ -93,12 +98,16 @@ export function Loader({
 
         {/* Percentage Text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-          <span className="font-mono text-sm font-bold text-neu-text tracking-tighter" style={{ fontSize: size * 0.25 }}>
-            {Math.round(progress)}<span className="text-[0.6em] text-neu-text-muted">%</span>
+          <span
+            className="font-mono text-sm font-bold text-neu-text tracking-tighter"
+            style={{ fontSize: size * 0.25 }}
+          >
+            {Math.round(progress)}
+            <span className="text-[0.6em] text-neu-text-muted">%</span>
           </span>
         </div>
       </div>
-      
+
       <div className="h-6 relative w-64 flex items-center justify-center overflow-hidden">
         {text ? (
           <p className="text-xs md:text-sm font-mono text-neu-text-muted animate-pulse font-medium uppercase tracking-widest absolute">

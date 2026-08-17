@@ -391,7 +391,7 @@ const ProjectRelatedPage = ({
           .slice(0, 4)
           .map((proj) => (
             <button
-              key={proj.id}
+              key={proj.id as string}
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
@@ -769,7 +769,7 @@ export default function ProjectModal({
               <div className="flex gap-[1px] items-stretch h-full opacity-80 justify-center">
                 {[...Array(28)].map((_, i) => (
                   <div
-                    key={i}
+                    key={i as number}
                     className="bg-black"
                     style={{
                       width: secureMathRandom() > 0.5 ? "2px" : "4px",
@@ -902,7 +902,7 @@ export default function ProjectModal({
           <div className="w-full h-full relative preserve-3d">
             <AnimatePresence mode="wait" custom={direction} initial={false}>
               <motion.div
-                key={currentPage}
+                key={currentPage as number}
                 custom={direction}
                 variants={pageVariants}
                 initial="enter"

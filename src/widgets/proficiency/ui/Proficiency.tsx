@@ -375,7 +375,7 @@ export default function ProficiencySection({
                           hoveredLang !== null && !isHovered;
                         return (
                           <Cell
-                            key={`cell-${index}`}
+                            key={`cell-${index}` as string}
                             fill={entry.color}
                             fillOpacity={isHovered ? 0.4 : 0.15}
                             stroke={entry.color}
@@ -802,7 +802,7 @@ export default function ProficiencySection({
                                     LucideIcons.Briefcase;
                                   return (
                                     <div
-                                      key={idx}
+                                      key={idx as number}
                                       className="p-5 sm:p-6 rounded-2xl glass-card group hover:shadow-neu-sm transition-all flex flex-col justify-between border border-white/5 bg-white/5 dark:bg-black/20"
                                     >
                                       <div>

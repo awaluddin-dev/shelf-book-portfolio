@@ -11,7 +11,7 @@ jest.mock("../SpeechBubble", () => ({
     <div data-testid="speech-bubble">
       <span>{text}</span>
       {showButton && (
-        <button onClick={onClose} data-testid="close-btn">
+        <button type="button" onClick={onClose} data-testid="close-btn">
           Close
         </button>
       )}
@@ -37,7 +37,7 @@ jest.mock("../ChatFloatingMenu", () => ({
   ChatFloatingMenu: ({ isOpen, onClose }: any) =>
     isOpen ? (
       <div data-testid="chat-floating-menu">
-        <button onClick={onClose} data-testid="menu-close-btn">
+        <button type="button" onClick={onClose} data-testid="menu-close-btn">
           Close Menu
         </button>
       </div>

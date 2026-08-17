@@ -1,7 +1,9 @@
 import { motion } from "motion/react";
 import { Search } from "lucide-react";
 
-export default function EmptyState({ message = "No data available" }: { message?: string }) {
+export default function EmptyState({
+  message = "No data available",
+}: Readonly<{ message?: string }>) {
   return (
     <div className="py-16 px-4 text-center w-full max-w-md mx-auto relative z-10">
       <motion.div

@@ -683,7 +683,7 @@ export default function ExperienceSection({
                                 {(monthsData || []).map(
                                   (monthGroup: any, mIdx: number) => (
                                     <div
-                                      key={mIdx}
+                                      key={mIdx as number}
                                       className="flex shrink-0 gap-[3px]"
                                     >
                                       <div className="flex gap-[3px] shrink-0">
@@ -708,7 +708,7 @@ export default function ExperienceSection({
 
                                             return (
                                               <div
-                                                key={wIdxInMonth}
+                                                key={wIdxInMonth as number}
                                                 className={cn(
                                                   "flex flex-col gap-[3px] shrink-0 relative pt-10 px-[1px] rounded-md transition-all duration-300",
                                                   getHoveredColClass(),
@@ -766,12 +766,12 @@ export default function ExperienceSection({
 
                                                     return day === null ? (
                                                       <div
-                                                        key={dIdx}
+                                                        key={dIdx as number}
                                                         className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] opacity-0 pointer-events-none"
                                                       />
                                                     ) : (
                                                       <div
-                                                        key={dIdx}
+                                                        key={dIdx as number}
                                                         onTouchStart={() =>
                                                           handleTouchStart(
                                                             day.date,
@@ -844,9 +844,9 @@ export default function ExperienceSection({
                           <div className="relative group/legend-info flex flex-col gap-1 text-[10px] font-mono text-neu-text-muted max-w-xl">
                             <span className="font-bold text-neu-text text-[11px] mb-0.5 flex items-center gap-1.5 cursor-help pl-1 sm:pl-0">
                               ℹ Understanding Activity Levels
-                              <span className="text-[9px] bg-neu-accent/15 text-neu-accent px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">
-                                Inspect Info
-                              </span>
+                            </span>
+                            <span className="text-[9px] bg-neu-accent/15 text-neu-accent px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">
+                              Inspect Info
                             </span>
                             <p className="leading-relaxed pl-1 sm:pl-0">
                               Each tile represents a single day of the year. The
@@ -928,6 +928,7 @@ export default function ExperienceSection({
                           <div className="flex flex-wrap items-center gap-1.5 lg:ml-auto text-[10px] font-mono text-neu-text-muted bg-neu-bg/50 shadow-neu-inset p-2 rounded-xl border border-white/5 w-fit">
                             {selectedLevelFilter !== null ? (
                               <button
+                                type="button"
                                 onClick={() => setSelectedLevelFilter(null)}
                                 onKeyDown={(e) => {
                                   if (e.key === "Enter")
@@ -947,7 +948,8 @@ export default function ExperienceSection({
                               const active = selectedLevelFilter === lvl.level;
                               return (
                                 <button
-                                  key={lvl.level}
+                                  type="button"
+                                  key={lvl.level as number}
                                   onClick={() =>
                                     setSelectedLevelFilter(
                                       selectedLevelFilter === lvl.level
@@ -1125,6 +1127,7 @@ export default function ExperienceSection({
 
                         return (
                           <motion.button
+                            type="button"
                             key={globalIndex as number}
                             onClick={() =>
                               isVisible && handleSelectWorkNode(globalIndex)
@@ -1230,6 +1233,7 @@ export default function ExperienceSection({
                       .includes("present");
                     return (
                       <button
+                        type="button"
                         key={index as number}
                         onClick={() => handleSelectWorkNode(index)}
                         className={cn(
@@ -1259,7 +1263,7 @@ export default function ExperienceSection({
                     selectedWorkIndex !== null &&
                     timelineWork[selectedWorkIndex] && (
                       <motion.div
-                        key={`work-details-${selectedWorkIndex}`}
+                        key={`work-details-${selectedWorkIndex}` as string}
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -15 }}
@@ -1297,7 +1301,7 @@ export default function ExperienceSection({
                                 ).split(",")
                             ).map((tech: string, i: number) => (
                               <span
-                                key={i}
+                                key={i as number}
                                 className="px-2 py-1 bg-neu-accent/10 border border-neu-accent/20 rounded-md text-[10px] font-mono text-neu-accent uppercase"
                               >
                                 {tech.trim()}
@@ -1328,7 +1332,7 @@ export default function ExperienceSection({
                             {timelineWork[selectedWorkIndex].bullets.map(
                               (bullet: string, bIdx: number) => (
                                 <li
-                                  key={bIdx}
+                                  key={bIdx as number}
                                   className="flex items-start gap-2.5 text-xs sm:text-sm text-neu-text-muted leading-relaxed font-light"
                                 >
                                   <span className="text-neu-accent font-bold mt-1 shrink-0">
@@ -1387,6 +1391,7 @@ export default function ExperienceSection({
         <div className="relative w-full py-16 -my-8 px-0 md:px-0">
           <div className="flex justify-between items-center px-4 mb-4 z-20 relative">
             <button
+              type="button"
               onClick={() => scrollTestimonials("left")}
               className="p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5 bg-neu-bg/80 backdrop-blur-md"
               aria-label="Scroll Left"
@@ -1394,6 +1399,7 @@ export default function ExperienceSection({
               <ChevronLeft size={20} />
             </button>
             <button
+              type="button"
               onClick={() => scrollTestimonials("right")}
               className="p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5 bg-neu-bg/80 backdrop-blur-md"
               aria-label="Scroll Right"
@@ -1425,7 +1431,7 @@ export default function ExperienceSection({
               ...testimonialsList,
             ].map((t, index) => (
               <div
-                key={`${t.id}-dup-${index}`}
+                key={`${t.id}-dup-${index}` as string}
                 className={cn(
                   "flex-shrink-0 w-[85vw] sm:w-[440px] max-w-[400px] sm:max-w-none p-5 sm:p-8 rounded-3xl glass-card relative flex flex-col justify-between group transition-all duration-300 ease-out border border-white/5 mr-6 sm:mr-10",
                   index % 2 === 0 ? "-rotate-2" : "rotate-2",
@@ -1456,6 +1462,7 @@ export default function ExperienceSection({
                       </div>
                       {t.testimonial.length > 150 && (
                         <button
+                          type="button"
                           onClick={() => setSelectedTestimonial(t)}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") setSelectedTestimonial(t);
@@ -1497,7 +1504,7 @@ export default function ExperienceSection({
                   <div className="flex flex-wrap gap-1.5 mt-5">
                     {(t.tags || []).map((tag: string) => (
                       <span
-                        key={tag}
+                        key={tag as string}
                         className="px-2.5 py-1 glass-card-inset text-[10px] font-mono font-medium rounded-lg text-neu-text-muted"
                       >
                         #{tag}
