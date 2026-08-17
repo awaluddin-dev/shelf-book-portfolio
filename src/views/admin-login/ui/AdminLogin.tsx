@@ -29,12 +29,12 @@ export default function AdminLogin() {
       const resData = await res.json();
       const token = resData.data?.access_token || resData.access_token;
       const refreshToken = resData.data?.refresh_token || resData.refresh_token;
-      
+
       if (token) {
-        localStorage.setItem('isAdmin', 'true'); // kept for backwards compatibility in UI state
-        localStorage.setItem('token', token);
-        if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
-        router.push('/admin/dashboard');
+        localStorage.setItem("isAdmin", "true"); // kept for backwards compatibility in UI state
+        localStorage.setItem("token", token);
+        if (refreshToken) localStorage.setItem("refresh_token", refreshToken);
+        router.push("/admin/dashboard");
       } else {
         setError(true);
       }
@@ -60,7 +60,10 @@ export default function AdminLogin() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2">
+            <label
+              htmlFor="email-log-in"
+              className="block text-xs font-mono font-bold uppercase tracking-wider mb-2"
+            >
               Email
             </label>
             <div className="relative">
@@ -68,6 +71,7 @@ export default function AdminLogin() {
                 <User size={16} />
               </div>
               <input
+                id="email-log-in"
                 type="text"
                 value={email}
                 onChange={(e) => {
@@ -80,7 +84,10 @@ export default function AdminLogin() {
             </div>
           </div>
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider mb-2">
+            <label
+              htmlFor="password-log-in"
+              className="block text-xs font-mono font-bold uppercase tracking-wider mb-2"
+            >
               Password
             </label>
             <div className="relative">
@@ -88,6 +95,7 @@ export default function AdminLogin() {
                 <Lock size={16} />
               </div>
               <input
+                id="password-log-in"
                 type="password"
                 value={password}
                 onChange={(e) => {
@@ -104,7 +112,7 @@ export default function AdminLogin() {
               </p>
             )}
           </div>
-                    <div className="flex justify-center mt-4 mb-2">
+          <div className="flex justify-center mt-4 mb-2">
             <Turnstile
               siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
               onSuccess={(token) => setTurnstileToken(token)}

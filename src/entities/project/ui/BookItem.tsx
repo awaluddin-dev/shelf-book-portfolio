@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useTransform } from "motion/react";
 import { cn } from "@/shared/lib/utils";
-import { Github } from "lucide-react";
+import { SiGithub } from "@/shared/ui/icons/BrandIcons";
 import { Project } from "@/shared/types";
 
 interface BookItemProps {
@@ -114,7 +114,7 @@ export default function BookItem({
                   : "text-white/50 cursor-not-allowed"
               }`}
             >
-              <Github size={16} className="drop-shadow-sm md:w-3 md:h-3" />
+              <SiGithub size={16} className="drop-shadow-sm md:w-3 md:h-3" />
             </a>
             <div className="w-full h-0.5 bg-white/40 shadow-sm"></div>
           </div>

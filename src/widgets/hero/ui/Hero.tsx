@@ -4,11 +4,10 @@ import {
   BookOpen,
   Download,
   Terminal,
-  Github,
-  Linkedin,
   PenTool,
   Mail,
 } from "lucide-react";
+import { SiGithub, SiLinkedin } from "@/shared/ui/icons/BrandIcons";
 import { cn } from "@/shared/lib/utils";
 import { CircuitBoardBg } from "@/shared/ui/CircuitBoardBg";
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";
@@ -219,7 +218,7 @@ export default function HeroSection({
                         <span className="text-[9px] text-neu-text-muted">
                           awaluddin-dev
                         </span>
-                        <Github
+                        <SiGithub
                           size={13}
                           className="text-neu-accent group-hover:scale-110 transition-transform"
                         />
@@ -238,7 +237,7 @@ export default function HeroSection({
                         <span className="text-[9px] text-neu-text-muted">
                           awaluddin0001
                         </span>
-                        <Linkedin
+                        <SiLinkedin
                           size={13}
                           className="text-neu-accent group-hover:scale-110 transition-transform"
                         />

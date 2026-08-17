@@ -107,4 +107,59 @@ describe('AdminSidebar', () => {
     backLink = Array.from(otherContainer.querySelectorAll('a')).find(a => a.getAttribute('href') === '/')
     expect(backLink).toBeUndefined()
   })
+
+  it('handles mobile menu open and close via click and keyboard', () => {
+    const { container } = render(<AdminSidebar />)
+    
+    // Initial state: menu is closed, mobile backdrop is not visible
+    expect(container.querySelector('.bg-black\\/50')).not.toBeInTheDocument()
+    
+    // Find mobile toggle button (first button with md:hidden)
+    const mobileToggleBtn = container.querySelector('button.md\\:hidden')
+    expect(mobileToggleBtn).toBeInTheDocument()
+    
+    // Click to open
+    if (mobileToggleBtn) {
+      fireEvent.click(mobileToggleBtn)
+    }
+    
+    // Now backdrop should be present
+    const backdrop = container.querySelector('.bg-black\\/50')
+    expect(backdrop).toBeInTheDocument()
+    
+    // Close via click
+    if (backdrop) {
+      fireEvent.click(backdrop)
+    }
+    
+    // Backdrop should be gone
+    expect(container.querySelector('.bg-black\\/50')).not.toBeInTheDocument()
+    
+    // Open again to test keyboard close
+    if (mobileToggleBtn) {
+      fireEvent.click(mobileToggleBtn)
+    }
+    
+    const newBackdrop = container.querySelector('.bg-black\\/50')
+    expect(newBackdrop).toBeInTheDocument()
+    
+    // Close via Escape key
+    if (newBackdrop) {
+      fireEvent.keyDown(newBackdrop, { key: 'Escape', code: 'Escape' })
+    }
+    
+    expect(container.querySelector('.bg-black\\/50')).not.toBeInTheDocument()
+    
+    // Open again to test close button (X) inside sidebar
+    if (mobileToggleBtn) {
+      fireEvent.click(mobileToggleBtn)
+    }
+    
+    const closeBtn = container.querySelectorAll('button')[1] // The X button inside the sidebar
+    if (closeBtn) {
+      fireEvent.click(closeBtn)
+    }
+    
+    expect(container.querySelector('.bg-black\\/50')).not.toBeInTheDocument()
+  })
 })
