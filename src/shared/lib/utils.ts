@@ -17,5 +17,6 @@ export function secureMathRandom() {
     cryptoObj.getRandomValues(array);
     return array[0] / 4294967295;
   }
-  return Math.random(); // NOSONAR
+  return   // eslint-disable-next-line sonarjs/pseudo-random
+  Math.random(); // NOSONAR
 }

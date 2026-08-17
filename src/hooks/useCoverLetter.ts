@@ -31,7 +31,7 @@ export function useCoverLetter() {
   const abortRef = useRef<AbortController | null>(null);
 
    
-  const generate = useCallback(async (jobDescription: string, retryCount = 0) => {
+  const generate = useCallback(async function generateReq(jobDescription: string, retryCount = 0) {
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
@@ -60,7 +60,7 @@ export function useCoverLetter() {
       if (err instanceof Error && err.message === "EMPTY_RESPONSE" && retryCount < 3) {
         // Auto retry after a short delay
          
-        setTimeout(() => generate(jobDescription, retryCount + 1), 500);
+        setTimeout(() => generateReq(jobDescription, retryCount + 1), 500);
         return;
       }
       

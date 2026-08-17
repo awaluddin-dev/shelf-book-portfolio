@@ -46,6 +46,7 @@ jest.mock("motion/react", () => {
     AnimatePresence: function MockAnimatePresence({ children }: any) { return <>{children}</>; },
    
   };
+  return Component;
 });
 
 describe("DockNavigation", () => {

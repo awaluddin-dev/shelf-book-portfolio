@@ -1,6 +1,6 @@
 import { memo, useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Network } from "lucide-react";
+
 import { cn } from "@/shared/lib/utils";
 
 interface SkillNode {
