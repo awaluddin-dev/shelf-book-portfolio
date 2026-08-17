@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { SiGithub } from "@/shared/ui/icons/BrandIcons";
 import {
@@ -279,10 +279,10 @@ export default function ProjectModal({
     dynamicProjects: activeProjects,
   } = usePortfolioStore();
 
-  const onClose = () => setSelectedProject(null);
-  const onSelectProject = (project: any) => setSelectedProject(project);
+  const onClose = useCallback(() => setSelectedProject(null), [setSelectedProject]);
+  const onSelectProject = useCallback((project: any) => setSelectedProject(project), [setSelectedProject]);
 
-  const onPrevProject = () => {
+  const onPrevProject = useCallback(() => {
     if (!selectedProject) return;
     const currentIndex = activeProjects.findIndex(
       (p) => p.id === selectedProject.id,
@@ -293,9 +293,9 @@ export default function ProjectModal({
     } else {
       setSelectedProject(activeProjects.at(-1));
     }
-  };
+  }, [selectedProject, activeProjects, setSelectedProject]);
 
-  const onNextProject = () => {
+  const onNextProject = useCallback(() => {
     if (!selectedProject) return;
     const currentIndex = activeProjects.findIndex(
       (p) => p.id === selectedProject.id,
@@ -306,7 +306,7 @@ export default function ProjectModal({
     } else {
       setSelectedProject(activeProjects[0]);
     }
-  };
+  }, [selectedProject, activeProjects, setSelectedProject]);
 
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   
@@ -387,7 +387,7 @@ export default function ProjectModal({
     return sp;
   }, [selectedProject]);
 
-  const paginate = (newDirection: number) => {
+  const paginate = useCallback((newDirection: number) => {
     const nextIndex = currentPage + newDirection;
     if (nextIndex >= 0 && nextIndex < spreads.length) {
       setDirection(newDirection);
@@ -397,7 +397,7 @@ export default function ProjectModal({
     } else if (nextIndex >= spreads.length) {
       onNextProject();
     }
-  };
+  }, [currentPage, spreads.length, onPrevProject, onNextProject]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -415,8 +415,7 @@ export default function ProjectModal({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedProject, currentPage, spreads.length]);
+  }, [selectedProject, currentPage, spreads.length, onClose, paginate]);
 
   const pageVariants: any = {
     enter: (direction: number) => ({
