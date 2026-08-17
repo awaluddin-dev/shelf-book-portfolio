@@ -1,12 +1,12 @@
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { SiGithub } from "@/shared/ui/icons/BrandIcons";
 import {
   BookOpen,
   Search,
   Filter,
   ChevronLeft,
   ChevronRight,
-  Github,
   ArrowLeft,
   Wrench,
   Sparkles,
@@ -262,7 +262,7 @@ const FocusedProject = ({
                       : "bg-black/10 border-white/5 opacity-50 cursor-not-allowed"
                   }`}
                 >
-                  <Github size={12} />
+                  <SiGithub size={12} />
                 </a>
               </div>
             </div>

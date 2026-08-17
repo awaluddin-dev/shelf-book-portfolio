@@ -1,12 +1,12 @@
 /* eslint-disable */
 import React, { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { SiGithub } from "@/shared/ui/icons/BrandIcons";
 import {
   ChevronLeft,
   ChevronRight,
   X,
   Globe,
-  Github,
   Terminal,
   Lightbulb,
   Target,
@@ -52,7 +52,7 @@ const ProjectDetailsPage = ({ selectedProject }: { selectedProject: any }) => (
       )}
       {selectedProject.github && (
         <a href={selectedProject.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 rounded-lg font-mono text-[10px] font-bold shadow-sm border border-zinc-300 dark:border-zinc-700 transition-transform active:scale-95">
-          <Github size={14} /> Source Code
+          <SiGithub size={14} /> Source Code
         </a>
       )}
     </div>
