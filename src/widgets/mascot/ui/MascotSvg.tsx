@@ -4,18 +4,17 @@ import { motion, Variants } from "motion/react";
 
 
   const normalWingVariants: Variants = {
-    greet: { opacity: 0, scale: 0 },
-    normal: { opacity: 1, scale: 1 },
-    blink: { opacity: 1, scale: 1 },
-    happy: { opacity: 1, scale: 1 },
-    goodbye: { opacity: 0, scale: 0 },
+    greet: { opacity: 0 },
+    normal: { opacity: 1 },
+    blink: { opacity: 1 },
+    happy: { opacity: 1 },
+    goodbye: { opacity: 0 },
   };
 
 
   const sapaWingVariants: Variants = {
     greet: {
       opacity: 1,
-      scale: 1,
       rotate: [0, -15, 0, -15, 0],
       originX: 1,
       originY: 0.5,
@@ -29,7 +28,6 @@ import { motion, Variants } from "motion/react";
     },
     goodbye: {
       opacity: 1,
-      scale: 1,
       rotate: [0, -15, 0, -15, 0],
       originX: 1,
       originY: 0.5,
@@ -41,9 +39,9 @@ import { motion, Variants } from "motion/react";
         },
       },
     },
-    normal: { opacity: 0, scale: 0 },
-    blink: { opacity: 0, scale: 0 },
-    happy: { opacity: 0, scale: 0 },
+    normal: { opacity: 0 },
+    blink: { opacity: 0 },
+    happy: { opacity: 0 },
   };
 
   const normalEyeVariants: Variants = {

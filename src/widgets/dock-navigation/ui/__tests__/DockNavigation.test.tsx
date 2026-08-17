@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import DockNavigation from "../DockNavigation";
@@ -29,24 +28,33 @@ window.open = mockWindowOpen;
 jest.mock("motion/react", () => {
   const React = require("react");
   // Simple mock for motion components
-  const motion = {
-    div: React.forwardRef(({ children, layoutId, initial, animate, exit, transition, ...props }: any, ref: any) => (
+  const MockDiv = React.forwardRef(function MockDivComp({ children, layoutId, initial, animate, exit, transition, ...props }: any, ref: any) {
+    return (
       <div ref={ref} data-testid="motion-div" {...props}>
         {children}
       </div>
-    )),
-    path: React.forwardRef(({ children, initial, animate, transition, ...props }: any, ref: any) => (
+    );
+  });
+
+  const MockPath = React.forwardRef(function MockPathComp({ children, initial, animate, transition, ...props }: any, ref: any) {
+    return (
       <path ref={ref} data-testid="motion-path" {...props}>
         {children}
       </path>
-    )),
+    );
+  });
+
+  const motion = {
+    div: MockDiv,
+    path: MockPath,
   };
   
   return {
     motion,
     AnimatePresence: function MockAnimatePresence({ children }: any) { return <>{children}</>; },
-  // eslint-disable-next-line react/display-name
+   
   };
+  return Component;
 });
 
 describe("DockNavigation", () => {
@@ -95,7 +103,6 @@ describe("DockNavigation", () => {
     expect(screen.getByLabelText("Endorse")).toBeInTheDocument();
     expect(screen.getByLabelText("API Reference")).toBeInTheDocument();
     expect(screen.getByLabelText("Toggle Theme")).toBeInTheDocument();
-    expect(screen.getByLabelText("Ask about Awaluddin")).toBeInTheDocument();
     expect(screen.getByLabelText("Scroll to Top")).toBeInTheDocument();
   });
 
@@ -159,9 +166,6 @@ describe("DockNavigation", () => {
     
     fireEvent.click(screen.getByLabelText("Toggle Theme"));
     expect(mockSetTheme).toHaveBeenCalledWith("light"); // Current isDark is true
-    
-    fireEvent.click(screen.getByLabelText("Ask about Awaluddin"));
-    expect(mockSetIsChatOpen).toHaveBeenCalledWith(true);
     
     fireEvent.click(screen.getByLabelText("Scroll to Top"));
     expect(mockScrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
@@ -240,7 +244,6 @@ describe("DockNavigation", () => {
       { label: "Endorse", tooltip: "Endorse" },
       { label: "API Reference", tooltip: "API Reference" },
       { label: "Toggle Theme", tooltip: "Light Mode" },
-      { label: "Ask about Awaluddin", tooltip: "AI Chat" },
       { label: "Scroll to Top", tooltip: "Back to Top" }
     ];
 

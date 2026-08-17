@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus, Edit, Trash2, ChevronLeft, ChevronRight, X, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -49,7 +49,7 @@ export function AdminCrudTable<T extends { id?: string }>({
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const paginatedItems = items.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const res = await fetch(apiEndpoint);
       const data = await res.json();
@@ -62,7 +62,7 @@ export function AdminCrudTable<T extends { id?: string }>({
       console.error('Failed to fetch data', e);
     }
     setLoading(false);
-  };
+  }, [apiEndpoint, dataExtractor]);
 
   useEffect(() => {
     if (localStorage.getItem('isAdmin') !== 'true') {
@@ -71,8 +71,7 @@ export function AdminCrudTable<T extends { id?: string }>({
     }
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router]);
+  }, [router, fetchData]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

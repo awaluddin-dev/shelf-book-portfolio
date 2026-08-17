@@ -4,6 +4,9 @@ import { SpeechBubble } from "./SpeechBubble";
 import { useTheme } from "next-themes";
 
 import { MascotSvg } from "./MascotSvg";
+import { ChatSvg } from "./ChatSvg";
+import { ChatFloatingMenu } from "./ChatFloatingMenu";
+
 export function Mascot() {
   const [isVisible, setIsVisible] = useState(false);
   const [expression, setExpression] = useState<
@@ -11,6 +14,9 @@ export function Mascot() {
   >("greet");
   const [speechText, setSpeechText] = useState("");
   const [showButton, setShowButton] = useState(false);
+  const [isChatMode, setIsChatMode] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
 
@@ -46,19 +52,24 @@ export function Mascot() {
         // Keep showing button in normal/blink loops
         setShowButton(true);
       }, timeSpawn + 12000),
+
+      // T=20s (10 seconds after happy state)
+      setTimeout(() => {
+        setIsChatMode(true);
+      }, timeSpawn + 20300),
     ];
 
     return () => {
       timeouts.forEach((t) => clearTimeout(t));
     };
-  });
+  }, [timeSpawn]);
 
   const handleClose = () => {
     setShowButton(false);
     setSpeechText("See you!");
     setExpression("goodbye");
     setTimeout(() => {
-      setIsVisible(false);
+      setIsChatMode(true);
     }, 2000);
   };
 
@@ -92,18 +103,41 @@ export function Mascot() {
           animate="visible"
           exit="hidden"
           variants={mascotVariants}
-          className="fixed -bottom-4 md:-bottom-2 right-0 md:right-12 z-[100] w-[130px] h-[190px] md:w-[190px] md:h-[250px] pointer-events-none"
+          className={`fixed z-[100] pointer-events-none transition-all duration-700 ease-in-out ${
+            isChatMode 
+              ? "bottom-6 right-6 w-16 h-16 md:w-20 md:h-20"
+              : "-bottom-4 md:-bottom-2 right-0 md:right-12 w-[130px] h-[190px] md:w-[190px] md:h-[250px]"
+          }`}
         >
           <div className="relative w-full h-full pointer-events-auto">
-            <SpeechBubble
-              text={speechText}
-              showButton={showButton}
-              onClose={handleClose}
-            />
+            {isChatMode ? (
+              <div className="relative w-full h-full flex items-center justify-center group">
+                <ChatFloatingMenu 
+                  isOpen={isMenuOpen} 
+                  onClose={() => setIsMenuOpen(false)} 
+                />
+                <motion.div
+                  initial={{ scale: 0.5, opacity: 0, rotate: -45 }}
+                  animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                  className="w-full h-full cursor-pointer hover:scale-110 active:scale-95 transition-transform"
+                >
+                  <ChatSvg onClick={() => setIsMenuOpen(!isMenuOpen)} isDark={isDark} />
+                </motion.div>
+              </div>
+            ) : (
+              <>
+                <SpeechBubble
+                  text={speechText}
+                  showButton={showButton}
+                  onClose={handleClose}
+                />
 
-            <motion.div animate={expression} className="w-full h-full">
-              <MascotSvg isDark={isDark} />
-            </motion.div>
+                <motion.div animate={expression} className="w-full h-full">
+                  <MascotSvg isDark={isDark} />
+                </motion.div>
+              </>
+            )}
           </div>
         </motion.div>
       )}

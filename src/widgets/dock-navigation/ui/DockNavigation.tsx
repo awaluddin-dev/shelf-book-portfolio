@@ -1,5 +1,4 @@
-/* eslint-disable */
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect,  } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { DockItem } from "./DockItem";
 import {
@@ -13,7 +12,7 @@ import {
   BookOpen,
   Sun,
   Moon,
-  Sparkles,
+  
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
@@ -34,6 +33,7 @@ export default function DockNavigation({
   const [hoveredDockId, setHoveredDockId] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(true);
   const { setTheme } = useTheme();
+  // eslint-disable-next-line sonarjs/no-unused-vars, sonarjs/no-dead-store
   const { setIsChatOpen } = usePortfolioStore();
 
   // Initialize state based on screen size on first mount
@@ -43,23 +43,22 @@ export default function DockNavigation({
     }
   }, []);
 
-  // Full SVG Path for the Top-Right L-Shape (300x300) - 5 rows tall, 5 cols wide
+  // Full SVG Path when Back To Top is shown (240px tall) - 4 rows tall
   const lShapePathFull =
-    "M 20 0 L 280 0 A 20 20 0 0 1 300 20 L 300 280 A 20 20 0 0 1 280 300 L 260 300 A 20 20 0 0 1 240 280 L 240 80 A 20 20 0 0 0 220 60 L 20 60 A 20 20 0 0 1 0 40 L 0 20 A 20 20 0 0 1 20 0 Z";
-
-  // Short SVG Path when Back To Top is hidden (300x240) - 4 rows tall
-  const lShapePathShort =
     "M 20 0 L 280 0 A 20 20 0 0 1 300 20 L 300 220 A 20 20 0 0 1 280 240 L 260 240 A 20 20 0 0 1 240 220 L 240 80 A 20 20 0 0 0 220 60 L 20 60 A 20 20 0 0 1 0 40 L 0 20 A 20 20 0 0 1 20 0 Z";
+
+  // Short SVG Path when Back To Top is hidden (180px tall) - 3 rows tall
+  const lShapePathShort =
+    "M 20 0 L 280 0 A 20 20 0 0 1 300 20 L 300 160 A 20 20 0 0 1 280 180 L 260 180 A 20 20 0 0 1 240 160 L 240 80 A 20 20 0 0 0 220 60 L 20 60 A 20 20 0 0 1 0 40 L 0 20 A 20 20 0 0 1 20 0 Z";
 
   // Square SVG Path when menu is closed (60x60 at top-right corner)
   const lShapePathSquare =
     "M 260 0 L 280 0 A 20 20 0 0 1 300 20 L 300 40 A 20 20 0 0 1 280 60 L 260 60 A 20 20 0 0 1 240 40 L 240 20 A 20 20 0 0 0 240 20 L 240 20 A 20 20 0 0 1 240 20 L 240 20 A 20 20 0 0 1 260 0 Z";
 
-  const activePath = !isOpen
-    ? lShapePathSquare
-    : showBackToTop
-      ? lShapePathFull
-      : lShapePathShort;
+  let activePath = lShapePathSquare;
+  if (isOpen) {
+    activePath = showBackToTop ? lShapePathFull : lShapePathShort;
+  }
 
   return (
     <motion.div
@@ -220,20 +219,6 @@ export default function DockNavigation({
                 setHoveredDockId={setHoveredDockId}
               />
               
-              <DockItem
-                id="chat-toggle"
-                label="AI Chat"
-                ariaLabel="Ask about Awaluddin"
-                icon={<Sparkles size={18} />}
-                onClick={() => setIsChatOpen(true)}
-                wrapperClassName="col-start-5 row-start-4 flex items-center justify-center pointer-events-auto"
-                delay={0.15}
-                tooltipPos="LEFT"
-                hoverAnimation="group-hover:rotate-12 group-hover:scale-110"
-                hoveredDockId={hoveredDockId}
-                setHoveredDockId={setHoveredDockId}
-              />
-              
               {showBackToTop && (
                 <DockItem
                   id="scroll-top"
@@ -241,7 +226,7 @@ export default function DockNavigation({
                   ariaLabel="Scroll to Top"
                   icon={<ArrowUp size={18} />}
                   onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                  wrapperClassName="col-start-5 row-start-5 flex items-center justify-center pointer-events-auto"
+                  wrapperClassName="col-start-5 row-start-4 flex items-center justify-center pointer-events-auto"
                   delay={0.20}
                   tooltipPos="LEFT"
                   hoverAnimation="group-hover:-translate-y-0.5"

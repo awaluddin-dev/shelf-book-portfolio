@@ -16,8 +16,7 @@ export function ProjectExplainer({ project, autoExplain = false }: ProjectExplai
   useEffect(() => {
     if (autoExplain) explain(project);
     return () => reset();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [project.id]);
+  }, [project, autoExplain, explain, reset]);
 
   const isActive = status === 'loading' || status === 'streaming';
 

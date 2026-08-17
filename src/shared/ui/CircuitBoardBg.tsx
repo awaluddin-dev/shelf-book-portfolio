@@ -1,4 +1,3 @@
-/* eslint-disable */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -42,7 +41,7 @@ function MovingNode({
   initialColor,
 }: Readonly<MovingNodeProps>) {
   // Random color on mount
-  const [nodeColor] = useState(() => initialColor || NODE_PALETTE[Math.floor(secureMathRandom() * NODE_PALETTE.length)]);
+  const [nodeColor] = useState(() => initialColor || NODE_PALETTE[Math.floor(secureMathRandom() * NODE_PALETTE.length)] || "#05626E");
 
   // OPSI A hot-zone window: the node "charges" to the accent color while
   // passing behind the cards (SVG center zone), then returns to its
@@ -212,6 +211,7 @@ export const CircuitBoardBg = React.memo(function CircuitBoardBg() {
           y: vp.y + (svgRect?.top ?? 0),
         };
 
+  // eslint-disable-next-line sonarjs/no-nested-functions
         cards.forEach((card) => {
           const rect = card.getBoundingClientRect();
           const margin = 16; // node radius tolerance — "touching"

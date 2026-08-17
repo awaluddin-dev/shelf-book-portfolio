@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { motion, AnimatePresence } from "motion/react";
 import { X, Sparkles } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -30,7 +29,8 @@ export default function ContactModal() {
   // Handle Draft Inquiry AI generation
   useEffect(() => {
     if (isOpen && draftInquirySource) {
-      setFormData((prev) => ({ ...prev, message: "" })); // clear message before typing
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setFormData((prev) => ({ ...prev, message: "" }));
       draft(draftInquirySource, (chunk) => {
         setFormData((prev) => ({ ...prev, message: prev.message + chunk }));
       });
@@ -41,6 +41,7 @@ export default function ContactModal() {
   // Prefill message if inquiryMessage exists when modal opens
   useEffect(() => {
     if (isOpen && inquiryMessage) {
+       
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData((prev) => ({ ...prev, message: inquiryMessage }));
     }

@@ -1,12 +1,10 @@
-/* eslint-disable */
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Quote } from "lucide-react";
-import { Testimonial } from "@/shared/types";
 
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
 
-export default function TestimonialModal() {
+export default function Modal() {
   const { selectedTestimonial, setSelectedTestimonial } = usePortfolioStore();
   const onClose = () => setSelectedTestimonial(null);
   return (

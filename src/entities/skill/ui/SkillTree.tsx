@@ -1,7 +1,6 @@
-/* eslint-disable */
 import { memo, useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Network } from "lucide-react";
+
 import { cn } from "@/shared/lib/utils";
 
 interface SkillNode {
@@ -250,13 +249,10 @@ export default function SkillTree({
     if (externalHoveredCategory && !effectiveNode) {
       const sourceNode = nodes.find((n) => n.id === sourceId);
       const targetNode = nodes.find((n) => n.id === targetId);
-      if (
+      return (
         sourceNode?.categoryId === externalHoveredCategory &&
         targetNode?.categoryId === externalHoveredCategory
-      ) {
-        return true;
-      }
-      return false;
+      );
     }
 
     if (

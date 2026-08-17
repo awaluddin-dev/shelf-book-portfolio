@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useState, useCallback, useRef } from "react";
 import { parseSSEStream } from "@/shared/lib/sse";
 
@@ -26,8 +25,8 @@ export function useDraftInquiry() {
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  // eslint-disable-next-line
-  const draft = useCallback(async (coverLetter: string, onUpdate?: (chunk: string) => void, retryCount = 0) => {
+   
+  const draft = useCallback(async function draftReq(coverLetter: string, onUpdate?: (chunk: string) => void, retryCount = 0) {
     // Abort any in-flight request
     abortRef.current?.abort();
     const controller = new AbortController();
@@ -57,8 +56,8 @@ export function useDraftInquiry() {
       
       if (err instanceof Error && err.message === "EMPTY_RESPONSE" && retryCount < 3) {
         // Auto retry after a short delay
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        setTimeout(() => draft(coverLetter, onUpdate, retryCount + 1), 500);
+         
+        setTimeout(() => draftReq(coverLetter, onUpdate, retryCount + 1), 500);
         return;
       }
 

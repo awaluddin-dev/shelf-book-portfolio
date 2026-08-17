@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -18,5 +17,6 @@ export function secureMathRandom() {
     cryptoObj.getRandomValues(array);
     return array[0] / 4294967295;
   }
+  // eslint-disable-next-line sonarjs/pseudo-random
   return Math.random(); // NOSONAR
 }
