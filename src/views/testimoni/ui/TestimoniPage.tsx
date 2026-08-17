@@ -84,6 +84,7 @@ export default function SubmitTestimonial({
             the portfolio.
           </p>
           <button
+            type="button"
             onClick={() => router.push("/")}
             className="px-6 py-3 glass-card rounded-xl text-sm font-bold text-neu-accent hover:scale-[1.02] transition-all"
           >

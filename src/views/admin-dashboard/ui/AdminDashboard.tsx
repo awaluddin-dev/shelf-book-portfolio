@@ -18,7 +18,7 @@ import { Testimonial } from "@/shared/types";
 
 export default function AdminDashboard() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [heroConfig, setHeroConfig] = useState<any>({ name: '', role: '' });
+  const [heroConfig, setHeroConfig] = useState<any>({ name: "", role: "" });
   const [metrics, setMetrics] = useState<any[]>([]);
 
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,7 @@ export default function AdminDashboard() {
       return;
     }
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const payload = JSON.parse(atob(token.split(".")[1]));
       if (payload.exp * 1000 < Date.now()) {
         localStorage.removeItem("token");
         localStorage.removeItem("isAdmin");
@@ -52,7 +52,7 @@ export default function AdminDashboard() {
       router.push("/admin/login");
       return;
     }
-    
+
     if (localStorage.getItem("isAdmin") !== "true") {
       router.push("/admin/login");
       return;
@@ -63,24 +63,33 @@ export default function AdminDashboard() {
       fetch("/api/testimonials?all=true").then((res) => res.json()),
       fetch("/api/hero").then((res) => res.json()),
     ]).then(([statusData, testData, heroData]) => {
-      
       let testExtracted = [];
-      if (testData.data?.testimonials) { testExtracted = testData.data.testimonials; }
-      else if (testData.testimonials) { testExtracted = testData.testimonials; }
-      else if (Array.isArray(testData.data)) { testExtracted = testData.data; }
-      else if (Array.isArray(testData)) { testExtracted = testData; }
+      if (testData.data?.testimonials) {
+        testExtracted = testData.data.testimonials;
+      } else if (testData.testimonials) {
+        testExtracted = testData.testimonials;
+      } else if (Array.isArray(testData.data)) {
+        testExtracted = testData.data;
+      } else if (Array.isArray(testData)) {
+        testExtracted = testData;
+      }
       setTestimonials(testExtracted);
 
       const actualHeroConfig = heroData.data?.heroConfig || heroData.heroConfig;
       setHeroConfig(actualHeroConfig || {});
 
       let metricsExtracted = [];
-      if (heroData.data?.metrics) { metricsExtracted = heroData.data.metrics; }
-      else if (heroData.metrics) { metricsExtracted = heroData.metrics; }
-      else if (Array.isArray(heroData.data)) { metricsExtracted = heroData.data; }
-      else if (Array.isArray(heroData)) { metricsExtracted = heroData; }
+      if (heroData.data?.metrics) {
+        metricsExtracted = heroData.data.metrics;
+      } else if (heroData.metrics) {
+        metricsExtracted = heroData.metrics;
+      } else if (Array.isArray(heroData.data)) {
+        metricsExtracted = heroData.data;
+      } else if (Array.isArray(heroData)) {
+        metricsExtracted = heroData;
+      }
       setMetrics(metricsExtracted);
-      
+
       setLoading(false);
     });
   }, [router]);
@@ -140,10 +149,10 @@ export default function AdminDashboard() {
   return (
     <>
       {isProcessing && <Loader fullScreen text="Processing..." />}
-        {loading ? (
-          <AdminPageSkeleton />
-        ) : (
-          <div className="max-w-5xl mx-auto space-y-8">
+      {loading ? (
+        <AdminPageSkeleton />
+      ) : (
+        <div className="max-w-5xl mx-auto space-y-8">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold font-display tracking-tight">
               Dashboard Overview
@@ -179,7 +188,12 @@ export default function AdminDashboard() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setHeroConfig({ ...heroConfig, openForWork: !heroConfig.openForWork })}
+                  onClick={() =>
+                    setHeroConfig({
+                      ...heroConfig,
+                      openForWork: !heroConfig.openForWork,
+                    })
+                  }
                   className="relative inline-flex h-8 w-16 items-center rounded-full bg-gray-200 dark:bg-zinc-850 shadow-inner transition-colors duration-200 focus:outline-none cursor-pointer"
                 >
                   <span
@@ -233,31 +247,43 @@ export default function AdminDashboard() {
               {/* Name & Role */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label htmlFor="hc-name" className="text-xs font-mono text-neu-text-muted">Display Name</label>
+                  <span className="text-xs font-mono text-neu-text-muted">
+                    Display Name
+                  </span>
                   <input
-                    id="hc-name"
-                    value={heroConfig.name || ''}
-                    onChange={(e) => setHeroConfig({ ...heroConfig, name: e.target.value })}
+                    value={heroConfig.name || ""}
+                    onChange={(e) =>
+                      setHeroConfig({ ...heroConfig, name: e.target.value })
+                    }
                     placeholder="Your full name"
                     className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label htmlFor="hc-role" className="text-xs font-mono text-neu-text-muted">Role / Title</label>
+                  <span className="text-xs font-mono text-neu-text-muted">
+                    Role / Title
+                  </span>
                   <input
-                    id="hc-role"
-                    value={heroConfig.role || ''}
-                    onChange={(e) => setHeroConfig({ ...heroConfig, role: e.target.value })}
+                    value={heroConfig.role || ""}
+                    onChange={(e) =>
+                      setHeroConfig({ ...heroConfig, role: e.target.value })
+                    }
                     placeholder="e.g. Backend Engineer"
                     className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label htmlFor="hc-avail" className="text-xs font-mono text-neu-text-muted">Available From</label>
+                  <span className="text-xs font-mono text-neu-text-muted">
+                    Available From
+                  </span>
                   <input
-                    id="hc-avail"
-                    value={heroConfig.availableFrom || ''}
-                    onChange={(e) => setHeroConfig({ ...heroConfig, availableFrom: e.target.value })}
+                    value={heroConfig.availableFrom || ""}
+                    onChange={(e) =>
+                      setHeroConfig({
+                        ...heroConfig,
+                        availableFrom: e.target.value,
+                      })
+                    }
                     placeholder="e.g. Now, Jan 2027"
                     className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
                   />
@@ -267,13 +293,14 @@ export default function AdminDashboard() {
               {/* Metric Strip Form */}
               <div className="pt-6 border-t border-white/5 space-y-4">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-mono text-neu-text-muted">
+                  <span className="text-xs font-mono text-neu-text-muted">
                     Metric Strip Items (Max 4 recommended)
-                  </label>
+                  </span>
                   <button
                     type="button"
                     onClick={addMetric}
                     className="text-xs font-bold text-neu-accent hover:underline flex items-center gap-1"
+                    name="Add Metric"
                   >
                     <Plus size={14} /> Add Metric
                   </button>
@@ -281,7 +308,7 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {metrics.map((m, idx) => (
                     <div
-                      key={idx}
+                      key={idx as number}
                       className="p-4 rounded-xl glass-card-inset border border-white/5 relative group"
                     >
                       <button
@@ -294,11 +321,10 @@ export default function AdminDashboard() {
                       <div className="space-y-3">
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-1">
-                            <label htmlFor={`m-val-${idx}`} className="text-[10px] font-mono text-neu-text-muted">
+                            <span className="text-[10px] font-mono text-neu-text-muted">
                               Value (e.g. 5+ Years)
-                            </label>
+                            </span>
                             <input
-                              id={`m-val-${idx}`}
                               value={m.value || ""}
                               onChange={(e) =>
                                 handleMetricChange(idx, "value", e.target.value)
@@ -307,11 +333,10 @@ export default function AdminDashboard() {
                             />
                           </div>
                           <div className="space-y-1">
-                            <label htmlFor={`m-lbl-${idx}`} className="text-[10px] font-mono text-neu-text-muted">
+                            <span className="text-[10px] font-mono text-neu-text-muted">
                               Label (e.g. EXPERIENCE)
-                            </label>
+                            </span>
                             <input
-                              id={`m-lbl-${idx}`}
                               value={m.label}
                               onChange={(e) =>
                                 handleMetricChange(idx, "label", e.target.value)
@@ -322,11 +347,10 @@ export default function AdminDashboard() {
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-1">
-                            <label htmlFor={`m-ico-${idx}`} className="text-[10px] font-mono text-neu-text-muted">
+                            <span className="text-[10px] font-mono text-neu-text-muted">
                               Icon Name
-                            </label>
+                            </span>
                             <select
-                              id={`m-ico-${idx}`}
                               value={m.icon}
                               onChange={(e) =>
                                 handleMetricChange(idx, "icon", e.target.value)
@@ -362,7 +386,7 @@ export default function AdminDashboard() {
                                   )
                                 }
                                 className="rounded bg-black/5 dark:bg-white/5 border-transparent text-neu-accent focus:ring-neu-accent"
-                              />{' '}
+                              />{" "}
                               Highlight (Savings)
                             </label>
                           </div>
