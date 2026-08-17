@@ -1,4 +1,4 @@
-import { useState, useEffect,  } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { DockItem } from "./DockItem";
 import {
@@ -12,7 +12,6 @@ import {
   BookOpen,
   Sun,
   Moon,
-  
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
@@ -155,7 +154,11 @@ export default function DockNavigation({
                 label="Projects"
                 icon={<BookOpen size={18} />}
                 isActive={activeSection === "projects"}
-                onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() =>
+                  document
+                    .getElementById("projects")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
                 wrapperClassName="col-start-1 row-start-1 flex items-center justify-center pointer-events-auto"
                 hoveredDockId={hoveredDockId}
                 setHoveredDockId={setHoveredDockId}
@@ -165,7 +168,11 @@ export default function DockNavigation({
                 label="Proficiency"
                 icon={<Cpu size={18} />}
                 isActive={activeSection === "proficiency"}
-                onClick={() => document.getElementById("proficiency")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() =>
+                  document
+                    .getElementById("proficiency")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
                 wrapperClassName="col-start-2 row-start-1 flex items-center justify-center pointer-events-auto"
                 hoveredDockId={hoveredDockId}
                 setHoveredDockId={setHoveredDockId}
@@ -175,7 +182,11 @@ export default function DockNavigation({
                 label="Experience"
                 icon={<Briefcase size={18} />}
                 isActive={activeSection === "experience"}
-                onClick={() => document.getElementById("experience")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() =>
+                  document
+                    .getElementById("experience")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
                 wrapperClassName="col-start-3 row-start-1 flex items-center justify-center pointer-events-auto"
                 hoveredDockId={hoveredDockId}
                 setHoveredDockId={setHoveredDockId}
@@ -185,17 +196,21 @@ export default function DockNavigation({
                 label="Endorse"
                 icon={<MessageSquare size={18} />}
                 isActive={activeSection === "endorse"}
-                onClick={() => document.getElementById("endorse")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() =>
+                  document
+                    .getElementById("endorse")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
                 wrapperClassName="col-start-4 row-start-1 flex items-center justify-center pointer-events-auto"
                 hoveredDockId={hoveredDockId}
                 setHoveredDockId={setHoveredDockId}
               />
-              
+
               <DockItem
                 id="api-docs"
                 label="API Reference"
                 icon={<Code2 size={18} />}
-                onClick={() => window.open('/api/scalar', '_blank')}
+                onClick={() => window.open("/api/scalar", "_blank")}
                 wrapperClassName="col-start-5 row-start-2 flex items-center justify-center pointer-events-auto"
                 delay={0.05}
                 tooltipPos="LEFT"
@@ -204,30 +219,32 @@ export default function DockNavigation({
                 hoveredDockId={hoveredDockId}
                 setHoveredDockId={setHoveredDockId}
               />
-              
+
               <DockItem
                 id="theme-toggle"
                 label={isDark ? "Light Mode" : "Dark Mode"}
                 ariaLabel="Toggle Theme"
                 icon={isDark ? <Sun size={18} /> : <Moon size={18} />}
-                onClick={() => setTheme(isDark ? 'light' : 'dark')}
+                onClick={() => setTheme(isDark ? "light" : "dark")}
                 wrapperClassName="col-start-5 row-start-3 flex items-center justify-center pointer-events-auto"
-                delay={0.10}
+                delay={0.1}
                 tooltipPos="LEFT"
                 hoverAnimation="group-hover:rotate-12 group-hover:scale-110"
                 hoveredDockId={hoveredDockId}
                 setHoveredDockId={setHoveredDockId}
               />
-              
+
               {showBackToTop && (
                 <DockItem
                   id="scroll-top"
                   label="Back to Top"
                   ariaLabel="Scroll to Top"
                   icon={<ArrowUp size={18} />}
-                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
                   wrapperClassName="col-start-5 row-start-4 flex items-center justify-center pointer-events-auto"
-                  delay={0.20}
+                  delay={0.2}
                   tooltipPos="LEFT"
                   hoverAnimation="group-hover:-translate-y-0.5"
                   hoveredDockId={hoveredDockId}
@@ -241,6 +258,7 @@ export default function DockNavigation({
         {/* Top Right (Corner): Hamburger Toggle */}
         <div className="col-start-5 row-start-1 flex items-center justify-center pointer-events-auto">
           <button
+            type="button"
             onClick={() => setIsOpen(!isOpen)}
             onMouseEnter={() => setHoveredDockId("menu-toggle")}
             onMouseLeave={() => setHoveredDockId(null)}
@@ -277,8 +295,6 @@ export default function DockNavigation({
             </AnimatePresence>
           </button>
         </div>
-
-
       </div>
     </motion.div>
   );

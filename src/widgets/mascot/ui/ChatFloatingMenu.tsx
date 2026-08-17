@@ -8,7 +8,10 @@ interface ChatFloatingMenuProps {
   onClose: () => void;
 }
 
-export function ChatFloatingMenu({ isOpen, onClose }: ChatFloatingMenuProps) {
+export function ChatFloatingMenu({
+  isOpen,
+  onClose,
+}: Readonly<ChatFloatingMenuProps>) {
   const { setIsChatOpen, setShowCoverLetterModal } = usePortfolioStore();
 
   return (
@@ -22,8 +25,11 @@ export function ChatFloatingMenu({ isOpen, onClose }: ChatFloatingMenuProps) {
           className="absolute bottom-full right-full mb-4 mr-4 w-48 bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md border border-neu-border rounded-xl shadow-neu-modal z-[110] overflow-hidden"
         >
           <div className="flex items-center justify-between px-3 py-2 border-b border-neu-border">
-            <span className="text-xs font-bold text-neu-text-muted">Options</span>
+            <span className="text-xs font-bold text-neu-text-muted">
+              Options
+            </span>
             <button
+              type="button"
               onClick={onClose}
               className="text-neu-text-muted hover:text-neu-accent transition-colors p-1 rounded-md"
             >
@@ -32,6 +38,7 @@ export function ChatFloatingMenu({ isOpen, onClose }: ChatFloatingMenuProps) {
           </div>
           <div className="flex flex-col p-1.5">
             <button
+              type="button"
               onClick={() => {
                 setShowCoverLetterModal(true);
                 onClose();
@@ -42,6 +49,7 @@ export function ChatFloatingMenu({ isOpen, onClose }: ChatFloatingMenuProps) {
               Cover Letter
             </button>
             <button
+              type="button"
               onClick={() => {
                 setIsChatOpen(true);
                 onClose();

@@ -1,4 +1,3 @@
-import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { SiGithub } from "@/shared/ui/icons/BrandIcons";
 import {
@@ -19,7 +18,7 @@ import { getTagProjectCount } from "@/shared/lib/helpers";
 import BookItem from "@/entities/project/ui/BookItem";
 import MobileFilterModal from "./MobileFilterModal";
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
-import { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { useProjectExplainer } from "@/hooks/useProjectExplainer";
 
 interface ProjectsSectionProps {
@@ -73,6 +72,7 @@ const EmptyState = ({
       . Try checking for typos or simplifying your search query.
     </p>
     <button
+      type="button"
       onClick={() => {
         setSearchQuery("");
         setSelectedCategory(null);
@@ -288,6 +288,7 @@ const FocusedProject = ({
         {isExplaining ? (
           <div className="flex-1 flex flex-col relative h-full min-h-[250px]">
             <button
+              type="button"
               onClick={reset}
               className="absolute -top-2 -right-2 p-2 rounded-full glass-card hover:bg-white/10 text-neu-text-muted hover:text-white transition-colors z-10 border border-white/10"
             >
@@ -323,6 +324,7 @@ const FocusedProject = ({
                 <div className="text-red-400 text-sm">
                   <p>{error ?? "Something went wrong. Please try again."}</p>
                   <button
+                    type="button"
                     onClick={() =>
                       explain({
                         id: focusedProject.id,
@@ -414,6 +416,7 @@ const FocusedProject = ({
         {!isExplaining && (
           <div className="flex flex-col gap-3 mt-2">
             <button
+              type="button"
               onClick={() =>
                 explain({
                   id: focusedProject.id,
@@ -437,6 +440,7 @@ const FocusedProject = ({
             </button>
             <div className="flex flex-col sm:flex-row flex-wrap items-center gap-3">
               <button
+                type="button"
                 onClick={() => setSelectedProject(focusedProject)}
                 className="w-full sm:flex-1 py-4 sm:py-3.5 px-5 rounded-xl font-bold text-white bg-neu-accent shadow-neu hover:shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2"
               >
@@ -444,6 +448,7 @@ const FocusedProject = ({
                 Dev Log
               </button>
               <button
+                type="button"
                 onClick={() => setFocusedProject(null)}
                 className="w-full sm:w-auto py-4 sm:py-3.5 px-6 rounded-xl font-bold text-neu-text glass-card hover:shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2 border border-gray-300/10"
               >
@@ -621,6 +626,7 @@ export default function ProjectsSection({
             {/* Desktop Filter */}
             <div className="hidden md:flex flex-wrap gap-3 bg-neu-bg p-1.5 rounded-2xl shadow-neu-inset">
               <button
+                type="button"
                 onClick={() => setSelectedCategory(null)}
                 className={cn(
                   "px-5 py-2.5 text-xs font-mono uppercase tracking-wider rounded-xl transition-all relative",
@@ -644,6 +650,7 @@ export default function ProjectsSection({
               </button>
               {(categories || []).map((cat) => (
                 <button
+                  type="button"
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
                   className={cn(
@@ -703,6 +710,7 @@ export default function ProjectsSection({
 
             {/* Mobile Filter Button */}
             <button
+              type="button"
               onClick={() => setIsFilterModalOpen(true)}
               className="md:hidden flex items-center justify-center p-3 rounded-xl glass-card text-neu-text-muted hover:text-neu-accent transition-colors"
             >
@@ -737,6 +745,7 @@ export default function ProjectsSection({
             {!isLoading && !focusedProject && filteredProjects.length > 0 && (
               <>
                 <button
+                  type="button"
                   onClick={() => scrollShelf("left")}
                   className="absolute left-4 top-[45%] -translate-y-1/2 z-20 p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5"
                   aria-label="Scroll Left"
@@ -744,6 +753,7 @@ export default function ProjectsSection({
                   <ChevronLeft size={20} />
                 </button>
                 <button
+                  type="button"
                   onClick={() => scrollShelf("right")}
                   className="absolute right-4 top-[45%] -translate-y-1/2 z-20 p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5"
                   aria-label="Scroll Right"

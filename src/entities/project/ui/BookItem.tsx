@@ -14,7 +14,7 @@ interface BookItemProps {
 export default function BookItem({
   project,
   setFocusedProject,
-}: BookItemProps) {
+}: Readonly<BookItemProps>) {
   // Motion values to track dynamic mouse coords relative to element center
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);

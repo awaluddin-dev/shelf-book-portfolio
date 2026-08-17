@@ -40,7 +40,7 @@ const SkillTreeNode = memo(function SkillTreeNode({
   shortTitle,
   onMouseEnter,
   onMouseLeave,
-}: SkillNodeProps) {
+}: Readonly<SkillNodeProps>) {
   const catLower = (node.category || "").toLowerCase();
   let fillGradient = "url(#ai-grad)";
   if (catLower.includes("backend")) fillGradient = "url(#backend-grad)";
@@ -168,38 +168,58 @@ export default function SkillTree({
     [],
   );
 
-  const getNodeCoords = useCallback(
-    (node: SkillNode) => {
-      // Use predefined coordinates since DB x/y are largely unseeded/0.
-      // Layout is designed to be horizontal.
-      switch (node.id) {
-        case "nodejs": return { y: 200, x: 80 };
-        case "go": return { y: 400, x: 80 };
-        case "typescript": return { y: 200, x: 160 };
-        case "dist-systems": return { y: 400, x: 160 };
-        case "nestjs": return { y: 200, x: 240 };
-        case "rest-api": return { y: 400, x: 240 };
-        case "postgres": return { y: 200, x: 320 };
-        case "docker": return { y: 400, x: 320 };
-        case "redis": return { y: 200, x: 400 };
-        case "k8s": return { y: 400, x: 400 };
-        case "bullmq": return { y: 200, x: 480 };
-        case "argocd": return { y: 400, x: 480 };
-        case "azure-servicebus": return { y: 200, x: 560 };
-        case "azure-apim": return { y: 400, x: 560 };
-        case "python": return { y: 200, x: 640 };
-        case "sap-integration": return { y: 400, x: 640 };
-        case "langchain": return { y: 200, x: 720 };
-        case "mekari-talenta": return { y: 400, x: 720 };
-        case "langgraph": return { y: 200, x: 800 };
-        case "llm-router": return { y: 400, x: 800 };
-        case "claude-api": return { y: 200, x: 880 };
-        case "vectordb": return { y: 400, x: 880 };
-        default: return { y: 300, x: 960 };
-      }
-    },
-    [],
-  );
+  const getNodeCoords = useCallback((node: SkillNode) => {
+    // Use predefined coordinates since DB x/y are largely unseeded/0.
+    // Layout is designed to be horizontal.
+    switch (node.id) {
+      case "nodejs":
+        return { y: 200, x: 80 };
+      case "go":
+        return { y: 400, x: 80 };
+      case "typescript":
+        return { y: 200, x: 160 };
+      case "dist-systems":
+        return { y: 400, x: 160 };
+      case "nestjs":
+        return { y: 200, x: 240 };
+      case "rest-api":
+        return { y: 400, x: 240 };
+      case "postgres":
+        return { y: 200, x: 320 };
+      case "docker":
+        return { y: 400, x: 320 };
+      case "redis":
+        return { y: 200, x: 400 };
+      case "k8s":
+        return { y: 400, x: 400 };
+      case "bullmq":
+        return { y: 200, x: 480 };
+      case "argocd":
+        return { y: 400, x: 480 };
+      case "azure-servicebus":
+        return { y: 200, x: 560 };
+      case "azure-apim":
+        return { y: 400, x: 560 };
+      case "python":
+        return { y: 200, x: 640 };
+      case "sap-integration":
+        return { y: 400, x: 640 };
+      case "langchain":
+        return { y: 200, x: 720 };
+      case "mekari-talenta":
+        return { y: 400, x: 720 };
+      case "langgraph":
+        return { y: 200, x: 800 };
+      case "llm-router":
+        return { y: 400, x: 800 };
+      case "claude-api":
+        return { y: 200, x: 880 };
+      case "vectordb":
+        return { y: 400, x: 880 };
+      default:
+        return { y: 300, x: 960 };
+    }
+  }, []);
 
   const getShortTitle = (node: SkillNode): string => {
     const labels: Record<string, string> = {

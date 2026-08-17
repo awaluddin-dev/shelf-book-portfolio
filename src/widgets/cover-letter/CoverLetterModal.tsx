@@ -1,18 +1,18 @@
-import {  } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X } from "lucide-react";
 import { CoverLetterGenerator } from "./CoverLetterGenerator";
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
 
 export function CoverLetterModal() {
-  const { showCoverLetterModal: isOpen, setShowCoverLetterModal: setIsOpen } = usePortfolioStore();
+  const { showCoverLetterModal: isOpen, setShowCoverLetterModal: setIsOpen } =
+    usePortfolioStore();
 
   return (
     <>
       {/* Modal */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -25,7 +25,7 @@ export function CoverLetterModal() {
               onClick={() => setIsOpen(false)}
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
-            
+
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -41,6 +41,7 @@ export function CoverLetterModal() {
                   </span>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setIsOpen(false)}
                   className="p-1.5 rounded-lg text-neu-text-muted hover:text-neu-text hover:bg-white/10 transition-colors"
                 >

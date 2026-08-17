@@ -1,7 +1,10 @@
-'use client';
+"use client";
 
-import { ThemeProvider as NextThemesProvider, useTheme as useNextTheme } from 'next-themes';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import {
+  ThemeProvider as NextThemesProvider,
+  useTheme as useNextTheme,
+} from "next-themes";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 type ThemeContextType = {
   isDark: boolean;
@@ -15,15 +18,24 @@ const ThemeContext = createContext<ThemeContextType>({
 
 export const useTheme = () => useContext(ThemeContext);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+export function ThemeProvider({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
       <ThemeContextWrapper>{children}</ThemeContextWrapper>
     </NextThemesProvider>
   );
 }
 
-function ThemeContextWrapper({ children }: { children: React.ReactNode }) {
+function ThemeContextWrapper({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const { setTheme, resolvedTheme } = useNextTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -32,10 +44,10 @@ function ThemeContextWrapper({ children }: { children: React.ReactNode }) {
     setMounted(true);
   }, []);
 
-  const isDark = mounted ? resolvedTheme === 'dark' : false;
+  const isDark = mounted ? resolvedTheme === "dark" : false;
 
   const toggleTheme = () => {
-    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
   return (

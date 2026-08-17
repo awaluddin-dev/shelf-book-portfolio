@@ -8,15 +8,17 @@ interface MermaidDiagramProps {
   chart: string;
 }
 
-export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
+export default function MermaidDiagram({
+  chart,
+}: Readonly<MermaidDiagramProps>) {
   const ref = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRendered, setIsRendered] = useState(false);
   const [svgContent, setSvgContent] = useState<string>("");
-  
+
   const reactId = useId();
   // Ensure the ID is valid for Mermaid (starts with letter, no colons)
-  const idRef = useRef(`mermaid-${reactId.replaceAll(':', '')}`);
+  const idRef = useRef(`mermaid-${reactId.replaceAll(":", "")}`);
 
   useEffect(() => {
     let cancelled = false;
@@ -59,9 +61,9 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
           const cleanSvg = DOMPurify.sanitize(svg, {
             USE_PROFILES: { svg: true, svgFilters: true },
           });
-          
+
           setSvgContent(cleanSvg);
-          
+
           // We need a small delay to allow React to inject the HTML before manipulating it
           setTimeout(() => {
             if (!cancelled && ref.current) {
@@ -97,10 +99,16 @@ export default function MermaidDiagram({ chart }: MermaidDiagramProps) {
           <GitBranch size={12} />
           <span className="font-bold">Mermaid Error:</span>
         </p>
-        <pre className="text-[10px] text-rose-300 mt-2 whitespace-pre-wrap">{error}</pre>
+        <pre className="text-[10px] text-rose-300 mt-2 whitespace-pre-wrap">
+          {error}
+        </pre>
         <details className="mt-3">
-          <summary className="text-[10px] font-mono text-rose-400/70 cursor-pointer">Show source</summary>
-          <pre className="mt-2 p-2 bg-black/20 rounded text-[10px] text-zinc-400 whitespace-pre-wrap">{chart}</pre>
+          <summary className="text-[10px] font-mono text-rose-400/70 cursor-pointer">
+            Show source
+          </summary>
+          <pre className="mt-2 p-2 bg-black/20 rounded text-[10px] text-zinc-400 whitespace-pre-wrap">
+            {chart}
+          </pre>
         </details>
       </div>
     );

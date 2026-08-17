@@ -26,7 +26,7 @@ import ProjectLifecycleTracker from "@/entities/project/ui/ProjectLifecycleTrack
 import ProjectArchitectureDiagram from "@/entities/project/ui/ProjectArchitectureDiagram";
 
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
-import { getRelatedProjects, TECHNICAL_IMAGERY } from "@/shared/lib/helpers";
+import { getRelatedProjects } from "@/shared/lib/helpers";
 
 interface ProjectModalProps {
   isDark: boolean;
@@ -202,6 +202,7 @@ const ProjectMarkdownPage = ({
                   <div className="flex items-center justify-between px-4 py-2 bg-black/5 dark:bg-white/5 border-b border-zinc-200 dark:border-white/10 text-[10px] font-mono text-zinc-500 dark:text-gray-400">
                     <span>{match[1]}</span>
                     <button
+                      type="button"
                       onClick={() => {
                         navigator.clipboard.writeText(String(children));
                         setCopiedCode(String(children));
@@ -390,7 +391,7 @@ const ProjectRelatedPage = ({
           .slice(0, 4)
           .map((proj) => (
             <button
-              key={proj.id}
+              key={proj.id as string}
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
@@ -707,8 +708,7 @@ export default function ProjectModal({
             <img
               src={
                 selectedProject.technicalImagery?.featured ||
-                TECHNICAL_IMAGERY[selectedProject.id]?.featured ||
-                TECHNICAL_IMAGERY["auraflow-ai"]?.featured
+                "/assets/cover-book/default.webp"
               }
               alt="Cover"
               className="w-full h-full object-cover opacity-30 mix-blend-overlay"
@@ -768,7 +768,7 @@ export default function ProjectModal({
               <div className="flex gap-[1px] items-stretch h-full opacity-80 justify-center">
                 {[...Array(28)].map((_, i) => (
                   <div
-                    key={i}
+                    key={i as number}
                     className="bg-black"
                     style={{
                       width: secureMathRandom() > 0.5 ? "2px" : "4px",
@@ -860,6 +860,7 @@ export default function ProjectModal({
         >
           {/* Close Button Top Right */}
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               onClose();
@@ -872,6 +873,7 @@ export default function ProjectModal({
           {/* Pagination Controls */}
           {currentPage > 0 && (
             <button
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 paginate(-1);
@@ -884,6 +886,7 @@ export default function ProjectModal({
 
           {currentPage < spreads.length - 1 && (
             <button
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 paginate(1);
@@ -898,7 +901,7 @@ export default function ProjectModal({
           <div className="w-full h-full relative preserve-3d">
             <AnimatePresence mode="wait" custom={direction} initial={false}>
               <motion.div
-                key={currentPage}
+                key={currentPage as number}
                 custom={direction}
                 variants={pageVariants}
                 initial="enter"
