@@ -14,7 +14,7 @@ export function Mascot() {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
 
-  const timeSpawn = 60000;
+  const timeSpawn = Number(process.env.NEXT_PUBLIC_MASCOT_TIME_SPAWN) || 45000;
 
   useEffect(() => {
     const timeouts: ReturnType<typeof setTimeout>[] = [
@@ -51,7 +51,7 @@ export function Mascot() {
     return () => {
       timeouts.forEach((t) => clearTimeout(t));
     };
-  }, []);
+  });
 
   const handleClose = () => {
     setShowButton(false);
