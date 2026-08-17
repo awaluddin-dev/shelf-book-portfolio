@@ -10,25 +10,36 @@ jest.mock("../SpeechBubble", () => ({
   SpeechBubble: ({ text, showButton, onClose }: any) => (
     <div data-testid="speech-bubble">
       <span>{text}</span>
-      {showButton && <button onClick={onClose} data-testid="close-btn">Close</button>}
+      {showButton && (
+        <button onClick={onClose} data-testid="close-btn">
+          Close
+        </button>
+      )}
     </div>
   ),
 }));
 
 jest.mock("../MascotSvg", () => ({
-  MascotSvg: ({ isDark }: any) => <div data-testid={`mascot-svg-${isDark ? "dark" : "light"}`} />,
+  MascotSvg: ({ isDark }: any) => (
+    <div data-testid={`mascot-svg-${isDark ? "dark" : "light"}`} />
+  ),
 }));
 
 jest.mock("../ChatSvg", () => ({
-  ChatSvg: ({ onClick }: any) => <div data-testid="chat-svg" onClick={onClick} />,
+  ChatSvg: ({ onClick }: any) => (
+    <div data-testid="chat-svg" onClick={onClick} />
+  ),
 }));
 
 jest.mock("../ChatFloatingMenu", () => ({
-  ChatFloatingMenu: ({ isOpen, onClose }: any) => isOpen ? (
-    <div data-testid="chat-floating-menu">
-      <button onClick={onClose} data-testid="menu-close-btn">Close Menu</button>
-    </div>
-  ) : null,
+  ChatFloatingMenu: ({ isOpen, onClose }: any) =>
+    isOpen ? (
+      <div data-testid="chat-floating-menu">
+        <button onClick={onClose} data-testid="menu-close-btn">
+          Close Menu
+        </button>
+      </div>
+    ) : null,
 }));
 
 describe("Mascot", () => {
@@ -48,35 +59,43 @@ describe("Mascot", () => {
 
   it("should become visible after timeSpawn and show greet", () => {
     render(<Mascot />);
-    
+
     act(() => {
       jest.advanceTimersByTime(45000); // default timeSpawn
     });
 
     expect(screen.getByTestId("mascot-svg-dark")).toBeInTheDocument();
-    expect(screen.getByText("Hello, I think you like this portfolio!")).toBeInTheDocument();
+    expect(
+      screen.getByText("Hello, I think you like this portfolio!"),
+    ).toBeInTheDocument();
   });
 
   it("should sequence through states", () => {
     render(<Mascot />);
-    
+
     // Greet
     act(() => {
       jest.advanceTimersByTime(45000);
     });
-    expect(screen.getByText("Hello, I think you like this portfolio!")).toBeInTheDocument();
+    expect(
+      screen.getByText("Hello, I think you like this portfolio!"),
+    ).toBeInTheDocument();
 
     // Normal
     act(() => {
       jest.advanceTimersByTime(5000);
     });
-    expect(screen.getByText("Are you looking for a backend engineer?")).toBeInTheDocument();
+    expect(
+      screen.getByText("Are you looking for a backend engineer?"),
+    ).toBeInTheDocument();
 
     // Happy
     act(() => {
       jest.advanceTimersByTime(5300); // 10300 total from spawn
     });
-    expect(screen.getByText("I highly recommend trying my Cover Letter Generator!")).toBeInTheDocument();
+    expect(
+      screen.getByText("I highly recommend trying my Cover Letter Generator!"),
+    ).toBeInTheDocument();
 
     // Show button
     act(() => {
@@ -94,7 +113,7 @@ describe("Mascot", () => {
 
   it("handles onClose correctly", () => {
     render(<Mascot />);
-    
+
     // Advance to where button is visible
     act(() => {
       jest.advanceTimersByTime(45000 + 12000);
@@ -103,9 +122,7 @@ describe("Mascot", () => {
     const closeBtn = screen.getByTestId("close-btn");
     expect(closeBtn).toBeInTheDocument();
 
-    act(() => {
-      fireEvent.click(closeBtn);
-    });
+    fireEvent.click(closeBtn);
 
     expect(screen.getByText("See you!")).toBeInTheDocument();
     expect(screen.queryByTestId("close-btn")).not.toBeInTheDocument();
@@ -120,26 +137,24 @@ describe("Mascot", () => {
 
   it("handles ChatFloatingMenu open and close", () => {
     render(<Mascot />);
-    
+
     // Advance to chat mode directly
     act(() => {
       jest.advanceTimersByTime(45000 + 20300);
     });
 
     const chatSvg = screen.getByTestId("chat-svg");
-    
+
     // Open menu
-    act(() => {
-      fireEvent.click(chatSvg);
-    });
-    
+
+    fireEvent.click(chatSvg);
+
     expect(screen.getByTestId("chat-floating-menu")).toBeInTheDocument();
 
     // Close menu
     const menuCloseBtn = screen.getByTestId("menu-close-btn");
-    act(() => {
-      fireEvent.click(menuCloseBtn);
-    });
+
+    fireEvent.click(menuCloseBtn);
 
     expect(screen.queryByTestId("chat-floating-menu")).not.toBeInTheDocument();
   });
