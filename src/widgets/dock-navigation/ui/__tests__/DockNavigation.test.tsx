@@ -45,7 +45,7 @@ jest.mock("motion/react", () => {
   return {
     motion,
     AnimatePresence: function MockAnimatePresence({ children }: any) { return <>{children}</>; },
-  // eslint-disable-next-line react/display-name
+   
   };
 });
 

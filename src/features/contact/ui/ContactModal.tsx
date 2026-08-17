@@ -41,7 +41,7 @@ export default function ContactModal() {
   // Prefill message if inquiryMessage exists when modal opens
   useEffect(() => {
     if (isOpen && inquiryMessage) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       setFormData((prev) => ({ ...prev, message: inquiryMessage }));
     }
   }, [isOpen, inquiryMessage]);

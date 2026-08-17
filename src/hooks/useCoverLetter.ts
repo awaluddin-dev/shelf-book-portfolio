@@ -31,7 +31,7 @@ export function useCoverLetter() {
 
   const abortRef = useRef<AbortController | null>(null);
 
-  // eslint-disable-next-line
+   
   const generate = useCallback(async (jobDescription: string, retryCount = 0) => {
     abortRef.current?.abort();
     const controller = new AbortController();
@@ -60,7 +60,7 @@ export function useCoverLetter() {
       
       if (err instanceof Error && err.message === "EMPTY_RESPONSE" && retryCount < 3) {
         // Auto retry after a short delay
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+         
         setTimeout(() => generate(jobDescription, retryCount + 1), 500);
         return;
       }
@@ -71,7 +71,7 @@ export function useCoverLetter() {
   }, [setError, setStatus, setText]);
 
   const reset = useCallback(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     abortRef.current?.abort();
     setText("");
     setStatus("idle");
