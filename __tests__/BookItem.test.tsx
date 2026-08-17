@@ -111,4 +111,36 @@ describe('BookItem', () => {
     fireEvent.mouseLeave(innerDiv)
     expect(innerDiv).toBeDefined()
   })
+
+  it('renders disabled github link when project.github is missing', () => {
+    render(<BookItem {...defaultProps} project={{ ...mockProject, github: undefined }} />)
+    const githubLink = screen.getByTitle('View GitHub Repository')
+    expect(githubLink).toHaveAttribute('href', '#')
+    expect(githubLink.className).toContain('text-white/50')
+    
+    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true })
+    const preventDefaultSpy = jest.spyOn(clickEvent, 'preventDefault')
+    const stopPropagationSpy = jest.spyOn(clickEvent, 'stopPropagation')
+    
+    fireEvent(githubLink, clickEvent)
+    
+    expect(preventDefaultSpy).toHaveBeenCalled()
+    expect(stopPropagationSpy).toHaveBeenCalled()
+  })
+
+  it('renders active github link when project.github is provided', () => {
+    render(<BookItem {...defaultProps} project={{ ...mockProject, github: 'https://github.com/test' }} />)
+    const githubLink = screen.getByTitle('View GitHub Repository')
+    expect(githubLink).toHaveAttribute('href', 'https://github.com/test')
+    expect(githubLink.className).toContain('text-white/80')
+    
+    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true })
+    const preventDefaultSpy = jest.spyOn(clickEvent, 'preventDefault')
+    const stopPropagationSpy = jest.spyOn(clickEvent, 'stopPropagation')
+    
+    fireEvent(githubLink, clickEvent)
+    
+    expect(preventDefaultSpy).not.toHaveBeenCalled()
+    expect(stopPropagationSpy).toHaveBeenCalled()
+  })
 })
