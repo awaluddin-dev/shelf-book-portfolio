@@ -202,6 +202,7 @@ const ProjectMarkdownPage = ({
                   <div className="flex items-center justify-between px-4 py-2 bg-black/5 dark:bg-white/5 border-b border-zinc-200 dark:border-white/10 text-[10px] font-mono text-zinc-500 dark:text-gray-400">
                     <span>{match[1]}</span>
                     <button
+                      type="button"
                       onClick={() => {
                         navigator.clipboard.writeText(String(children));
                         setCopiedCode(String(children));
@@ -860,6 +861,7 @@ export default function ProjectModal({
         >
           {/* Close Button Top Right */}
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               onClose();
@@ -872,6 +874,7 @@ export default function ProjectModal({
           {/* Pagination Controls */}
           {currentPage > 0 && (
             <button
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 paginate(-1);
@@ -884,6 +887,7 @@ export default function ProjectModal({
 
           {currentPage < spreads.length - 1 && (
             <button
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 paginate(1);

@@ -1,12 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
-import {
-  BookOpen,
-  Download,
-  Terminal,
-  PenTool,
-  Mail,
-} from "lucide-react";
+import { BookOpen, Download, Terminal, PenTool, Mail } from "lucide-react";
 import { SiGithub, SiLinkedin } from "@/shared/ui/icons/BrandIcons";
 import { cn } from "@/shared/lib/utils";
 import { CircuitBoardBg } from "@/shared/ui/CircuitBoardBg";
@@ -140,6 +134,7 @@ export default function HeroSection({
                     className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto mt-2"
                   >
                     <button
+                      type="button"
                       onClick={() => {
                         document
                           .getElementById("projects")
@@ -264,6 +259,7 @@ export default function HeroSection({
                     </a>
 
                     <button
+                      type="button"
                       onClick={() => setShowInquiryModal(true)}
                       className="w-full flex items-center justify-between p-2 rounded-lg glass-card-inset hover:text-neu-accent transition-all group text-left cursor-pointer border-none outline-none"
                     >
@@ -370,7 +366,7 @@ export default function HeroSection({
                 >
                   {activeMetrics.map((item: any, idx: number) => (
                     <div
-                      key={idx}
+                      key={idx as number}
                       className={cn(
                         "flex flex-col gap-2 p-3 sm:p-4 rounded-xl sm:rounded-2xl glass-card-inset text-left transition-colors",
                         item.isSavings

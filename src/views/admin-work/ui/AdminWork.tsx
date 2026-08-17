@@ -7,11 +7,6 @@ import { Eye, X } from "lucide-react";
 export default function AdminWork() {
   const [viewingWork, setViewingWork] = useState<any>(null);
 
-  // Note: Since we want to use the Edit function from inside viewingWork,
-  // we would ideally need a reference to openEditModal.
-  // Instead, since the edit button is already in the table row, we can just hide it in the modal or keep it simple.
-  // For simplicity, we just provide the View Detail modal and close it to use the table's Edit button.
-
   return (
     <>
       <AdminCrudTable

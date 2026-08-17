@@ -1,8 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import ReactMarkdown from 'react-markdown';
-import { useProjectExplainer, ProjectPayload } from '@/hooks/useProjectExplainer';
+import { useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import {
+  useProjectExplainer,
+  ProjectPayload,
+} from "@/hooks/useProjectExplainer";
 
 interface ProjectExplainerProps {
   project: ProjectPayload;
@@ -10,7 +13,10 @@ interface ProjectExplainerProps {
   autoExplain?: boolean;
 }
 
-export function ProjectExplainer({ project, autoExplain = false }: ProjectExplainerProps) {
+export function ProjectExplainer({
+  project,
+  autoExplain = false,
+}: Readonly<ProjectExplainerProps>) {
   const { text, status, error, explain, reset } = useProjectExplainer();
 
   useEffect(() => {
@@ -18,12 +24,13 @@ export function ProjectExplainer({ project, autoExplain = false }: ProjectExplai
     return () => reset();
   }, [project, autoExplain, explain, reset]);
 
-  const isActive = status === 'loading' || status === 'streaming';
+  const isActive = status === "loading" || status === "streaming";
 
   return (
     <div className="mt-4">
-      {status === 'idle' && (
+      {status === "idle" && (
         <button
+          type="button"
           onClick={() => explain(project)}
           className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
         >
@@ -32,7 +39,7 @@ export function ProjectExplainer({ project, autoExplain = false }: ProjectExplai
         </button>
       )}
 
-      {(isActive || status === 'done' || status === 'error') && (
+      {(isActive || status === "done" || status === "error") && (
         <div className="rounded-lg border border-white/10 bg-white/5 p-4">
           {/* Header */}
           <div className="mb-3 flex items-center justify-between">
@@ -41,6 +48,7 @@ export function ProjectExplainer({ project, autoExplain = false }: ProjectExplai
               AI Explanation
             </span>
             <button
+              type="button"
               onClick={reset}
               disabled={isActive}
               aria-label="Close explanation"
@@ -51,32 +59,34 @@ export function ProjectExplainer({ project, autoExplain = false }: ProjectExplai
           </div>
 
           {/* Loading state */}
-          {status === 'loading' && (
+          {status === "loading" && (
             <div className="flex items-center gap-2 text-sm text-white/50">
-              <span className="inline-block h-1.5 w-1.5 animate-ping rounded-full bg-white/50" />
-              Thinking...
+              <span className="inline-block h-1.5 w-1.5 animate-ping rounded-full bg-white/50">
+                Thinking...
+              </span>
             </div>
           )}
 
           {/* Streaming / done text */}
-          {(status === 'streaming' || status === 'done') && (
+          {(status === "streaming" || status === "done") && (
             <div className="relative">
               <div className="prose prose-sm prose-invert max-w-none text-white/80 leading-relaxed marker:text-white/40 prose-a:text-neu-accent hover:prose-a:text-neu-accent/80 prose-headings:text-white/90 prose-strong:text-white/90 prose-th:text-white/70 prose-td:text-white/60">
                 <ReactMarkdown>{text}</ReactMarkdown>
               </div>
-              {status === 'streaming' && (
+              {status === "streaming" && (
                 <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-white/60 align-middle" />
               )}
             </div>
           )}
 
           {/* Error state */}
-          {status === 'error' && (
+          {status === "error" && (
             <div className="space-y-2">
               <p className="text-sm text-red-400">
-                {error ?? 'Something went wrong. Please try again.'}
+                {error ?? "Something went wrong. Please try again."}
               </p>
               <button
+                type="button"
                 onClick={() => explain(project)}
                 className="text-xs text-white/50 underline underline-offset-2 hover:text-white/80"
               >
@@ -92,7 +102,7 @@ export function ProjectExplainer({ project, autoExplain = false }: ProjectExplai
 
 // ── Inline icons (no external dep needed) ────────────────────────────────────
 
-function SparkleIcon({ className }: { className?: string }) {
+function SparkleIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}
@@ -110,7 +120,7 @@ function SparkleIcon({ className }: { className?: string }) {
   );
 }
 
-function CloseIcon({ className }: { className?: string }) {
+function CloseIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}

@@ -88,118 +88,184 @@ export default function ProficiencySection({
                 architecture, and DevOps practices.
               </p>
             </div>
-
-
           </div>
-
 
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start relative">
             {/* Left Column: Proficiency Categories (35%) */}
             <div className="w-full lg:w-[35%] space-y-6">
-              {(activeProficiency || []).map((category: any, catIdx: number) => {
-                const catLower = (category.title || "").toLowerCase();
-                let titleColor = "#38bdf8";
-                if (catLower.includes("backend")) titleColor = "#fbbf24";
-                else if (catLower.includes("infra") || catLower.includes("data")) titleColor = "#f43f5e";
-                else if (catLower.includes("ai") || catLower.includes("automation") || catLower.includes("integration")) titleColor = "#8b5cf6";
-                
-                return (
-                  <div
-                    key={catIdx as number}
-                    onMouseEnter={() => setHoveredCategory(category.id)}
-                    onMouseLeave={() => setHoveredCategory(null)}
-                    className={cn(
-                      "p-6 sm:p-8 rounded-3xl glass-card border border-white/5 dark:border-zinc-800/30 flex flex-col justify-between relative overflow-hidden group/card transition-all duration-300",
-                      hoveredCategory === category.id ? "shadow-lg scale-[1.01]" : ""
-                    )}
-                    style={{
-                      borderColor: hoveredCategory === category.id ? `${titleColor}50` : undefined,
-                      boxShadow: hoveredCategory === category.id ? `0 0 30px ${titleColor}15` : undefined
-                    }}
-                  >
-                    <div className="relative z-10">
-                      <h3 
-                        className="font-mono text-xs font-extrabold uppercase tracking-widest border-b border-gray-200/10 dark:border-zinc-800/30 pb-3.5 mb-4"
-                        style={{ color: titleColor }}
-                      >
-                        {category.title}
-                      </h3>
+              {(activeProficiency || []).map(
+                (category: any, catIdx: number) => {
+                  const catLower = (category.title || "").toLowerCase();
+                  let titleColor = "#38bdf8";
+                  if (catLower.includes("backend")) titleColor = "#fbbf24";
+                  else if (
+                    catLower.includes("infra") ||
+                    catLower.includes("data")
+                  )
+                    titleColor = "#f43f5e";
+                  else if (
+                    catLower.includes("ai") ||
+                    catLower.includes("automation") ||
+                    catLower.includes("integration")
+                  )
+                    titleColor = "#8b5cf6";
 
-                      <div className="flex flex-col">
-                        {category.skills?.map((skill: any, skillIdx: number) => (
-                          <div
-                            key={skillIdx as number}
-                            onMouseEnter={() => setHoveredSkillId(skill.id)}
-                            onMouseLeave={() => setHoveredSkillId(null)}
-                            className="py-4 border-b border-gray-200/5 dark:border-zinc-800/20 last:border-b-0 flex justify-between items-center gap-4 group/item cursor-pointer"
-                          >
-                            <div className="flex items-start gap-3">
-                              {/* Colored status dot */}
-                              <span
-                                className={cn(
-                                  "w-2 h-2 rounded-full mt-1.5 flex-shrink-0 transition-transform duration-300 group-hover/item:scale-125",
-                                  skill.status === "Production-ready" && "bg-emerald-500",
-                                  skill.status === "In Use" && "bg-blue-500",
-                                  skill.status === "Building" && "bg-purple-500",
-                                )}
-                              />
-                              <div className="flex flex-col text-left">
-                                <h4 className="font-display font-bold text-[14px] sm:text-[15px] text-neu-text leading-tight group-hover/item:text-neu-accent transition-colors duration-300">
-                                  {skill.name}
-                                </h4>
-                                <p className="font-mono text-[11px] sm:text-[11.5px] text-neu-text-muted mt-1 leading-snug">
-                                  {skill.subtext}
-                                </p>
-                              </div>
-                            </div>
+                  return (
+                    <div
+                      key={catIdx as number}
+                      onMouseEnter={() => setHoveredCategory(category.id)}
+                      onMouseLeave={() => setHoveredCategory(null)}
+                      className={cn(
+                        "p-6 sm:p-8 rounded-3xl glass-card border border-white/5 dark:border-zinc-800/30 flex flex-col justify-between relative overflow-hidden group/card transition-all duration-300",
+                        hoveredCategory === category.id
+                          ? "shadow-lg scale-[1.01]"
+                          : "",
+                      )}
+                      style={{
+                        borderColor:
+                          hoveredCategory === category.id
+                            ? `${titleColor}50`
+                            : undefined,
+                        boxShadow:
+                          hoveredCategory === category.id
+                            ? `0 0 30px ${titleColor}15`
+                            : undefined,
+                      }}
+                    >
+                      <div className="relative z-10">
+                        <h3
+                          className="font-mono text-xs font-extrabold uppercase tracking-widest border-b border-gray-200/10 dark:border-zinc-800/30 pb-3.5 mb-4"
+                          style={{ color: titleColor }}
+                        >
+                          {category.title}
+                        </h3>
 
-                            <div className="flex-shrink-0">
-                              <span
-                                className={cn(
-                                  "text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg border transition-all duration-300",
-                                  skill.status === "Production-ready" && "border-emerald-500/20 text-emerald-600 bg-emerald-500/5 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/30",
-                                  skill.status === "In Use" && "border-blue-500/20 text-blue-600 bg-blue-500/5 dark:text-blue-400 dark:bg-blue-500/10 dark:border-blue-500/30",
-                                  skill.status === "Building" && "border-purple-500/20 text-purple-600 bg-purple-500/5 dark:text-purple-400 dark:bg-purple-500/10 dark:border-purple-500/30",
-                                )}
+                        <div className="flex flex-col">
+                          {category.skills?.map(
+                            (skill: any, skillIdx: number) => (
+                              <div
+                                key={skillIdx as number}
+                                onMouseEnter={() => setHoveredSkillId(skill.id)}
+                                onMouseLeave={() => setHoveredSkillId(null)}
+                                className="py-4 border-b border-gray-200/5 dark:border-zinc-800/20 last:border-b-0 flex justify-between items-center gap-4 group/item cursor-pointer"
                               >
-                                {skill.status}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
+                                <div className="flex items-start gap-3">
+                                  {/* Colored status dot */}
+                                  <span
+                                    className={cn(
+                                      "w-2 h-2 rounded-full mt-1.5 flex-shrink-0 transition-transform duration-300 group-hover/item:scale-125",
+                                      skill.status === "Production-ready" &&
+                                        "bg-emerald-500",
+                                      skill.status === "In Use" &&
+                                        "bg-blue-500",
+                                      skill.status === "Building" &&
+                                        "bg-purple-500",
+                                    )}
+                                  />
+                                  <div className="flex flex-col text-left">
+                                    <h4 className="font-display font-bold text-[14px] sm:text-[15px] text-neu-text leading-tight group-hover/item:text-neu-accent transition-colors duration-300">
+                                      {skill.name}
+                                    </h4>
+                                    <p className="font-mono text-[11px] sm:text-[11.5px] text-neu-text-muted mt-1 leading-snug">
+                                      {skill.subtext}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="flex-shrink-0">
+                                  <span
+                                    className={cn(
+                                      "text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg border transition-all duration-300",
+                                      skill.status === "Production-ready" &&
+                                        "border-emerald-500/20 text-emerald-600 bg-emerald-500/5 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/30",
+                                      skill.status === "In Use" &&
+                                        "border-blue-500/20 text-blue-600 bg-blue-500/5 dark:text-blue-400 dark:bg-blue-500/10 dark:border-blue-500/30",
+                                      skill.status === "Building" &&
+                                        "border-purple-500/20 text-purple-600 bg-purple-500/5 dark:text-purple-400 dark:bg-purple-500/10 dark:border-purple-500/30",
+                                    )}
+                                  >
+                                    {skill.status}
+                                  </span>
+                                </div>
+                              </div>
+                            ),
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                },
+              )}
             </div>
 
             {/* Right Column: Interactive Skill Tree (Sticky) */}
-            <div className="w-full lg:w-[65%] sticky top-24 z-10 glass-card rounded-3xl p-4 sm:p-6 lg:p-8 border border-white/5 dark:border-zinc-800/30 shadow-neu-lg max-h-[calc(100vh-6rem)] overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+            <div
+              className="w-full lg:w-[65%] sticky top-24 z-10 glass-card rounded-3xl p-4 sm:p-6 lg:p-8 border border-white/5 dark:border-zinc-800/30 shadow-neu-lg max-h-[calc(100vh-6rem)] overflow-y-auto"
+              style={{ scrollbarWidth: "none" }}
+            >
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 pl-2">
                 <div>
                   <p className="text-[11px] font-mono text-neu-text-muted mt-1 max-w-sm leading-relaxed">
-                    Hover over categories or skills on the left to highlight their infrastructure dependencies and relationships below.
+                    Hover over categories or skills on the left to highlight
+                    their infrastructure dependencies and relationships below.
                   </p>
                 </div>
-                
+
                 {/* Legend with Tooltips */}
                 <div className="relative flex flex-wrap items-center gap-x-5 gap-y-2.5 font-mono text-xs px-4 py-2.5 rounded-2xl select-none self-start md:self-auto z-10 group/legend shadow-sm">
                   {/* Glowing SVG Border mimicking DockNavigation */}
-                  <svg width="100%" height="100%" className="absolute inset-0 pointer-events-none rounded-2xl z-0 overflow-visible">
+                  <svg
+                    width="100%"
+                    height="100%"
+                    className="absolute inset-0 pointer-events-none rounded-2xl z-0 overflow-visible"
+                  >
                     <defs>
-                      <linearGradient id="legend-glow" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="300" y2="40">
+                      <linearGradient
+                        id="legend-glow"
+                        gradientUnits="userSpaceOnUse"
+                        x1="0"
+                        y1="0"
+                        x2="300"
+                        y2="40"
+                      >
                         <stop offset="0%" stopColor="transparent" />
                         <stop offset="50%" stopColor="transparent" />
                         <stop offset="75%" stopColor="#3b82f6" />
                         <stop offset="85%" stopColor="#8b5cf6" />
                         <stop offset="95%" stopColor="#ec4899" />
                         <stop offset="100%" stopColor="#f59e0b" />
-                        <animateTransform attributeName="gradientTransform" type="rotate" from="0 150 20" to="360 150 20" dur="4s" repeatCount="indefinite"/>
+                        <animateTransform
+                          attributeName="gradientTransform"
+                          type="rotate"
+                          from="0 150 20"
+                          to="360 150 20"
+                          dur="4s"
+                          repeatCount="indefinite"
+                        />
                       </linearGradient>
                     </defs>
-                    <rect x="0" y="0" width="100%" height="100%" rx="16" fill="none" stroke="url(#legend-glow)" strokeWidth="3" />
-                    <rect x="0" y="0" width="100%" height="100%" rx="16" fill="none" stroke={isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"} strokeWidth="1.5" />
+                    <rect
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                      rx="16"
+                      fill="none"
+                      stroke="url(#legend-glow)"
+                      strokeWidth="3"
+                    />
+                    <rect
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                      rx="16"
+                      fill="none"
+                      stroke={
+                        isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"
+                      }
+                      strokeWidth="1.5"
+                    />
                   </svg>
                   <div className="absolute inset-0 bg-neu-bg/80 dark:bg-neu-bg/90 backdrop-blur-xl rounded-2xl -z-10" />
 
@@ -210,8 +276,12 @@ export default function ProficiencySection({
                     </span>
                     {/* Tooltip */}
                     <div className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-56 p-3 rounded-xl bg-zinc-950/95 dark:bg-white/95 text-zinc-100 dark:text-zinc-900 shadow-xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none text-left text-[11px] font-sans leading-relaxed border border-white/10 dark:border-zinc-200/50 z-50">
-                      <p className="font-semibold text-emerald-400 dark:text-emerald-600 mb-0.5">Production-ready</p>
-                      <p className="text-zinc-300 dark:text-zinc-600">Used in real-world production environments</p>
+                      <p className="font-semibold text-emerald-400 dark:text-emerald-600 mb-0.5">
+                        Production-ready
+                      </p>
+                      <p className="text-zinc-300 dark:text-zinc-600">
+                        Used in real-world production environments
+                      </p>
                       <div className="absolute bottom-[100%] left-1/2 -translate-x-1/2 mb-0 border-4 border-transparent border-b-zinc-950/95 dark:border-b-white/95" />
                     </div>
                   </div>
@@ -223,8 +293,12 @@ export default function ProficiencySection({
                     </span>
                     {/* Tooltip */}
                     <div className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-56 p-3 rounded-xl bg-zinc-950/95 dark:bg-white/95 text-zinc-100 dark:text-zinc-900 shadow-xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none text-left text-[11px] font-sans leading-relaxed border border-white/10 dark:border-zinc-200/50 z-50">
-                      <p className="font-semibold text-blue-400 dark:text-blue-600 mb-0.5">In Use</p>
-                      <p className="text-zinc-300 dark:text-zinc-600">Actively used in current projects</p>
+                      <p className="font-semibold text-blue-400 dark:text-blue-600 mb-0.5">
+                        In Use
+                      </p>
+                      <p className="text-zinc-300 dark:text-zinc-600">
+                        Actively used in current projects
+                      </p>
                       <div className="absolute bottom-[100%] left-1/2 -translate-x-1/2 mb-0 border-4 border-transparent border-b-zinc-950/95 dark:border-b-white/95" />
                     </div>
                   </div>
@@ -236,8 +310,12 @@ export default function ProficiencySection({
                     </span>
                     {/* Tooltip */}
                     <div className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-56 p-3 rounded-xl bg-zinc-950/95 dark:bg-white/95 text-zinc-100 dark:text-zinc-900 shadow-xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none text-left text-[11px] font-sans leading-relaxed border border-white/10 dark:border-zinc-200/50 z-50">
-                      <p className="font-semibold text-purple-400 dark:text-purple-600 mb-0.5">Building</p>
-                      <p className="text-zinc-300 dark:text-zinc-600">Currently learning through active projects</p>
+                      <p className="font-semibold text-purple-400 dark:text-purple-600 mb-0.5">
+                        Building
+                      </p>
+                      <p className="text-zinc-300 dark:text-zinc-600">
+                        Currently learning through active projects
+                      </p>
                       <div className="absolute bottom-[100%] left-1/2 -translate-x-1/2 mb-0 border-4 border-transparent border-b-zinc-950/95 dark:border-b-white/95" />
                     </div>
                   </div>
@@ -245,16 +323,15 @@ export default function ProficiencySection({
               </div>
 
               <div className="mt-4 -mx-4 sm:mx-0">
-                <SkillTree 
-                  isDark={isDark} 
-                  isLoading={isLoading} 
+                <SkillTree
+                  isDark={isDark}
+                  isLoading={isLoading}
                   externalHoveredNodeId={hoveredSkillId}
                   externalHoveredCategory={hoveredCategory}
                   activeProficiency={activeProficiency}
                 />
               </div>
             </div>
-
           </div>
 
           {/* Most Used Languages Section (Moved to Bottom) */}
@@ -312,9 +389,7 @@ export default function ProficiencySection({
                               filter: isHovered
                                 ? `brightness(1.2) drop-shadow(0px 0px 8px ${entry.color})`
                                 : "none",
-                              transform: isHovered
-                                ? "scale(1.05)"
-                                : "scale(1)",
+                              transform: isHovered ? "scale(1.05)" : "scale(1)",
                               transformOrigin: "120px 120px",
                             }}
                             onMouseEnter={() => setHoveredLang(entry.name)}
@@ -332,7 +407,7 @@ export default function ProficiencySection({
                     const isOtherHovered = hoveredLang !== null && !isHovered;
                     return (
                       <motion.div
-                        key={idx}
+                        key={idx as number}
                         whileHover={{ y: -2 }}
                         onMouseEnter={() => setHoveredLang(lang.name)}
                         onMouseLeave={() => setHoveredLang(null)}
@@ -562,6 +637,7 @@ export default function ProficiencySection({
                     item.status?.toLowerCase() === "success";
                   return (
                     <button
+                      type="button"
                       key={index as number}
                       onClick={() => handleSelectNode(index)}
                       className={cn(
@@ -766,7 +842,6 @@ export default function ProficiencySection({
             </div>
           </div>
         </motion.div>
-
 
         {/* Animated divider with a section-specific icon and quote tooltip */}
         <AnimatedDivider

@@ -30,6 +30,7 @@ export default function Modal() {
                 Full Testimonial
               </h3>
               <button
+                type="button"
                 onClick={onClose}
                 className="w-8 h-8 rounded-full bg-gray-200/50 dark:bg-white/5 flex items-center justify-center text-neu-text-muted hover:text-neu-text hover:bg-gray-300/50 dark:hover:bg-white/10 transition-colors"
               >

@@ -1,4 +1,3 @@
-import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { SiGithub } from "@/shared/ui/icons/BrandIcons";
 import {
@@ -19,7 +18,7 @@ import { getTagProjectCount } from "@/shared/lib/helpers";
 import BookItem from "@/entities/project/ui/BookItem";
 import MobileFilterModal from "./MobileFilterModal";
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
-import { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { useProjectExplainer } from "@/hooks/useProjectExplainer";
 
 interface ProjectsSectionProps {

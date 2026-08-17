@@ -39,6 +39,7 @@ export default function MobileFilterModal({
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-bold">Filter Projects</h3>
               <button
+                type="button"
                 onClick={onClose}
                 className="p-2 rounded-full glass-card-inset text-neu-text-muted hover:text-neu-accent"
               >
@@ -47,6 +48,7 @@ export default function MobileFilterModal({
             </div>
             <div className="flex flex-col gap-3">
               <button
+                type="button"
                 onClick={() => {
                   onSelectCategory(null);
                   onClose();
@@ -62,6 +64,7 @@ export default function MobileFilterModal({
               </button>
               {(categories || []).map((cat) => (
                 <button
+                  type="button"
                   key={cat}
                   onClick={() => {
                     onSelectCategory(cat);

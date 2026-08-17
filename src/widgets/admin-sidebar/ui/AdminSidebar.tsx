@@ -84,7 +84,7 @@ export function AdminSidebar() {
       </button>
 
       {isMobileOpen && (
-        <div
+        <button
           className="md:hidden fixed inset-0 bg-black/50 z-[90] backdrop-blur-sm"
           onClick={() => setIsMobileOpen(false)}
           onKeyDown={(e) => {
@@ -92,7 +92,7 @@ export function AdminSidebar() {
               setIsMobileOpen(false);
             }
           }}
-          role="button"
+          type="button"
           tabIndex={0}
           aria-label="Close sidebar"
         />
