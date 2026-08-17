@@ -58,6 +58,7 @@ jest.mock('lucide-react', () => ({
   ChevronLeft: () => <span>ChevronLeftIcon</span>,
   ChevronRight: () => <span>ChevronRightIcon</span>,
   Code2: () => <span>Code2Icon</span>,
+  Github: () => <span>GithubIcon</span>,
   ArrowLeft: () => <span>ArrowLeftIcon</span>,
   Wrench: () => <span>WrenchIcon</span>,
   Sparkles: () => <span>SparklesIcon</span>,
