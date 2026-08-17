@@ -27,7 +27,9 @@ jest.mock("../MascotSvg", () => ({
 
 jest.mock("../ChatSvg", () => ({
   ChatSvg: ({ onClick }: any) => (
-    <div data-testid="chat-svg" onClick={onClick} />
+    <button type="button" data-testid="chat-svg" onClick={onClick}>
+      Mock Svg Button
+    </button>
   ),
 }));
 

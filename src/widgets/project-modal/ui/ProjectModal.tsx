@@ -389,8 +389,9 @@ const ProjectRelatedPage = ({
         {getRelatedProjects(selectedProject, activeProjects)
           .slice(0, 4)
           .map((proj) => (
-            <div
+            <button
               key={proj.id}
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 onSelectProject(proj);
@@ -421,7 +422,7 @@ const ProjectRelatedPage = ({
                   {proj.title}
                 </h5>
               </div>
-            </div>
+            </button>
           ))}
       </div>
     </div>
@@ -509,8 +510,7 @@ export default function ProjectModal({
     // This prevents any blank pages in the middle of the book
     const interiorPages: any[] = [];
 
-    interiorPages.push({ type: "details" });
-    interiorPages.push({ type: "tech-stack" });
+    interiorPages.push({ type: "details" }, { type: "tech-stack" });
 
     // Add all markdown pages
     mdParts.forEach((content: string, i: number) => {
@@ -553,8 +553,7 @@ export default function ProjectModal({
     });
 
     // Add tail pages
-    interiorPages.push({ type: "lifecycle" });
-    interiorPages.push({ type: "related" });
+    interiorPages.push({ type: "lifecycle" }, { type: "related" });
 
     // Pair interiorPages into spreads (2 pages per spread)
     for (let i = 0; i < interiorPages.length; i += 2) {
@@ -685,7 +684,7 @@ export default function ProjectModal({
   };
 
   const renderSpreadContent = (spread: any) => {
-    if (!selectedProject) return null;
+    if (!selectedProject || !spread) return null;
 
     if (spread.type === "front-cover") {
       return (
