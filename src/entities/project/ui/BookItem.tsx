@@ -1,7 +1,7 @@
-import { motion, useMotionValue, useTransform } from 'motion/react';
-import { cn } from '@/shared/lib/utils';
-import { Code2 } from "lucide-react";
-import { Project } from '@/shared/types';
+import { motion, useMotionValue, useTransform } from "motion/react";
+import { cn } from "@/shared/lib/utils";
+import { Github } from "lucide-react";
+import { Project } from "@/shared/types";
 
 interface BookItemProps {
   project: Project;
@@ -27,7 +27,7 @@ export default function BookItem({
     const rect = e.currentTarget.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
-    
+
     // Calculate normalized position relative to element center (-0.5 to 0.5)
     const relativeX = (e.clientX - rect.left) / width - 0.5;
     const relativeY = (e.clientY - rect.top) / height - 0.5;
@@ -47,23 +47,23 @@ export default function BookItem({
       initial={{ opacity: 0, y: 50, rotate: -5 }}
       animate={{ opacity: 1, y: 0, rotate: 0 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+      transition={{ type: "spring", stiffness: 350, damping: 28 }}
       onClick={() => setFocusedProject(project)}
       className="relative cursor-pointer group flex-shrink-0 snap-center w-24 sm:w-28 md:w-auto flex justify-center"
       style={{ perspective: 800 }}
     >
-      <motion.div 
+      <motion.div
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{
           rotateX,
           rotateY,
-          transformStyle: "preserve-3d"
+          transformStyle: "preserve-3d",
         }}
         whileHover={{
           scale: 1.08,
           y: -16,
-          z: 30
+          z: 30,
         }}
         transition={{ type: "spring", stiffness: 350, damping: 22 }}
         className="relative transition-all duration-300 group-hover:z-20 group-hover:shadow-neu-modal w-full md:w-auto flex justify-center"
@@ -72,11 +72,17 @@ export default function BookItem({
         <div
           className={cn(
             "w-20 md:w-20 h-80 shadow-neu relative flex flex-col justify-between p-3 border border-white/40 overflow-hidden",
-            !project.spineColor?.startsWith('#') && !project.spineColor?.startsWith('rgb') ? project.spineColor : ""
+            !project.spineColor?.startsWith("#") &&
+              !project.spineColor?.startsWith("rgb")
+              ? project.spineColor
+              : "",
           )}
-          style={{ 
+          style={{
             transform: "translateZ(10px)",
-            ...(project.spineColor?.startsWith('#') || project.spineColor?.startsWith('rgb') ? { backgroundColor: project.spineColor } : {})
+            ...(project.spineColor?.startsWith("#") ||
+            project.spineColor?.startsWith("rgb")
+              ? { backgroundColor: project.spineColor }
+              : {}),
           }}
         >
           {/* Spine Details */}
@@ -89,9 +95,27 @@ export default function BookItem({
             </span>
           </div>
 
-          <div className="mt-4 flex flex-col items-center gap-2">
+          <div className="mt-4 flex flex-col items-center gap-2 relative z-50">
             <div className="w-full h-0.5 bg-white/40 shadow-sm"></div>
-            <Code2 size={16} className="text-white drop-shadow-sm md:w-3 md:h-3" />
+            <a
+              href={project.github || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="View GitHub Repository"
+              onClick={(e) => {
+                if (!project.github) {
+                  e.preventDefault();
+                }
+                e.stopPropagation();
+              }}
+              className={`p-1 rounded transition-colors cursor-pointer pointer-events-auto ${
+                project.github
+                  ? "text-white/80 hover:text-white hover:bg-white/20"
+                  : "text-white/50 cursor-not-allowed"
+              }`}
+            >
+              <Github size={16} className="drop-shadow-sm md:w-3 md:h-3" />
+            </a>
             <div className="w-full h-0.5 bg-white/40 shadow-sm"></div>
           </div>
 

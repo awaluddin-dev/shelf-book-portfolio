@@ -6,7 +6,7 @@ import {
   Filter,
   ChevronLeft,
   ChevronRight,
-  Code2,
+  Github,
   ArrowLeft,
   Wrench,
   Sparkles,
@@ -106,7 +106,9 @@ const ProjectList = ({
           setSelectedProject={setSelectedProject}
           setFocusedProject={setFocusedProject}
           isDark={isDark}
-          getTagProjectCount={(tag: string) => getTagProjectCount(tag, activeProjects)}
+          getTagProjectCount={(tag: string) =>
+            getTagProjectCount(tag, activeProjects)
+          }
         />
       ))}
     </AnimatePresence>
@@ -124,296 +126,358 @@ const FocusedProject = ({
   const isExplaining = status !== "idle";
 
   return (
-  <div className="relative py-8 md:py-12 px-4 md:px-8 z-20 flex flex-col lg:flex-row items-center justify-center gap-10 md:gap-16">
-    <div className="absolute inset-0 bg-black/5 dark:bg-black/30 backdrop-blur-md rounded-3xl z-0 pointer-events-none"></div>
-    <div
-      className={cn(
-        "absolute -inset-10 opacity-15 blur-[120px] rounded-full z-0 pointer-events-none transition-all duration-500",
-        !focusedProject.spineColor?.startsWith("#") &&
-          !focusedProject.spineColor?.startsWith("rgb")
-          ? focusedProject.spineColor
-          : "",
-      )}
-      style={{
-        ...(focusedProject.spineColor?.startsWith("#") ||
-        focusedProject.spineColor?.startsWith("rgb")
-          ? { backgroundColor: focusedProject.spineColor }
-          : {}),
-      }}
-    ></div>
+    <div className="relative py-8 md:py-12 px-4 md:px-8 z-20 flex flex-col lg:flex-row items-center justify-center gap-10 md:gap-16">
+      <div className="absolute inset-0 bg-black/5 dark:bg-black/30 backdrop-blur-md rounded-3xl z-0 pointer-events-none"></div>
+      <div
+        className={cn(
+          "absolute -inset-10 opacity-15 blur-[120px] rounded-full z-0 pointer-events-none transition-all duration-500",
+          !focusedProject.spineColor?.startsWith("#") &&
+            !focusedProject.spineColor?.startsWith("rgb")
+            ? focusedProject.spineColor
+            : "",
+        )}
+        style={{
+          ...(focusedProject.spineColor?.startsWith("#") ||
+          focusedProject.spineColor?.startsWith("rgb")
+            ? { backgroundColor: focusedProject.spineColor }
+            : {}),
+        }}
+      ></div>
 
-    <div
-      className="relative z-10 flex-shrink-0 flex items-center justify-center w-[280px] md:w-[320px] h-[340px] md:h-[400px]"
-      style={{ perspective: "1200px" }}
-    >
+      <div
+        className="relative z-10 flex-shrink-0 flex items-center justify-center w-[280px] md:w-[320px] h-[340px] md:h-[400px]"
+        style={{ perspective: "1200px" }}
+      >
+        <motion.div
+          initial={{
+            scale: 0.8,
+            rotateY: -35,
+            rotateX: 12,
+            rotateZ: -6,
+            opacity: 0,
+          }}
+          animate={{
+            scale: 1.05,
+            rotateY: -18,
+            rotateX: 8,
+            rotateZ: -4,
+            opacity: 1,
+          }}
+          whileHover={{
+            rotateY: -8,
+            rotateX: 4,
+            rotateZ: -2,
+            scale: 1.12,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 220,
+            damping: 22,
+          }}
+          className="relative cursor-pointer group flex items-center justify-center"
+          onClick={() => setSelectedProject(focusedProject)}
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          <div className="absolute left-[12px] top-0 bottom-0 w-[4px] bg-gradient-to-r from-black/20 to-transparent z-40 pointer-events-none" />
+
+          <div
+            className="absolute right-[-8px] top-[4px] bottom-[4px] w-[10px] bg-stone-100 dark:bg-zinc-800 border-y border-r border-stone-300 dark:border-zinc-700/60 rounded-r shadow-md z-10"
+            style={{
+              transform: "skewY(6deg)",
+              backgroundImage:
+                "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 3px)",
+            }}
+          />
+
+          <div
+            className={cn(
+              "w-[200px] md:w-[240px] h-[280px] md:h-[340px] rounded-r-xl shadow-2xl relative flex flex-col justify-between p-6 border-y border-r border-white/20 overflow-hidden z-20",
+              !(
+                focusedProject.coverColor || focusedProject.spineColor
+              )?.startsWith("#") &&
+                !(
+                  focusedProject.coverColor || focusedProject.spineColor
+                )?.startsWith("rgb")
+                ? focusedProject.coverColor || focusedProject.spineColor
+                : "",
+            )}
+            style={{
+              ...((
+                focusedProject.coverColor || focusedProject.spineColor
+              )?.startsWith("#") ||
+              (
+                focusedProject.coverColor || focusedProject.spineColor
+              )?.startsWith("rgb")
+                ? {
+                    backgroundColor:
+                      focusedProject.coverColor || focusedProject.spineColor,
+                  }
+                : {}),
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-tr from-black/15 via-transparent to-white/10 pointer-events-none z-10" />
+
+            <div className="relative z-20 flex flex-col h-full justify-between">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <span className="text-[9px] font-mono font-bold tracking-widest text-white/70 uppercase">
+                  {focusedProject.category}
+                </span>
+                <span className="text-[8px] font-mono text-white/50">
+                  {focusedProject.date}
+                </span>
+              </div>
+
+              <div className="my-auto py-2">
+                <h4 className="text-lg md:text-xl font-display font-black text-white tracking-tight leading-snug drop-shadow-md">
+                  {focusedProject.title}
+                </h4>
+                <p className="text-[10px] md:text-xs text-white/80 font-mono mt-1.5 font-medium italic line-clamp-2 leading-relaxed">
+                  {focusedProject.subtitle}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between pt-2 border-t border-white/15">
+                <div className="flex flex-col">
+                  <span className="text-[7px] font-mono text-white/40 tracking-wider uppercase">
+                    Author
+                  </span>
+                  <span className="text-[9px] font-mono font-bold text-white/80 leading-none">
+                    {dynamicHeroConfig?.name?.toUpperCase() || "AWALUDDIN"}
+                  </span>
+                </div>
+                <a
+                  href={focusedProject.github || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="View GitHub Repository"
+                  onClick={(e) => {
+                    if (!focusedProject.github) {
+                      e.preventDefault();
+                    }
+                    e.stopPropagation();
+                  }}
+                  className={`p-1.5 rounded-lg border text-white/80 transition-colors z-50 cursor-pointer pointer-events-auto ${
+                    focusedProject.github
+                      ? "bg-black/20 border-white/10 hover:text-white hover:bg-black/40 hover:border-white/20"
+                      : "bg-black/10 border-white/5 opacity-50 cursor-not-allowed"
+                  }`}
+                >
+                  <Github size={12} />
+                </a>
+              </div>
+            </div>
+
+            <div className="absolute left-[3px] top-0 bottom-0 w-[1px] bg-black/25 z-30" />
+            <div className="absolute left-[4px] top-0 bottom-0 w-[1px] bg-white/10 z-30" />
+            <div className="absolute top-0 right-4 w-3 h-8 bg-red-500 shadow-md origin-top transform translate-y-[-4px] z-10 rounded-b" />
+          </div>
+        </motion.div>
+      </div>
+
       <motion.div
-        initial={{
-          scale: 0.8,
-          rotateY: -35,
-          rotateX: 12,
-          rotateZ: -6,
-          opacity: 0,
-        }}
-        animate={{
-          scale: 1.05,
-          rotateY: -18,
-          rotateX: 8,
-          rotateZ: -4,
-          opacity: 1,
-        }}
-        whileHover={{
-          rotateY: -8,
-          rotateX: 4,
-          rotateZ: -2,
-          scale: 1.12,
-        }}
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
         transition={{
           type: "spring",
           stiffness: 220,
           damping: 22,
+          delay: 0.15,
         }}
-        className="relative cursor-pointer group flex items-center justify-center"
-        onClick={() => setSelectedProject(focusedProject)}
-        style={{ transformStyle: "preserve-3d" }}
+        className="relative z-10 flex-1 max-w-xl p-6 md:p-8 rounded-3xl bg-neu-bg/90 dark:bg-zinc-900/80 backdrop-blur-lg border border-gray-300/25 dark:border-zinc-700/30 shadow-neu flex flex-col justify-between"
       >
-        <div className="absolute left-[12px] top-0 bottom-0 w-[4px] bg-gradient-to-r from-black/20 to-transparent z-40 pointer-events-none" />
+        {isExplaining ? (
+          <div className="flex-1 flex flex-col relative h-full min-h-[250px]">
+            <button
+              onClick={reset}
+              className="absolute -top-2 -right-2 p-2 rounded-full glass-card hover:bg-white/10 text-neu-text-muted hover:text-white transition-colors z-10 border border-white/10"
+            >
+              <X size={16} />
+            </button>
 
-        <div
-          className="absolute right-[-8px] top-[4px] bottom-[4px] w-[10px] bg-stone-100 dark:bg-zinc-800 border-y border-r border-stone-300 dark:border-zinc-700/60 rounded-r shadow-md z-10"
-          style={{
-            transform: "skewY(6deg)",
-            backgroundImage:
-              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 3px)",
-          }}
-        />
+            <div className="flex items-center gap-2 mb-4">
+              <span className="flex items-center gap-2 text-xs font-mono font-bold text-neu-accent uppercase tracking-wider">
+                <Sparkles
+                  size={14}
+                  className={
+                    status === "loading" || status === "streaming"
+                      ? "animate-pulse"
+                      : ""
+                  }
+                />
+                AI Explanation
+              </span>
+              {status === "loading" && (
+                <span className="text-[10px] text-neu-text-muted animate-pulse">
+                  Thinking...
+                </span>
+              )}
+              {status === "streaming" && (
+                <span className="text-[10px] text-neu-text-muted animate-pulse">
+                  Typing...
+                </span>
+              )}
+            </div>
 
-        <div
-          className={cn(
-            "w-[200px] md:w-[240px] h-[280px] md:h-[340px] rounded-r-xl shadow-2xl relative flex flex-col justify-between p-6 border-y border-r border-white/20 overflow-hidden z-20",
-            !(
-              focusedProject.coverColor || focusedProject.spineColor
-            )?.startsWith("#") &&
-              !(
-                focusedProject.coverColor || focusedProject.spineColor
-              )?.startsWith("rgb")
-              ? focusedProject.coverColor || focusedProject.spineColor
-              : "",
-          )}
-          style={{
-            ...((
-              focusedProject.coverColor || focusedProject.spineColor
-            )?.startsWith("#") ||
-            (
-              focusedProject.coverColor || focusedProject.spineColor
-            )?.startsWith("rgb")
-              ? {
-                  backgroundColor:
-                    focusedProject.coverColor || focusedProject.spineColor,
-                }
-              : {}),
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-tr from-black/15 via-transparent to-white/10 pointer-events-none z-10" />
-
-          <div className="relative z-20 flex flex-col h-full justify-between">
-            <div className="flex items-center justify-between border-b border-white/10 pb-2">
-              <span className="text-[9px] font-mono font-bold tracking-widest text-white/70 uppercase">
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 relative">
+              {status === "error" ? (
+                <div className="text-red-400 text-sm">
+                  <p>{error ?? "Something went wrong. Please try again."}</p>
+                  <button
+                    onClick={() =>
+                      explain({
+                        id: focusedProject.id,
+                        title: focusedProject.title,
+                        description:
+                          focusedProject.subtitle ||
+                          focusedProject.description ||
+                          "",
+                        tech_stack: focusedProject.tags || [],
+                        metrics: focusedProject.stats
+                          ?.map((s: any) => `${s.label}: ${s.value}`)
+                          .join(", "),
+                        role: focusedProject.role,
+                      })
+                    }
+                    className="mt-2 text-xs underline underline-offset-2 opacity-80 hover:opacity-100"
+                  >
+                    Try again
+                  </button>
+                </div>
+              ) : (
+                <p className="text-sm md:text-base leading-relaxed text-neu-text/90 font-sans whitespace-pre-wrap">
+                  {text}
+                  {status === "streaming" && (
+                    <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-white/60 align-middle" />
+                  )}
+                </p>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="px-3 py-1 glass-card-inset rounded-xl text-xs font-mono font-bold text-neu-accent uppercase tracking-wider">
                 {focusedProject.category}
               </span>
-              <span className="text-[8px] font-mono text-white/50">
+              <span className="text-neu-text-muted text-xs font-mono">
                 {focusedProject.date}
               </span>
             </div>
 
-            <div className="my-auto py-2">
-              <h4 className="text-lg md:text-xl font-display font-black text-white tracking-tight leading-snug drop-shadow-md">
-                {focusedProject.title}
-              </h4>
-              <p className="text-[10px] md:text-xs text-white/80 font-mono mt-1.5 font-medium italic line-clamp-2 leading-relaxed">
-                {focusedProject.subtitle}
-              </p>
+            <h3 className="text-2xl md:text-4xl font-display font-bold text-neu-text tracking-tight mb-3">
+              {focusedProject.title}
+            </h3>
+
+            <p className="text-sm md:text-base text-neu-text-muted font-light mb-6">
+              {focusedProject.subtitle}
+            </p>
+
+            <div className="flex flex-wrap gap-2 mb-6">
+              {(focusedProject.tags || []).map((tag: string) => {
+                const { color, icon } = getTechIconAndColor(tag);
+                const count = getTagProjectCount(tag, activeProjects || []);
+                return (
+                  <div
+                    key={tag}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-card-inset text-[10px] font-mono font-semibold text-neu-text-muted hover:scale-[1.02] transition-transform"
+                  >
+                    <span className={cn("flex-shrink-0", color)}>{icon}</span>
+                    <span>{tag}</span>
+                    <span className="text-neu-accent font-bold text-[9px] ml-1 bg-neu-accent/5 px-1 rounded-md">
+                      +{count} project{count > 1 ? "s" : ""} experience
+                    </span>
+                  </div>
+                );
+              })}
             </div>
 
-            <div className="flex items-center justify-between pt-2 border-t border-white/15">
-              <div className="flex flex-col">
-                <span className="text-[7px] font-mono text-white/40 tracking-wider uppercase">
-                  Author
-                </span>
-                <span className="text-[9px] font-mono font-bold text-white/80 leading-none">
-                  {dynamicHeroConfig?.name?.toUpperCase() || "AWALUDDIN"}
-                </span>
+            {focusedProject.stats && focusedProject.stats.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-6">
+                {(focusedProject.stats || []).map((stat: any, idx: number) => (
+                  <div
+                    key={idx as number}
+                    className="p-3 rounded-2xl glass-card-inset flex flex-col sm:flex-col justify-center items-center text-center"
+                  >
+                    <span className="text-base md:text-lg font-bold font-display text-neu-text tracking-tight">
+                      {stat.value}
+                    </span>
+                    <span className="text-sm sm:text-[9px] font-mono text-neu-text-muted mt-1 leading-none">
+                      {stat.label}
+                    </span>
+                  </div>
+                ))}
               </div>
-              <div className="p-1.5 rounded-lg bg-black/20 border border-white/10 text-white/80">
-                <Code2 size={12} />
-              </div>
-            </div>
-          </div>
-
-          <div className="absolute left-[3px] top-0 bottom-0 w-[1px] bg-black/25 z-30" />
-          <div className="absolute left-[4px] top-0 bottom-0 w-[1px] bg-white/10 z-30" />
-          <div className="absolute top-0 right-4 w-3 h-8 bg-red-500 shadow-md origin-top transform translate-y-[-4px] z-10 rounded-b" />
-        </div>
-      </motion.div>
-    </div>
-
-    <motion.div
-      initial={{ opacity: 0, x: 40 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ type: "spring", stiffness: 220, damping: 22, delay: 0.15 }}
-      className="relative z-10 flex-1 max-w-xl p-6 md:p-8 rounded-3xl bg-neu-bg/90 dark:bg-zinc-900/80 backdrop-blur-lg border border-gray-300/25 dark:border-zinc-700/30 shadow-neu flex flex-col justify-between"
-    >
-      {isExplaining ? (
-        <div className="flex-1 flex flex-col relative h-full min-h-[250px]">
-          <button
-            onClick={reset}
-            className="absolute -top-2 -right-2 p-2 rounded-full glass-card hover:bg-white/10 text-neu-text-muted hover:text-white transition-colors z-10 border border-white/10"
-          >
-            <X size={16} />
-          </button>
-          
-          <div className="flex items-center gap-2 mb-4">
-            <span className="flex items-center gap-2 text-xs font-mono font-bold text-neu-accent uppercase tracking-wider">
-              <Sparkles size={14} className={status === "loading" || status === "streaming" ? "animate-pulse" : ""} />
-              AI Explanation
-            </span>
-            {status === "loading" && <span className="text-[10px] text-neu-text-muted animate-pulse">Thinking...</span>}
-            {status === "streaming" && <span className="text-[10px] text-neu-text-muted animate-pulse">Typing...</span>}
-          </div>
-
-          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 relative">
-            {status === "error" ? (
-              <div className="text-red-400 text-sm">
-                <p>{error ?? "Something went wrong. Please try again."}</p>
-                <button
-                  onClick={() => explain({
-                    id: focusedProject.id,
-                    title: focusedProject.title,
-                    description: focusedProject.subtitle || focusedProject.description || "",
-                    tech_stack: focusedProject.tags || [],
-                    metrics: focusedProject.stats?.map((s: any) => `${s.label}: ${s.value}`).join(", "),
-                    role: focusedProject.role,
-                  })}
-                  className="mt-2 text-xs underline underline-offset-2 opacity-80 hover:opacity-100"
-                >
-                  Try again
-                </button>
-              </div>
-            ) : (
-              <p className="text-sm md:text-base leading-relaxed text-neu-text/90 font-sans whitespace-pre-wrap">
-                {text}
-                {status === "streaming" && (
-                  <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-white/60 align-middle" />
-                )}
-              </p>
             )}
           </div>
-        </div>
-      ) : (
-        <div>
-          <div className="flex items-center gap-3 mb-4">
-            <span className="px-3 py-1 glass-card-inset rounded-xl text-xs font-mono font-bold text-neu-accent uppercase tracking-wider">
-              {focusedProject.category}
-            </span>
-            <span className="text-neu-text-muted text-xs font-mono">
-              {focusedProject.date}
-            </span>
-          </div>
+        )}
 
-          <h3 className="text-2xl md:text-4xl font-display font-bold text-neu-text tracking-tight mb-3">
-            {focusedProject.title}
-          </h3>
-
-          <p className="text-sm md:text-base text-neu-text-muted font-light mb-6">
-            {focusedProject.subtitle}
-          </p>
-
-          <div className="flex flex-wrap gap-2 mb-6">
-            {(focusedProject.tags || []).map((tag: string) => {
-              const { color, icon } = getTechIconAndColor(tag);
-              const count = getTagProjectCount(tag, activeProjects || []);
-              return (
-                <div
-                  key={tag}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-card-inset text-[10px] font-mono font-semibold text-neu-text-muted hover:scale-[1.02] transition-transform"
-                >
-                  <span className={cn("flex-shrink-0", color)}>{icon}</span>
-                  <span>{tag}</span>
-                  <span className="text-neu-accent font-bold text-[9px] ml-1 bg-neu-accent/5 px-1 rounded-md">
-                    +{count} project{count > 1 ? "s" : ""} experience
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-
-          {focusedProject.stats && focusedProject.stats.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-6">
-              {(focusedProject.stats || []).map((stat: any, idx: number) => (
-                <div
-                  key={idx as number}
-                  className="p-3 rounded-2xl glass-card-inset flex flex-col sm:flex-col justify-center items-center text-center"
-                >
-                  <span className="text-base md:text-lg font-bold font-display text-neu-text tracking-tight">
-                    {stat.value}
-                  </span>
-                  <span className="text-sm sm:text-[9px] font-mono text-neu-text-muted mt-1 leading-none">
-                    {stat.label}
-                  </span>
-                </div>
-              ))}
+        {!isExplaining && (
+          <div className="flex flex-col gap-3 mt-2">
+            <button
+              onClick={() =>
+                explain({
+                  id: focusedProject.id,
+                  title: focusedProject.title,
+                  description:
+                    focusedProject.subtitle || focusedProject.description || "",
+                  tech_stack: focusedProject.tags || [],
+                  metrics: focusedProject.stats
+                    ?.map((s: any) => `${s.label}: ${s.value}`)
+                    .join(", "),
+                  role: focusedProject.role,
+                })
+              }
+              className="w-full py-4 sm:py-3.5 px-5 rounded-xl font-bold text-neu-text bg-white/5 border border-white/10 hover:bg-white/10 shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2"
+            >
+              <Sparkles
+                size={16}
+                className="sm:w-3.5 sm:h-3.5 text-neu-accent"
+              />{" "}
+              Explain this to me
+            </button>
+            <div className="flex flex-col sm:flex-row flex-wrap items-center gap-3">
+              <button
+                onClick={() => setSelectedProject(focusedProject)}
+                className="w-full sm:flex-1 py-4 sm:py-3.5 px-5 rounded-xl font-bold text-white bg-neu-accent shadow-neu hover:shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2"
+              >
+                <BookOpen size={16} className="sm:w-3.5 sm:h-3.5" /> Open Full
+                Dev Log
+              </button>
+              <button
+                onClick={() => setFocusedProject(null)}
+                className="w-full sm:w-auto py-4 sm:py-3.5 px-6 rounded-xl font-bold text-neu-text glass-card hover:shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2 border border-gray-300/10"
+              >
+                <ArrowLeft size={16} className="sm:w-3.5 sm:h-3.5" /> Close
+                Spotlight
+              </button>
             </div>
-          )}
-        </div>
-      )}
-
-      {!isExplaining && (
-        <div className="flex flex-col gap-3 mt-2">
-          <button
-            onClick={() => explain({
-              id: focusedProject.id,
-              title: focusedProject.title,
-              description: focusedProject.subtitle || focusedProject.description || "",
-              tech_stack: focusedProject.tags || [],
-              metrics: focusedProject.stats?.map((s: any) => `${s.label}: ${s.value}`).join(", "),
-              role: focusedProject.role,
-            })}
-            className="w-full py-4 sm:py-3.5 px-5 rounded-xl font-bold text-neu-text bg-white/5 border border-white/10 hover:bg-white/10 shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2"
-          >
-            <Sparkles size={16} className="sm:w-3.5 sm:h-3.5 text-neu-accent" /> Explain this to me
-          </button>
-          <div className="flex flex-col sm:flex-row flex-wrap items-center gap-3">
-            <button
-              onClick={() => setSelectedProject(focusedProject)}
-              className="w-full sm:flex-1 py-4 sm:py-3.5 px-5 rounded-xl font-bold text-white bg-neu-accent shadow-neu hover:shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2"
-            >
-              <BookOpen size={16} className="sm:w-3.5 sm:h-3.5" /> Open Full Dev Log
-            </button>
-            <button
-              onClick={() => setFocusedProject(null)}
-              className="w-full sm:w-auto py-4 sm:py-3.5 px-6 rounded-xl font-bold text-neu-text glass-card hover:shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2 border border-gray-300/10"
-            >
-              <ArrowLeft size={16} className="sm:w-3.5 sm:h-3.5" /> Close Spotlight
-            </button>
           </div>
-        </div>
-      )}
-    </motion.div>
-  </div>
+        )}
+      </motion.div>
+    </div>
   );
 };
 
 export default function ProjectsSection({
   isDark,
 }: Readonly<ProjectsSectionProps>) {
-  const { 
-    searchQuery, setSearchQuery, 
-    selectedCategory, setSelectedCategory,
-    setSelectedProject, setFocusedProject,
-    focusedProject, dynamicHeroConfig, triggerToast,
-    dynamicProjects: activeProjects, isLoading
+  const {
+    searchQuery,
+    setSearchQuery,
+    selectedCategory,
+    setSelectedCategory,
+    setSelectedProject,
+    setFocusedProject,
+    focusedProject,
+    dynamicHeroConfig,
+    triggerToast,
+    dynamicProjects: activeProjects,
+    isLoading,
   } = usePortfolioStore();
 
-  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "alphabetical">("newest");
+  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "alphabetical">(
+    "newest",
+  );
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const shelfRef = useRef<HTMLDivElement>(null);
 
