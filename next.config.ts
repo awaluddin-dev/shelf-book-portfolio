@@ -16,7 +16,30 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    // Memastikan redirect HANYA berjalan jika kedua ENV diatur di Vercel.
+    // Jika repo di-clone orang lain atau berjalan di lokal tanpa ENV ini, redirect diabaikan.
+    if (
+      !process.env.NEXT_PUBLIC_LEGACY_DOMAIN ||
+      !process.env.NEXT_PUBLIC_WEB_URL
+    ) {
+      return [];
+    }
 
+    return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: process.env.NEXT_PUBLIC_LEGACY_DOMAIN,
+          },
+        ],
+        destination: `${process.env.NEXT_PUBLIC_WEB_URL}/:path*`,
+        permanent: true,
+      },
+    ];
+  },
   output: "standalone",
   transpilePackages: ["motion"],
   webpack: (config, { dev }) => {
