@@ -125,7 +125,7 @@ export function CoverLetterGenerator({
           <div class="header">
             <h1>Awaluddin</h1>
             <p>Backend Engineer & AI Integrator</p>
-            <p>Jakarta, Indonesia | github.com/awaluddin-dev | linkedin.com/in/awaluddin0001</p>
+            <p>Jakarta, Indonesia | github.com/awaluddin-dev | linkedin.com/in/awaluddin-developer</p>
             <hr />
           </div>
           <div class="content">${text}</div>

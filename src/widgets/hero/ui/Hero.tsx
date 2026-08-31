@@ -220,7 +220,7 @@ export default function HeroSection({
                       </div>
                     </a>
                     <a
-                      href="https://linkedin.com/in/awaluddin0001"
+                      href="https://www.linkedin.com/in/awaluddin-developer"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-between p-2 rounded-lg glass-card-inset hover:text-neu-accent transition-all group"
@@ -230,7 +230,7 @@ export default function HeroSection({
                       </span>
                       <div className="flex items-center gap-1.5">
                         <span className="text-[9px] text-neu-text-muted">
-                          awaluddin0001
+                          awaluddin-developer
                         </span>
                         <SiLinkedin
                           size={13}
