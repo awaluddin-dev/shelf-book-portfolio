@@ -324,7 +324,7 @@ export function CoverLetterGenerator({
                   </button>
 
                   <a
-                    href="https://calendly.com/awal14h/engineering-opportunities-discussion"
+                    href="https://calendly.com/hello-awaluddin/developer-talk-hiring"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neu-text transition-colors"
