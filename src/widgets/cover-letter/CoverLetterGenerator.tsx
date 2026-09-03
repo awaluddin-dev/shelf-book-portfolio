@@ -179,13 +179,14 @@ export function CoverLetterGenerator({
             onChange={(e) => setJobDescription(e.target.value)}
             placeholder="Paste the full job description here..."
             rows={8}
+            maxLength={3000}
             className="w-full resize-none rounded-lg border border-neu-accent/20 bg-neu-bg/50 px-4 py-3 text-sm text-neu-text placeholder-neu-text-muted outline-none transition-colors focus:border-neu-accent focus:bg-neu-bg"
           />
           <div className="flex items-center justify-between">
             <span className="text-xs text-neu-text-muted">
               {jobDescription.trim().length < MIN_JD_LENGTH
                 ? `${MIN_JD_LENGTH - jobDescription.trim().length} more characters needed`
-                : `${jobDescription.trim().length} characters`}
+                : `${jobDescription.trim().length}/3000 characters`}
             </span>
             <button
               type="button"

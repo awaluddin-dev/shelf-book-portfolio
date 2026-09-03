@@ -172,6 +172,7 @@ export function ChatWidget() {
                 onKeyDown={handleKeyDown}
                 placeholder="Ask a question..."
                 rows={1}
+                maxLength={500}
                 disabled={isActive}
                 className="flex-1 resize-none bg-transparent text-sm text-white/80 placeholder-white/25 outline-none disabled:opacity-50"
                 style={{ maxHeight: "80px" }}
@@ -186,9 +187,14 @@ export function ChatWidget() {
                 <SendIcon className="h-4 w-4" />
               </button>
             </div>
-            <p className="mt-1.5 text-center text-[10px] text-white/20">
-              Only answers questions about Awaluddin
-            </p>
+            <div className="mt-1.5 flex items-center justify-between px-1">
+              <p className="text-[10px] text-white/20">
+                Only answers questions about Awaluddin
+              </p>
+              <p className="text-[10px] text-white/20">
+                {input.length}/500
+              </p>
+            </div>
           </div>
         </div>
       )}
