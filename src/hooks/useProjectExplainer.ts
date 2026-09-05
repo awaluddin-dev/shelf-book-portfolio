@@ -20,7 +20,7 @@ async function fetchProjectExplanation(
   onStart: () => void,
   onChunk: (delta: string) => void,
 ): Promise<string> {
-  const res = await fetch(`${process.env.API_URL}/api/ai/explain-project`, {
+  const res = await fetch(`/api/ai/explain-project`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(project),

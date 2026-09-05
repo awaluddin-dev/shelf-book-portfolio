@@ -6,7 +6,7 @@ async function fetchCoverLetterStream(
   jobDescription: string,
   signal: AbortSignal,
 ) {
-  const res = await fetch(`${process.env.API_URL}/api/ai/cover-letter`, {
+  const res = await fetch(`/api/ai/cover-letter`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ jobDescription }),
