@@ -18,16 +18,17 @@ async function fetchProjectExplanation(
   project: ProjectPayload,
   signal: AbortSignal,
   onStart: () => void,
-  onChunk: (delta: string) => void
+  onChunk: (delta: string) => void,
 ): Promise<string> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ai/explain-project`, {
+  const res = await fetch(`${process.env.API_URL}/ai/explain-project`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(project),
     signal,
   });
 
-  if (!res.ok) throw new Error(`Request failed: ${res.status} ${res.statusText}`);
+  if (!res.ok)
+    throw new Error(`Request failed: ${res.status} ${res.statusText}`);
   if (!res.body) throw new Error("No response body received");
 
   onStart();
@@ -66,7 +67,7 @@ export function useProjectExplainer() {
         project,
         controller.signal,
         () => setStatus("streaming"),
-        (delta) => setText((prev) => prev + delta)
+        (delta) => setText((prev) => prev + delta),
       );
       explanationCache.set(project.id, fullText);
       setStatus("done");

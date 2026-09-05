@@ -1,20 +1,20 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://awaluddin.dev'
+  const baseUrl = process.env.SITE_URL || "https://awaluddin.dev";
 
   return [
     {
       url: `${baseUrl}`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 1,
     },
     {
       url: `${baseUrl}/testimoni`,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
+      changeFrequency: "yearly",
       priority: 0.8,
     },
-  ]
+  ];
 }
