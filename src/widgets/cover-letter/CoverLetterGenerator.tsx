@@ -5,6 +5,7 @@ import { useCoverLetter } from "@/hooks/useCoverLetter";
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
 
 const MIN_JD_LENGTH = 10;
+const MAX_JD_LENGTH = 4000;
 
 export function CoverLetterGenerator({
   onClose,
@@ -43,6 +44,12 @@ export function CoverLetterGenerator({
     }
   }, [text, status]);
 
+  const handleJdChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (value.length <= MAX_JD_LENGTH) {
+      setJobDescription(value);
+    }
+  };
   async function handleCopy() {
     await navigator.clipboard.writeText(text);
     setCopied(true);
@@ -176,17 +183,17 @@ export function CoverLetterGenerator({
         <div className="space-y-3">
           <textarea
             value={jobDescription}
-            onChange={(e) => setJobDescription(e.target.value)}
+            onChange={handleJdChange}
+            maxLength={MAX_JD_LENGTH}
             placeholder="Paste the full job description here..."
             rows={8}
-            maxLength={3000}
             className="w-full resize-none rounded-lg border border-neu-accent/20 bg-neu-bg/50 px-4 py-3 text-sm text-neu-text placeholder-neu-text-muted outline-none transition-colors focus:border-neu-accent focus:bg-neu-bg"
           />
           <div className="flex items-center justify-between">
-            <span className="text-xs text-neu-text-muted">
-              {jobDescription.trim().length < MIN_JD_LENGTH
-                ? `${MIN_JD_LENGTH - jobDescription.trim().length} more characters needed`
-                : `${jobDescription.trim().length}/3000 characters`}
+            <span
+              className={`text-xs ${jobDescription.length >= MAX_JD_LENGTH ? "text-red-400 font-semibold" : "text-gray-500"}`}
+            >
+              {jobDescription.length}/{MAX_JD_LENGTH}
             </span>
             <button
               type="button"
