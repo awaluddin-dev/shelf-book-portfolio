@@ -11,6 +11,8 @@ const SUGGESTED_QUESTIONS = [
   "Is he available for hire?",
 ];
 
+const MAX_CHAT_LENGTH = 500;
+
 export function ChatWidget() {
   const { isChatOpen, setIsChatOpen } = usePortfolioStore();
   const [input, setInput] = useState("");
@@ -39,6 +41,14 @@ export function ChatWidget() {
     setInput("");
     send(trimmed);
   }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    // Jangan update state jika panjang karakter melebihi batas
+    if (value.length <= MAX_CHAT_LENGTH) {
+      setInput(value);
+    }
+  };
 
   function handleKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -168,11 +178,11 @@ export function ChatWidget() {
               <textarea
                 ref={inputRef}
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 placeholder="Ask a question..."
                 rows={1}
-                maxLength={500}
+                maxLength={MAX_CHAT_LENGTH}
                 disabled={isActive}
                 className="flex-1 resize-none bg-transparent text-sm text-white/80 placeholder-white/25 outline-none disabled:opacity-50"
                 style={{ maxHeight: "80px" }}
@@ -191,9 +201,11 @@ export function ChatWidget() {
               <p className="text-[10px] text-white/20">
                 Only answers questions about Awaluddin
               </p>
-              <p className="text-[10px] text-white/20">
-                {input.length}/500
-              </p>
+              <span
+                className={`text-xs ${input.length >= MAX_CHAT_LENGTH ? "text-red-400 font-semibold" : "text-gray-500"}`}
+              >
+                {input.length}/{MAX_CHAT_LENGTH}
+              </span>
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@ async function fetchChatStream(
   onStart: () => void,
   onChunk: (delta: string) => void,
 ) {
-  const res = await fetch(`${process.env.API_URL}/ai/chat`, {
+  const res = await fetch(`${process.env.API_URL}/api/ai/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ messages }),
