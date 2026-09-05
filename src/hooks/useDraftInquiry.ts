@@ -3,8 +3,11 @@ import { parseSSEStream } from "@/shared/lib/sse";
 
 type Status = "idle" | "loading" | "streaming" | "done" | "error";
 
-async function fetchDraftInquiryStream(coverLetter: string, signal: AbortSignal) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ai/draft-inquiry`, {
+async function fetchDraftInquiryStream(
+  coverLetter: string,
+  signal: AbortSignal,
+) {
+  const res = await fetch(`${process.env.API_URL}/ai/draft-inquiry`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ coverLetter }),
@@ -25,46 +28,62 @@ export function useDraftInquiry() {
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-   
-  const draft = useCallback(async function draftReq(coverLetter: string, onUpdate?: (chunk: string) => void, retryCount = 0) {
-    // Abort any in-flight request
-    abortRef.current?.abort();
-    const controller = new AbortController();
-    abortRef.current = controller;
+  const draft = useCallback(
+    async function draftReq(
+      coverLetter: string,
+      onUpdate?: (chunk: string) => void,
+      retryCount = 0,
+    ) {
+      // Abort any in-flight request
+      abortRef.current?.abort();
+      const controller = new AbortController();
+      abortRef.current = controller;
 
-    setText("");
-    setError(null);
-    setStatus("loading");
+      setText("");
+      setError(null);
+      setStatus("loading");
 
-    try {
-      const body = await fetchDraftInquiryStream(coverLetter, controller.signal);
-      setStatus("streaming");
+      try {
+        const body = await fetchDraftInquiryStream(
+          coverLetter,
+          controller.signal,
+        );
+        setStatus("streaming");
 
-      let currentText = "";
-      await parseSSEStream(body, (delta) => {
-        currentText += delta;
-        setText(currentText);
-        if (onUpdate) onUpdate(delta);
-      });
-      
-      if (currentText.trim() === "") throw new Error("EMPTY_RESPONSE");
-      setStatus("done");
-    } catch (err: unknown) {
-      if (err instanceof Error && err.name === "AbortError") return;
-      
-      console.error(err);
-      
-      if (err instanceof Error && err.message === "EMPTY_RESPONSE" && retryCount < 3) {
-        // Auto retry after a short delay
-         
-        setTimeout(() => draftReq(coverLetter, onUpdate, retryCount + 1), 500);
-        return;
+        let currentText = "";
+        await parseSSEStream(body, (delta) => {
+          currentText += delta;
+          setText(currentText);
+          if (onUpdate) onUpdate(delta);
+        });
+
+        if (currentText.trim() === "") throw new Error("EMPTY_RESPONSE");
+        setStatus("done");
+      } catch (err: unknown) {
+        if (err instanceof Error && err.name === "AbortError") return;
+
+        console.error(err);
+
+        if (
+          err instanceof Error &&
+          err.message === "EMPTY_RESPONSE" &&
+          retryCount < 3
+        ) {
+          // Auto retry after a short delay
+
+          setTimeout(
+            () => draftReq(coverLetter, onUpdate, retryCount + 1),
+            500,
+          );
+          return;
+        }
+
+        setError(err instanceof Error ? err.message : String(err));
+        setStatus("error");
       }
-
-      setError(err instanceof Error ? err.message : String(err));
-      setStatus("error");
-    }
-  }, [setError, setStatus, setText]);
+    },
+    [setError, setStatus, setText],
+  );
 
   const reset = useCallback(() => {
     abortRef.current?.abort();

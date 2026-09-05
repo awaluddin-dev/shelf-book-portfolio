@@ -20,7 +20,7 @@ export function Mascot() {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
 
-  const timeSpawn = Number(process.env.NEXT_PUBLIC_MASCOT_TIME_SPAWN) || 45000;
+  const timeSpawn = Number(process.env.MASCOT_TIME_SPAWN) || 45000;
 
   useEffect(() => {
     const timeouts: ReturnType<typeof setTimeout>[] = [
@@ -104,7 +104,7 @@ export function Mascot() {
           exit="hidden"
           variants={mascotVariants}
           className={`fixed z-[100] pointer-events-none transition-all duration-700 ease-in-out ${
-            isChatMode 
+            isChatMode
               ? "bottom-6 right-6 w-16 h-16 md:w-20 md:h-20"
               : "-bottom-4 md:-bottom-2 right-0 md:right-12 w-[130px] h-[190px] md:w-[190px] md:h-[250px]"
           }`}
@@ -112,9 +112,9 @@ export function Mascot() {
           <div className="relative w-full h-full pointer-events-auto">
             {isChatMode ? (
               <div className="relative w-full h-full flex items-center justify-center group">
-                <ChatFloatingMenu 
-                  isOpen={isMenuOpen} 
-                  onClose={() => setIsMenuOpen(false)} 
+                <ChatFloatingMenu
+                  isOpen={isMenuOpen}
+                  onClose={() => setIsMenuOpen(false)}
                 />
                 <motion.div
                   initial={{ scale: 0.5, opacity: 0, rotate: -45 }}
@@ -122,7 +122,10 @@ export function Mascot() {
                   transition={{ type: "spring", stiffness: 260, damping: 20 }}
                   className="w-full h-full cursor-pointer hover:scale-110 active:scale-95 transition-transform"
                 >
-                  <ChatSvg onClick={() => setIsMenuOpen(!isMenuOpen)} isDark={isDark} />
+                  <ChatSvg
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    isDark={isDark}
+                  />
                 </motion.div>
               </div>
             ) : (

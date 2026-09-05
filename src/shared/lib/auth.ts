@@ -1,12 +1,16 @@
+const API_BASE_URL = process.env.API_URL || "https://sb.awaluddin.dev";
+
 export function parseJwt(token: string) {
   try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const base64Url = token.split(".")[1];
+    if (!base64Url) return null;
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(
-      window.atob(base64)
-        .split('')
-        .map((c) => '%' + ('00' + c.codePointAt(0)?.toString(16)).slice(-2))
-        .join('')
+      window
+        .atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.codePointAt(0)?.toString(16)).slice(-2))
+        .join(""),
     );
     return JSON.parse(jsonPayload);
   } catch (error: unknown) {
@@ -18,21 +22,22 @@ export function parseJwt(token: string) {
 export function isTokenExpired(token: string): boolean {
   const decoded = parseJwt(token);
   if (!decoded?.exp) return true;
-  
+
   const currentTime = Math.floor(Date.now() / 1000);
-  // Add a 10 seconds buffer
-  return decoded.exp < (currentTime + 10);
+  // Berikan buffer toleransi 10 detik
+  return decoded.exp < currentTime + 10;
 }
 
 export async function refreshAccessToken(): Promise<boolean> {
-  const refreshToken = localStorage.getItem('refresh_token');
+  const refreshToken = localStorage.getItem("refresh_token");
   if (!refreshToken) return false;
 
   try {
-    const res = await fetch('/api/auth/refresh', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refresh_token: refreshToken })
+    // Tembak langsung ke backend sb.awaluddin.dev
+    const res = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh_token: refreshToken }),
     });
 
     if (!res.ok) {
@@ -44,15 +49,15 @@ export async function refreshAccessToken(): Promise<boolean> {
     const newRefreshToken = data.data?.refresh_token || data.refresh_token;
 
     if (newToken) {
-      localStorage.setItem('token', newToken);
+      localStorage.setItem("token", newToken);
       if (newRefreshToken) {
-        localStorage.setItem('refresh_token', newRefreshToken);
+        localStorage.setItem("refresh_token", newRefreshToken);
       }
       return true;
     }
     return false;
   } catch (error) {
-    console.error('Failed to refresh token', error);
+    console.error("Failed to refresh token", error);
     return false;
   }
 }

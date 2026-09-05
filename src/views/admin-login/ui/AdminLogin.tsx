@@ -4,7 +4,13 @@ import { useRouter } from "next/navigation";
 import { Lock, ArrowRight, User } from "lucide-react";
 import { Turnstile } from "@marsidev/react-turnstile";
 
-export default function AdminLogin() {
+const API_BASE_URL = process.env.API_URL;
+
+interface AdminLoginProps {
+  turnstileSiteKey?: string;
+}
+
+export default function AdminLogin({ turnstileSiteKey }: AdminLoginProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -12,28 +18,42 @@ export default function AdminLogin() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
+
   const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError(false);
 
+    // Pastikan Turnstile token sudah ada sebelum submit
+    if (!turnstileToken) {
+      console.warn("Turnstile belum selesai diverifikasi");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const res = await fetch("/api/auth/login", {
+      // Tembak ke endpoint backend Nest.js
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, turnstileToken }),
       });
 
-      if (!res.ok) throw new Error("Login failed");
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.message || "Login failed");
+      }
 
       const resData = await res.json();
       const token = resData.data?.access_token || resData.access_token;
       const refreshToken = resData.data?.refresh_token || resData.refresh_token;
 
       if (token) {
-        localStorage.setItem("isAdmin", "true"); // kept for backwards compatibility in UI state
+        localStorage.setItem("isAdmin", "true");
         localStorage.setItem("token", token);
-        if (refreshToken) localStorage.setItem("refresh_token", refreshToken);
+        if (refreshToken) {
+          localStorage.setItem("refresh_token", refreshToken);
+        }
         router.push("/admin/dashboard");
       } else {
         setError(true);
@@ -114,7 +134,7 @@ export default function AdminLogin() {
           </div>
           <div className="flex justify-center mt-4 mb-2">
             <Turnstile
-              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+              siteKey={turnstileSiteKey!}
               onSuccess={(token) => setTurnstileToken(token)}
               onError={() => setTurnstileToken(null)}
               onExpire={() => setTurnstileToken(null)}

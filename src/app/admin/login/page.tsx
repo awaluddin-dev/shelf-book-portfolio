@@ -1,5 +1,7 @@
-import AdminLogin from '@/views/admin-login/ui/AdminLogin';
+import AdminLogin from "@/views/admin-login/ui/AdminLogin";
 
 export default function Page() {
-  return <AdminLogin />;
+  const turnstileSiteKey = process.env.TURNSTILE_SITE_KEY || "";
+
+  return <AdminLogin turnstileSiteKey={turnstileSiteKey} />;
 }
