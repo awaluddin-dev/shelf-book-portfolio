@@ -7,7 +7,7 @@ async function fetchDraftInquiryStream(
   coverLetter: string,
   signal: AbortSignal,
 ) {
-  const res = await fetch(`${process.env.API_URL}/api/ai/draft-inquiry`, {
+  const res = await fetch(`/api/ai/draft-inquiry`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ coverLetter }),
