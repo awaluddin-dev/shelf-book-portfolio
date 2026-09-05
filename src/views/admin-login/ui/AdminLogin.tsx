@@ -10,7 +10,9 @@ interface AdminLoginProps {
   turnstileSiteKey?: string;
 }
 
-export default function AdminLogin({ turnstileSiteKey }: AdminLoginProps) {
+export default function AdminLogin({
+  turnstileSiteKey,
+}: Readonly<AdminLoginProps>) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
