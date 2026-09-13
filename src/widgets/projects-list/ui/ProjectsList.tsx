@@ -741,7 +741,17 @@ const FocusedProject = ({
                       {stat.value}
                     </span>
                     <span className="text-sm sm:text-[9px] font-mono text-neu-text-muted mt-1 leading-none">
-          <div className="flex flex-col gap-3">
+                      {stat.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {!isExplaining && (
+          <div className="flex flex-col gap-3 mt-2">
             <button
               type="button"
               onClick={() =>
