@@ -123,7 +123,7 @@ describe('ExperienceSection', () => {
     fireEvent.click(timelineBtn);
   });
   
-  it('handles clicking on work timeline nodes and touch events', () => {
+  it('renders the vertical career timeline entries correctly', () => {
     (usePortfolioStore as unknown as jest.Mock).mockReturnValue({ ...mockStore, isLoading: false });
     render(<ExperienceSection isDark={false} />);
     
@@ -131,13 +131,15 @@ describe('ExperienceSection', () => {
       jest.advanceTimersByTime(1000);
     });
     
-    // We should be able to click on the timeline nodes.
-    const nodes = screen.getAllByRole('button').filter(b => b.className.includes('w-6') && b.className.includes('h-6'));
-    if (nodes.length > 0) {
-      fireEvent.click(nodes[0]);
-      fireEvent.click(nodes[1]);
-    }
-    expect(nodes).toBeDefined();
+    // Assert STRICT NAMING RULES entities are rendered
+    expect(screen.getByText('PT Serasi Autoraya (SERA) — Astra Group')).toBeInTheDocument();
+    expect(screen.getByText('Telkomsel')).toBeInTheDocument();
+    expect(screen.getByText('Regulated Fintech Company (OJK & BI Regulated)')).toBeInTheDocument();
+    expect(screen.getByText('PT Maccon Generasi Mandiri')).toBeInTheDocument();
+    expect(screen.getByText('PT Daikin Industries Indonesia')).toBeInTheDocument();
+    
+    // Assert metric $18K/year is rendered
+    expect(screen.getByText('$18K/year')).toBeInTheDocument();
   });
 
   it('renders testimonials and handles scrolling', () => {
