@@ -39,6 +39,7 @@ import DockNavigation from "@/widgets/dock-navigation/ui/DockNavigation";
 import TestimonialModal from "@/widgets/testimonial-modal/ui/TestimonialModal";
 import AdminPlayground from "@/views/admin-playground/ui/AdminPlayground";
 import { CoverLetterModal } from "@/widgets/cover-letter/CoverLetterModal";
+import WritingSection from "@/widgets/writing/ui/WritingSection";
 import dynamic from "next/dynamic";
 import { Loader } from "@/shared/ui/Loader";
 
@@ -53,33 +54,6 @@ const NAV_ITEMS = [
   { id: "proficiency", label: "Proficiency" },
   { id: "experience", label: "Experience" },
   { id: "writing", label: "Writing" },
-];
-
-const CURATED_ARTICLES = [
-  {
-    title: "Engineering Scalable Event-Driven Architectures in Node.js & Go",
-    description:
-      "Deep dive into partitioning strategies, high-throughput message brokers, and transactional outbox patterns for mission-critical systems.",
-    url: "https://dev.to/awaluddin",
-    tags: ["Backend", "Go", "Node.js", "Architecture"],
-    year: "2025",
-  },
-  {
-    title: "Production LLM Pipelines: Beyond Prompt Engineering to Reliable Workflows",
-    description:
-      "Strategies for structuring LangGraph/LangChain agentic workflows, deterministic fallbacks, token cost observability, and low-latency streaming in live APIs.",
-    url: "https://dev.to/awaluddin",
-    tags: ["AI Engineering", "LLM", "LangGraph", "Python"],
-    year: "2024",
-  },
-  {
-    title: "From HVAC Control Systems to Distributed Cloud Backends",
-    description:
-      "Reflecting on architectural parallels: how PID controller feedback loops, sensor telemetry pipelines at Daikin, and thermal load balancing inspired resilient distributed computing.",
-    url: "https://dev.to/awaluddin",
-    tags: ["Career", "Systems", "Distributed Systems", "IoT"],
-    year: "2024",
-  },
 ];
 
 export default function Portfolio() {
@@ -479,66 +453,7 @@ export default function Portfolio() {
                   </h2>
                 </div>
 
-                <div className="space-y-8">
-                  <div className="flex items-center gap-2 text-neu-accent mb-2">
-                    <BookOpen size={18} />
-                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
-                      Curated Dev.to Articles & Publications
-                    </span>
-                  </div>
-
-                  <div className="flex flex-col gap-6">
-                    {CURATED_ARTICLES.map((article, idx) => (
-                      <a
-                        key={idx}
-                        href={article.url}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        className="group relative rounded-2xl p-5 md:p-6 glass-card-inset border border-white/5 hover:border-neu-accent/40 transition-all duration-300 flex flex-col gap-3"
-                      >
-                        <div className="flex items-start justify-between gap-4">
-                          <h3 className="text-base font-display font-bold text-neu-text group-hover:text-neu-accent transition-colors flex items-center gap-1.5">
-                            {article.title}
-                            <ArrowUpRight
-                              size={16}
-                              className="text-neu-text-muted group-hover:text-neu-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
-                            />
-                          </h3>
-                          <span className="text-xs font-mono text-neu-text-muted/60 shrink-0">
-                            {article.year}
-                          </span>
-                        </div>
-
-                        <p className="text-xs sm:text-sm text-neu-text-muted leading-relaxed">
-                          {article.description}
-                        </p>
-
-                        <div className="flex flex-wrap gap-2 pt-2">
-                          {article.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="px-2.5 py-1 text-[11px] font-mono rounded-full bg-neu-accent/10 text-neu-accent font-medium border border-neu-accent/20"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </a>
-                    ))}
-                  </div>
-
-                  <div className="pt-2">
-                    <a
-                      href="https://dev.to/awaluddin"
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="inline-flex items-center gap-2 text-xs font-mono font-bold text-neu-accent hover:underline"
-                    >
-                      <span>Read all articles on Dev.to</span>
-                      <ArrowUpRight size={14} />
-                    </a>
-                  </div>
-                </div>
+                <WritingSection isDark={isDark} />
               </section>
 
               {/* Footer */}
