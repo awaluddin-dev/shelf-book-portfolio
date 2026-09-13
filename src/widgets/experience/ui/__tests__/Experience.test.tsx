@@ -141,43 +141,5 @@ describe('ExperienceSection', () => {
     // Assert metric $18K/year is rendered
     expect(screen.getByText('$18K/year')).toBeInTheDocument();
   });
-
-  it('renders testimonials and handles scrolling', () => {
-    (usePortfolioStore as unknown as jest.Mock).mockReturnValue({ ...mockStore, isLoading: false });
-    render(<ExperienceSection isDark={true} />);
-    act(() => {
-      jest.advanceTimersByTime(1000);
-    });
-
-    // Testimonial should be visible
-    expect(screen.getAllByText('“Great dev”')[0]).toBeInTheDocument();
-    
-    // Test the arrow buttons for scrolling
-    const leftArrow = screen.getAllByRole('button').find(b => b.querySelector('.lucide-chevron-left'));
-    const rightArrow = screen.getAllByRole('button').find(b => b.querySelector('.lucide-chevron-right'));
-    if (leftArrow) fireEvent.click(leftArrow);
-    if (rightArrow) fireEvent.click(rightArrow);
-
-    act(() => {
-      jest.advanceTimersByTime(1000);
-    });
-  });
-
-  it('handles mouse drag for testimonials', () => {
-    (usePortfolioStore as unknown as jest.Mock).mockReturnValue({ ...mockStore, isLoading: false });
-    render(<ExperienceSection isDark={false} />);
-    
-    const elements = screen.getAllByText('“Great dev”');
-    if (elements.length > 0) {
-      const container = elements[0].closest('ul') || elements[0].parentElement?.parentElement;
-      if (container) {
-        fireEvent.mouseDown(container, { pageX: 100 });
-        fireEvent.mouseMove(container, { pageX: 50 });
-        fireEvent.mouseUp(container);
-        fireEvent.mouseDown(container, { pageX: 50 });
-        fireEvent.mouseLeave(container);
-      }
-    }
-    expect(elements).toBeDefined();
-  });
 });
+

@@ -40,6 +40,8 @@ import TestimonialModal from "@/widgets/testimonial-modal/ui/TestimonialModal";
 import AdminPlayground from "@/views/admin-playground/ui/AdminPlayground";
 import { CoverLetterModal } from "@/widgets/cover-letter/CoverLetterModal";
 import WritingSection from "@/widgets/writing/ui/WritingSection";
+import MetricsBento from "@/widgets/metrics/ui/MetricsBento";
+import WhiteboardTestimonials from "@/widgets/testimonials/ui/WhiteboardTestimonials";
 import dynamic from "next/dynamic";
 import { Loader } from "@/shared/ui/Loader";
 
@@ -54,6 +56,7 @@ const NAV_ITEMS = [
   { id: "proficiency", label: "Proficiency" },
   { id: "experience", label: "Experience" },
   { id: "writing", label: "Writing" },
+  { id: "endorse", label: "Endorsements" },
 ];
 
 export default function Portfolio() {
@@ -201,11 +204,11 @@ export default function Portfolio() {
 
         {/* Main 2-Column Container */}
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="lg:flex lg:justify-between lg:gap-12">
+          <div className="lg:flex lg:justify-between lg:gap-12 xl:gap-16">
             {/* ========================================================================= */}
-            {/* A. KOLOM KIRI (Sticky Left Column - ~42% width) */}
+            {/* A. KOLOM KIRI (Sticky Left Column - 32% / 28% width) */}
             {/* ========================================================================= */}
-            <header className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24 pt-16 pb-10">
+            <header className="lg:w-[32%] xl:w-[28%] lg:sticky lg:top-0 lg:h-screen lg:flex lg:flex-col lg:justify-between lg:py-24 pt-16 pb-10">
               <div className="flex flex-col">
                 {/* Status Badge */}
                 <div className="mb-4 flex items-center gap-2">
@@ -350,9 +353,9 @@ export default function Portfolio() {
             </header>
 
             {/* ========================================================================= */}
-            {/* B. KOLOM KANAN (Scrollable Feed - ~58% width) */}
+            {/* B. KOLOM KANAN (Scrollable Feed - 68% / 72% width) */}
             {/* ========================================================================= */}
-            <main className="lg:w-1/2 lg:py-24 space-y-24 pb-24">
+            <main className="lg:w-[68%] xl:w-[72%] lg:py-24 space-y-24 pb-24">
               {/* SECTION 1: #about */}
               <section
                 id="about"
@@ -398,6 +401,9 @@ export default function Portfolio() {
                   </p>
                 </div>
               </section>
+
+              {/* OPERATIONAL METRICS BENTO */}
+              <MetricsBento />
 
               {/* SECTION 2: #projects */}
               <section
@@ -455,6 +461,9 @@ export default function Portfolio() {
 
                 <WritingSection isDark={isDark} />
               </section>
+
+              {/* SECTION 6: #endorse */}
+              <WhiteboardTestimonials isDark={isDark} />
 
               {/* Footer */}
               <footer className="pt-16 border-t border-gray-300/30 dark:border-gray-800/40 text-left text-xs font-mono text-neu-text-muted/80">
