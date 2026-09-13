@@ -10,6 +10,12 @@ import {
   Wrench,
   Sparkles,
   X,
+  LayoutGrid,
+  ChevronDown,
+  ChevronUp,
+  Globe,
+  ArrowUpRight,
+  Layers,
 } from "lucide-react";
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";
 import { cn } from "@/shared/lib/utils";
@@ -20,10 +26,341 @@ import MobileFilterModal from "./MobileFilterModal";
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
 import React, { useState, useRef, useMemo } from "react";
 import { useProjectExplainer } from "@/hooks/useProjectExplainer";
+import ProjectArchitectureDiagram from "@/entities/project/ui/ProjectArchitectureDiagram";
 
 interface ProjectsSectionProps {
   isDark: boolean;
 }
+
+const getProjectMetadata = (project: any) => {
+  const title = (project.title || "").toLowerCase();
+  const tags = (project.tags || []).map((t: string) => t.toLowerCase());
+
+  if (
+    title.includes("auraflow") ||
+    tags.includes("langgraph") ||
+    tags.includes("rag") ||
+    tags.includes("ai")
+  ) {
+    return {
+      domainBadge: "AI Systems & Distributed Queue",
+      problem:
+        project.problemSolved ||
+        "Production LLM agent workflows suffered from unpredictable latency, token budget overruns, and cascading API timeouts under high concurrent load.",
+      solution:
+        project.reasonToBuild ||
+        "Engineered an asynchronous orchestration engine using LangGraph with Redis BullMQ queuing, fallback models, and persistent state checkpoints.",
+      pipelineFlow: [
+        "Gateway",
+        "Redis BullMQ",
+        "LangGraph",
+        "Vector DB",
+        "PostgreSQL",
+      ],
+    };
+  }
+
+  if (
+    title.includes("service-bus") ||
+    title.includes("bus") ||
+    tags.includes("rabbitmq") ||
+    tags.includes("redis")
+  ) {
+    return {
+      domainBadge: "Developer Tooling & Infrastructure",
+      problem:
+        project.problemSolved ||
+        "Inconsistent pub/sub implementations across polyglot microservices resulted in deadlocks, unacknowledged consumer lag, and missing telemetry.",
+      solution:
+        project.reasonToBuild ||
+        "Architected an enterprise lightweight message bus with deterministic idempotency keys, automatic dead-letter retries, and Prometheus tracing.",
+      pipelineFlow: [
+        "Producer SDK",
+        "Schema Registry",
+        "Broker (Pub/Sub)",
+        "DLQ Worker",
+        "Consumer",
+      ],
+    };
+  }
+
+  if (
+    title.includes("ledger") ||
+    title.includes("finance") ||
+    tags.includes("financial") ||
+    tags.includes("fintech")
+  ) {
+    return {
+      domainBadge: "Financial Ledger & High-Throughput",
+      problem:
+        project.problemSolved ||
+        "Traditional SQL updates for high-frequency balance adjustments caused database row locks, balance drift, and double-entry discrepancies.",
+      solution:
+        project.reasonToBuild ||
+        "Built an immutable event-sourced double-entry ledger in Go and PostgreSQL with strict sequence verification and sub-millisecond atomic audits.",
+      pipelineFlow: [
+        "API Gateway",
+        "Idempotency Filter",
+        "Event Log",
+        "Atomic Ledger",
+        "Audit Store",
+      ],
+    };
+  }
+
+  if (
+    title.includes("shelf") ||
+    title.includes("book") ||
+    title.includes("portfolio")
+  ) {
+    return {
+      domainBadge: "Developer Platform & Visual Systems",
+      problem:
+        project.problemSolved ||
+        "Standard static portfolios lack interactive technical depth, system architecture transparency, and low-friction exploratory workflows.",
+      solution:
+        project.reasonToBuild ||
+        "Designed an interactive 3D virtual bookshelf and engineering dual-view system backed by Feature-Sliced Design and streaming state management.",
+      pipelineFlow: [
+        "Next.js Client",
+        "Zustand Store",
+        "Reverse Proxy",
+        "Serverless API",
+        "Prisma/DB",
+      ],
+    };
+  }
+
+  // Fallback metadata inferred from tags and category
+  return {
+    domainBadge: project.category || "Enterprise Distributed Backend",
+    problem:
+      project.problemSolved ||
+      project.subtitle ||
+      "Solving high-concurrency bottlenecks and ensuring strict transactional consistency across distributed services.",
+    solution:
+      project.reasonToBuild ||
+      "Implemented a modular, observable microservice architecture with structured telemetry and automated resilience patterns.",
+    pipelineFlow: [
+      "Client API",
+      "Reverse Proxy",
+      "Worker Service",
+      "Cache Tier",
+      "Primary DB",
+    ],
+  };
+};
+
+const ProjectCardGrid = ({
+  project,
+  setSelectedProject,
+}: {
+  project: any;
+  setSelectedProject: (p: any) => void;
+}) => {
+  const [isArchExpanded, setIsArchExpanded] = useState(false);
+  const metadata = useMemo(() => getProjectMetadata(project), [project]);
+
+  const archDiagram = project.systemArchitectures?.[0];
+
+  return (
+    <motion.article
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.98 }}
+      transition={{ duration: 0.3 }}
+      className="group relative rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/40 backdrop-blur-md p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-neu-accent/40 transition-all flex flex-col justify-between gap-5"
+    >
+      <div className="flex flex-col gap-4">
+        {/* Header: Domain Badge & Year */}
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <span className="px-2.5 py-1 rounded-md bg-neu-accent/10 border border-neu-accent/25 text-neu-accent text-[10px] font-mono font-bold uppercase tracking-wider">
+            {metadata.domainBadge}
+          </span>
+          <span className="text-[11px] font-mono text-neu-text-muted/60">
+            {project.date || "Production"}
+          </span>
+        </div>
+
+        {/* Project Title & Subtitle */}
+        <div>
+          <h3
+            onClick={() => setSelectedProject(project)}
+            className="text-lg sm:text-xl font-display font-bold text-neu-text group-hover:text-neu-accent transition-colors cursor-pointer inline-flex items-center gap-1.5"
+          >
+            {project.title}
+            <ArrowUpRight
+              size={15}
+              className="text-neu-text-muted group-hover:text-neu-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
+            />
+          </h3>
+          {project.subtitle && (
+            <p className="text-xs font-mono text-neu-text-muted mt-0.5">
+              {project.subtitle}
+            </p>
+          )}
+        </div>
+
+        {/* Technical Problem & Solution Breakdown */}
+        <div className="grid grid-cols-1 gap-2.5 text-xs text-neu-text-muted leading-relaxed">
+          <div className="p-3 rounded-xl bg-black/[0.02] dark:bg-black/20 border border-zinc-200/50 dark:border-zinc-800/60">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-500/90 dark:text-rose-400 block mb-1">
+              • Problem
+            </span>
+            <p className="font-normal">{metadata.problem}</p>
+          </div>
+
+          <div className="p-3 rounded-xl bg-black/[0.02] dark:bg-black/20 border border-zinc-200/50 dark:border-zinc-800/60">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block mb-1">
+              • Solution & Architecture
+            </span>
+            <p className="font-normal">{metadata.solution}</p>
+          </div>
+        </div>
+
+        {/* Pipeline Flow (Visual Badge Alur Data) */}
+        {metadata.pipelineFlow && metadata.pipelineFlow.length > 0 && (
+          <div className="flex flex-col gap-1.5 pt-1">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-neu-text-muted/70 font-semibold">
+              Pipeline Flow
+            </span>
+            <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono">
+              {metadata.pipelineFlow.map((step, idx) => (
+                <React.Fragment key={idx}>
+                  <span className="px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-neu-text border border-zinc-200 dark:border-zinc-700/80 font-medium">
+                    {step}
+                  </span>
+                  {idx < metadata.pipelineFlow.length - 1 && (
+                    <span className="text-neu-accent font-bold">➔</span>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Metrics Pill (jika ada) */}
+        {project.stats && project.stats.length > 0 && (
+          <div className="flex flex-wrap gap-2 pt-1">
+            {project.stats.slice(0, 3).map((stat: any, sIdx: number) => (
+              <div
+                key={sIdx}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-neu-accent/5 dark:bg-neu-accent/10 border border-neu-accent/20 text-[11px] font-mono"
+              >
+                <span className="font-bold text-neu-accent">{stat.value}</span>
+                <span className="text-neu-text-muted/80">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Expand In-Place Architecture Viewer */}
+        <AnimatePresence>
+          {isArchExpanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden mt-2 pt-2 border-t border-zinc-200 dark:border-zinc-800"
+            >
+              <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/60 p-3 flex flex-col gap-2">
+                <div className="flex items-center justify-between text-xs font-mono font-bold text-neu-accent uppercase">
+                  <span className="flex items-center gap-1.5">
+                    <Layers size={13} /> Architecture Blueprint
+                  </span>
+                  {archDiagram?.order !== undefined && (
+                    <span className="text-[10px] text-neu-text-muted">
+                      v{archDiagram.order + 1}
+                    </span>
+                  )}
+                </div>
+
+                <div className="min-h-[200px] w-full rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-800/80 bg-black/5 dark:bg-black/30 flex items-center justify-center">
+                  {archDiagram?.imageUrl ? (
+                    <ProjectArchitectureDiagram imageUrl={archDiagram.imageUrl} />
+                  ) : (
+                    <div className="p-6 text-center text-xs font-mono text-neu-text-muted italic flex flex-col items-center gap-2">
+                      <Layers size={20} className="text-neu-text-muted/40" />
+                      <span>Interactive diagram mapped in system specifications.</span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedProject(project)}
+                        className="mt-1 text-neu-accent hover:underline text-[11px] font-bold"
+                      >
+                        Open Full Dev Log →
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {archDiagram?.description && (
+                  <p className="text-[11px] font-mono text-neu-text-muted leading-relaxed pt-1">
+                    {archDiagram.description}
+                  </p>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Footer Actions: [ View Architecture ], GitHub, Demo/DevLog */}
+      <div className="flex items-center justify-between gap-3 pt-3 border-t border-zinc-200/60 dark:border-zinc-800/80 flex-wrap">
+        <button
+          type="button"
+          onClick={() => setIsArchExpanded(!isArchExpanded)}
+          className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neu-accent hover:text-neu-accent/80 transition-colors py-1 cursor-pointer"
+        >
+          <span>
+            {isArchExpanded
+              ? "[ Hide Architecture ]"
+              : "[ View Architecture ]"}
+          </span>
+          {isArchExpanded ? (
+            <ChevronUp size={14} />
+          ) : (
+            <ChevronDown size={14} />
+          )}
+        </button>
+
+        <div className="flex items-center gap-2">
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub Repository"
+              className="p-2 rounded-lg glass-card hover:text-neu-accent text-neu-text-muted border border-white/5 transition-all active:scale-95"
+            >
+              <SiGithub size={14} />
+            </a>
+          )}
+
+          {project.demoUrl ? (
+            <a
+              href={project.demoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-white bg-neu-accent hover:bg-neu-accent/90 transition-all active:scale-95 shadow-sm"
+            >
+              <Globe size={12} /> Live / Article
+            </a>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setSelectedProject(project)}
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-neu-text glass-card border border-white/10 hover:border-neu-accent/40 transition-all active:scale-95"
+            >
+              <BookOpen size={12} /> Log
+            </button>
+          )}
+        </div>
+      </div>
+    </motion.article>
+  );
+};
 
 const LoadingState = () => (
   <div className="relative z-10 flex gap-6 overflow-hidden py-10 px-2 justify-center sm:justify-start">
@@ -404,17 +741,7 @@ const FocusedProject = ({
                       {stat.value}
                     </span>
                     <span className="text-sm sm:text-[9px] font-mono text-neu-text-muted mt-1 leading-none">
-                      {stat.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {!isExplaining && (
-          <div className="flex flex-col gap-3 mt-2">
+          <div className="flex flex-col gap-3">
             <button
               type="button"
               onClick={() =>
@@ -422,7 +749,9 @@ const FocusedProject = ({
                   id: focusedProject.id,
                   title: focusedProject.title,
                   description:
-                    focusedProject.subtitle || focusedProject.description || "",
+                    focusedProject.subtitle ||
+                    focusedProject.description ||
+                    "",
                   tech_stack: focusedProject.tags || [],
                   metrics: focusedProject.stats
                     ?.map((s: any) => `${s.label}: ${s.value}`)
@@ -430,30 +759,24 @@ const FocusedProject = ({
                   role: focusedProject.role,
                 })
               }
-              className="w-full py-4 sm:py-3.5 px-5 rounded-xl font-bold text-neu-text bg-white/5 border border-white/10 hover:bg-white/10 shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 rounded-xl text-xs font-mono font-bold uppercase tracking-wider text-neu-accent glass-card hover:bg-neu-accent/10 border border-neu-accent/30 transition-all flex items-center justify-center gap-2"
             >
-              <Sparkles
-                size={16}
-                className="sm:w-3.5 sm:h-3.5 text-neu-accent"
-              />{" "}
-              Explain this to me
+              <Sparkles size={14} /> Explain this project with AI
             </button>
             <div className="flex flex-col sm:flex-row flex-wrap items-center gap-3">
               <button
                 type="button"
                 onClick={() => setSelectedProject(focusedProject)}
-                className="w-full sm:flex-1 py-4 sm:py-3.5 px-5 rounded-xl font-bold text-white bg-neu-accent shadow-neu hover:shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2"
+                className="w-full sm:flex-1 py-3 px-4 rounded-xl text-xs font-mono font-bold uppercase tracking-wider text-white bg-neu-accent shadow-neu hover:shadow-neu-sm active:scale-95 transition-all flex items-center justify-center gap-2"
               >
-                <BookOpen size={16} className="sm:w-3.5 sm:h-3.5" /> Open Full
-                Dev Log
+                <BookOpen size={14} /> Open Full Dev Log
               </button>
               <button
                 type="button"
                 onClick={() => setFocusedProject(null)}
-                className="w-full sm:w-auto py-4 sm:py-3.5 px-6 rounded-xl font-bold text-neu-text glass-card hover:shadow-neu-sm active:scale-95 transition-all text-sm sm:text-xs text-center flex items-center justify-center gap-2 border border-gray-300/10"
+                className="w-full sm:w-auto py-3 px-5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider text-neu-text glass-card hover:shadow-neu-sm active:scale-95 transition-all flex items-center justify-center gap-2 border border-white/10"
               >
-                <ArrowLeft size={16} className="sm:w-3.5 sm:h-3.5" /> Close
-                Spotlight
+                <ArrowLeft size={14} /> Close Spotlight
               </button>
             </div>
           </div>
@@ -480,6 +803,7 @@ export default function ProjectsSection({
     isLoading,
   } = usePortfolioStore();
 
+  const [viewMode, setViewMode] = useState<"grid" | "shelf">("grid");
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "alphabetical">(
     "newest",
   );
@@ -546,7 +870,8 @@ export default function ProjectsSection({
       });
     }
   };
-  const renderContent = () => {
+
+  const renderShelfContent = () => {
     if (isLoading) return <LoadingState />;
     if (focusedProject)
       return (
@@ -580,35 +905,105 @@ export default function ProjectsSection({
     );
   };
 
+  const renderGridContent = () => {
+    if (isLoading) return <LoadingState />;
+    if (filteredProjects.length === 0) {
+      return (
+        <EmptyState
+          searchQuery={searchQuery}
+          selectedCategory={selectedCategory}
+          setSearchQuery={setSearchQuery}
+          setSelectedCategory={setSelectedCategory}
+          triggerToast={triggerToast}
+        />
+      );
+    }
+    return (
+      <div className="grid grid-cols-1 gap-6">
+        <AnimatePresence mode="popLayout">
+          {filteredProjects.map((project: any) => (
+            <ProjectCardGrid
+              key={project.id}
+              project={project}
+              setSelectedProject={setSelectedProject}
+            />
+          ))}
+        </AnimatePresence>
+      </div>
+    );
+  };
+
   return (
     <>
       {/* Projects Section with Intersection Observer Animations */}
       <motion.div
-        className="mt-24"
+        className="mt-6"
         initial={{ opacity: 0, y: 35 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        {/* Section Heading */}
-        <div className="max-w-7xl mx-auto mb-10">
-          <div className="flex items-center gap-2 text-neu-accent mb-1">
-            <BookOpen size={18} />
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
-              Featured Portfolio & Works
-            </span>
+        {/* Section Heading & Dual-View Toggle */}
+        <div className="max-w-7xl mx-auto mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 text-neu-accent mb-1">
+              <BookOpen size={18} />
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
+                Featured Portfolio & Works
+              </span>
+            </div>
+            <h2 className="text-3xl font-display font-bold text-neu-text tracking-tight">
+              Projects
+            </h2>
+            <p className="text-xs text-neu-text-muted font-mono mt-1">
+              ✦ Interactive archive of production applications, system APIs, and developer tools.
+            </p>
           </div>
-          <h2 className="text-3xl font-display font-bold text-neu-text tracking-tight">
-            Projects
-          </h2>
-          <p className="text-xs text-neu-text-muted font-mono mt-1">
-            ✦ Interactive archive of production applications, system APIs, and
-            developer tools.
-          </p>
+
+          {/* Minimalist Dual-View Mode Toggle Buttons */}
+          <div className="inline-flex items-center p-1 rounded-xl glass-card border border-white/10 self-start sm:self-auto shadow-sm">
+            <button
+              type="button"
+              onClick={() => {
+                setViewMode("grid");
+                triggerToast?.("Switched to Engineering Grid view");
+              }}
+              className={cn(
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer",
+                viewMode === "grid"
+                  ? "bg-neu-accent text-white shadow-sm"
+                  : "text-neu-text-muted hover:text-neu-text",
+              )}
+              title="Engineering Grid View"
+              aria-label="Engineering Grid View"
+            >
+              <LayoutGrid size={14} />
+              <span>Grid</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setViewMode("shelf");
+                triggerToast?.("Switched to Shelf Book view");
+              }}
+              className={cn(
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer",
+                viewMode === "shelf"
+                  ? "bg-neu-accent text-white shadow-sm"
+                  : "text-neu-text-muted hover:text-neu-text",
+              )}
+              title="Shelf Book 3D View"
+              aria-label="Shelf Book 3D View"
+            >
+              <BookOpen size={14} />
+              <span>Shelf</span>
+            </button>
+          </div>
         </div>
 
         {/* Controls: Search & Filter */}
-        <div className="max-w-7xl mx-auto mb-12 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
+        <div className="max-w-7xl mx-auto mb-10 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
           <div className="relative flex-1 group">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neu-text-muted group-focus-within:text-neu-accent transition-colors z-10">
               <Search size={18} />
@@ -624,12 +1019,12 @@ export default function ProjectsSection({
 
           <div className="flex gap-3 items-center justify-between md:justify-end w-full md:w-auto">
             {/* Desktop Filter */}
-            <div className="hidden md:flex flex-wrap gap-3 bg-neu-bg p-1.5 rounded-2xl shadow-neu-inset">
+            <div className="hidden md:flex flex-wrap gap-2 bg-neu-bg p-1.5 rounded-2xl shadow-neu-inset">
               <button
                 type="button"
                 onClick={() => setSelectedCategory(null)}
                 className={cn(
-                  "px-5 py-2.5 text-xs font-mono uppercase tracking-wider rounded-xl transition-all relative",
+                  "px-4 py-2 text-xs font-mono uppercase tracking-wider rounded-xl transition-all relative",
                   !selectedCategory
                     ? "text-neu-accent font-bold"
                     : "text-neu-text-muted hover:text-neu-text",
@@ -654,7 +1049,7 @@ export default function ProjectsSection({
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
                   className={cn(
-                    "px-5 py-2.5 text-xs font-mono uppercase tracking-wider rounded-xl transition-all relative",
+                    "px-4 py-2 text-xs font-mono uppercase tracking-wider rounded-xl transition-all relative",
                     selectedCategory === cat
                       ? "text-neu-accent font-bold"
                       : "text-neu-text-muted hover:text-neu-text",
@@ -728,46 +1123,54 @@ export default function ProjectsSection({
           onSelectCategory={setSelectedCategory}
         />
 
-        {/* Bookshelf Layout */}
+        {/* Dynamic Dual-View Rendering */}
         <div id="projects" className="max-w-7xl mx-auto scroll-mt-24">
-          <div className="bg-neu-bg p-4 sm:p-8 md:p-12 rounded-3xl shadow-neu-inset relative overflow-hidden">
-            {/* Centered Bookshelf Projects Title inside, matching book spine font but bold */}
-            <div className="flex justify-center items-center gap-2 mb-10 relative z-20">
-              <h3 className="text-sm sm:text-base md:text-lg font-mono font-bold tracking-[0.25em] text-neu-text uppercase text-center border-b border-gray-300/40 dark:border-zinc-800/40 pb-2 flex items-center gap-2">
-                <BookOpen size={16} className="text-neu-accent animate-pulse" />{" "}
-                My Bookshelf Projects
-              </h3>
+          {viewMode === "grid" ? (
+            /* Mode 1: Engineering Grid View */
+            <div className="w-full">
+              {renderGridContent()}
             </div>
-            {/* Wooden Shelf Aesthetic Details */}
-            <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-white/10 to-transparent opacity-50 z-10"></div>
+          ) : (
+            /* Mode 2: Shelf Book View */
+            <div className="bg-neu-bg p-4 sm:p-8 md:p-12 rounded-3xl shadow-neu-inset relative overflow-hidden">
+              {/* Centered Bookshelf Projects Title */}
+              <div className="flex justify-center items-center gap-2 mb-10 relative z-20">
+                <h3 className="text-sm sm:text-base md:text-lg font-mono font-bold tracking-[0.25em] text-neu-text uppercase text-center border-b border-gray-300/40 dark:border-zinc-800/40 pb-2 flex items-center gap-2">
+                  <BookOpen size={16} className="text-neu-accent animate-pulse" />{" "}
+                  My Bookshelf Projects
+                </h3>
+              </div>
+              {/* Wooden Shelf Aesthetic Details */}
+              <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-white/10 to-transparent opacity-50 z-10"></div>
 
-            {/* Scroll Buttons */}
-            {!isLoading && !focusedProject && filteredProjects.length > 0 && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => scrollShelf("left")}
-                  className="absolute left-4 top-[45%] -translate-y-1/2 z-20 p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5"
-                  aria-label="Scroll Left"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => scrollShelf("right")}
-                  className="absolute right-4 top-[45%] -translate-y-1/2 z-20 p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5"
-                  aria-label="Scroll Right"
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </>
-            )}
+              {/* Scroll Buttons */}
+              {!isLoading && !focusedProject && filteredProjects.length > 0 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => scrollShelf("left")}
+                    className="absolute left-4 top-[45%] -translate-y-1/2 z-20 p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5"
+                    aria-label="Scroll Left"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => scrollShelf("right")}
+                    className="absolute right-4 top-[45%] -translate-y-1/2 z-20 p-3.5 rounded-full glass-card hover:shadow-neu-sm transition-all text-neu-text-muted hover:text-neu-accent active:scale-95 flex items-center justify-center border border-white/5"
+                    aria-label="Scroll Right"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </>
+              )}
 
-            {renderContent()}
+              {renderShelfContent()}
 
-            {/* The visual "shelf" plank */}
-            <div className="w-full h-4 glass-card mt-4 rounded-xl relative z-0"></div>
-          </div>
+              {/* The visual "shelf" plank */}
+              <div className="w-full h-4 glass-card mt-4 rounded-xl relative z-0"></div>
+            </div>
+          )}
         </div>
       </motion.div>
 
