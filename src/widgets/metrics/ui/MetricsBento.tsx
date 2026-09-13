@@ -1,96 +1,92 @@
-"use client";
+import React from 'react';
+import { DollarSign, Zap, ShieldCheck, RefreshCw } from 'lucide-react';
 
-import React from "react";
-import { TrendingDown, Zap, ShieldCheck, FileCheck2 } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
-
-export interface MetricCardItem {
-  id: string;
+interface MetricItem {
   value: string;
   label: string;
-  sub: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
-  accentColor: string;
-  valueColor?: string;
+  description: string;
+  subtext: string;
+  icon: React.ReactNode;
 }
 
-export const METRIC_CARDS: MetricCardItem[] = [
+const OPERATIONAL_METRICS: MetricItem[] = [
   {
-    id: "cost-optimization",
-    value: "$18K/yr",
-    label: "Infra Cost Optimization",
-    sub: "Query refactoring & resource right-sizing",
-    icon: TrendingDown,
-    accentColor: "text-emerald-400",
-    valueColor: "text-emerald-400",
+    value: '$18K / yr',
+    label: 'Infrastructure Cost Saved',
+    description: 'Cloud resource right-sizing & query indexing optimization at Telkomsel.',
+    subtext: 'Documented Annual Impact',
+    icon: <DollarSign className="w-4 h-4 text-emerald-400" />,
   },
   {
-    id: "sync-latency",
-    value: "Sub-Second",
-    label: "Data Sync Latency",
-    sub: "Azure Service Bus & Redis pub/sub",
-    icon: Zap,
-    accentColor: "text-cyan-400",
+    value: 'Sub-Second',
+    label: 'Data Synchronization Latency',
+    description: 'Event-driven cross-service sync between SAP & HRIS via Azure Service Bus.',
+    subtext: 'Enterprise B2B SaaS (SERA - Astra)',
+    icon: <Zap className="w-4 h-4 text-cyan-400" />,
   },
   {
-    id: "production-delivery",
-    value: "Zero Downtime",
-    label: "Production Delivery",
-    sub: "Decoupled workers & BullMQ retry queue",
-    icon: ShieldCheck,
-    accentColor: "text-indigo-400",
+    value: 'Zero-Downtime',
+    label: 'Fault-Tolerant AI Pipelines',
+    description: 'Multi-provider fallback (Gemini ➔ Groq ➔ Claude) & decoupled BullMQ worker.',
+    subtext: 'AuraFlow AI Architecture',
+    icon: <RefreshCw className="w-4 h-4 text-indigo-400" />,
   },
   {
-    id: "compliance-engineering",
-    value: "OJK & BI",
-    label: "Compliance Engineering",
-    sub: "ACID transactions & ledger audit trails",
-    icon: FileCheck2,
-    accentColor: "text-amber-400",
+    value: 'OJK & BI',
+    label: 'Regulated Compliance Standard',
+    description: 'ACID transaction isolation, double-entry ledger balances, and audit trails.',
+    subtext: 'Financial Compliance Engineering',
+    icon: <ShieldCheck className="w-4 h-4 text-amber-400" />,
   },
 ];
 
-interface MetricsBentoProps {
-  className?: string;
-}
-
-export default function MetricsBento({ className }: Readonly<MetricsBentoProps>) {
+export const MetricsBento: React.FC = () => {
   return (
-    <div className={cn("w-full", className)}>
+    <div className="w-full">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <span className="text-[11px] font-mono text-cyan-400 uppercase tracking-widest">
+            System Impact
+          </span>
+          <h3 className="text-xl font-bold text-white mt-0.5">
+            Operational &amp; Production Metrics
+          </h3>
+        </div>
+        <span className="text-xs font-mono text-zinc-500 hidden sm:inline-block">
+          ● Verified Production Metrics
+        </span>
+      </div>
+
+      {/* Bento Grid 4 Kolom/Kartu */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {METRIC_CARDS.map((card) => {
-          const Icon = card.icon;
-          return (
-            <div
-              key={card.id}
-              className="group relative rounded-xl border border-zinc-800 bg-zinc-900/30 p-4 transition-all duration-300 hover:border-zinc-700 hover:bg-zinc-900/50 flex flex-col justify-between gap-3"
-            >
+        {OPERATIONAL_METRICS.map((metric, idx) => (
+          <div
+            key={idx}
+            className="p-5 rounded-xl border border-zinc-800 bg-zinc-900/40 hover:border-zinc-700 transition-colors flex flex-col justify-between"
+          >
+            <div>
               <div className="flex items-center justify-between gap-2">
-                <span className="font-mono text-xs uppercase tracking-wider text-neu-text-muted font-medium">
-                  {card.label}
-                </span>
-                <div className={cn("p-1.5 rounded-lg bg-zinc-800/60", card.accentColor)}>
-                  <Icon size={16} />
+                <span className="text-xs font-mono text-zinc-400">{metric.subtext}</span>
+                <div className="p-1.5 rounded-md bg-zinc-800/80 border border-zinc-700/40">
+                  {metric.icon}
                 </div>
               </div>
 
-              <div>
-                <div
-                  className={cn(
-                    "font-mono text-2xl font-bold tracking-tight",
-                    card.valueColor || "text-white",
-                  )}
-                >
-                  {card.value}
-                </div>
-                <p className="mt-1 text-xs text-neu-text-muted leading-relaxed">
-                  {card.sub}
-                </p>
+              <div className="text-2xl font-bold font-mono text-white mt-3 tracking-tight">
+                {metric.value}
               </div>
+              <div className="text-sm font-semibold text-zinc-200 mt-0.5">
+                {metric.label}
+              </div>
+              <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
+                {metric.description}
+              </p>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </div>
   );
-}
+};
+
+export default MetricsBento;

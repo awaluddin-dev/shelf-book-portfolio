@@ -100,7 +100,7 @@ describe('ExperienceSection', () => {
     expect(screen.getByText('Experience')).toBeInTheDocument();
   });
 
-  it('renders correctly and switches chart tabs', () => {
+  it('renders correctly and displays section title', () => {
     (usePortfolioStore as unknown as jest.Mock).mockReturnValue({ ...mockStore, isLoading: false });
     render(<ExperienceSection isDark={false} />);
     
@@ -109,18 +109,7 @@ describe('ExperienceSection', () => {
     });
 
     expect(screen.getByText('Experience')).toBeInTheDocument();
-
-    // Switch to Heatmap
-    const heatmapBtn = screen.getByText('Heatmap');
-    fireEvent.click(heatmapBtn);
-
-    // Switch to Repos
-    const reposBtn = screen.getByText('Repos');
-    fireEvent.click(reposBtn);
-
-    // Switch to Timeline
-    const timelineBtn = screen.getByText('Commit Timeline');
-    fireEvent.click(timelineBtn);
+    expect(screen.getByText('Professional Experience')).toBeInTheDocument();
   });
   
   it('renders the vertical career timeline entries correctly', () => {

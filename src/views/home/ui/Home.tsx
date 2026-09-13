@@ -40,7 +40,7 @@ import TestimonialModal from "@/widgets/testimonial-modal/ui/TestimonialModal";
 import AdminPlayground from "@/views/admin-playground/ui/AdminPlayground";
 import { CoverLetterModal } from "@/widgets/cover-letter/CoverLetterModal";
 import WritingSection from "@/widgets/writing/ui/WritingSection";
-import MetricsBento from "@/widgets/metrics/ui/MetricsBento";
+import { MetricsBento } from "@/widgets/metrics/ui/MetricsBento";
 import WhiteboardTestimonials from "@/widgets/testimonials/ui/WhiteboardTestimonials";
 import dynamic from "next/dynamic";
 import { Loader } from "@/shared/ui/Loader";
