@@ -73,7 +73,7 @@ export function ChatWidget() {
     <>
       {/* Chat panel */}
       {isChatOpen && (
-        <div className="fixed bottom-24 right-4 z-[60] flex h-[520px] w-[360px] flex-col rounded-2xl border border-white/10 bg-[#0d0d0d] shadow-2xl shadow-black/50 sm:right-6 sm:bottom-28">
+        <div className="fixed bottom-0 left-0 right-0 z-[60] flex h-[85vh] w-full flex-col rounded-t-2xl border border-white/10 bg-[#0d0d0d] shadow-2xl shadow-black/50 sm:bottom-28 sm:left-auto sm:right-6 sm:h-[520px] sm:w-[420px] sm:rounded-xl">
           {/* Header */}
           <div className="flex items-center justify-between rounded-t-2xl border-b border-white/10 px-4 py-3">
             <div className="flex items-center gap-2.5">

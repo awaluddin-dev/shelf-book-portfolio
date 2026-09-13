@@ -105,7 +105,7 @@ export function Mascot() {
           variants={mascotVariants}
           className={`fixed z-[100] pointer-events-none transition-all duration-700 ease-in-out ${
             isChatMode
-              ? "bottom-6 right-6 w-16 h-16 md:w-20 md:h-20"
+              ? "bottom-5 right-5 w-16 h-16 md:w-20 md:h-20"
               : "-bottom-4 md:-bottom-2 right-0 md:right-12 w-[130px] h-[190px] md:w-[190px] md:h-[250px]"
           }`}
         >

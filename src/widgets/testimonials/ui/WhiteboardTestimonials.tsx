@@ -81,9 +81,9 @@ const TARGET_HIGHLIGHT_PHRASES = [
 ];
 
 const ROTATION_CLASSES = [
-  "-rotate-1 hover:rotate-0 transition-transform duration-200",
-  "rotate-1 hover:rotate-0 transition-transform duration-200",
-  "-rotate-0.5 hover:rotate-0 transition-transform duration-200",
+  "rotate-0 md:-rotate-1 md:hover:rotate-0 transition-transform duration-200",
+  "rotate-0 md:rotate-1 md:hover:rotate-0 transition-transform duration-200",
+  "rotate-0 md:-rotate-0.5 md:hover:rotate-0 transition-transform duration-200",
 ];
 
 interface WhiteboardTestimonialsProps {

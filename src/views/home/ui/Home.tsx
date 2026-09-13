@@ -21,7 +21,9 @@ import {
   Download,
   PenTool,
   ArrowUpRight,
-  BookOpen,
+  Sun,
+  Moon,
+  FileText,
 } from "lucide-react";
 
 import { useTheme } from "@/shared/ui/ThemeProvider";
@@ -35,7 +37,6 @@ import ProficiencySection from "@/widgets/proficiency/ui/Proficiency";
 import ExperienceSection from "@/widgets/experience/ui/Experience";
 import ContactModal from "@/features/contact/ui/ContactModal";
 import ProjectModal from "@/widgets/project-modal/ui/ProjectModal";
-import DockNavigation from "@/widgets/dock-navigation/ui/DockNavigation";
 import TestimonialModal from "@/widgets/testimonial-modal/ui/TestimonialModal";
 import AdminPlayground from "@/views/admin-playground/ui/AdminPlayground";
 import { CoverLetterModal } from "@/widgets/cover-letter/CoverLetterModal";
@@ -60,7 +61,7 @@ const NAV_ITEMS = [
 ];
 
 export default function Portfolio() {
-  const { isDark } = useTheme();
+  const { isDark, toggleTheme } = useTheme();
   const { dynamicHeroConfig, initializeData, toastMessage, isLoading, triggerToast } =
     usePortfolioStore();
 
@@ -194,21 +195,55 @@ export default function Portfolio() {
           style={{ scaleX }}
         />
 
-        {/* Sticky bottom dock navigation */}
-        <DockNavigation
-          isDark={isDark}
-          showBackToTop={showBackToTop}
-          activeSection={activeSection}
-          openPlayground={() => setPlaygroundOpen(true)}
-        />
+        {/* Minimalist Theme Toggle (Top Right) */}
+        <div className="fixed top-6 right-6 z-40">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="w-10 h-10 rounded-xl glass-card border border-zinc-700/50 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/80 backdrop-blur-md flex items-center justify-center text-neu-text-muted hover:text-neu-accent hover:border-neu-accent transition-all shadow-sm hover:scale-105 active:scale-95"
+          >
+            {isDark ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-zinc-700" />}
+          </button>
+        </div>
+
+        {/* Mobile Sticky Top Bar (<lg) */}
+        <div className="lg:hidden sticky top-0 z-40 w-full bg-neu-bg/85 backdrop-blur-md border-b border-zinc-200/50 dark:border-zinc-800/60 px-6 py-3.5 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="font-display font-bold text-sm text-neu-text">
+              {dynamicHeroConfig?.name || "Awaluddin"}
+            </span>
+            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Available
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-xs font-mono">
+            <a
+              href="/assets/resume/Awaluddin_cv.pdf"
+              download="Awaluddin_CV.pdf"
+              className="px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-neu-text-muted hover:text-neu-accent transition-colors"
+            >
+              Resume
+            </a>
+            <a
+              href="https://sb.awaluddin.dev/docs"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 transition-colors"
+            >
+              API Docs
+            </a>
+          </div>
+        </div>
 
         {/* Main 2-Column Container */}
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="max-w-7xl mx-auto px-6 py-12 lg:px-12 lg:py-0">
           <div className="lg:flex lg:justify-between lg:gap-12 xl:gap-16">
             {/* ========================================================================= */}
             {/* A. KOLOM KIRI (Sticky Left Column - 32% / 28% width) */}
             {/* ========================================================================= */}
-            <header className="lg:w-[32%] xl:w-[28%] lg:sticky lg:top-0 lg:h-screen lg:flex lg:flex-col lg:justify-between lg:py-24 pt-16 pb-10">
+            <header className="lg:sticky lg:top-0 lg:h-screen lg:max-h-screen lg:self-start lg:w-[32%] xl:w-[28%] lg:flex lg:flex-col lg:justify-between lg:py-24 pt-6 pb-10">
               <div className="flex flex-col">
                 {/* Status Badge */}
                 <div className="mb-4 flex items-center gap-2">
@@ -255,7 +290,7 @@ export default function Portfolio() {
 
                   <button
                     type="button"
-                    onClick={() => window.open("/api/scalar", "_blank")}
+                    onClick={() => window.open("https://sb.awaluddin.dev/docs", "_blank")}
                     className="px-4 py-2 rounded-xl font-bold text-xs font-mono text-neu-text glass-card border border-white/10 hover:border-neu-accent/50 hover:text-neu-accent hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-1.5 shadow-sm group"
                   >
                     <Code2 size={13} className="group-hover:rotate-12 transition-transform text-neu-accent" />
@@ -264,7 +299,7 @@ export default function Portfolio() {
                 </div>
 
                 {/* Navigasi Scrollspy Vertikal */}
-                <nav className="nav hidden lg:block mt-16" aria-label="In-page jump links">
+                <nav className="nav hidden lg:block mt-14" aria-label="In-page jump links">
                   <ul className="w-max space-y-3">
                     {NAV_ITEMS.map((item) => {
                       const isActive = activeSection === item.id;
@@ -300,7 +335,7 @@ export default function Portfolio() {
               </div>
 
               {/* Social Links & Slot Mascot Kolom Kiri */}
-              <div className="mt-8 lg:mt-0 flex flex-col gap-6">
+              <div className="mt-8 lg:mt-0 flex flex-col gap-5">
                 <ul className="flex items-center gap-5 text-neu-text-muted" aria-label="Social media">
                   <li>
                     <a
@@ -355,7 +390,7 @@ export default function Portfolio() {
             {/* ========================================================================= */}
             {/* B. KOLOM KANAN (Scrollable Feed - 68% / 72% width) */}
             {/* ========================================================================= */}
-            <main className="lg:w-[68%] xl:w-[72%] lg:py-24 space-y-24 pb-24">
+            <main className="lg:w-[68%] xl:w-[72%] lg:py-24 space-y-16 lg:space-y-24 pb-24">
               {/* SECTION 1: #about */}
               <section
                 id="about"
