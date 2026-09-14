@@ -99,7 +99,7 @@ function renderHighlightedText(item: TestimonialItem) {
     return (
       <>
         &ldquo;{item.quotePrefix}
-        <strong className="text-zinc-100 font-bold">{item.highlight}</strong>
+        <strong className="text-primary font-bold">{item.highlight}</strong>
         {item.quoteSuffix}&rdquo;
       </>
     );
@@ -115,7 +115,7 @@ function renderHighlightedText(item: TestimonialItem) {
       return (
         <>
           &ldquo;{before}
-          <strong className="text-zinc-100 font-bold">{matched}</strong>
+          <strong className="text-primary font-bold">{matched}</strong>
           {after}&rdquo;
         </>
       );
@@ -164,8 +164,8 @@ export default function WhiteboardTestimonials({
   return (
     <section id="endorse" className="scroll-mt-16 lg:scroll-mt-24" aria-label="Endorsements">
       {/* Mobile section heading */}
-      <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-neu-bg/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
-        <h2 className="text-sm font-mono font-bold uppercase tracking-widest text-neu-accent">
+      <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-canvas px-6 py-5 md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+        <h2 className="text-sm font-mono font-bold uppercase tracking-widest text-brand">
           Endorsements
         </h2>
       </div>
@@ -173,28 +173,28 @@ export default function WhiteboardTestimonials({
       <div className="space-y-6">
         {/* Section Header */}
         <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2 text-neu-accent">
+          <div className="flex items-center gap-2 text-brand">
             <MessageSquare size={18} className="animate-pulse" />
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-brand">
               Peer Endorsements
             </span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-display font-bold text-neu-text tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-display font-bold text-primary tracking-tight">
             What Colleagues & Partners Say
           </h2>
-          <p className="text-xs text-neu-text-muted font-mono mt-0.5">
+          <p className="text-xs text-secondary font-mono mt-0.5">
             ✦ Verifiable peer reviews from enterprise clients, backend engineers, and delivery leads.
           </p>
         </div>
 
         {/* Whiteboard Board Area */}
-        <div className="relative rounded-2xl p-6 sm:p-8 bg-zinc-950/40 border border-zinc-800/80 shadow-inner overflow-hidden">
+        <div className="relative rounded-2xl p-6 sm:p-8 bg-card border border-subtle shadow-sm overflow-hidden">
           {/* Subtle Grid Background Pattern */}
           <div
-            className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.06]"
+            className="absolute inset-0 pointer-events-none opacity-[0.05]"
             style={{
               backgroundImage:
-                "radial-gradient(circle, #ffffff 1px, transparent 1px)",
+                "radial-gradient(circle, var(--color-brand) 1px, transparent 1px)",
               backgroundSize: "20px 20px",
             }}
           />
@@ -205,7 +205,7 @@ export default function WhiteboardTestimonials({
               <motion.article
                 key={t.id}
                 className={cn(
-                  "relative bg-zinc-900/60 border border-zinc-800/90 p-5 rounded-lg shadow-md hover:border-zinc-600 flex flex-col justify-between group cursor-pointer",
+                  "relative bg-canvas border border-subtle p-5 rounded-lg shadow-sm hover:border-subtle-hover transition-colors duration-150 flex flex-col justify-between group cursor-pointer",
                   t.rotationClass,
                 )}
                 whileHover={{ y: -3 }}
@@ -218,7 +218,7 @@ export default function WhiteboardTestimonials({
                 {/* Visual Pushpin / Paku Payung */}
                 <div
                   aria-hidden="true"
-                  className="w-2.5 h-2.5 rounded-full bg-zinc-400 border border-zinc-200 shadow-sm mx-auto -mt-2 mb-3"
+                  className="w-2.5 h-2.5 rounded-full bg-secondary border border-primary shadow-sm mx-auto -mt-2 mb-3"
                 />
 
                 {/* Quote Content */}
@@ -226,15 +226,15 @@ export default function WhiteboardTestimonials({
                   <div className="relative">
                     <Quote
                       size={18}
-                      className="text-neu-accent/30 absolute -top-1 -left-1 pointer-events-none"
+                      className="text-brand/30 absolute -top-1 -left-1 pointer-events-none"
                     />
-                    <p className="text-xs sm:text-[13px] text-zinc-300 leading-relaxed font-sans pt-3 line-clamp-6">
+                    <p className="text-xs sm:text-[13px] text-secondary leading-relaxed font-sans pt-3 line-clamp-6">
                       {renderHighlightedText(t)}
                     </p>
                   </div>
 
                   {/* Author Meta Footer */}
-                  <div className="mt-6 pt-4 border-t border-zinc-800/80 flex flex-col gap-0.5">
+                  <div className="mt-6 pt-4 border-t border-subtle/60 flex flex-col gap-0.5">
                     <div className="flex items-center justify-between">
                       {t.url ? (
                         <a
@@ -242,21 +242,21 @@ export default function WhiteboardTestimonials({
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="text-sm font-display font-bold text-white tracking-wide hover:text-neu-accent inline-flex items-center gap-1 transition-colors"
+                          className="text-sm font-display font-bold text-primary tracking-wide hover:text-brand inline-flex items-center gap-1 transition-colors"
                         >
                           {t.name}
                           <ExternalLink size={12} className="opacity-70" />
                         </a>
                       ) : (
-                        <h3 className="text-sm font-display font-bold text-white tracking-wide">
+                        <h3 className="text-sm font-display font-bold text-primary tracking-wide">
                           {t.name}
                         </h3>
                       )}
                     </div>
-                    <p className="text-xs text-neu-accent font-medium">
+                    <p className="text-xs text-brand font-medium">
                       {t.role}
                     </p>
-                    <span className="text-[10px] font-mono text-zinc-400">
+                    <span className="text-[10px] font-mono text-muted">
                       {t.relation || t.company}
                     </span>
                   </div>

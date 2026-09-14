@@ -25,7 +25,7 @@ export default function MobileFilterModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-4 bg-black/80 md:hidden"
           onClick={onClose}
         >
           <motion.div
@@ -34,14 +34,14 @@ export default function MobileFilterModal({
             exit={{ y: "100%", scale: 0.95 }}
             transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full bg-neu-bg rounded-t-3xl sm:rounded-3xl p-6 shadow-neu-modal border border-white/10"
+            className="w-full bg-card rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl border border-subtle"
           >
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-bold">Filter Projects</h3>
+              <h3 className="text-lg font-bold text-primary">Filter Projects</h3>
               <button
                 type="button"
                 onClick={onClose}
-                className="p-2 rounded-full glass-card-inset text-neu-text-muted hover:text-neu-accent"
+                className="p-2 rounded-full bg-canvas border border-subtle text-secondary hover:text-primary"
               >
                 <X size={20} />
               </button>

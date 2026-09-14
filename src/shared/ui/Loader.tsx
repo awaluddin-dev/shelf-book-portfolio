@@ -133,7 +133,7 @@ export function Loader({
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-neu-bg/80 backdrop-blur-md border border-white/10 rounded-2xl">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-canvas border border-subtle rounded-2xl">
         {content}
       </div>
     );

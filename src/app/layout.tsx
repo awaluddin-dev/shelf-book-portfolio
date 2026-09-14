@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css"; // Global styles
-import { ThemeProvider } from "@/shared/ui/ThemeProvider";
 import { ButtonSprinkles } from "@/shared/ui/ButtonSprinkles";
 import { ChatWidget } from "@/widgets/chat/ChatWidget";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -56,7 +55,7 @@ export const metadata: Metadata = {
       "Backend Developer portfolio featuring system architecture and technical projects.",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231B262C'/><text x='50%' y='55%' dominant-baseline='central' text-anchor='middle' font-size='56' font-family='sans-serif' font-weight='bold' fill='%233282B8'>A</text><circle cx='80' cy='20' r='10' fill='%2314FFEC'/></svg>",
   },
   robots: {
     index: true,
@@ -77,18 +76,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable}`}
+      className={`dark bg-canvas text-primary ${inter.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable}`}
       suppressHydrationWarning
     >
       <body
-        className="antialiased selection:bg-neu-accent/30"
+        className="antialiased selection:bg-subtle selection:text-primary min-h-screen bg-canvas text-secondary"
         suppressHydrationWarning
       >
-        <ThemeProvider>
-          {children}
-          <ButtonSprinkles />
-          <ChatWidget />
-        </ThemeProvider>
+        {children}
+        <ButtonSprinkles />
+        <ChatWidget />
         <Analytics />
         <SpeedInsights />
       </body>

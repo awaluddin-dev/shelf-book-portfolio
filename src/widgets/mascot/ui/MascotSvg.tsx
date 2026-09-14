@@ -82,7 +82,7 @@ export function MascotSvg({ isDark = true }: Readonly<MascotSvgProps>) {
   const palette = {
     primary: "#05626E",
     secondary: "#054C56",
-    accent1: "#10B981", // vibrant emerald
+    accent1: "#1ADDDA", // vibrant emerald
     primaryAlpha: "#05626E",
     secondaryAlpha: "#054C56",
     accent2: "#34A09E",

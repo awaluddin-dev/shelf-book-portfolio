@@ -9,12 +9,12 @@ export function ChatSvg({
   const palette = {
     primary: "#05626E",
     secondary: "#054C56",
-    accent1: "#10B981", // vibrant emerald
+    accent1: "#1ADDDA", // vibrant emerald
     accent2: "#34A09E",
     black: "#0d0d0d",
     purple: "#111827",
     peach: "#FFEAE1",
-    primaryDark: "#155B64",
+    primaryDark: "#054C56",
   };
 
   return (

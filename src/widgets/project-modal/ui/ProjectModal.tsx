@@ -716,14 +716,14 @@ export default function ProjectModal({
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10"></div>
           </div>
 
-          <div className="relative z-10 flex flex-col items-center justify-center h-full p-8 text-center border-[6px] border-white/5 m-6 rounded-2xl backdrop-blur-[2px]">
-            <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] font-mono font-bold text-white tracking-[0.2em] uppercase mb-6 shadow-sm border border-white/20">
+          <div className="relative z-10 flex flex-col items-center justify-center h-full p-8 text-center border-[6px] border-white/10 m-6 rounded-2xl bg-black/40">
+            <span className="px-3 py-1 bg-card rounded-full text-[10px] font-mono font-bold text-primary tracking-[0.2em] uppercase mb-6 shadow-sm border border-subtle">
               {selectedProject.category}
             </span>
             <h1 className="font-display font-black text-3xl md:text-5xl text-white tracking-tight mb-4 drop-shadow-2xl leading-[1.1] uppercase">
               {selectedProject.title}
             </h1>
-            <div className="w-12 h-1 bg-neu-accent my-6 rounded-full shadow-[0_0_15px_rgba(var(--color-neu-accent),0.6)]"></div>
+            <div className="w-12 h-1 bg-brand my-6 rounded-full shadow-[0_0_15px_rgba(var(--color-brand),0.6)]"></div>
             <p className="text-xs md:text-sm text-white/80 font-mono italic max-w-[250px] drop-shadow-md leading-relaxed">
               {selectedProject.subtitle}
             </p>
@@ -752,10 +752,10 @@ export default function ProjectModal({
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/80"></div>
 
           <div className="relative z-10 flex flex-col items-center justify-center h-full p-10 text-center">
-            <div className="mb-12 p-6 rounded-3xl border border-white/5 bg-white/5 backdrop-blur-sm shadow-xl">
+            <div className="mb-12 p-6 rounded-3xl border border-subtle bg-card shadow-xl">
               <Quote
                 size={20}
-                className="text-neu-accent mb-4 mx-auto opacity-60"
+                className="text-brand mb-4 mx-auto opacity-60"
               />
               <p className="text-[11px] md:text-xs text-white/60 font-mono italic leading-relaxed max-w-[220px]">
                 &quot;Software is a great combination between artistry and
@@ -793,11 +793,11 @@ export default function ProjectModal({
 
     // Interior Spread (Double Page)
     return (
-      <div className="w-full h-full flex flex-col md:flex-row bg-[#f8f9fa] dark:bg-[#1a1b1e] rounded-[1rem] md:rounded-[1.5rem] overflow-hidden shadow-2xl relative text-zinc-800 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800">
+      <div className="w-full h-full flex flex-col md:flex-row bg-card rounded-[1rem] md:rounded-[1.5rem] overflow-hidden shadow-2xl relative text-secondary border border-subtle/80">
         {/* Left Page */}
-        <div className="flex-1 h-1/2 md:h-full overflow-y-auto custom-scrollbar p-6 md:p-10 relative bg-gradient-to-r from-transparent to-black/5 dark:to-black/30 border-b border-b-black/10 md:border-b-0">
+        <div className="flex-1 h-1/2 md:h-full overflow-y-auto custom-scrollbar p-6 md:p-10 relative bg-gradient-to-r from-transparent to-black/30 border-b border-b-subtle/40 md:border-b-0">
           {renderInteriorSection(spread.left)}
-          <div className="hidden md:flex absolute bottom-4 left-8 right-8 items-center justify-between text-[9px] font-mono text-black/30 dark:text-white/30">
+          <div className="hidden md:flex absolute bottom-4 left-8 right-8 items-center justify-between text-[9px] font-mono text-secondary/40">
             <span>{currentPage * 2 - 1}</span>
             <span className="uppercase tracking-widest opacity-70 truncate max-w-[200px]">
               {selectedProject.title}
@@ -806,16 +806,16 @@ export default function ProjectModal({
         </div>
 
         {/* Center Crease (Visible only on Desktop) */}
-        <div className="hidden md:block w-[2px] h-full bg-black/10 dark:bg-black/60 relative z-20 shrink-0">
-          <div className="absolute top-0 bottom-0 left-1/2 -ml-8 w-16 bg-gradient-to-r from-transparent via-black/10 dark:via-black/50 to-transparent pointer-events-none"></div>
-          <div className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-black/10 dark:from-black/40 to-transparent pointer-events-none"></div>
-          <div className="absolute top-0 bottom-0 right-0 w-3 bg-gradient-to-l from-black/10 dark:from-black/40 to-transparent pointer-events-none"></div>
+        <div className="hidden md:block w-[2px] h-full bg-subtle/60 relative z-20 shrink-0">
+          <div className="absolute top-0 bottom-0 left-1/2 -ml-8 w-16 bg-gradient-to-r from-transparent via-black/40 to-transparent pointer-events-none"></div>
+          <div className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-black/30 to-transparent pointer-events-none"></div>
+          <div className="absolute top-0 bottom-0 right-0 w-3 bg-gradient-to-l from-black/30 to-transparent pointer-events-none"></div>
         </div>
 
         {/* Right Page */}
-        <div className="flex-1 h-1/2 md:h-full overflow-y-auto custom-scrollbar p-6 md:p-10 relative bg-gradient-to-l from-transparent to-black/5 dark:to-black/30">
+        <div className="flex-1 h-1/2 md:h-full overflow-y-auto custom-scrollbar p-6 md:p-10 relative bg-gradient-to-l from-transparent to-black/30">
           {renderInteriorSection(spread.right)}
-          <div className="hidden md:flex absolute bottom-4 left-8 right-8 items-center justify-between text-[9px] font-mono text-black/30 dark:text-white/30">
+          <div className="hidden md:flex absolute bottom-4 left-8 right-8 items-center justify-between text-[9px] font-mono text-secondary/40">
             <span className="uppercase tracking-widest opacity-70 truncate max-w-[200px]">
               {selectedProject.title}
             </span>
@@ -836,11 +836,11 @@ export default function ProjectModal({
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-        animate={{ opacity: 1, backdropFilter: "blur(8px)" }}
-        exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-        transition={{ duration: 0.4 }}
-        className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80"
         onClick={onClose}
       >
         {/* Main Book Container */}
@@ -865,7 +865,7 @@ export default function ProjectModal({
               e.stopPropagation();
               onClose();
             }}
-            className="absolute -top-12 right-0 md:-right-12 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/20 transition-colors z-50 shadow-lg"
+            className="absolute -top-12 right-0 md:-right-12 p-3 rounded-full bg-card hover:bg-canvas text-primary hover:text-brand border border-subtle transition-colors z-50 shadow-lg"
           >
             <X size={20} />
           </button>
@@ -878,7 +878,7 @@ export default function ProjectModal({
                 e.stopPropagation();
                 paginate(-1);
               }}
-              className="absolute left-2 md:-left-16 top-1/2 -translate-y-1/2 p-3 md:p-4 rounded-full bg-neu-bg/90 shadow-neu-sm text-neu-text hover:text-neu-accent hover:scale-110 active:scale-95 transition-all z-50 border border-neu-text/10"
+              className="absolute left-2 md:-left-16 top-1/2 -translate-y-1/2 p-3 md:p-4 rounded-full bg-card shadow-neu-sm text-primary hover:text-brand hover:scale-110 active:scale-95 transition-all z-50 border border-subtle"
             >
               <ChevronLeft size={24} />
             </button>
@@ -891,7 +891,7 @@ export default function ProjectModal({
                 e.stopPropagation();
                 paginate(1);
               }}
-              className="absolute right-2 md:-right-16 top-1/2 -translate-y-1/2 p-3 md:p-4 rounded-full bg-neu-bg/90 shadow-neu-sm text-neu-text hover:text-neu-accent hover:scale-110 active:scale-95 transition-all z-50 border border-neu-text/10"
+              className="absolute right-2 md:-right-16 top-1/2 -translate-y-1/2 p-3 md:p-4 rounded-full bg-card shadow-neu-sm text-primary hover:text-brand hover:scale-110 active:scale-95 transition-all z-50 border border-subtle"
             >
               <ChevronRight size={24} />
             </button>

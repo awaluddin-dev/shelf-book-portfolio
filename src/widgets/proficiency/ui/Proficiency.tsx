@@ -123,32 +123,32 @@ export default function ProficiencySection({
           {/* Section Heading */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div>
-              <div className="flex items-center gap-2 text-neu-accent mb-1">
+              <div className="flex items-center gap-2 text-brand mb-1">
                 <Cpu size={18} />
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-brand">
                   Engineering Capability Matrix
                 </span>
               </div>
-              <h2 className="text-3xl font-display font-bold text-neu-text tracking-tight">
+              <h2 className="text-3xl font-display font-bold text-primary tracking-tight">
                 Production Systems Architecture
               </h2>
-              <p className="text-xs text-neu-text-muted font-mono mt-1">
+              <p className="text-xs text-secondary font-mono mt-1">
                 ✦ 4-Pillar foundation engineered for high concurrency, deterministic failover, and verified telemetry.
               </p>
             </div>
 
             {/* Status Legend Pill */}
-            <div className="flex items-center gap-4 text-[11px] font-mono select-none self-start md:self-auto py-1.5 px-3.5 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/40 backdrop-blur-sm">
+            <div className="flex items-center gap-4 text-[11px] font-mono select-none self-start md:self-auto py-1.5 px-3.5 rounded-xl border border-subtle bg-card">
               <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                <span className="text-neu-text font-semibold">PROD</span>
-                <span className="text-neu-text-muted/60 text-[10px]">In Production</span>
+                <span className="w-2 h-2 rounded-full bg-status shadow-[0_0_8px_rgba(20,255,236,0.5)]" />
+                <span className="text-primary font-semibold">PROD</span>
+                <span className="text-secondary text-[10px]">In Production</span>
               </span>
-              <span className="text-zinc-400 dark:text-zinc-600">|</span>
+              <span className="text-subtle">|</span>
               <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-                <span className="text-neu-text font-semibold">R&D</span>
-                <span className="text-neu-text-muted/60 text-[10px]">Active R&D</span>
+                <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]" />
+                <span className="text-primary font-semibold">R&D</span>
+                <span className="text-secondary text-[10px]">Active R&D</span>
               </span>
             </div>
           </div>
@@ -160,20 +160,20 @@ export default function ProficiencySection({
               return (
                 <article
                   key={pillar.id}
-                  className="group relative rounded-xl border border-zinc-800 bg-zinc-900/30 p-6 backdrop-blur-sm hover:border-neu-accent/40 transition-all duration-300 flex flex-col justify-between gap-6 shadow-sm"
+                  className="group relative rounded-xl border border-subtle bg-card p-6 hover:border-subtle-hover transition-colors duration-150 flex flex-col justify-between gap-6 shadow-sm"
                 >
                   <div className="space-y-4">
                     {/* Pillar Header */}
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-center gap-3">
-                        <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-neu-accent group-hover:scale-105 transition-transform">
+                        <div className="p-2.5 rounded-lg bg-canvas border border-subtle text-brand group-hover:scale-105 transition-transform">
                           <Icon size={18} />
                         </div>
                         <div>
-                          <span className="text-[10px] font-mono font-bold text-neu-accent tracking-widest uppercase block">
+                          <span className="text-[10px] font-mono font-bold text-brand tracking-widest uppercase block">
                             Pillar {pillar.pillarNumber}
                           </span>
-                          <h3 className="text-base font-display font-bold text-neu-text group-hover:text-neu-accent transition-colors">
+                          <h3 className="text-lg font-display font-bold text-primary group-hover:text-brand transition-colors">
                             {pillar.title}
                           </h3>
                         </div>
@@ -181,31 +181,31 @@ export default function ProficiencySection({
                     </div>
 
                     {/* Pillar Description */}
-                    <p className="text-xs text-neu-text-muted font-normal leading-relaxed">
+                    <p className="text-xs text-secondary leading-relaxed">
                       {pillar.description}
                     </p>
 
                     {/* Skill Chips */}
-                    <div className="pt-2 flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 pt-2">
                       {pillar.skills.map((skill) => {
                         const isProd = skill.status === "PROD";
                         return (
                           <div
                             key={skill.name}
                             className={cn(
-                              "inline-flex items-center gap-2 px-3 py-1.5 rounded-lg font-mono text-xs transition-all duration-200",
-                              "bg-black/20 dark:bg-zinc-900/70 border border-zinc-800/80 hover:border-zinc-700",
+                              "inline-flex items-center gap-2 px-3 py-1.5 rounded-lg font-mono text-xs transition-colors duration-150",
+                              "bg-canvas border border-subtle hover:border-subtle-hover",
                             )}
                           >
-                            <span className="text-neu-text font-medium">
+                            <span className="text-primary font-medium">
                               {skill.name}
                             </span>
                             <span
                               className={cn(
                                 "px-1.5 py-0.5 rounded text-[9px] font-mono font-bold tracking-wider uppercase border",
                                 isProd
-                                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                                  : "bg-amber-500/10 text-amber-400 border-amber-500/30",
+                                  ? "bg-status/10 text-status border-status/30"
+                                  : "bg-amber-400/10 text-amber-300 border-amber-400/30",
                               )}
                             >
                               {skill.status}

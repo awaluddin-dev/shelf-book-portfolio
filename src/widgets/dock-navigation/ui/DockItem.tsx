@@ -97,7 +97,7 @@ export function DockItem({
                 damping: 24,
               }}
               className={cn(
-                "absolute px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none",
+                "absolute px-3 py-1.5 rounded-xl bg-card text-brand text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-xl border border-subtle z-50 pointer-events-none",
                 tooltipPos === "BOTTOM"
                   ? "top-[calc(100%+12px)] left-1/2 -translate-x-1/2"
                   : "right-[calc(100%+12px)] top-1/2 -translate-y-1/2",

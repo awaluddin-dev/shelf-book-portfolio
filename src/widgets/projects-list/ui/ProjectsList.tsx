@@ -170,15 +170,15 @@ const ProjectCardGrid = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ duration: 0.3 }}
-      className="group relative rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/40 backdrop-blur-md p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-neu-accent/40 transition-all flex flex-col justify-between gap-5"
+      className="group relative rounded-2xl border border-subtle bg-card p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-subtle-hover transition-colors duration-150 flex flex-col justify-between gap-5"
     >
       <div className="flex flex-col gap-4">
         {/* Header: Domain Badge & Year */}
         <div className="flex items-center justify-between gap-2 flex-wrap">
-          <span className="px-2.5 py-1 rounded-md bg-neu-accent/10 border border-neu-accent/25 text-neu-accent text-[10px] font-mono font-bold uppercase tracking-wider">
+          <span className="px-2.5 py-1 rounded-md bg-subtle text-primary text-[10px] font-mono font-bold uppercase tracking-wider">
             {metadata.domainBadge}
           </span>
-          <span className="text-[11px] font-mono text-neu-text-muted/60">
+          <span className="text-[11px] font-mono text-secondary">
             {project.date || "Production"}
           </span>
         </div>
@@ -187,52 +187,52 @@ const ProjectCardGrid = ({
         <div>
           <h3
             onClick={() => setSelectedProject(project)}
-            className="text-lg sm:text-xl font-display font-bold text-neu-text group-hover:text-neu-accent transition-colors cursor-pointer inline-flex items-center gap-1.5"
+            className="text-lg sm:text-xl font-display font-bold text-primary group-hover:text-brand transition-colors cursor-pointer inline-flex items-center gap-1.5"
           >
             {project.title}
             <ArrowUpRight
               size={15}
-              className="text-neu-text-muted group-hover:text-neu-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
+              className="text-secondary group-hover:text-brand group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
             />
           </h3>
           {project.subtitle && (
-            <p className="text-xs font-mono text-neu-text-muted mt-0.5">
+            <p className="text-xs font-mono text-secondary mt-0.5">
               {project.subtitle}
             </p>
           )}
         </div>
 
         {/* Technical Problem & Solution Breakdown */}
-        <div className="grid grid-cols-1 gap-2.5 text-xs text-neu-text-muted leading-relaxed">
-          <div className="p-3 rounded-xl bg-black/[0.02] dark:bg-black/20 border border-zinc-200/50 dark:border-zinc-800/60">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-500/90 dark:text-rose-400 block mb-1">
+        <div className="grid grid-cols-1 gap-2.5 text-xs text-secondary leading-relaxed">
+          <div className="p-3 rounded-xl bg-canvas border border-subtle">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-400 block mb-1">
               • Problem
             </span>
-            <p className="font-normal">{metadata.problem}</p>
+            <p className="font-normal text-secondary">{metadata.problem}</p>
           </div>
 
-          <div className="p-3 rounded-xl bg-black/[0.02] dark:bg-black/20 border border-zinc-200/50 dark:border-zinc-800/60">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block mb-1">
+          <div className="p-3 rounded-xl bg-canvas border border-subtle">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-status block mb-1">
               • Solution & Architecture
             </span>
-            <p className="font-normal">{metadata.solution}</p>
+            <p className="font-normal text-secondary">{metadata.solution}</p>
           </div>
         </div>
 
         {/* Pipeline Flow (Visual Badge Alur Data) */}
         {metadata.pipelineFlow && metadata.pipelineFlow.length > 0 && (
           <div className="flex flex-col gap-1.5 pt-1">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-neu-text-muted/70 font-semibold">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-secondary font-semibold">
               Pipeline Flow
             </span>
             <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono">
               {metadata.pipelineFlow.map((step, idx) => (
                 <React.Fragment key={idx}>
-                  <span className="px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-neu-text border border-zinc-200 dark:border-zinc-700/80 font-medium">
+                  <span className="px-2 py-0.5 rounded-md bg-canvas text-primary border border-subtle font-medium">
                     {step}
                   </span>
                   {idx < metadata.pipelineFlow.length - 1 && (
-                    <span className="text-neu-accent font-bold">➔</span>
+                    <span className="text-brand font-bold">➔</span>
                   )}
                 </React.Fragment>
               ))}
@@ -246,10 +246,10 @@ const ProjectCardGrid = ({
             {project.stats.slice(0, 3).map((stat: any, sIdx: number) => (
               <div
                 key={sIdx}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-neu-accent/5 dark:bg-neu-accent/10 border border-neu-accent/20 text-[11px] font-mono"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-canvas border border-subtle text-[11px] font-mono"
               >
-                <span className="font-bold text-neu-accent">{stat.value}</span>
-                <span className="text-neu-text-muted/80">{stat.label}</span>
+                <span className="font-bold text-status">{stat.value}</span>
+                <span className="text-secondary">{stat.label}</span>
               </div>
             ))}
           </div>
@@ -263,31 +263,31 @@ const ProjectCardGrid = ({
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="overflow-hidden mt-2 pt-2 border-t border-zinc-200 dark:border-zinc-800"
+              className="overflow-hidden mt-2 pt-2 border-t border-subtle"
             >
-              <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/60 p-3 flex flex-col gap-2">
-                <div className="flex items-center justify-between text-xs font-mono font-bold text-neu-accent uppercase">
+              <div className="rounded-xl border border-subtle bg-canvas p-3 flex flex-col gap-2">
+                <div className="flex items-center justify-between text-xs font-mono font-bold text-primary uppercase">
                   <span className="flex items-center gap-1.5">
-                    <Layers size={13} /> Architecture Blueprint
+                    <Layers size={13} className="text-brand" /> Architecture Blueprint
                   </span>
                   {archDiagram?.order !== undefined && (
-                    <span className="text-[10px] text-neu-text-muted">
+                    <span className="text-[10px] text-secondary">
                       v{archDiagram.order + 1}
                     </span>
                   )}
                 </div>
 
-                <div className="min-h-[200px] w-full rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-800/80 bg-black/5 dark:bg-black/30 flex items-center justify-center">
+                <div className="min-h-[200px] w-full rounded-lg overflow-hidden border border-subtle bg-card flex items-center justify-center">
                   {archDiagram?.imageUrl ? (
                     <ProjectArchitectureDiagram imageUrl={archDiagram.imageUrl} />
                   ) : (
-                    <div className="p-6 text-center text-xs font-mono text-neu-text-muted italic flex flex-col items-center gap-2">
-                      <Layers size={20} className="text-neu-text-muted/40" />
+                    <div className="p-6 text-center text-xs font-mono text-secondary italic flex flex-col items-center gap-2">
+                      <Layers size={20} className="text-secondary/40" />
                       <span>Interactive diagram mapped in system specifications.</span>
                       <button
                         type="button"
                         onClick={() => setSelectedProject(project)}
-                        className="mt-1 text-neu-accent hover:underline text-[11px] font-bold"
+                        className="mt-1 text-brand hover:underline text-[11px] font-bold"
                       >
                         Open Full Dev Log →
                       </button>
@@ -296,7 +296,7 @@ const ProjectCardGrid = ({
                 </div>
 
                 {archDiagram?.description && (
-                  <p className="text-[11px] font-mono text-neu-text-muted leading-relaxed pt-1">
+                  <p className="text-[11px] font-mono text-secondary leading-relaxed pt-1">
                     {archDiagram.description}
                   </p>
                 )}
@@ -307,11 +307,11 @@ const ProjectCardGrid = ({
       </div>
 
       {/* Footer Actions: [ View Architecture ], GitHub, Demo/DevLog */}
-      <div className="flex items-center justify-between gap-3 pt-3 border-t border-zinc-200/60 dark:border-zinc-800/80 flex-wrap">
+      <div className="flex items-center justify-between gap-3 pt-3 border-t border-subtle flex-wrap">
         <button
           type="button"
           onClick={() => setIsArchExpanded(!isArchExpanded)}
-          className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neu-accent hover:text-neu-accent/80 transition-colors py-1 cursor-pointer"
+          className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-brand hover:text-primary transition-colors py-1 cursor-pointer"
         >
           <span>
             {isArchExpanded
@@ -332,7 +332,7 @@ const ProjectCardGrid = ({
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub Repository"
-              className="p-2 rounded-lg glass-card hover:text-neu-accent text-neu-text-muted border border-white/5 transition-all active:scale-95"
+              className="p-2 rounded-lg bg-canvas hover:text-primary text-secondary border border-subtle hover:border-subtle-hover transition-colors active:scale-95"
             >
               <SiGithub size={14} />
             </a>
@@ -343,7 +343,7 @@ const ProjectCardGrid = ({
               href={project.demoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-white bg-neu-accent hover:bg-neu-accent/90 transition-all active:scale-95 shadow-sm"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-canvas bg-brand hover:bg-primary transition-colors active:scale-95 shadow-sm"
             >
               <Globe size={12} /> Live / Article
             </a>
@@ -351,7 +351,7 @@ const ProjectCardGrid = ({
             <button
               type="button"
               onClick={() => setSelectedProject(project)}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-neu-text glass-card border border-white/10 hover:border-neu-accent/40 transition-all active:scale-95"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-primary bg-canvas border border-subtle hover:border-subtle-hover transition-colors active:scale-95"
             >
               <BookOpen size={12} /> Log
             </button>
@@ -464,7 +464,7 @@ const FocusedProject = ({
 
   return (
     <div className="relative py-8 md:py-12 px-4 md:px-8 z-20 flex flex-col lg:flex-row items-center justify-center gap-10 md:gap-16">
-      <div className="absolute inset-0 bg-black/5 dark:bg-black/30 backdrop-blur-md rounded-3xl z-0 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-card rounded-3xl z-0 pointer-events-none border border-subtle"></div>
       <div
         className={cn(
           "absolute -inset-10 opacity-15 blur-[120px] rounded-full z-0 pointer-events-none transition-all duration-500",
@@ -620,14 +620,14 @@ const FocusedProject = ({
           damping: 22,
           delay: 0.15,
         }}
-        className="relative z-10 flex-1 max-w-xl p-6 md:p-8 rounded-3xl bg-neu-bg/90 dark:bg-zinc-900/80 backdrop-blur-lg border border-gray-300/25 dark:border-zinc-700/30 shadow-neu flex flex-col justify-between"
+        className="relative z-10 flex-1 max-w-xl p-6 md:p-8 rounded-3xl bg-card border border-subtle shadow-lg flex flex-col justify-between"
       >
         {isExplaining ? (
           <div className="flex-1 flex flex-col relative h-full min-h-[250px]">
             <button
               type="button"
               onClick={reset}
-              className="absolute -top-2 -right-2 p-2 rounded-full glass-card hover:bg-white/10 text-neu-text-muted hover:text-white transition-colors z-10 border border-white/10"
+              className="absolute -top-2 -right-2 p-2 rounded-full bg-canvas hover:bg-card text-secondary hover:text-primary transition-colors z-10 border border-subtle"
             >
               <X size={16} />
             </button>

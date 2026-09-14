@@ -45,14 +45,14 @@ export const MetricsBento: React.FC = () => {
     <div className="w-full">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <span className="text-[11px] font-mono text-cyan-400 uppercase tracking-widest">
+          <span className="text-[11px] font-mono text-brand uppercase tracking-widest">
             System Impact
           </span>
-          <h3 className="text-xl font-bold text-white mt-0.5">
+          <h3 className="text-xl font-bold text-primary mt-0.5">
             Operational &amp; Production Metrics
           </h3>
         </div>
-        <span className="text-xs font-mono text-zinc-500 hidden sm:inline-block">
+        <span className="text-xs font-mono text-muted hidden sm:inline-block">
           ● Verified Production Metrics
         </span>
       </div>
@@ -62,23 +62,23 @@ export const MetricsBento: React.FC = () => {
         {OPERATIONAL_METRICS.map((metric, idx) => (
           <div
             key={idx}
-            className="p-5 rounded-xl border border-zinc-800 bg-zinc-900/40 hover:border-zinc-700 transition-colors flex flex-col justify-between"
+            className="p-5 rounded-xl border border-subtle bg-card hover:border-subtle-hover transition-colors duration-150 flex flex-col justify-between group shadow-sm"
           >
             <div>
               <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-mono text-zinc-400">{metric.subtext}</span>
-                <div className="p-1.5 rounded-md bg-zinc-800/80 border border-zinc-700/40">
+                <span className="text-xs font-mono text-secondary">{metric.subtext}</span>
+                <div className="p-1.5 rounded-md bg-canvas border border-subtle">
                   {metric.icon}
                 </div>
               </div>
 
-              <div className="text-2xl font-bold font-mono text-white mt-3 tracking-tight">
+              <div className="text-2xl font-bold font-mono text-primary mt-3 tracking-tight">
                 {metric.value}
               </div>
-              <div className="text-sm font-semibold text-zinc-200 mt-0.5">
+              <div className="text-sm font-semibold text-primary mt-0.5">
                 {metric.label}
               </div>
-              <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
+              <p className="text-xs text-secondary mt-2 leading-relaxed">
                 {metric.description}
               </p>
             </div>

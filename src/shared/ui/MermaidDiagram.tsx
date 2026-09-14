@@ -115,16 +115,16 @@ export default function MermaidDiagram({
   }
 
   return (
-    <div className="relative my-6 rounded-2xl overflow-hidden border border-white/5 bg-zinc-950/70">
+    <div className="relative my-6 rounded-2xl overflow-hidden border border-subtle bg-card">
       {/* Header bar */}
-      <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border-b border-white/5 text-[10px] font-mono uppercase tracking-wider text-neutral-400">
-        <GitBranch size={10} className="text-neu-accent" />
-        <span className="text-neu-accent">Mermaid Diagram</span>
+      <div className="flex items-center gap-2 px-4 py-2 bg-canvas border-b border-subtle text-[10px] font-mono uppercase tracking-wider text-secondary">
+        <GitBranch size={10} className="text-brand" />
+        <span className="text-brand">Mermaid Diagram</span>
       </div>
       {/* Loading skeleton */}
       {!isRendered && (
         <div className="absolute inset-0 top-8 flex items-center justify-center">
-          <div className="w-5 h-5 border-2 border-neu-accent/30 border-t-neu-accent rounded-full animate-spin" />
+          <div className="w-5 h-5 border-2 border-brand/30 border-t-brand rounded-full animate-spin" />
         </div>
       )}
       {/* Rendered SVG */}

@@ -239,16 +239,16 @@ export default function AdminWork() {
 
       {/* View Detail Modal */}
       {viewingWork && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-neu-bg rounded-3xl shadow-neu-modal w-full max-w-2xl p-8 relative border border-white/5 max-h-[85vh] overflow-y-auto hide-scrollbar">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80">
+          <div className="bg-card rounded-3xl shadow-2xl w-full max-w-2xl p-8 relative border border-subtle max-h-[85vh] overflow-y-auto hide-scrollbar">
             <button
               type="button"
               onClick={() => setViewingWork(null)}
-              className="absolute top-5 right-5 p-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-neu-text transition-colors"
+              className="absolute top-5 right-5 p-2 rounded-full bg-canvas hover:bg-card text-secondary hover:text-primary transition-colors border border-subtle"
             >
               <X size={20} />
             </button>
-            <h3 className="text-xl font-bold font-display mb-6">
+            <h3 className="text-xl font-bold font-display mb-6 text-primary">
               Work Experience Detail
             </h3>
 

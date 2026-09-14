@@ -25,7 +25,7 @@ function ZoomControls() {
         type="button"
         onClick={() => zoomIn()}
         title="Zoom In"
-        className="p-2 rounded-xl bg-neu-bg/80 backdrop-blur-md border border-white/10 text-neu-text hover:text-neu-accent hover:border-neu-accent/40 transition-all duration-200 shadow-neu-sm"
+        className="p-2 rounded-xl bg-canvas border border-subtle text-secondary hover:text-primary hover:border-subtle-hover transition-colors shadow-sm"
       >
         <ZoomIn size={14} />
       </button>
@@ -33,7 +33,7 @@ function ZoomControls() {
         type="button"
         onClick={() => zoomOut()}
         title="Zoom Out"
-        className="p-2 rounded-xl bg-neu-bg/80 backdrop-blur-md border border-white/10 text-neu-text hover:text-neu-accent hover:border-neu-accent/40 transition-all duration-200 shadow-neu-sm"
+        className="p-2 rounded-xl bg-canvas border border-subtle text-secondary hover:text-primary hover:border-subtle-hover transition-colors shadow-sm"
       >
         <ZoomOut size={14} />
       </button>
@@ -41,7 +41,7 @@ function ZoomControls() {
         type="button"
         onClick={() => resetTransform()}
         title="Reset View"
-        className="p-2 rounded-xl bg-neu-bg/80 backdrop-blur-md border border-white/10 text-neu-text hover:text-neu-accent hover:border-neu-accent/40 transition-all duration-200 shadow-neu-sm"
+        className="p-2 rounded-xl bg-canvas border border-subtle text-secondary hover:text-primary hover:border-subtle-hover transition-colors shadow-sm"
       >
         <RotateCcw size={14} />
       </button>
@@ -62,7 +62,7 @@ function FullscreenViewer({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex flex-col"
+      className="fixed inset-0 z-[9999] bg-black/95 flex flex-col"
       onClick={onClose}
       onKeyDown={(e) => {
         if (e.key === "Escape") onClose();
@@ -135,7 +135,7 @@ export default function ProjectArchitectureDiagram({
   return (
     <>
       <div className="w-full h-full relative rounded-2xl overflow-hidden group">
-        <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-[10px] font-mono text-white/70 pointer-events-none select-none">
+        <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-canvas border border-subtle text-[10px] font-mono text-secondary pointer-events-none select-none">
           <Move size={10} /> Drag · Scroll to zoom
         </div>
 
@@ -143,7 +143,7 @@ export default function ProjectArchitectureDiagram({
           type="button"
           onClick={() => setIsFullscreen(true)}
           title="Open Fullscreen"
-          className="absolute top-3 right-3 z-10 p-2 rounded-xl bg-black/60 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:border-white/30 transition-all duration-200 opacity-0 group-hover:opacity-100"
+          className="absolute top-3 right-3 z-10 p-2 rounded-xl bg-canvas border border-subtle text-secondary hover:text-primary hover:border-subtle-hover transition-colors opacity-0 group-hover:opacity-100"
         >
           <Maximize2 size={13} />
         </button>

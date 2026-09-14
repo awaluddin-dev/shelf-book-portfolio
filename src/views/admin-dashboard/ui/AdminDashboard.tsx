@@ -409,10 +409,10 @@ export default function AdminDashboard() {
             animate={{ opacity: 1, y: 0, x: "-50%" }}
             exit={{ opacity: 0, y: 50, x: "-50%" }}
             className={cn(
-              "fixed bottom-8 left-1/2 z-[200] px-6 py-3.5 rounded-2xl font-mono text-xs shadow-neu border backdrop-blur-md flex items-center gap-2.5",
+              "fixed bottom-8 left-1/2 z-[200] px-6 py-3.5 rounded-2xl font-mono text-xs shadow-xl border flex items-center gap-2.5",
               toastMessage.type === "success"
-                ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
-                : "bg-red-500/10 text-red-500 border-red-500/20",
+                ? "bg-card text-emerald-400 border-subtle"
+                : "bg-card text-red-400 border-red-500/50",
             )}
           >
             {toastMessage.type === "success" ? (

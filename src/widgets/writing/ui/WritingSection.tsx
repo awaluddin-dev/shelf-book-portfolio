@@ -56,13 +56,13 @@ export default function WritingSection({ isDark }: Readonly<WritingSectionProps>
     <div className="space-y-6">
       {/* Header Info */}
       <div className="flex flex-col gap-1 mb-2">
-        <div className="flex items-center gap-2 text-neu-accent">
+        <div className="flex items-center gap-2 text-brand">
           <BookOpen size={18} />
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-brand">
             The Shelves
           </span>
         </div>
-        <p className="text-xs text-neu-text-muted font-mono">
+        <p className="text-xs text-secondary font-mono">
           ✦ Deep-dive technical essays, post-mortems, and architectural reflections.
         </p>
       </div>
@@ -73,16 +73,16 @@ export default function WritingSection({ isDark }: Readonly<WritingSectionProps>
           const CardContent = (
             <div
               className={cn(
-                "group relative rounded-xl p-5 md:p-6 transition-all duration-300 flex flex-col justify-between gap-3.5 border",
-                "bg-zinc-900/30 border-zinc-800/80 hover:border-zinc-700",
-                article.isDraft && "opacity-85 hover:border-zinc-800 cursor-default",
+                "group relative rounded-xl p-5 md:p-6 transition-colors duration-150 flex flex-col justify-between gap-3.5 border",
+                "bg-card border-subtle hover:border-subtle-hover shadow-sm",
+                article.isDraft && "opacity-85 hover:border-subtle cursor-default",
               )}
             >
               <div>
                 {/* Shelf Badge & Status indicator */}
                 <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono font-medium bg-zinc-800/70 text-zinc-300 border border-zinc-700/60">
-                    <span className="text-neu-accent text-xs">§</span>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono font-medium bg-canvas text-primary border border-subtle">
+                    <span className="text-brand text-xs">§</span>
                     <span>[{article.shelf}]</span>
                   </div>
 
@@ -93,7 +93,7 @@ export default function WritingSection({ isDark }: Readonly<WritingSectionProps>
                     </span>
                   ) : (
                     article.metrics && (
-                      <span className="text-[11px] font-mono text-neu-text-muted">
+                      <span className="text-[11px] font-mono text-muted">
                         {article.metrics}
                       </span>
                     )
@@ -101,25 +101,25 @@ export default function WritingSection({ isDark }: Readonly<WritingSectionProps>
                 </div>
 
                 {/* Article Title */}
-                <h3 className="text-base sm:text-lg font-display font-bold text-neu-text group-hover:text-neu-accent transition-colors flex items-start justify-between gap-2">
+                <h3 className="text-base sm:text-lg font-display font-bold text-primary group-hover:text-brand transition-colors flex items-start justify-between gap-2">
                   <span>{article.title}</span>
                   {!article.isDraft && (
                     <ArrowUpRight
                       size={18}
-                      className="text-neu-text-muted group-hover:text-neu-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 mt-0.5"
+                      className="text-secondary group-hover:text-brand group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 mt-0.5"
                     />
                   )}
                 </h3>
 
                 {/* Summary */}
-                <p className="mt-2 text-xs sm:text-sm text-neu-text-muted leading-relaxed font-normal">
+                <p className="mt-2 text-xs sm:text-sm text-secondary leading-relaxed font-normal">
                   {article.summary}
                 </p>
               </div>
 
               {/* Action Prompt for Live Articles */}
               {!article.isDraft && (
-                <div className="pt-1 flex items-center gap-1.5 text-xs font-mono font-semibold text-neu-accent group-hover:underline">
+                <div className="pt-1 flex items-center gap-1.5 text-xs font-mono font-semibold text-brand group-hover:underline">
                   <span>Read full post on Dev.to</span>
                   <ArrowUpRight size={13} />
                 </div>
@@ -155,7 +155,7 @@ export default function WritingSection({ isDark }: Readonly<WritingSectionProps>
           href="https://dev.to/awaluddin"
           target="_blank"
           rel="noreferrer noopener"
-          className="inline-flex items-center gap-2 text-xs font-mono font-bold text-neu-accent hover:underline"
+          className="inline-flex items-center gap-2 text-xs font-mono font-bold text-brand hover:underline"
         >
           <span>Explore all technical notes on Dev.to</span>
           <ArrowUpRight size={14} />

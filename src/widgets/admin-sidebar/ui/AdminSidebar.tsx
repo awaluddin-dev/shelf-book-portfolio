@@ -85,7 +85,7 @@ export function AdminSidebar() {
 
       {isMobileOpen && (
         <button
-          className="md:hidden fixed inset-0 bg-black/50 z-[90] backdrop-blur-sm"
+          className="md:hidden fixed inset-0 bg-black/75 z-[90]"
           onClick={() => setIsMobileOpen(false)}
           onKeyDown={(e) => {
             if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {

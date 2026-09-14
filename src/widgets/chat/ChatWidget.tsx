@@ -73,18 +73,18 @@ export function ChatWidget() {
     <>
       {/* Chat panel */}
       {isChatOpen && (
-        <div className="fixed bottom-0 left-0 right-0 z-[60] flex h-[85vh] w-full flex-col rounded-t-2xl border border-white/10 bg-[#0d0d0d] shadow-2xl shadow-black/50 sm:bottom-28 sm:left-auto sm:right-6 sm:h-[520px] sm:w-[420px] sm:rounded-xl">
+        <div className="fixed bottom-0 left-0 right-0 z-[60] flex h-[85vh] w-full flex-col rounded-t-2xl border border-subtle bg-card shadow-2xl shadow-black/80 sm:bottom-28 sm:left-auto sm:right-6 sm:h-[520px] sm:w-[420px] sm:rounded-xl">
           {/* Header */}
-          <div className="flex items-center justify-between rounded-t-2xl border-b border-white/10 px-4 py-3">
+          <div className="flex items-center justify-between rounded-t-2xl border-b border-subtle bg-canvas px-4 py-3">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10">
-                <SparkleIcon className="h-3.5 w-3.5 text-white/70" />
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-canvas border border-subtle">
+                <SparkleIcon className="h-3.5 w-3.5 text-status" />
               </div>
               <div>
-                <p className="text-sm font-medium text-white/90">
+                <p className="text-sm font-semibold text-primary">
                   Ask about Awaluddin
                 </p>
-                <p className="text-xs text-white/35">
+                <p className="text-xs text-muted">
                   Answers based on his portfolio data
                 </p>
               </div>
@@ -95,7 +95,7 @@ export function ChatWidget() {
                   type="button"
                   onClick={handleReset}
                   title="Clear conversation"
-                  className="rounded p-1.5 text-white/30 transition-colors hover:text-white/60"
+                  className="rounded p-1.5 text-muted transition-colors hover:text-primary"
                 >
                   <ResetIcon className="h-4 w-4" />
                 </button>
@@ -104,7 +104,7 @@ export function ChatWidget() {
                 type="button"
                 onClick={handleClose}
                 aria-label="Close chat"
-                className="rounded p-1.5 text-white/30 transition-colors hover:text-white/60"
+                className="rounded p-1.5 text-muted transition-colors hover:text-primary"
               >
                 <CloseIcon className="h-4 w-4" />
               </button>
@@ -115,7 +115,7 @@ export function ChatWidget() {
           <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
             {!hasMessages && (
               <div className="space-y-4 pt-2">
-                <p className="text-xs text-white/40 text-center">
+                <p className="text-xs text-muted text-center">
                   Ask me anything about Awaluddin&apos;s experience, skills, or
                   availability.
                 </p>
@@ -125,7 +125,7 @@ export function ChatWidget() {
                       type="button"
                       key={q}
                       onClick={() => handleSuggestedQuestion(q)}
-                      className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-xs text-white/60 transition-colors hover:border-white/20 hover:bg-white/8 hover:text-white/80"
+                      className="w-full rounded-lg border border-subtle/60 bg-canvas px-3 py-2 text-left text-xs text-secondary transition-colors hover:border-subtle-hover hover:bg-canvas hover:text-primary"
                     >
                       {q}
                     </button>
@@ -142,8 +142,8 @@ export function ChatWidget() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
                     msg.role === "user"
-                      ? "rounded-tr-sm bg-white text-black"
-                      : "rounded-tl-sm bg-white/8 text-white/80"
+                      ? "rounded-tr-sm bg-brand text-canvas font-medium"
+                      : "rounded-tl-sm bg-canvas border border-subtle/50 text-primary"
                   }`}
                 >
                   {msg.content || (
@@ -173,8 +173,8 @@ export function ChatWidget() {
           </div>
 
           {/* Input area */}
-          <div className="border-t border-white/10 p-3">
-            <div className="flex items-end gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2">
+          <div className="border-t border-subtle/60 p-3 bg-canvas">
+            <div className="flex items-end gap-2 rounded-xl border border-subtle/60 bg-card px-3 py-2 focus-within:border-subtle-hover">
               <textarea
                 ref={inputRef}
                 value={input}
@@ -184,7 +184,7 @@ export function ChatWidget() {
                 rows={1}
                 maxLength={MAX_CHAT_LENGTH}
                 disabled={isActive}
-                className="flex-1 resize-none bg-transparent text-sm text-white/80 placeholder-white/25 outline-none disabled:opacity-50"
+                className="flex-1 resize-none bg-transparent text-sm text-primary placeholder-muted outline-none disabled:opacity-50"
                 style={{ maxHeight: "80px" }}
               />
               <button
@@ -192,17 +192,17 @@ export function ChatWidget() {
                 onClick={handleSend}
                 disabled={!input.trim() || isActive}
                 aria-label="Send message"
-                className="mb-0.5 flex-shrink-0 rounded-lg p-1.5 text-white/40 transition-colors hover:text-white/80 disabled:cursor-not-allowed disabled:opacity-30"
+                className="mb-0.5 flex-shrink-0 rounded-lg p-1.5 text-brand transition-colors hover:text-primary disabled:cursor-not-allowed disabled:opacity-30"
               >
                 <SendIcon className="h-4 w-4" />
               </button>
             </div>
             <div className="mt-1.5 flex items-center justify-between px-1">
-              <p className="text-[10px] text-white/20">
+              <p className="text-[10px] text-muted">
                 Only answers questions about Awaluddin
               </p>
               <span
-                className={`text-xs ${input.length >= MAX_CHAT_LENGTH ? "text-red-400 font-semibold" : "text-gray-500"}`}
+                className={`text-xs ${input.length >= MAX_CHAT_LENGTH ? "text-red-400 font-semibold" : "text-muted"}`}
               >
                 {input.length}/{MAX_CHAT_LENGTH}
               </span>

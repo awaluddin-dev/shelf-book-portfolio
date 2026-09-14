@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/cognitive-complexity, sonarjs/no-nested-functions */
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "motion/react";
 import {
   Briefcase,
@@ -212,6 +212,11 @@ export const CAREER_EXPERIENCES: CareerExperience[] = [
 export default function ExperienceSection({
   isDark,
 }: Readonly<ExperienceSectionProps>) {
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  // Jika sedang ada yang di-hover gunakan itu, jika tidak gunakan id yang isActive
+  const activeDotId = hoveredId || CAREER_EXPERIENCES.find((e) => e.isActive)?.id;
+
   return (
     <>
       {/* Experience Section */}
@@ -223,126 +228,105 @@ export default function ExperienceSection({
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <div className="w-full space-y-8">
-            <div className="mb-10">
-              <div className="flex items-center gap-2 text-neu-accent mb-1">
+          <div className="w-full space-y-6">
+            <div>
+              <div className="flex items-center gap-2 text-brand mb-1">
                 <Briefcase size={18} />
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-brand">
                   Journey & Chronology
                 </span>
               </div>
-              <h2 className="text-3xl font-display font-bold text-neu-text tracking-tight">
-                Experience
+              <h2 className="text-2xl sm:text-3xl font-display font-bold text-primary tracking-tight">
+                Professional Experience
               </h2>
-              <p className="text-xs text-neu-text-muted font-mono mt-1">
-                ✦ Chronological timeline of professional roles, core
-                contributions, and enterprise projects.
+              <p className="text-xs text-secondary font-mono mt-1">
+                ✦ Chronological timeline of professional roles, core contributions, and enterprise projects.
               </p>
             </div>
 
-            {/* Vertical Career Timeline */}
-            <motion.div
-              className="mt-10 p-5 sm:p-8 rounded-3xl glass-card-inset space-y-8 max-w-full relative"
-              variants={{
-                hidden: { opacity: 0 },
-                show: { opacity: 1, transition: { staggerChildren: 0.1 } },
-              }}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-100px" }}
-            >
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-300/30 dark:border-zinc-800/30 pb-6">
-                <div>
-                  <div className="flex items-center gap-2 text-neu-accent mb-1">
-                    <Briefcase size={18} />
-                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
-                      Career Timeline
-                    </span>
-                  </div>
-                  <h2 className="text-2xl sm:text-3xl font-display font-bold text-neu-text tracking-tight">
-                    Professional Experience
-                  </h2>
-                </div>
-              </div>
-
-              {/* Vertical Timeline Tree */}
-              <div className="relative pl-6 sm:pl-8 border-l border-zinc-800 space-y-12">
-                {CAREER_EXPERIENCES.map((exp) => {
-                  return (
-                    <article
-                      key={exp.id}
-                      className="relative group transition-all duration-300"
+            {/* Vertical Timeline Tree */}
+            <div className="relative pl-6 sm:pl-8 border-l border-subtle/80 space-y-8 pt-4">
+              {CAREER_EXPERIENCES.map((exp) => {
+                const isLit = activeDotId === exp.id;
+                return (
+                  <article
+                    key={exp.id}
+                    onMouseEnter={() => setHoveredId(exp.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                    className={cn(
+                      "relative transition-all duration-200 p-4 -ml-4 rounded-2xl cursor-default group",
+                      "hover:bg-brand/[0.06] hover:shadow-[inset_0_0_0_1px_rgba(50,130,184,0.25)]",
+                    )}
+                  >
+                    {/* Pointer Dot */}
+                    <div
+                      className={cn(
+                        "absolute -left-[15px] sm:-left-[23px] top-6 w-3.5 h-3.5 rounded-full border-2 transition-all duration-300 z-10",
+                        isLit
+                          ? "bg-status border-status/80 shadow-[0_0_12px_rgba(20,255,236,0.8)] scale-110"
+                          : "bg-canvas border-subtle",
+                      )}
                     >
-                      {/* Pointer Dot */}
-                      <div
-                        className={cn(
-                          "absolute -left-[31px] sm:-left-[39px] top-1.5 w-3.5 h-3.5 rounded-full border-2 transition-all duration-300",
-                          exp.isActive
-                            ? "bg-emerald-500 border-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
-                            : "bg-zinc-800 border-zinc-700 group-hover:border-zinc-500",
-                        )}
-                      >
+                      {isLit && (
+                        <span className="absolute inset-0 rounded-full bg-status animate-ping opacity-75" />
+                      )}
+                    </div>
+
+                    {/* Header Info */}
+                    <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-2">
+                      <div>
+                        <h3 className="text-base sm:text-lg font-display font-bold text-primary group-hover:text-brand transition-colors">
+                          {exp.company}
+                        </h3>
+                        <p className="text-xs sm:text-sm font-medium text-brand">
+                          {exp.role}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs text-secondary/80 shrink-0">
+                          {exp.period}
+                        </span>
                         {exp.isActive && (
-                          <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-75" />
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold tracking-wider uppercase bg-status/10 text-status border border-status/30">
+                            Current
+                          </span>
                         )}
                       </div>
+                    </div>
 
-                      {/* Header Info */}
-                      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-2">
-                        <div>
-                          <h3 className="text-base sm:text-lg font-display font-bold text-neu-text group-hover:text-neu-accent transition-colors">
-                            {exp.company}
-                          </h3>
-                          <p className="text-xs sm:text-sm font-medium text-neu-accent">
-                            {exp.role}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs text-neu-text-muted shrink-0">
-                            {exp.period}
+                    {/* STAR Format Bullets */}
+                    <ul className="mt-3 space-y-2.5 text-xs sm:text-sm text-secondary leading-relaxed">
+                      {exp.bullets.map((bullet, bIdx) => (
+                        <li key={bIdx} className="flex items-start gap-2">
+                          <span className="text-brand mt-1 shrink-0">✦</span>
+                          <span>
+                            <span>{bullet.situation} </span>
+                            <span>{bullet.action} </span>
+                            {bullet.metricPrefix && <span>{bullet.metricPrefix} </span>}
+                            <strong className="text-primary font-medium">
+                              {bullet.metric}
+                            </strong>
+                            {bullet.metricSuffix && <span>{bullet.metricSuffix}</span>}
                           </span>
-                          {exp.isActive && (
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold tracking-wider uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                              Active
-                            </span>
-                          )}
-                        </div>
-                      </div>
+                        </li>
+                      ))}
+                    </ul>
 
-                      {/* STAR Format Bullets */}
-                      <ul className="mt-3 space-y-2.5 text-xs sm:text-sm text-neu-text-muted leading-relaxed">
-                        {exp.bullets.map((bullet, bIdx) => (
-                          <li key={bIdx} className="flex items-start gap-2">
-                            <span className="text-neu-accent mt-1 shrink-0">✦</span>
-                            <span>
-                              <span>{bullet.situation} </span>
-                              <span>{bullet.action} </span>
-                              {bullet.metricPrefix && <span>{bullet.metricPrefix} </span>}
-                              <strong className="text-white font-medium">
-                                {bullet.metric}
-                              </strong>
-                              {bullet.metricSuffix && <span>{bullet.metricSuffix}</span>}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      {/* Tech Tags */}
-                      <div className="mt-4 flex flex-wrap gap-1.5">
-                        {exp.techTags.map((tech) => (
-                          <span
-                            key={tech}
-                            className="px-2 py-0.5 rounded bg-zinc-900 text-zinc-400 border border-zinc-800/80 font-mono text-xs"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            </motion.div>
+                    {/* Tech Tags */}
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      {exp.techTags.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-2 py-0.5 rounded bg-canvas text-secondary border border-subtle/60 font-mono text-xs group-hover:border-subtle-hover transition-colors"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
           </div>
         </motion.div>
         {/* Animated divider with a section-specific icon and quote tooltip */}
