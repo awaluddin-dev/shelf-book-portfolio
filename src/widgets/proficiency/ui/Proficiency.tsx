@@ -133,7 +133,7 @@ export default function ProficiencySection({
                 Production Systems Architecture
               </h2>
               <p className="text-xs text-secondary font-mono mt-1">
-                ✦ 4-Pillar foundation engineered for high concurrency, deterministic failover, and verified telemetry.
+                ✦ Architecture foundation engineered for high concurrency, deterministic failover, and verified telemetry.
               </p>
             </div>
 
@@ -153,7 +153,7 @@ export default function ProficiencySection({
             </div>
           </div>
 
-          {/* 4 Pillars Matrix Grid */}
+          {/* Architecture Matrix Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {ARCHITECTURE_PILLARS.map((pillar) => {
               const Icon = pillar.icon;
@@ -163,16 +163,13 @@ export default function ProficiencySection({
                   className="group relative rounded-xl border border-subtle bg-card p-6 hover:border-subtle-hover transition-colors duration-150 flex flex-col justify-between gap-6 shadow-sm"
                 >
                   <div className="space-y-4">
-                    {/* Pillar Header */}
+                    {/* Header */}
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-center gap-3">
                         <div className="p-2.5 rounded-lg bg-canvas border border-subtle text-brand group-hover:scale-105 transition-transform">
                           <Icon size={18} />
                         </div>
                         <div>
-                          <span className="text-[10px] font-mono font-bold text-brand tracking-widest uppercase block">
-                            Pillar {pillar.pillarNumber}
-                          </span>
                           <h3 className="text-lg font-display font-bold text-primary group-hover:text-brand transition-colors">
                             {pillar.title}
                           </h3>
@@ -180,7 +177,7 @@ export default function ProficiencySection({
                       </div>
                     </div>
 
-                    {/* Pillar Description */}
+                    {/* Description */}
                     <p className="text-xs text-secondary leading-relaxed">
                       {pillar.description}
                     </p>
@@ -194,7 +191,7 @@ export default function ProficiencySection({
                             key={skill.name}
                             className={cn(
                               "inline-flex items-center gap-2 px-3 py-1.5 rounded-lg font-mono text-xs transition-colors duration-150",
-                              "bg-canvas border border-subtle hover:border-subtle-hover",
+                              "bg-canvas hover:bg-canvas/80",
                             )}
                           >
                             <span className="text-primary font-medium">
@@ -202,10 +199,10 @@ export default function ProficiencySection({
                             </span>
                             <span
                               className={cn(
-                                "px-1.5 py-0.5 rounded text-[9px] font-mono font-bold tracking-wider uppercase border",
+                                "px-1.5 py-0.5 rounded text-[9px] font-mono font-bold tracking-wider uppercase",
                                 isProd
-                                  ? "bg-status/10 text-status border-status/30"
-                                  : "bg-amber-400/10 text-amber-300 border-amber-400/30",
+                                  ? "bg-status/10 text-status"
+                                  : "bg-amber-400/10 text-amber-300",
                               )}
                             >
                               {skill.status}

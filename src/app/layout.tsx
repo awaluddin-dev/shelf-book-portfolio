@@ -55,7 +55,8 @@ export const metadata: Metadata = {
       "Backend Developer portfolio featuring system architecture and technical projects.",
   },
   icons: {
-    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231B262C'/><text x='50%' y='55%' dominant-baseline='central' text-anchor='middle' font-size='56' font-family='sans-serif' font-weight='bold' fill='%233282B8'>A</text><circle cx='80' cy='20' r='10' fill='%2314FFEC'/></svg>",
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
   },
   robots: {
     index: true,

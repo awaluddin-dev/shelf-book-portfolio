@@ -1,4 +1,8 @@
-const API_BASE_URL = process.env.API_URL || "https://sb.awaluddin.dev";
+const API_BASE_URL = (
+  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.API_URL ||
+  ""
+).replace(/\/api\/?$/, "");
 
 export function parseJwt(token: string) {
   try {

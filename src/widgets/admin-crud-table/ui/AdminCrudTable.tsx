@@ -313,11 +313,7 @@ export function AdminCrudTable<T extends { id?: string }>({
             </h3>
 
             <form onSubmit={handleSave} className="space-y-4">
-              {children({
-                formData,
-                handleChange,
-                handleFileChange,
-              })}
+              {renderForm(formData, setFormData, !!editingItem)}
 
               <div className="flex justify-end gap-3 pt-6 border-t border-subtle">
                 <button
@@ -329,7 +325,7 @@ export function AdminCrudTable<T extends { id?: string }>({
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-accent-brand hover:bg-text-primary text-bg-canvas font-mono text-xs font-bold transition-all shadow-md active:scale-95"
+                  className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-mono text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
                 >
                   Save Changes
                 </button>

@@ -343,7 +343,7 @@ const ProjectCardGrid = ({
               href={project.demoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-canvas bg-brand hover:bg-primary transition-colors active:scale-95 shadow-sm"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-white bg-emerald-500 hover:bg-emerald-600 transition-colors active:scale-95 shadow-sm"
             >
               <Globe size={12} /> Live / Article
             </a>

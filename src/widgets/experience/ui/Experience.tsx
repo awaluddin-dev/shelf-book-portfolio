@@ -237,7 +237,7 @@ export default function ExperienceSection({
                 </span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-display font-bold text-primary tracking-tight">
-                Professional Experience
+                Career
               </h2>
               <p className="text-xs text-secondary font-mono mt-1">
                 ✦ Chronological timeline of professional roles, core contributions, and enterprise projects.

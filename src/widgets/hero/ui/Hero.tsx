@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { BookOpen, Download, Terminal, PenTool, Mail, Printer } from "lucide-react";
+import { BookOpen, Download, Terminal, PenTool, Mail, Printer, FileText } from "lucide-react";
 import { SiGithub, SiLinkedin } from "@/shared/ui/icons/BrandIcons";
 import { cn } from "@/shared/lib/utils";
 import { CircuitBoardBg } from "@/shared/ui/CircuitBoardBg";

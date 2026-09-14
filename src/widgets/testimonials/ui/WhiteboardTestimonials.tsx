@@ -140,29 +140,40 @@ export default function WhiteboardTestimonials({
             f.name.toLowerCase() === (t.name || "").toLowerCase(),
         );
 
+        if (fallbackMatch) {
+          return {
+            ...fallbackMatch,
+            ...t,
+            quotePrefix: fallbackMatch.quotePrefix,
+            highlight: fallbackMatch.highlight,
+            quoteSuffix: fallbackMatch.quoteSuffix,
+            rotationClass:
+              fallbackMatch.rotationClass ||
+              ROTATION_CLASSES[index % ROTATION_CLASSES.length],
+          };
+        }
+
         return {
-          id: t.id || `testimonial-${index}`,
-          name: t.name,
-          role: t.role,
-          company: t.company || fallbackMatch?.company,
-          relation: t.relation || fallbackMatch?.relation || t.company || "Collaborator",
-          testimonial: t.testimonial,
+          id: t.id || `testi-${index}`,
+          name: t.name || "Colleague",
+          role: t.role || "Software Engineer",
+          company: t.company,
+          relation: t.relation,
+          testimonial: t.testimonial || t.content || "",
           url: t.url,
-          quotePrefix: fallbackMatch?.quotePrefix,
-          highlight: fallbackMatch?.highlight,
-          quoteSuffix: fallbackMatch?.quoteSuffix,
           rotationClass: ROTATION_CLASSES[index % ROTATION_CLASSES.length],
         };
       });
     }
-    return FALLBACK_TESTIMONIALS.map((f, index) => ({
-      ...f,
-      rotationClass: ROTATION_CLASSES[index % ROTATION_CLASSES.length],
-    }));
+    return FALLBACK_TESTIMONIALS;
   }, [testimonialsList]);
 
   return (
-    <section id="endorse" className="scroll-mt-16 lg:scroll-mt-24" aria-label="Endorsements">
+    <section
+      id="endorse"
+      className="scroll-mt-16 lg:scroll-mt-24"
+      aria-label="Peer endorsements and testimonials"
+    >
       {/* Mobile section heading */}
       <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-canvas px-6 py-5 md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
         <h2 className="text-sm font-mono font-bold uppercase tracking-widest text-brand">
