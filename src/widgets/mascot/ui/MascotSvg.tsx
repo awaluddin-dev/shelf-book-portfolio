@@ -74,17 +74,18 @@ const happyLeftEyeVariants: Variants = {
 };
 
 interface MascotSvgProps {
-  isDark: boolean;
+  isDark?: boolean;
 }
 
-export function MascotSvg({ isDark }: Readonly<MascotSvgProps>) {
+export function MascotSvg({ isDark = true }: Readonly<MascotSvgProps>) {
+  // Permanently set to emerald / teal theme (removing white/grey)
   const palette = {
-    primary: isDark ? "#05626E" : "#c3d1eb",
-    secondary: isDark ? "#054C56" : "#a5b9e1",
-    accent1: isDark ? "#1ADDDA" : "#E5E7EB",
-    primaryAlpha: isDark ? "#05626E" : "#c3d1ebff",
-    secondaryAlpha: isDark ? "#054C56" : "#a5b9e1ff",
-    accent2: isDark ? "#34A09E" : "#b4c7e6",
+    primary: "#05626E",
+    secondary: "#054C56",
+    accent1: "#10B981", // vibrant emerald
+    primaryAlpha: "#05626E",
+    secondaryAlpha: "#054C56",
+    accent2: "#34A09E",
   };
 
   return (
