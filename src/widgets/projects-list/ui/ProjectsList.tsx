@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
+import Link from "next/link";
 import { SiGithub } from "@/shared/ui/icons/BrandIcons";
 import {
   BookOpen,
@@ -7,6 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowLeft,
+  ArrowRight,
   Wrench,
   Sparkles,
   X,
@@ -30,6 +32,8 @@ import ProjectArchitectureDiagram from "@/entities/project/ui/ProjectArchitectur
 
 interface ProjectsSectionProps {
   isDark: boolean;
+  isFeaturedOnly?: boolean;
+  showViewAll?: boolean;
 }
 
 const getProjectMetadata = (project: any) => {
@@ -807,6 +811,8 @@ const FocusedProject = ({
 
 export default function ProjectsSection({
   isDark,
+  isFeaturedOnly = false,
+  showViewAll = false,
 }: Readonly<ProjectsSectionProps>) {
   const {
     searchQuery,
@@ -834,6 +840,10 @@ export default function ProjectsSection({
   ) as string[];
 
   const filteredProjects = useMemo(() => {
+    if (isFeaturedOnly) {
+      return (activeProjects || []).slice(0, 1);
+    }
+
     const filtered = (activeProjects || []).filter((project: any) => {
       const matchesSearch =
         project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -968,73 +978,78 @@ export default function ProjectsSection({
             <div className="flex items-center gap-2 text-neu-accent mb-1">
               <BookOpen size={18} />
               <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-accent">
-                Featured Portfolio & Works
+                {isFeaturedOnly ? "Spotlight Engineering Work" : "Featured Portfolio & Works"}
               </span>
             </div>
             <h2 className="text-3xl font-display font-bold text-neu-text tracking-tight">
-              Projects
+              {isFeaturedOnly ? "Featured Project" : "Projects"}
             </h2>
             <p className="text-xs text-neu-text-muted font-mono mt-1">
-              ✦ Interactive archive of production applications, system APIs, and developer tools.
+              {isFeaturedOnly
+                ? "✦ Highlighted flagship production system. Explore the full catalog below."
+                : "✦ Interactive archive of production applications, system APIs, and developer tools."}
             </p>
           </div>
 
           {/* Minimalist Dual-View Mode Toggle Buttons */}
-          <div className="inline-flex items-center p-1 rounded-xl glass-card border border-white/10 self-start sm:self-auto shadow-sm">
-            <button
-              type="button"
-              onClick={() => {
-                setViewMode("grid");
-                triggerToast?.("Switched to Engineering Grid view");
-              }}
-              className={cn(
-                "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer",
-                viewMode === "grid"
-                  ? "bg-neu-accent text-white shadow-sm"
-                  : "text-neu-text-muted hover:text-neu-text",
-              )}
-              title="Engineering Grid View"
-              aria-label="Engineering Grid View"
-            >
-              <LayoutGrid size={14} />
-              <span>Grid</span>
-            </button>
+          {!isFeaturedOnly && (
+            <div className="inline-flex items-center p-1 rounded-xl glass-card border border-white/10 self-start sm:self-auto shadow-sm">
+              <button
+                type="button"
+                onClick={() => {
+                  setViewMode("grid");
+                  triggerToast?.("Switched to Engineering Grid view");
+                }}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer",
+                  viewMode === "grid"
+                    ? "bg-neu-accent text-white shadow-sm"
+                    : "text-neu-text-muted hover:text-neu-text",
+                )}
+                title="Engineering Grid View"
+                aria-label="Engineering Grid View"
+              >
+                <LayoutGrid size={14} />
+                <span>Grid</span>
+              </button>
 
-            <button
-              type="button"
-              onClick={() => {
-                setViewMode("shelf");
-                triggerToast?.("Switched to Shelf Book view");
-              }}
-              className={cn(
-                "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer",
-                viewMode === "shelf"
-                  ? "bg-neu-accent text-white shadow-sm"
-                  : "text-neu-text-muted hover:text-neu-text",
-              )}
-              title="Shelf Book 3D View"
-              aria-label="Shelf Book 3D View"
-            >
-              <BookOpen size={14} />
-              <span>Shelf</span>
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setViewMode("shelf");
+                  triggerToast?.("Switched to Shelf Book view");
+                }}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer",
+                  viewMode === "shelf"
+                    ? "bg-neu-accent text-white shadow-sm"
+                    : "text-neu-text-muted hover:text-neu-text",
+                )}
+                title="Shelf Book 3D View"
+                aria-label="Shelf Book 3D View"
+              >
+                <BookOpen size={14} />
+                <span>Shelf</span>
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Controls: Search & Filter */}
-        <div className="max-w-7xl mx-auto mb-10 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
-          <div className="relative flex-1 group">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neu-text-muted group-focus-within:text-neu-accent transition-colors z-10">
-              <Search size={18} />
+        {/* Controls: Search & Filter (Hidden when isFeaturedOnly) */}
+        {!isFeaturedOnly && (
+          <div className="max-w-7xl mx-auto mb-10 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
+            <div className="relative flex-1 group">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neu-text-muted group-focus-within:text-neu-accent transition-colors z-10">
+                <Search size={18} />
+              </div>
+              <input
+                type="text"
+                className="block w-full pl-10 pr-3 py-3 rounded-xl glass-card-inset text-neu-text placeholder-neu-text-muted focus:outline-none focus:ring-0 sm:text-sm transition-all"
+                placeholder="Search projects..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
-            <input
-              type="text"
-              className="block w-full pl-10 pr-3 py-3 rounded-xl glass-card-inset text-neu-text placeholder-neu-text-muted focus:outline-none focus:ring-0 sm:text-sm transition-all"
-              placeholder="Search projects..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
 
           <div className="flex gap-3 items-center justify-between md:justify-end w-full md:w-auto">
             {/* Desktop Filter */}
@@ -1132,15 +1147,18 @@ export default function ProjectsSection({
             </button>
           </div>
         </div>
+        )}
 
         {/* Mobile Filter Modal */}
-        <MobileFilterModal
-          isOpen={isFilterModalOpen}
-          onClose={() => setIsFilterModalOpen(false)}
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
+        {!isFeaturedOnly && (
+          <MobileFilterModal
+            isOpen={isFilterModalOpen}
+            onClose={() => setIsFilterModalOpen(false)}
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          />
+        )}
 
         {/* Dynamic Dual-View Rendering */}
         <div id="projects" className="max-w-7xl mx-auto scroll-mt-24">
@@ -1188,6 +1206,22 @@ export default function ProjectsSection({
 
               {/* The visual "shelf" plank */}
               <div className="w-full h-4 glass-card mt-4 rounded-xl relative z-0"></div>
+            </div>
+          )}
+
+          {/* View Full List Projects Link Button */}
+          {showViewAll && (
+            <div className="mt-8 flex justify-center">
+              <Link
+                href="/projects"
+                className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl border border-subtle bg-card hover:border-brand/50 hover:bg-card/80 text-primary text-xs font-mono font-bold uppercase tracking-wider transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5"
+              >
+                <span>View Full List Projects</span>
+                <ArrowRight
+                  size={15}
+                  className="text-brand transition-transform duration-200 group-hover:translate-x-1"
+                />
+              </Link>
             </div>
           )}
         </div>

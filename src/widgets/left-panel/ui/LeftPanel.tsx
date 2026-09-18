@@ -228,7 +228,7 @@ export function LeftPanel({
             href="/directions"
             className="hover:text-brand transition-colors"
           >
-            Directions
+            Activity
           </Link>
           <span className="text-subtle">|</span>
           <a

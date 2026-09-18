@@ -237,7 +237,7 @@ export default function Portfolio() {
               href="/directions"
               className="px-2.5 py-1 rounded-lg bg-card border border-subtle text-secondary hover:text-primary hover:border-subtle-hover transition-colors duration-150"
             >
-              Directions
+              Activity
             </Link>
             <a
               href={dynamicHeroConfig?.docsUrl || "https://sb.awaluddin.dev/docs"}
@@ -383,7 +383,11 @@ export default function Portfolio() {
                     Projects
                   </h2>
                 </div>
-                <ProjectsSection isDark={isDark} />
+                <ProjectsSection
+                  isDark={isDark}
+                  isFeaturedOnly={true}
+                  showViewAll={true}
+                />
               </section>
 
               {/* SECTION 4: #proficiency */}

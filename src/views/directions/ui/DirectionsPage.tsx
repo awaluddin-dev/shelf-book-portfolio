@@ -221,7 +221,7 @@ export function DirectionsPage() {
                 </Link>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-brand/10 border border-brand/25 text-brand">
                   <Compass size={13} className="animate-spin-slow" />
-                  <span>Future & Directions</span>
+                  <span>Activity & Directions</span>
                 </div>
               </div>
 
