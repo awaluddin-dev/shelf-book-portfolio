@@ -103,12 +103,35 @@ const ARCHITECTURE_PILLARS: Pillar[] = [
   },
 ];
 
+import { usePortfolioStore } from "@/shared/store/portfolioStore";
+
+const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+  Server,
+  BrainCircuit,
+  Database,
+  Cloud,
+  Cpu,
+  BriefcaseBusiness,
+};
+
 export default function ProficiencySection({
   renderIcon,
   isDark: propIsDark,
 }: Readonly<ProficiencySectionProps>) {
   const { isDark: contextIsDark } = useTheme();
   const isDark = propIsDark !== undefined ? propIsDark : contextIsDark;
+  const { dynamicPillarsV2 } = usePortfolioStore();
+
+  const pillars =
+    dynamicPillarsV2 && dynamicPillarsV2.length > 0
+      ? dynamicPillarsV2.map((p: any) => ({
+          ...p,
+          icon:
+            typeof p.icon === "string"
+              ? ICON_MAP[p.icon] || Server
+              : p.icon || Server,
+        }))
+      : ARCHITECTURE_PILLARS;
 
   return (
     <>
@@ -155,7 +178,7 @@ export default function ProficiencySection({
 
           {/* Architecture Matrix Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {ARCHITECTURE_PILLARS.map((pillar) => {
+            {pillars.map((pillar: any) => {
               const Icon = pillar.icon;
               return (
                 <article
@@ -184,7 +207,7 @@ export default function ProficiencySection({
 
                     {/* Skill Chips */}
                     <div className="flex flex-wrap gap-2 pt-2">
-                      {pillar.skills.map((skill) => {
+                      {(pillar.skills || []).map((skill: any) => {
                         const isProd = skill.status === "PROD";
                         return (
                           <div

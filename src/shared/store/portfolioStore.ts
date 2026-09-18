@@ -65,18 +65,41 @@ interface PortfolioState {
   dynamicMetrics: any[];
   dynamicProjects: any[];
   dynamicWork: any[];
+  dynamicHeroV2: AnyOrNullType;
+  dynamicMetricsV2: any[];
+  dynamicExperiencesV2: any[];
+  dynamicPillarsV2: any[];
+  dynamicProjectsV2: any[];
   testimonialsList: any[];
   contributionData: any[][];
   timelineData: any[];
   repoData: any[];
   languageData: any[];
   portfolioStatus: "available" | "busy";
+  primaryResume: AnyOrNullType;
+  resumeDocuments: any[];
+  showResumeModal: boolean;
+  setShowResumeModal: (show: boolean) => void;
+  fetchResumeDocuments: () => Promise<void>;
+
+  // --- Directions V2 State ---
+  directionsV2: {
+    current: any[];
+    future: any[];
+    roadmapByQuarter: Record<string, any[]>;
+  };
+  devtoArticles: any[];
+  youtubeVideos: any[];
+  fetchDirectionsV2: () => Promise<void>;
+  fetchDevToArticles: () => Promise<void>;
+  fetchYouTubeVideos: () => Promise<void>;
+
 
   // --- Initialization ---
   initializeData: () => Promise<void>;
 }
 
-export const usePortfolioStore = create<PortfolioState>((set) => ({
+export const usePortfolioStore = create<PortfolioState>((set, get) => ({
   // --- UI State ---
   searchQuery: "",
   setSearchQuery: (query) => set({ searchQuery: query }),
@@ -152,18 +175,88 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
   dynamicMetrics: [],
   dynamicProjects: [],
   dynamicWork: [],
+  dynamicHeroV2: null,
+  dynamicMetricsV2: [],
+  dynamicExperiencesV2: [],
+  dynamicPillarsV2: [],
+  dynamicProjectsV2: [],
   testimonialsList: [],
   contributionData: [],
   timelineData: [],
   repoData: [],
   languageData: [],
   portfolioStatus: "available",
+  primaryResume: null,
+  resumeDocuments: [],
+  showResumeModal: false,
+  setShowResumeModal: (show) => set({ showResumeModal: show }),
+
+  // --- Directions V2 State ---
+  directionsV2: { current: [], future: [], roadmapByQuarter: {} },
+  devtoArticles: [],
+  youtubeVideos: [],
+
+  fetchDirectionsV2: async () => {
+    try {
+      const res = await fetchWithRetry("/api/v2/directions");
+      const resData = await res.json();
+      const payload = resData.data || resData;
+      if (payload && (payload.current || payload.future)) {
+        set({ directionsV2: payload });
+      }
+    } catch (e) {
+      console.error("fetchDirectionsV2 error:", e);
+    }
+  },
+
+  fetchDevToArticles: async () => {
+    try {
+      const res = await fetchWithRetry("/api/v2/directions/devto");
+      const resData = await res.json();
+      const payload = resData.data || resData;
+      const list = Array.isArray(payload) ? payload : [];
+      if (list.length > 0) {
+        set({ devtoArticles: list });
+      }
+    } catch (e) {
+      console.error("fetchDevToArticles error:", e);
+    }
+  },
+
+  fetchYouTubeVideos: async () => {
+    try {
+      const res = await fetchWithRetry("/api/v2/directions/youtube");
+      const resData = await res.json();
+      const payload = resData.data || resData;
+      const list = Array.isArray(payload) ? payload : [];
+      if (list.length > 0) {
+        set({ youtubeVideos: list });
+      }
+    } catch (e) {
+      console.error("fetchYouTubeVideos error:", e);
+    }
+  },
+
+  fetchResumeDocuments: async () => {
+    try {
+      const res = await fetch("/api/resume/documents");
+      const data = await res.json();
+      const list = data.data || (Array.isArray(data) ? data : []);
+      set({ resumeDocuments: list });
+      const primary = list.find((d: any) => d.isPrimary) || list[0] || null;
+      if (primary) {
+        set({ primaryResume: primary });
+      }
+    } catch (e) {
+      console.error("fetchResumeDocuments error:", e);
+    }
+  },
 
   // --- Initialization ---
   initializeData: async () => {
     try {
-      await warmupDatabase((attempt) => {
-        if (attempt === 1) {
+      warmupDatabase().then((success) => {
+        if (success) {
           set({
             toastMessage: "Waking up database (cold start)... Please wait.",
           });
@@ -276,6 +369,74 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
         }
       };
 
+      // --- V2 Fetchers ---
+      const fetchHeroV2 = async () => {
+        try {
+          const res = await fetchWithRetry("/api/v2/hero", { cache: "no-store" });
+          const resData = await res.json();
+          const payload = resData.data || resData;
+          if (payload.heroConfig) {
+            set({
+              dynamicHeroV2: payload.heroConfig,
+              dynamicHeroConfig: payload.heroConfig,
+            });
+          }
+          if (Array.isArray(payload.metrics) && payload.metrics.length > 0) {
+            set({
+              dynamicMetricsV2: payload.metrics,
+              dynamicMetrics: payload.metrics,
+            });
+          }
+        } catch (e) {
+          console.error("fetchHeroV2 error:", e);
+        }
+      };
+
+      const fetchExperienceV2 = async () => {
+        try {
+          const res = await fetchWithRetry("/api/v2/experience");
+          const resData = await res.json();
+          const payload = resData.data || resData;
+          const list = payload.experiences || (Array.isArray(payload) ? payload : []);
+          if (list.length > 0) {
+            set({ dynamicExperiencesV2: list });
+          }
+        } catch (e) {
+          console.error("fetchExperienceV2 error:", e);
+        }
+      };
+
+      const fetchProficiencyV2 = async () => {
+        try {
+          const res = await fetchWithRetry("/api/v2/proficiency");
+          const resData = await res.json();
+          const payload = resData.data || resData;
+          const list = payload.pillars || (Array.isArray(payload) ? payload : []);
+          if (list.length > 0) {
+            set({ dynamicPillarsV2: list });
+          }
+        } catch (e) {
+          console.error("fetchProficiencyV2 error:", e);
+        }
+      };
+
+      const fetchProjectsV2 = async () => {
+        try {
+          const res = await fetchWithRetry("/api/v2/projects");
+          const resData = await res.json();
+          const payload = resData.data || resData;
+          const list = payload.projects || (Array.isArray(payload) ? payload : []);
+          if (list.length > 0) {
+            set({
+              dynamicProjectsV2: list,
+              dynamicProjects: list,
+            });
+          }
+        } catch (e) {
+          console.error("fetchProjectsV2 error:", e);
+        }
+      };
+
       const fetchTestimonials = async () => {
         try {
           const res = await fetch("/api/testimonials");
@@ -320,15 +481,38 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
         }
       };
 
+      const fetchPrimaryResume = async () => {
+        try {
+          const res = await fetch("/api/resume/documents");
+          const data = await res.json();
+          const list = data.data || (Array.isArray(data) ? data : []);
+          set({ resumeDocuments: list });
+          const primary = list.find((d: any) => d.isPrimary) || list[0] || null;
+          if (primary) {
+            set({ primaryResume: primary });
+          }
+        } catch (e) {
+          console.error("fetchPrimaryResume error:", e);
+        }
+      };
+
       await Promise.all([
         fetchRoadmap(),
         fetchProficiency(),
         fetchHero(),
         fetchProjects(),
         fetchWork(),
+        fetchHeroV2(),
+        fetchExperienceV2(),
+        fetchProficiencyV2(),
+        fetchProjectsV2(),
         fetchTestimonials(),
         fetchGithub(),
         fetchStatus(),
+        fetchPrimaryResume(),
+        get().fetchDirectionsV2(),
+        get().fetchDevToArticles(),
+        get().fetchYouTubeVideos(),
       ]);
 
       set({ isLoading: false });

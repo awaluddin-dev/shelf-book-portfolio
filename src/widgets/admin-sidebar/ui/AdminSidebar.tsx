@@ -19,6 +19,9 @@ import {
   Menu,
   X,
   Database,
+  FileText,
+  Compass,
+  Tv,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/shared/lib/utils";
@@ -36,15 +39,30 @@ export function AdminSidebar() {
 
   const navGroups = [
     {
-      group: "General",
+      group: "Core Portfolio (v2)",
       items: [
-        { path: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+        { path: "/admin/dashboard", icon: LayoutDashboard, label: "Hero & Metrics" },
+        { path: "/admin/projects", icon: BookOpen, label: "Projects" },
+        { path: "/admin/work", icon: Briefcase, label: "Career Timeline" },
+        { path: "/admin/proficiency", icon: Cpu, label: "Architecture Pillars" },
+        { path: "/admin/resume", icon: FileText, label: "Resume & CV" },
+        { path: "/admin/directions", icon: Compass, label: "Directions & Roadmap" },
+        { path: "/admin/youtube", icon: Tv, label: "YouTube Videos" },
       ],
     },
     {
-      group: "Portfolio",
+      group: "Social & Testimonials",
       items: [
-        { path: "/admin/projects", icon: BookOpen, label: "Projects" },
+        {
+          path: "/admin/testimoni",
+          icon: MessageSquare,
+          label: "Testimonials (v1)",
+        },
+      ],
+    },
+    {
+      group: "Architecture Diagrams & Tools",
+      items: [
         { path: "/admin/architecture", icon: Layers, label: "Architecture" },
         { path: "/admin/schema", icon: Database, label: "DB Schema" },
         { path: "/admin/erd", icon: Database, label: "ERD" },
@@ -54,21 +72,9 @@ export function AdminSidebar() {
           label: "Tech Imagery",
         },
         { path: "/admin/lifecycle", icon: Milestone, label: "Lifecycle" },
-      ],
-    },
-    {
-      group: "Resume & Social",
-      items: [
-        {
-          path: "/admin/testimoni",
-          icon: MessageSquare,
-          label: "Testimonials",
-        },
-        { path: "/admin/work", icon: Briefcase, label: "Work Exp." },
         { path: "/admin/skill", icon: Network, label: "Skill Tree" },
         { path: "/admin/learning", icon: Rocket, label: "Learning" },
         { path: "/admin/current", icon: Layers, label: "Right Now" },
-        { path: "/admin/proficiency", icon: Cpu, label: "Proficiency" },
       ],
     },
   ];

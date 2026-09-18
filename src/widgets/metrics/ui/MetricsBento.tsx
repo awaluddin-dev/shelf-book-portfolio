@@ -1,12 +1,13 @@
 import React from 'react';
-import { DollarSign, Zap, ShieldCheck, RefreshCw } from 'lucide-react';
+import { DollarSign, Zap, ShieldCheck, RefreshCw, Activity, Cpu, Database, Server } from 'lucide-react';
+import { usePortfolioStore } from '@/shared/store/portfolioStore';
 
 interface MetricItem {
   value: string;
   label: string;
   description: string;
   subtext: string;
-  icon: React.ReactNode;
+  icon?: string | React.ReactNode;
 }
 
 const OPERATIONAL_METRICS: MetricItem[] = [
@@ -40,7 +41,31 @@ const OPERATIONAL_METRICS: MetricItem[] = [
   },
 ];
 
+const renderMetricIcon = (icon: any) => {
+  if (React.isValidElement(icon)) return icon;
+  const iconStr = typeof icon === 'string' ? icon.toLowerCase() : '';
+  if (iconStr.includes('dollar') || iconStr.includes('cost') || iconStr.includes('save')) {
+    return <DollarSign className="w-4 h-4 text-emerald-400" />;
+  }
+  if (iconStr.includes('zap') || iconStr.includes('speed') || iconStr.includes('latency')) {
+    return <Zap className="w-4 h-4 text-cyan-400" />;
+  }
+  if (iconStr.includes('refresh') || iconStr.includes('cw') || iconStr.includes('pipeline') || iconStr.includes('ai')) {
+    return <RefreshCw className="w-4 h-4 text-indigo-400" />;
+  }
+  if (iconStr.includes('shield') || iconStr.includes('check') || iconStr.includes('audit')) {
+    return <ShieldCheck className="w-4 h-4 text-amber-400" />;
+  }
+  if (iconStr.includes('cpu')) return <Cpu className="w-4 h-4 text-cyan-400" />;
+  if (iconStr.includes('database')) return <Database className="w-4 h-4 text-emerald-400" />;
+  if (iconStr.includes('server')) return <Server className="w-4 h-4 text-indigo-400" />;
+  return <Activity className="w-4 h-4 text-emerald-400" />;
+};
+
 export const MetricsBento: React.FC = () => {
+  const { dynamicMetricsV2 } = usePortfolioStore();
+  const metrics = dynamicMetricsV2 && dynamicMetricsV2.length > 0 ? dynamicMetricsV2 : OPERATIONAL_METRICS;
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-4">
@@ -59,7 +84,7 @@ export const MetricsBento: React.FC = () => {
 
       {/* Bento Grid 4 Kolom/Kartu */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {OPERATIONAL_METRICS.map((metric, idx) => (
+        {metrics.map((metric: MetricItem, idx: number) => (
           <div
             key={idx}
             className="p-5 rounded-xl border border-subtle bg-card hover:border-subtle-hover transition-colors duration-150 flex flex-col justify-between group shadow-sm"
@@ -68,7 +93,7 @@ export const MetricsBento: React.FC = () => {
               <div className="flex items-center justify-between gap-2">
                 <span className="text-xs font-mono text-secondary">{metric.subtext}</span>
                 <div className="p-1.5 rounded-md bg-canvas border border-subtle">
-                  {metric.icon}
+                  {renderMetricIcon(metric.icon)}
                 </div>
               </div>
 

@@ -33,6 +33,15 @@ interface ProjectsSectionProps {
 }
 
 const getProjectMetadata = (project: any) => {
+  if (project.domainBadge || project.problem || project.solution) {
+    return {
+      domainBadge: project.domainBadge || "Backend & Systems",
+      problem: project.problem || project.problemSolved || "Scalability and architectural bottlenecks in production services.",
+      solution: project.solution || project.reasonToBuild || "Engineered scalable backend service architecture with robust error handling.",
+      pipelineFlow: project.pipelineFlow && project.pipelineFlow.length > 0 ? project.pipelineFlow : ["Gateway", "Service", "Cache", "Database"],
+    };
+  }
+
   const title = (project.title || "").toLowerCase();
   const tags = (project.tags || []).map((t: string) => t.toLowerCase());
 
@@ -226,7 +235,7 @@ const ProjectCardGrid = ({
               Pipeline Flow
             </span>
             <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono">
-              {metadata.pipelineFlow.map((step, idx) => (
+              {metadata.pipelineFlow.map((step: string, idx: number) => (
                 <React.Fragment key={idx}>
                   <span className="px-2 py-0.5 rounded-md bg-canvas text-primary border border-subtle font-medium">
                     {step}

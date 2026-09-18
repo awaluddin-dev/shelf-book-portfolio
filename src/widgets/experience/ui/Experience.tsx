@@ -209,13 +209,17 @@ export const CAREER_EXPERIENCES: CareerExperience[] = [
   },
 ];
 
+import { usePortfolioStore } from "@/shared/store/portfolioStore";
+
 export default function ExperienceSection({
   isDark,
 }: Readonly<ExperienceSectionProps>) {
+  const { dynamicExperiencesV2 } = usePortfolioStore();
+  const experiences = dynamicExperiencesV2 && dynamicExperiencesV2.length > 0 ? dynamicExperiencesV2 : CAREER_EXPERIENCES;
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   // Jika sedang ada yang di-hover gunakan itu, jika tidak gunakan id yang isActive
-  const activeDotId = hoveredId || CAREER_EXPERIENCES.find((e) => e.isActive)?.id;
+  const activeDotId = hoveredId || experiences.find((e: any) => e.isActive)?.id;
 
   return (
     <>
@@ -246,7 +250,7 @@ export default function ExperienceSection({
 
             {/* Vertical Timeline Tree */}
             <div className="relative pl-6 sm:pl-8 border-l border-subtle/80 space-y-8 pt-4">
-              {CAREER_EXPERIENCES.map((exp) => {
+              {experiences.map((exp: any) => {
                 const isLit = activeDotId === exp.id;
                 return (
                   <article
@@ -296,7 +300,7 @@ export default function ExperienceSection({
 
                     {/* STAR Format Bullets */}
                     <ul className="mt-3 space-y-2.5 text-xs sm:text-sm text-secondary leading-relaxed">
-                      {exp.bullets.map((bullet, bIdx) => (
+                      {(exp.bullets || []).map((bullet: any, bIdx: number) => (
                         <li key={bIdx} className="flex items-start gap-2">
                           <span className="text-brand mt-1 shrink-0">✦</span>
                           <span>
@@ -314,7 +318,7 @@ export default function ExperienceSection({
 
                     {/* Tech Tags */}
                     <div className="mt-4 flex flex-wrap gap-1.5">
-                      {exp.techTags.map((tech) => (
+                      {(exp.techTags || []).map((tech: string) => (
                         <span
                           key={tech}
                           className="px-2 py-0.5 rounded bg-canvas text-secondary border border-subtle/60 font-mono text-xs group-hover:border-subtle-hover transition-colors"

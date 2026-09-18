@@ -44,6 +44,8 @@ import WhiteboardTestimonials from "@/widgets/testimonials/ui/WhiteboardTestimon
 import dynamic from "next/dynamic";
 import { Loader } from "@/shared/ui/Loader";
 import { LeftPanel } from "@/widgets/left-panel/ui/LeftPanel";
+import { ResumeModal } from "@/widgets/resume-modal/ui/ResumeModal";
+import ReactMarkdown from "react-markdown";
 
 const Mascot = dynamic(
   () => import("@/widgets/mascot/ui/Mascot").then((mod) => mod.Mascot),
@@ -60,8 +62,14 @@ const NAV_ITEMS = [
 
 export default function Portfolio() {
   const isDark = true;
-  const { dynamicHeroConfig, initializeData, toastMessage, isLoading, triggerToast } =
-    usePortfolioStore();
+  const {
+    dynamicHeroConfig,
+    initializeData,
+    toastMessage,
+    isLoading,
+    triggerToast,
+    setShowResumeModal,
+  } = usePortfolioStore();
 
   const [isPlaygroundOpen, setPlaygroundOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("about");
@@ -201,23 +209,38 @@ export default function Portfolio() {
             <span className="font-display font-bold text-sm text-primary">
               {dynamicHeroConfig?.name || "Awaluddin"}
             </span>
-            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-status/10 text-status border border-status/30">
-              <span className="w-1.5 h-1.5 rounded-full bg-status animate-pulse" />
-              Available
+            <span
+              className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium border ${
+                dynamicHeroConfig?.status === "busy"
+                  ? "bg-amber-400/10 text-amber-400 border-amber-400/30"
+                  : "bg-status/10 text-status border-status/30"
+              }`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                  dynamicHeroConfig?.status === "busy" ? "bg-amber-400" : "bg-status"
+                }`}
+              />
+              {dynamicHeroConfig?.status === "busy" ? "Busy" : "Available"}
             </span>
           </div>
           <div className="flex items-center gap-2 text-xs font-mono">
-            <a
-              href="/assets/resume/Awaluddin_cv.pdf"
-              target="_blank"
-              rel="noreferrer noopener"
-              className="px-2.5 py-1 rounded-lg bg-card border border-subtle text-secondary hover:text-primary hover:border-subtle-hover transition-colors duration-150 flex items-center gap-1"
+            <button
+              type="button"
+              onClick={() => setShowResumeModal(true)}
+              className="px-2.5 py-1 rounded-lg bg-card border border-subtle text-secondary hover:text-primary hover:border-subtle-hover transition-colors duration-150 flex items-center gap-1 cursor-pointer"
             >
               <FileText size={11} className="text-brand" />
               <span>Resume</span>
-            </a>
+            </button>
+            <Link
+              href="/directions"
+              className="px-2.5 py-1 rounded-lg bg-card border border-subtle text-secondary hover:text-primary hover:border-subtle-hover transition-colors duration-150"
+            >
+              Directions
+            </Link>
             <a
-              href="https://sb.awaluddin.dev/docs"
+              href={dynamicHeroConfig?.docsUrl || "https://sb.awaluddin.dev/docs"}
               target="_blank"
               rel="noreferrer noopener"
               className="px-2.5 py-1 rounded-lg bg-card border border-subtle text-brand hover:text-primary hover:border-subtle-hover transition-colors duration-150"
@@ -255,38 +278,81 @@ export default function Portfolio() {
                   </h2>
                 </div>
 
-                <div className="space-y-4 text-sm text-secondary leading-relaxed font-normal">
-                  <p>
-                    Back in my early engineering days at{" "}
-                    <span className="font-semibold text-primary">Daikin HVAC</span>,
-                    I spent countless hours diagnosing industrial refrigeration systems,
-                    tuning physical feedback controllers, and managing sensor data pipelines.
-                    Working with physical thermodynamics taught me the unyielding truth of
-                    production systems: failure modes will always occur at the boundaries, and
-                    real-time reliability is non-negotiable.
-                  </p>
+                {dynamicHeroConfig?.aboutText && dynamicHeroConfig.aboutText.trim() ? (
+                  <div className="space-y-4 text-sm text-secondary leading-relaxed font-normal">
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => <p className="mb-4 last:mb-0">{children}</p>,
+                        strong: ({ children }) => (
+                          <span className="font-semibold text-primary">{children}</span>
+                        ),
+                        em: ({ children }) => <span className="italic">{children}</span>,
+                        a: ({ href, children }) => (
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className="font-medium text-brand hover:underline"
+                          >
+                            {children}
+                          </a>
+                        ),
+                        ul: ({ children }) => (
+                          <ul className="list-disc pl-5 space-y-2 mb-4">{children}</ul>
+                        ),
+                        ol: ({ children }) => (
+                          <ol className="list-decimal pl-5 space-y-2 mb-4">{children}</ol>
+                        ),
+                        li: ({ children }) => <li>{children}</li>,
+                        h3: ({ children }) => (
+                          <h3 className="font-bold text-primary text-base mt-6 mb-2">
+                            {children}
+                          </h3>
+                        ),
+                        code: ({ children }) => (
+                          <code className="px-1.5 py-0.5 rounded bg-subtle text-primary font-mono text-xs">
+                            {children}
+                          </code>
+                        ),
+                      }}
+                    >
+                      {dynamicHeroConfig.aboutText}
+                    </ReactMarkdown>
+                  </div>
+                ) : (
+                  <div className="space-y-4 text-sm text-secondary leading-relaxed font-normal">
+                    <p>
+                      Back in my early engineering days at{" "}
+                      <span className="font-semibold text-primary">Daikin HVAC</span>,
+                      I spent countless hours diagnosing industrial refrigeration systems,
+                      tuning physical feedback controllers, and managing sensor data pipelines.
+                      Working with physical thermodynamics taught me the unyielding truth of
+                      production systems: failure modes will always occur at the boundaries, and
+                      real-time reliability is non-negotiable.
+                    </p>
 
-                  <p>
-                    That passion for robust, deterministic architectures naturally led me to
-                    pivot into{" "}
-                    <span className="font-semibold text-primary">
-                      distributed backend engineering and cloud infrastructure
-                    </span>
-                    . Today, I architect and build async, event-driven microservices using{" "}
-                    <span className="font-semibold text-primary">Node.js, Go, Python, and PostgreSQL</span>,
-                    specializing in resilient financial platforms and high-throughput enterprise systems.
-                  </p>
+                    <p>
+                      That passion for robust, deterministic architectures naturally led me to
+                      pivot into{" "}
+                      <span className="font-semibold text-primary">
+                        distributed backend engineering and cloud infrastructure
+                      </span>
+                      . Today, I architect and build async, event-driven microservices using{" "}
+                      <span className="font-semibold text-primary">Node.js, Go, Python, and PostgreSQL</span>,
+                      specializing in resilient financial platforms and high-throughput enterprise systems.
+                    </p>
 
-                  <p>
-                    My primary technical focus is bridging modern AI systems with production backends:
-                    integrating{" "}
-                    <span className="font-semibold text-brand">
-                      large language models (LLMs), LangGraph/LangChain agentic workflows, and semantic retrieval
-                    </span>{" "}
-                    into scalable architectures. I care deeply about token telemetry, deterministic fallbacks,
-                    and building software that consistently delivers value at scale.
-                  </p>
-                </div>
+                    <p>
+                      My primary technical focus is bridging modern AI systems with production backends:
+                      integrating{" "}
+                      <span className="font-semibold text-brand">
+                        large language models (LLMs), LangGraph/LangChain agentic workflows, and semantic retrieval
+                      </span>{" "}
+                      into scalable architectures. I care deeply about token telemetry, deterministic fallbacks,
+                      and building software that consistently delivers value at scale.
+                    </p>
+                  </div>
+                )}
               </section>
 
               {/* OPERATIONAL METRICS BENTO */}
@@ -354,6 +420,7 @@ export default function Portfolio() {
         <ContactModal />
         <TestimonialModal />
         <CoverLetterModal />
+        <ResumeModal />
 
         {/* Dynamic Mascot Component */}
         <Mascot />

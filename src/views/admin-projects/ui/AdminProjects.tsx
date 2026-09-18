@@ -10,24 +10,27 @@ export default function AdminProjects() {
     subtitle: "",
     category: "",
     tags: "",
-    spineColor: "#4f46e5",
-    coverColor: "#312e81",
+    domainBadge: "",
+    problem: "",
+    solution: "",
+    pipelineFlow: "",
+    spineColor: "#0f4c75",
+    coverColor: "#142028",
     spineText: "",
-    date: "",
+    date: "2024",
     demoUrl: "",
     github: "",
     markdown: "",
-    reasonToBuild: "",
-    problemSolved: "",
+    order: 1,
     stats: [] as { label: string; value: string }[],
     phases: [] as { date: string; title: string; description: string }[],
   };
 
   return (
     <AdminCrudTable
-      title="Portfolio Projects"
+      title="Portfolio Projects (v2)"
       itemName="Project"
-      apiEndpoint="/api/projects"
+      apiEndpoint="/api/v2/projects"
       dataExtractor={(data) => {
         if (data.data?.projects) return data.data.projects;
         if (data.projects) return data.projects;
@@ -45,6 +48,14 @@ export default function AdminProjects() {
                 .map((s: string) => s.trim())
                 .filter(Boolean)
             : formData.tags,
+        pipelineFlow:
+          typeof formData.pipelineFlow === "string"
+            ? formData.pipelineFlow
+                .split(",")
+                .map((s: string) => s.trim())
+                .filter(Boolean)
+            : formData.pipelineFlow,
+        order: Number(formData.order) || 1,
       })}
       columns={[
         {
@@ -183,41 +194,82 @@ export default function AdminProjects() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <label
-                  htmlFor="adm-proj-psolved"
+                  htmlFor="adm-proj-dbadge"
                   className="text-xs font-mono text-neu-text-muted"
                 >
-                  Problem Solved
+                  Domain Badge (e.g. AI Systems & Distributed Queue)
                 </label>
-                <textarea
-                  id="adm-proj-psolved"
-                  required
-                  value={formData.problemSolved}
+                <input
+                  id="adm-proj-dbadge"
+                  value={formData.domainBadge || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, problemSolved: e.target.value })
+                    setFormData({ ...formData, domainBadge: e.target.value })
                   }
-                  rows={2}
-                  className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent resize-none"
+                  className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
+                  placeholder="AI Systems & Distributed Queue"
                 />
               </div>
               <div className="space-y-1">
                 <label
-                  htmlFor="adm-proj-rtbuild"
+                  htmlFor="adm-proj-pflow"
                   className="text-xs font-mono text-neu-text-muted"
                 >
-                  Reason to Build
+                  Pipeline Flow (Comma separated steps)
+                </label>
+                <input
+                  id="adm-proj-pflow"
+                  value={
+                    Array.isArray(formData.pipelineFlow)
+                      ? formData.pipelineFlow.join(", ")
+                      : formData.pipelineFlow || ""
+                  }
+                  onChange={(e) =>
+                    setFormData({ ...formData, pipelineFlow: e.target.value })
+                  }
+                  className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
+                  placeholder="Gateway, Redis BullMQ, LangGraph, PostgreSQL"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label
+                  htmlFor="adm-proj-psolved"
+                  className="text-xs font-mono text-neu-text-muted"
+                >
+                  Problem
                 </label>
                 <textarea
-                  id="adm-proj-rtbuild"
-                  required
-                  value={formData.reasonToBuild}
+                  id="adm-proj-psolved"
+                  value={formData.problem || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, reasonToBuild: e.target.value })
+                    setFormData({ ...formData, problem: e.target.value })
                   }
                   rows={2}
                   className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent resize-none"
+                  placeholder="Core technical problem addressed..."
                 />
               </div>
-              <div className="col-span-full space-y-1">
+              <div className="space-y-1">
+                <label
+                  htmlFor="adm-proj-solution"
+                  className="text-xs font-mono text-neu-text-muted"
+                >
+                  Solution & Architecture
+                </label>
+                <textarea
+                  id="adm-proj-solution"
+                  value={formData.solution || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, solution: e.target.value })
+                  }
+                  rows={2}
+                  className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent resize-none"
+                  placeholder="Engineering solution implemented..."
+                />
+              </div>
+              <div className="space-y-1">
                 <label
                   htmlFor="adm-proj-tags"
                   className="text-xs font-mono text-neu-text-muted"
@@ -227,9 +279,30 @@ export default function AdminProjects() {
                 <input
                   id="adm-proj-tags"
                   required
-                  value={formData.tags}
+                  value={
+                    Array.isArray(formData.tags)
+                      ? formData.tags.join(", ")
+                      : formData.tags || ""
+                  }
                   onChange={(e) =>
                     setFormData({ ...formData, tags: e.target.value })
+                  }
+                  className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
+                />
+              </div>
+              <div className="space-y-1">
+                <label
+                  htmlFor="adm-proj-order"
+                  className="text-xs font-mono text-neu-text-muted"
+                >
+                  Display Order
+                </label>
+                <input
+                  id="adm-proj-order"
+                  type="number"
+                  value={formData.order || 1}
+                  onChange={(e) =>
+                    setFormData({ ...formData, order: Number(e.target.value) })
                   }
                   className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
                 />

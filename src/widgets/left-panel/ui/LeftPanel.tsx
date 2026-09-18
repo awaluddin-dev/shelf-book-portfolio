@@ -32,7 +32,7 @@ export function LeftPanel({
   onSectionClick,
   isSubPage = false,
 }: Readonly<LeftPanelProps>) {
-  const { dynamicHeroConfig } = usePortfolioStore();
+  const { dynamicHeroConfig, setShowResumeModal } = usePortfolioStore();
 
   return (
     <aside className="lg:sticky lg:top-0 lg:h-screen lg:max-h-screen lg:self-start lg:w-[32%] xl:w-[28%] lg:flex lg:flex-col lg:justify-between lg:py-24">
@@ -98,16 +98,16 @@ export function LeftPanel({
         </h1>
 
         <h2 className="mt-2 text-base sm:text-lg font-display font-semibold text-brand">
-          Backend Engineer & AI Integrator
+          {dynamicHeroConfig?.role || "Backend Engineer & AI Integrator"}
         </h2>
 
         <p className="mt-1 text-base sm:text-lg font-display font-semibold text-brand">
-          Production Systems at Scale
+          {dynamicHeroConfig?.headline || "Production Systems at Scale"}
         </p>
 
         {/* Core Quote / Summary */}
         <p className="mt-3.5 max-w-sm text-xs sm:text-sm text-secondary font-normal leading-relaxed">
-          &ldquo;I ship LLM integrations into production — not train models in notebooks.&rdquo;
+          &ldquo;{dynamicHeroConfig?.quote || "I ship LLM integrations into production — not train models in notebooks."}&rdquo;
         </p>
 
         {/* Navigasi Scrollspy Vertikal */}
@@ -206,35 +206,51 @@ export function LeftPanel({
           </li>
         </ul>
 
-        <div className="text-xs font-mono text-muted flex items-center gap-2">
-          <a
-            href="/assets/resume/Awaluddin_cv.pdf"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="hover:text-brand transition-colors"
+        <div className="text-xs font-mono text-muted flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={() => setShowResumeModal(true)}
+            className="hover:text-brand transition-colors cursor-pointer text-left"
           >
             Resume
-          </a>
+          </button>
           <span className="text-subtle">|</span>
           <a
-            href="https://sb.awaluddin.dev/docs"
+            href={dynamicHeroConfig?.docsUrl || "https://sb.awaluddin.dev/docs"}
             target="_blank"
             rel="noreferrer noopener"
             className="hover:text-brand transition-colors"
           >
             Docs
           </a>
+          <span className="text-subtle">|</span>
+          <Link
+            href="/directions"
+            className="hover:text-brand transition-colors"
+          >
+            Directions
+          </Link>
+          <span className="text-subtle">|</span>
+          <a
+            href="https://v1.awaluddin.dev"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="hover:text-brand transition-colors opacity-70 hover:opacity-100"
+            title="Older portfolio version"
+          >
+            v1
+          </a>
         </div>
 
         {/* Available for Remote Work Status Indicator */}
         <div className="inline-flex items-center gap-2 text-[11px] font-mono pt-1">
           <div className="relative flex h-1.5 w-1.5 shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status opacity-75" />
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-status" />
+            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${dynamicHeroConfig?.status === "busy" ? "bg-amber-400" : "bg-status"}`} />
+            <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${dynamicHeroConfig?.status === "busy" ? "bg-amber-400" : "bg-status"}`} />
           </div>
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="font-semibold text-status">Status:</span>
-            <span className="text-secondary">Available for Remote Roles (UTC+7)</span>
+            <span className={`font-semibold ${dynamicHeroConfig?.status === "busy" ? "text-amber-400" : "text-status"}`}>Status:</span>
+            <span className="text-secondary">{dynamicHeroConfig?.statusText || "Available for Remote Roles (UTC+7)"}</span>
           </div>
         </div>
       </div>
