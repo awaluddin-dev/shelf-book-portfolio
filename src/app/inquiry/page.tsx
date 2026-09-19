@@ -20,30 +20,35 @@ export default function InquiryPage() {
   } = usePortfolioStore();
 
   const { draft, status: draftStatus } = useDraftInquiry();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState(() => ({
     name: "",
     email: "",
     projectType: "contract",
-    message: "",
-  });
+    message: inquiryMessage || "",
+  }));
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle Draft Inquiry AI generation
   useEffect(() => {
-    if (draftInquirySource) {
+    if (!draftInquirySource) return;
+
+    const source = draftInquirySource;
+    setDraftInquirySource(null);
+    queueMicrotask(() => {
       setFormData((prev) => ({ ...prev, message: "" }));
-      draft(draftInquirySource, (chunk) => {
+      draft(source, (chunk) => {
         setFormData((prev) => ({ ...prev, message: prev.message + chunk }));
       });
-      setDraftInquirySource(null);
-    }
+    });
   }, [draftInquirySource, draft, setDraftInquirySource]);
 
-  // Prefill message if inquiryMessage exists
+  // Sync inquiryMessage if updated externally
   useEffect(() => {
     if (inquiryMessage) {
-      setFormData((prev) => ({ ...prev, message: inquiryMessage }));
+      queueMicrotask(() => {
+        setFormData((prev) => ({ ...prev, message: inquiryMessage }));
+      });
     }
   }, [inquiryMessage]);
 

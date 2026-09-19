@@ -7,13 +7,12 @@ import {
   FileText,
   X,
   Download,
-  ExternalLink,
   Calendar,
   HardDrive,
   Star,
   Layers,
-  Sparkles,
   ArrowUpRight,
+  ExternalLink,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
@@ -37,14 +36,16 @@ export function ResumeModal() {
     }
   }, [showResumeModal, fetchResumeDocuments]);
 
-  // Set default active doc
+  // Set default active doc asynchronously to avoid cascading sync renders
   useEffect(() => {
-    if (showResumeModal) {
-      if (primaryResume?.id) {
-        setActiveDocId(primaryResume.id);
-      } else if (resumeDocuments.length > 0) {
-        const primary = resumeDocuments.find((d: any) => d.isPrimary) || resumeDocuments[0];
-        setActiveDocId(primary.id);
+    if (!showResumeModal) return;
+
+    if (primaryResume?.id) {
+      queueMicrotask(() => setActiveDocId(primaryResume.id));
+    } else if (resumeDocuments.length > 0) {
+      const primary = resumeDocuments.find((d: any) => d.isPrimary) || resumeDocuments[0];
+      if (primary?.id) {
+        queueMicrotask(() => setActiveDocId(primary.id));
       }
     }
   }, [showResumeModal, primaryResume, resumeDocuments]);
@@ -58,15 +59,15 @@ export function ResumeModal() {
   // Fetch markdown content if current selected is .md
   useEffect(() => {
     if (!selectedDoc) {
-      setMdContent(null);
+      queueMicrotask(() => setMdContent(null));
       return;
     }
-    const isMd =
+    const isDocMd =
       selectedDoc.fileType === "md" ||
       selectedDoc.fileName?.toLowerCase().endsWith(".md") ||
       selectedDoc.mimeType?.includes("markdown");
 
-    if (isMd) {
+    if (isDocMd) {
       setLoadingContent(true);
       fetch(`/api/resume/documents/${selectedDoc.id}/download`)
         .then((res) => {
@@ -82,7 +83,7 @@ export function ResumeModal() {
         })
         .finally(() => setLoadingContent(false));
     } else {
-      setMdContent(null);
+      queueMicrotask(() => setMdContent(null));
     }
   }, [selectedDoc]);
 
@@ -281,13 +282,28 @@ export function ResumeModal() {
 
               {/* Document Renderer */}
               <div className="flex-1 w-full h-full relative overflow-y-auto">
-                {isMd ? (
-                  <div className="p-6 sm:p-10 max-w-4xl mx-auto bg-canvas min-h-full my-4 rounded-xl border border-subtle shadow-sm">
-                    {loadingContent ? (
+                {(() => {
+                  if (!isMd) {
+                    return (
+                      <iframe
+                        src={resumeUrl}
+                        className="w-full h-full border-none"
+                        title={resumeTitle}
+                      />
+                    );
+                  }
+
+                  let markdownBody = (
+                    <div className="text-muted text-center py-20">No content found.</div>
+                  );
+                  if (loadingContent) {
+                    markdownBody = (
                       <div className="flex items-center justify-center py-20 text-muted font-mono text-sm">
                         Loading Markdown resume...
                       </div>
-                    ) : mdContent ? (
+                    );
+                  } else if (mdContent) {
+                    markdownBody = (
                       <div className="prose prose-invert max-w-none text-sm leading-relaxed">
                         <ReactMarkdown
                           components={{
@@ -331,17 +347,15 @@ export function ResumeModal() {
                           {mdContent}
                         </ReactMarkdown>
                       </div>
-                    ) : (
-                      <div className="text-muted text-center py-20">No content found.</div>
-                    )}
-                  </div>
-                ) : (
-                  <iframe
-                    src={resumeUrl}
-                    className="w-full h-full border-none"
-                    title={resumeTitle}
-                  />
-                )}
+                    );
+                  }
+
+                  return (
+                    <div className="p-6 sm:p-10 max-w-4xl mx-auto bg-canvas min-h-full my-4 rounded-xl border border-subtle shadow-sm">
+                      {markdownBody}
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </div>

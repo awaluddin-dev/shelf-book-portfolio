@@ -9,9 +9,13 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
   async rewrites() {
-    const apiUrl = (process.env.API_URL || "http://localhost:3002")
-      .replace(/\/+$/, "")
-      .replace(/\/api$/, "");
+    let apiUrl = (process.env.API_URL || "http://localhost:3002").trim();
+    while (apiUrl.endsWith("/")) {
+      apiUrl = apiUrl.slice(0, -1);
+    }
+    if (apiUrl.endsWith("/api")) {
+      apiUrl = apiUrl.slice(0, -4);
+    }
     return [
       {
         source: "/api/:path*",

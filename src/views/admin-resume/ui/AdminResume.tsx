@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Loader } from "@/shared/ui/Loader";
 import { AdminPageSkeleton } from "@/widgets/admin-page-skeleton/ui/AdminPageSkeleton";
 import { useRouter } from "next/navigation";
@@ -62,6 +62,28 @@ export default function AdminResume() {
     type: "success" | "error";
   } | null>(null);
 
+  const showToast = (message: string, type: "success" | "error" = "success") => {
+    setToastMessage({ message, type });
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const fetchDocuments = useCallback(async () => {
+    try {
+      const res = await fetch("/api/resume/documents");
+      const result = await res.json();
+      if (result.success && Array.isArray(result.data)) {
+        setDocuments(result.data);
+      } else if (Array.isArray(result)) {
+        setDocuments(result);
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to fetch resume documents", "error");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -90,12 +112,12 @@ export default function AdminResume() {
     }
 
     fetchDocuments();
-  }, [router]);
+  }, [router, fetchDocuments]);
 
   // Load preview content if previewing markdown document
   useEffect(() => {
     if (!previewDoc) {
-      setPreviewMdContent(null);
+      queueMicrotask(() => setPreviewMdContent(null));
       return;
     }
     const isMd =
@@ -110,31 +132,9 @@ export default function AdminResume() {
         .catch(() => setPreviewMdContent("# Failed to load markdown content"))
         .finally(() => setLoadingPreview(false));
     } else {
-      setPreviewMdContent(null);
+      queueMicrotask(() => setPreviewMdContent(null));
     }
   }, [previewDoc]);
-
-  const showToast = (message: string, type: "success" | "error" = "success") => {
-    setToastMessage({ message, type });
-    setTimeout(() => setToastMessage(null), 3500);
-  };
-
-  const fetchDocuments = async () => {
-    try {
-      const res = await fetch("/api/resume/documents");
-      const result = await res.json();
-      if (result.success && Array.isArray(result.data)) {
-        setDocuments(result.data);
-      } else if (Array.isArray(result)) {
-        setDocuments(result);
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Failed to fetch resume documents", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -171,6 +171,58 @@ export default function AdminResume() {
     }
   };
 
+  const saveUpdatedDocument = async (id: string, token: string) => {
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("title", title.trim());
+      formData.append("description", description.trim());
+      formData.append("isPrimary", String(isPrimary));
+
+      const res = await fetch(`/api/resume/documents/${id}`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to update document");
+    } else {
+      const res = await fetch(`/api/resume/documents/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title: title.trim(),
+          description: description.trim() || undefined,
+          isPrimary,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to update document");
+    }
+  };
+
+  const saveNewDocument = async (token: string) => {
+    const formData = new FormData();
+    if (file) formData.append("file", file);
+    formData.append("title", title.trim());
+    if (description.trim()) {
+      formData.append("description", description.trim());
+    }
+    formData.append("isPrimary", String(isPrimary));
+
+    const res = await fetch("/api/resume/documents", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to upload document");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -183,74 +235,18 @@ export default function AdminResume() {
       return;
     }
 
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token") || "";
     setIsUploading(true);
 
     try {
       if (editingDocId) {
-        // Update existing document (with optional new file replacement)
-        if (file) {
-          const formData = new FormData();
-          formData.append("file", file);
-          formData.append("title", title.trim());
-          formData.append("description", description.trim());
-          formData.append("isPrimary", String(isPrimary));
-
-          const res = await fetch(`/api/resume/documents/${editingDocId}`, {
-            method: "PATCH",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.message || "Failed to update document");
-        } else {
-          const res = await fetch(`/api/resume/documents/${editingDocId}`, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              title: title.trim(),
-              description: description.trim() || undefined,
-              isPrimary,
-            }),
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.message || "Failed to update document");
-        }
-
+        await saveUpdatedDocument(editingDocId, token);
         showToast("Document updated successfully!", "success");
-        cancelEdit();
       } else {
-        // Create new document upload
-        const formData = new FormData();
-        if (file) formData.append("file", file);
-        formData.append("title", title.trim());
-        if (description.trim()) {
-          formData.append("description", description.trim());
-        }
-        formData.append("isPrimary", String(isPrimary));
-
-        const res = await fetch("/api/resume/documents", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        });
-
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.message || "Failed to upload document");
-        }
-
+        await saveNewDocument(token);
         showToast("Document uploaded successfully!", "success");
-        cancelEdit();
       }
-
+      cancelEdit();
       fetchDocuments();
     } catch (err: any) {
       console.error(err);

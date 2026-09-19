@@ -2,7 +2,7 @@
 
 import React from "react";
 import { AdminCrudTable } from "@/widgets/admin-crud-table/ui/AdminCrudTable";
-import { Compass, Sparkles, Clock, ExternalLink } from "lucide-react";
+import { Compass, Clock, ExternalLink } from "lucide-react";
 
 export function AdminDirections() {
   return (
