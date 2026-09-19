@@ -21,7 +21,6 @@ import {
   Play,
   Tv,
   PenTool,
-  CheckCircle2,
   Hourglass,
   ArrowUpRight,
   FileText,
@@ -584,7 +583,6 @@ export function DirectionsPage() {
                       >
                         <div className="relative aspect-video w-full bg-surface overflow-hidden">
                           {video.thumbnailUrl ? (
-                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={video.thumbnailUrl}
                               alt={video.title}

@@ -891,7 +891,7 @@ export default function ProjectsSection({
       }
       return 0;
     });
-  }, [searchQuery, selectedCategory, sortBy, activeProjects]);
+  }, [searchQuery, selectedCategory, sortBy, activeProjects, isFeaturedOnly]);
 
   const scrollShelf = (direction: "left" | "right") => {
     if (shelfRef.current) {

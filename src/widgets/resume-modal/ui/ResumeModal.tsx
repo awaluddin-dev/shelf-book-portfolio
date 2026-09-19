@@ -7,8 +7,6 @@ import {
   FileText,
   X,
   Download,
-  Calendar,
-  HardDrive,
   Star,
   Layers,
   ArrowUpRight,
@@ -68,7 +66,7 @@ export function ResumeModal() {
       selectedDoc.mimeType?.includes("markdown");
 
     if (isDocMd) {
-      setLoadingContent(true);
+      queueMicrotask(() => setLoadingContent(true));
       fetch(`/api/resume/documents/${selectedDoc.id}/download`)
         .then((res) => {
           if (!res.ok) throw new Error("Failed to load markdown");

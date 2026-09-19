@@ -325,9 +325,10 @@ export function AdminCrudTable<T extends { id?: string }>({
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-mono text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+                  disabled={isProcessing}
+                  className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-mono text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
                 >
-                  Save Changes
+                  {isProcessing ? "Saving..." : "Save Changes"}
                 </button>
               </div>
             </form>

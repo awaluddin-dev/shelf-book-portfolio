@@ -19,16 +19,11 @@ import {
   TrendingUp,
   Zap,
   Activity,
-  Download,
-  PenTool,
-  ArrowUpRight,
   FileText,
-  Mail,
 } from "lucide-react";
 
 import { getTechIconAndColor } from "@/shared/lib/tech-icons";
 import { motion, AnimatePresence, useSpring, useScroll } from "motion/react";
-import { SiGithub, SiLinkedin } from "@/shared/ui/icons/BrandIcons";
 
 import { usePortfolioStore } from "@/shared/store/portfolioStore";
 import ProjectsSection from "@/widgets/projects-list/ui/ProjectsList";
@@ -67,13 +62,11 @@ export default function Portfolio() {
     initializeData,
     toastMessage,
     isLoading,
-    triggerToast,
     setShowResumeModal,
   } = usePortfolioStore();
 
   const [isPlaygroundOpen, setPlaygroundOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("about");
-  const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
     initializeData();
@@ -85,14 +78,6 @@ export default function Portfolio() {
     damping: 30,
     restDelta: 0.001,
   });
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 300);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     const sections = ["about", "experience", "projects", "proficiency", "endorse"];

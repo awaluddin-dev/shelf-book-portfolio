@@ -35,11 +35,14 @@ export default function InquiryPage() {
 
     const source = draftInquirySource;
     setDraftInquirySource(null);
+
+    const onChunk = (chunk: string) => {
+      setFormData((prev) => ({ ...prev, message: prev.message + chunk }));
+    };
+
     queueMicrotask(() => {
       setFormData((prev) => ({ ...prev, message: "" }));
-      draft(source, (chunk) => {
-        setFormData((prev) => ({ ...prev, message: prev.message + chunk }));
-      });
+      draft(source, onChunk);
     });
   }, [draftInquirySource, draft, setDraftInquirySource]);
 

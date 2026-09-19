@@ -11,7 +11,6 @@ import {
   BriefcaseBusiness,
 } from "lucide-react";
 import { AnimatedDivider } from "@/shared/ui/AnimatedDivider";
-import { useTheme } from "@/shared/ui/ThemeProvider";
 import { cn } from "@/shared/lib/utils";
 
 interface ProficiencySectionProps {
@@ -116,10 +115,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: 
 
 export default function ProficiencySection({
   renderIcon,
-  isDark: propIsDark,
 }: Readonly<ProficiencySectionProps>) {
-  const { isDark: contextIsDark } = useTheme();
-  const isDark = propIsDark !== undefined ? propIsDark : contextIsDark;
   const { dynamicPillarsV2 } = usePortfolioStore();
 
   const pillars =

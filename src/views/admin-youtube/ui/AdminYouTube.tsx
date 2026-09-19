@@ -2,7 +2,7 @@
 
 import React from "react";
 import { AdminCrudTable } from "@/widgets/admin-crud-table/ui/AdminCrudTable";
-import { Tv, ExternalLink, Play, Calendar } from "lucide-react";
+import { Tv, ExternalLink } from "lucide-react";
 
 export function AdminYouTube() {
   return (
@@ -41,7 +41,6 @@ export function AdminYouTube() {
             render: (item: any) => (
               <div className="flex items-center gap-3">
                 {item.thumbnailUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={item.thumbnailUrl}
                     alt={item.title}

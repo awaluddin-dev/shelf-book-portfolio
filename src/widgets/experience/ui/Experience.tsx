@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity, sonarjs/no-nested-functions */
 import React, { useState } from "react";
 import { motion } from "motion/react";
 import {
