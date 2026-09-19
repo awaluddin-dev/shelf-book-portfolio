@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import ExperienceSection from '../Experience';
 import { usePortfolioStore } from '@/shared/store/portfolioStore';
 
@@ -97,10 +97,10 @@ describe('ExperienceSection', () => {
       jest.advanceTimersByTime(1000);
     });
 
-    expect(screen.getByText('Experience')).toBeInTheDocument();
+    expect(screen.getByText('Career')).toBeInTheDocument();
   });
 
-  it('renders correctly and switches chart tabs', () => {
+  it('renders correctly and displays section title', () => {
     (usePortfolioStore as unknown as jest.Mock).mockReturnValue({ ...mockStore, isLoading: false });
     render(<ExperienceSection isDark={false} />);
     
@@ -108,22 +108,11 @@ describe('ExperienceSection', () => {
       jest.advanceTimersByTime(1000);
     });
 
-    expect(screen.getByText('Experience')).toBeInTheDocument();
-
-    // Switch to Heatmap
-    const heatmapBtn = screen.getByText('Heatmap');
-    fireEvent.click(heatmapBtn);
-
-    // Switch to Repos
-    const reposBtn = screen.getByText('Repos');
-    fireEvent.click(reposBtn);
-
-    // Switch to Timeline
-    const timelineBtn = screen.getByText('Commit Timeline');
-    fireEvent.click(timelineBtn);
+    expect(screen.getByText('Career')).toBeInTheDocument();
+    expect(screen.getByText('Journey & Chronology')).toBeInTheDocument();
   });
   
-  it('handles clicking on work timeline nodes and touch events', () => {
+  it('renders the vertical career timeline entries correctly', () => {
     (usePortfolioStore as unknown as jest.Mock).mockReturnValue({ ...mockStore, isLoading: false });
     render(<ExperienceSection isDark={false} />);
     
@@ -131,51 +120,15 @@ describe('ExperienceSection', () => {
       jest.advanceTimersByTime(1000);
     });
     
-    // We should be able to click on the timeline nodes.
-    const nodes = screen.getAllByRole('button').filter(b => b.className.includes('w-6') && b.className.includes('h-6'));
-    if (nodes.length > 0) {
-      fireEvent.click(nodes[0]);
-      fireEvent.click(nodes[1]);
-    }
-    expect(nodes).toBeDefined();
-  });
-
-  it('renders testimonials and handles scrolling', () => {
-    (usePortfolioStore as unknown as jest.Mock).mockReturnValue({ ...mockStore, isLoading: false });
-    render(<ExperienceSection isDark={true} />);
-    act(() => {
-      jest.advanceTimersByTime(1000);
-    });
-
-    // Testimonial should be visible
-    expect(screen.getAllByText('“Great dev”')[0]).toBeInTheDocument();
+    // Assert STRICT NAMING RULES entities are rendered
+    expect(screen.getByText('PT Serasi Autoraya (SERA) — Astra Group')).toBeInTheDocument();
+    expect(screen.getByText('Telkomsel')).toBeInTheDocument();
+    expect(screen.getByText('Regulated Fintech Company (OJK & BI Regulated)')).toBeInTheDocument();
+    expect(screen.getByText('PT Maccon Generasi Mandiri')).toBeInTheDocument();
+    expect(screen.getByText('PT Daikin Industries Indonesia')).toBeInTheDocument();
     
-    // Test the arrow buttons for scrolling
-    const leftArrow = screen.getAllByRole('button').find(b => b.querySelector('.lucide-chevron-left'));
-    const rightArrow = screen.getAllByRole('button').find(b => b.querySelector('.lucide-chevron-right'));
-    if (leftArrow) fireEvent.click(leftArrow);
-    if (rightArrow) fireEvent.click(rightArrow);
-
-    act(() => {
-      jest.advanceTimersByTime(1000);
-    });
-  });
-
-  it('handles mouse drag for testimonials', () => {
-    (usePortfolioStore as unknown as jest.Mock).mockReturnValue({ ...mockStore, isLoading: false });
-    render(<ExperienceSection isDark={false} />);
-    
-    const elements = screen.getAllByText('“Great dev”');
-    if (elements.length > 0) {
-      const container = elements[0].closest('ul') || elements[0].parentElement?.parentElement;
-      if (container) {
-        fireEvent.mouseDown(container, { pageX: 100 });
-        fireEvent.mouseMove(container, { pageX: 50 });
-        fireEvent.mouseUp(container);
-        fireEvent.mouseDown(container, { pageX: 50 });
-        fireEvent.mouseLeave(container);
-      }
-    }
-    expect(elements).toBeDefined();
+    // Assert metric $18K/year is rendered
+    expect(screen.getByText('$18K/year')).toBeInTheDocument();
   });
 });
+

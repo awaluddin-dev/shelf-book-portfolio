@@ -4,7 +4,11 @@ import { useRouter } from "next/navigation";
 import { Lock, ArrowRight, User } from "lucide-react";
 import { Turnstile } from "@marsidev/react-turnstile";
 
-const API_BASE_URL = process.env.API_URL;
+const API_BASE_URL = (
+  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.API_URL ||
+  ""
+).replace(/\/api\/?$/, "");
 
 interface AdminLoginProps {
   turnstileSiteKey?: string;
@@ -16,6 +20,9 @@ export default function AdminLogin({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(
+    "Incorrect credentials. Please try again.",
+  );
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const router = useRouter();
 
@@ -25,6 +32,7 @@ export default function AdminLogin({
     e.preventDefault();
     setIsLoading(true);
     setError(false);
+    setErrorMessage("Incorrect credentials. Please try again.");
 
     // Pastikan Turnstile token sudah ada sebelum submit
     if (!turnstileToken) {
@@ -43,6 +51,11 @@ export default function AdminLogin({
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
+        if (errData.message && errData.message !== "Email atau password salah") {
+          setErrorMessage(errData.message);
+        } else {
+          setErrorMessage("Incorrect credentials. Please try again.");
+        }
         throw new Error(errData.message || "Login failed");
       }
 
@@ -72,7 +85,7 @@ export default function AdminLogin({
       <div className="glass-card w-full max-w-md rounded-3xl p-8 border border-white/5">
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 rounded-full glass-card-inset flex items-center justify-center">
-            <Lock className="text-neu-accent" size={24} />
+            <Lock className="text-emerald-400" size={24} />
           </div>
         </div>
         <h1 className="text-2xl font-bold text-center mb-2">Admin Portal</h1>
@@ -100,7 +113,7 @@ export default function AdminLogin({
                   setEmail(e.target.value);
                   setError(false);
                 }}
-                className="w-full pl-10 pr-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-neu-accent"
+                className="w-full pl-10 pr-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 placeholder="Enter email..."
               />
             </div>
@@ -124,13 +137,13 @@ export default function AdminLogin({
                   setPassword(e.target.value);
                   setError(false);
                 }}
-                className="w-full pl-10 pr-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-neu-accent"
+                className="w-full pl-10 pr-4 py-3 glass-card-inset rounded-xl focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 placeholder="Enter password..."
               />
             </div>
             {error && (
               <p className="text-red-500 text-xs mt-2">
-                Incorrect credentials. Please try again.
+                {errorMessage}
               </p>
             )}
           </div>
@@ -146,7 +159,7 @@ export default function AdminLogin({
             <button
               type="submit"
               disabled={isLoading || !turnstileToken}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-neu-accent text-white rounded-xl shadow-neu hover:scale-[1.02] active:scale-95 transition-all font-bold disabled:opacity-50 disabled:hover:scale-100"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl shadow-neu hover:scale-[1.02] active:scale-95 transition-all font-bold disabled:opacity-50 disabled:hover:scale-100 cursor-pointer"
             >
               {isLoading ? (
                 <>

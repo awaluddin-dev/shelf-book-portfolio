@@ -5,15 +5,16 @@ export function ChatSvg({
   onClick,
   isDark = true,
 }: Readonly<{ className?: string; onClick?: () => void; isDark?: boolean }>) {
+  // Permanently locked to emerald & teal palette
   const palette = {
-    primary: isDark ? "#05626E" : "#7a9ee2ff",
-    secondary: isDark ? "#054C56" : "#3060c2ff",
-    accent1: isDark ? "#1ADDDA" : "#E5E7EB",
-    accent2: isDark ? "#34A09E" : "#b4c7e6",
-    black: isDark ? "#0d0d0d" : "#ffffff",
-    purple: isDark ? "#371A45" : "#2a1abdff",
-    peach: isDark ? "#FFEAE1" : "#ffeae1",
-    primaryDark: isDark ? "#155B64" : "#94a9d6",
+    primary: "#05626E",
+    secondary: "#054C56",
+    accent1: "#1ADDDA", // vibrant emerald
+    accent2: "#34A09E",
+    black: "#0d0d0d",
+    purple: "#111827",
+    peach: "#FFEAE1",
+    primaryDark: "#054C56",
   };
 
   return (

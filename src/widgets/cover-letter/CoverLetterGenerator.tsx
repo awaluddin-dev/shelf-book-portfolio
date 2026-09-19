@@ -199,7 +199,7 @@ export function CoverLetterGenerator({
               type="button"
               onClick={() => generate(jobDescription)}
               disabled={!canSubmit}
-              className="inline-flex items-center gap-2 rounded-md bg-neu-accent px-4 py-2 text-sm font-medium text-neu-bg transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
+              className="inline-flex items-center gap-2 rounded-md bg-emerald-500 hover:bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30 cursor-pointer"
             >
               <SparkleIcon className="h-4 w-4" />
               Generate Cover Letter

@@ -133,9 +133,9 @@ export default function DockNavigation({
           />
         </svg>
 
-        {/* Glass Background */}
+        {/* Solid Background */}
         <div
-          className="absolute inset-0 bg-neu-bg/20 dark:bg-neu-bg/40 backdrop-blur-md shadow-2xl pointer-events-auto transition-colors duration-300"
+          className="absolute inset-0 bg-card shadow-2xl pointer-events-auto border border-subtle"
           style={{
             clipPath: "url(#l-shape-clip)",
             WebkitClipPath: "url(#l-shape-clip)",
@@ -287,7 +287,7 @@ export default function DockNavigation({
                   animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
                   exit={{ opacity: 0, y: -6, x: "-50%", scale: 0.8 }}
                   transition={{ type: "spring", stiffness: 450, damping: 24 }}
-                  className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-xl bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md text-neu-accent text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-neu-modal border border-neu-accent/20 z-50 pointer-events-none"
+                  className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-xl bg-card text-brand text-[10px] font-mono tracking-wider uppercase font-semibold whitespace-nowrap shadow-xl border border-subtle z-50 pointer-events-none"
                 >
                   {isOpen ? "Close Menu" : "Menu"}
                 </motion.div>

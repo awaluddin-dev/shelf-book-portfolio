@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence, Variants } from "motion/react";
 import { SpeechBubble } from "./SpeechBubble";
-import { useTheme } from "next-themes";
 
 import { MascotSvg } from "./MascotSvg";
 import { ChatSvg } from "./ChatSvg";
@@ -17,8 +16,7 @@ export function Mascot() {
   const [isChatMode, setIsChatMode] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
+  const isDark = true;
 
   const timeSpawn = Number(process.env.MASCOT_TIME_SPAWN) || 45000;
 
@@ -105,7 +103,7 @@ export function Mascot() {
           variants={mascotVariants}
           className={`fixed z-[100] pointer-events-none transition-all duration-700 ease-in-out ${
             isChatMode
-              ? "bottom-6 right-6 w-16 h-16 md:w-20 md:h-20"
+              ? "bottom-5 right-5 w-16 h-16 md:w-20 md:h-20"
               : "-bottom-4 md:-bottom-2 right-0 md:right-12 w-[130px] h-[190px] md:w-[190px] md:h-[250px]"
           }`}
         >

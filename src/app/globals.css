@@ -16,36 +16,82 @@
     inset 6px 6px 12px rgb(17 45 78 / 8%), inset -6px -6px 12px #fff;
   --shadow-neu-sm: 4px 4px 8px rgb(17 45 78 / 6%), -4px -4px 8px #fff;
   --shadow-neu-modal: 16px 16px 40px rgb(17 45 78 / 20%);
+
+  /* Surface / Backgrounds (Solid, No Glassmorphism) */
+  --bg-canvas: #0f172a;
+  --bg-card: #142028;
+  --bg-card-hover: #182832;
+
+  /* Borders & Dividers */
+  --border-subtle: #0f4c75;
+  --border-hover: #dddddd;
+
+  /* Typography */
+  --text-primary: #ededed;
+  --text-secondary: #93b5cd;
+  --text-muted: #5e839b;
+
+  /* Accents & Status */
+  --accent-brand: #dddddd;
+  --accent-status: #14ffec;
+  --accent-emerald: #10b981;
 }
 
 .dark {
-  --color-neu-bg: #222831;
-  --color-neu-secondary: #393e46;
-  --color-neu-text: #eee;
-  --color-neu-text-muted: rgb(238 238 238 / 60%);
-  --color-neu-accent: #00adb5;
+  --color-neu-bg: var(--bg-canvas);
+  --color-neu-secondary: var(--bg-card);
+  --color-neu-text: var(--text-primary);
+  --color-neu-text-muted: var(--text-secondary);
+  --color-neu-accent: var(--accent-emerald);
+  --color-neu-border: var(--border-subtle);
   --shadow-neu:
-    8px 8px 16px rgb(0 0 0 / 60%), -8px -8px 16px rgb(255 255 255 / 5%);
+    8px 8px 16px rgb(10 15 18 / 60%), -8px -8px 16px rgb(50 130 184 / 5%);
   --shadow-neu-inset:
-    inset 6px 6px 12px rgb(0 0 0 / 60%),
-    inset -6px -6px 12px rgb(255 255 255 / 5%);
+    inset 6px 6px 12px rgb(10 15 18 / 60%),
+    inset -6px -6px 12px rgb(50 130 184 / 5%);
   --shadow-neu-sm:
-    4px 4px 8px rgb(0 0 0 / 50%), -4px -4px 8px rgb(255 255 255 / 5%);
-  --shadow-neu-modal: 16px 16px 40px rgb(0 0 0 / 80%);
+    4px 4px 8px rgb(10 15 18 / 50%), -4px -4px 8px rgb(50 130 184 / 5%);
+  --shadow-neu-modal: 16px 16px 40px rgb(10 15 18 / 80%);
 }
 
 @theme {
-  --color-test-1: #123456;
-  --color-neu-bg: #f9f7f7;
-  --color-neu-secondary: #dbe2ef;
-  --color-neu-text: #112d4e;
-  --color-neu-text-muted: rgb(17 45 78 / 65%);
-  --color-neu-accent: #3f72af;
+  /* Tailwind v4 Native Tokens */
+  --color-canvas: #0f172a;
+  --color-card: #142028;
+  --color-card-hover: #182832;
+  --color-subtle: #0f4c75;
+  --color-subtle-hover: #dddddd;
+  --color-primary: #ededed;
+  --color-secondary: #93b5cd;
+  --color-muted: #5e839b;
+  --color-brand: #dddddd;
+  --color-status: #14ffec;
+  --color-emerald: #10b981;
+
+  /* Aliases for semantic backward-compatibility */
+  --color-bg-canvas: #0f172a;
+  --color-bg-card: #142028;
+  --color-bg-card-hover: #182832;
+  --color-border-subtle: #0f4c75;
+  --color-border-hover: #dddddd;
+  --color-text-primary: #ededed;
+  --color-text-secondary: #93b5cd;
+  --color-text-muted: #5e839b;
+  --color-accent-brand: #dddddd;
+  --color-accent-status: #14ffec;
+  --color-accent-emerald: #10b981;
+
+  --color-neu-bg: var(--color-canvas);
+  --color-neu-secondary: var(--color-card);
+  --color-neu-text: var(--color-primary);
+  --color-neu-text-muted: var(--color-secondary);
+  --color-neu-accent: var(--color-emerald);
+  --color-neu-border: var(--color-subtle);
 }
 
 body {
-  background-color: var(--color-neu-bg);
-  color: var(--color-neu-text);
+  background-color: var(--color-canvas);
+  color: var(--color-secondary);
 }
 
 /* Scale down the layout for 1280-1439px screens to mimic 1440x900 */
@@ -289,20 +335,14 @@ body *,
   animation-play-state: paused;
 }
 
-
-
-/* Glassy Gradients Implementation */
+/* Solid Flat Surfaces Implementation (Replacing Glassmorphism) */
 .glass-card {
-  background: linear-gradient(
-    135deg,
-    rgb(219 226 239 / 40%) 0%,
-    rgb(249 247 247 / 60%) 100%
-  );
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgb(255 255 255 / 50%);
-  box-shadow: 0 8px 32px 0 rgb(17 45 78 / 10%);
-  transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 12px 0 rgb(0 0 0 / 25%);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
   -webkit-backface-visibility: hidden;
@@ -310,36 +350,26 @@ body *,
 }
 
 .dark .glass-card {
-  background: linear-gradient(
-    135deg,
-    rgb(57 62 70 / 40%) 0%,
-    rgb(34 40 49 / 70%) 100%
-  );
-  border: 1px solid rgb(238 238 238 / 8%);
-  box-shadow: 0 8px 32px 0 rgb(0 0 0 / 40%);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 12px 0 rgb(0 0 0 / 30%);
 }
 
 .glass-card:hover {
-  border-color: rgb(63 114 175 / 30%);
-  box-shadow: 0 10px 40px 0 rgb(63 114 175 / 15%);
+  border-color: var(--border-hover);
+  box-shadow: 0 6px 16px 0 rgb(50 130 184 / 15%);
 }
 
 .dark .glass-card:hover {
-  border-color: rgb(0 173 181 / 30%);
-  box-shadow: 0 10px 40px 0 rgb(0 173 181 / 20%);
+  border-color: var(--border-hover);
+  box-shadow: 0 6px 16px 0 rgb(50 130 184 / 20%);
 }
 
 .glass-card-inset {
-  background: linear-gradient(
-    135deg,
-    rgb(219 226 239 / 20%) 0%,
-    rgb(249 247 247 / 40%) 100%
-  );
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgb(255 255 255 / 20%);
-  box-shadow: inset 2px 2px 8px rgb(17 45 78 / 5%);
-  transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  box-shadow: inset 1px 1px 4px rgb(0 0 0 / 30%);
+  transition: border-color 150ms ease;
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
   -webkit-backface-visibility: hidden;
@@ -347,43 +377,24 @@ body *,
 }
 
 .dark .glass-card-inset {
-  background: linear-gradient(
-    135deg,
-    rgb(57 62 70 / 20%) 0%,
-    rgb(34 40 49 / 50%) 100%
-  );
-  border: 1px solid rgb(238 238 238 / 3%);
-  box-shadow: inset 2px 2px 8px rgb(0 0 0 / 30%);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  box-shadow: inset 1px 1px 4px rgb(0 0 0 / 40%);
 }
 
 .glass-card-inset:hover {
-  background: linear-gradient(
-    135deg,
-    rgb(219 226 239 / 30%) 0%,
-    rgb(249 247 247 / 50%) 100%
-  );
+  border-color: var(--border-hover);
 }
 
 .dark .glass-card-inset:hover {
-  background: linear-gradient(
-    135deg,
-    rgb(57 62 70 / 30%) 0%,
-    rgb(34 40 49 / 60%) 100%
-  );
+  border-color: var(--border-hover);
 }
 
-/* Let's redefine glass-card-highlighted to match inset styling for simplicity, since home_content uses it */
 .glass-card-highlighted {
-  background: linear-gradient(
-    135deg,
-    rgb(219 226 239 / 50%) 0%,
-    rgb(249 247 247 / 70%) 100%
-  );
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgb(255 255 255 / 50%);
-  box-shadow: 0 8px 32px 0 rgb(17 45 78 / 10%);
-  transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 12px 0 rgb(0 0 0 / 25%);
+  transition: border-color 150ms ease;
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
   -webkit-backface-visibility: hidden;
@@ -391,13 +402,9 @@ body *,
 }
 
 .dark .glass-card-highlighted {
-  background: linear-gradient(
-    135deg,
-    rgb(57 62 70 / 50%) 0%,
-    rgb(34 40 49 / 80%) 100%
-  );
-  border: 1px solid rgb(238 238 238 / 10%);
-  box-shadow: 0 8px 32px 0 rgb(0 0 0 / 40%);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 12px 0 rgb(0 0 0 / 30%);
 }
 
 /* Custom styling for dropdown options to match theme without affecting the transparent select box */
@@ -481,6 +488,3 @@ select option {
     scroll-behavior: auto !important;
   }
 }
-
-
-

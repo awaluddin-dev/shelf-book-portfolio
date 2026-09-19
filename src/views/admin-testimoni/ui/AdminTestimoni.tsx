@@ -248,12 +248,12 @@ export default function AdminTestimoni() {
 
       {/* Modal */}
       {selectedTestimonial && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-neu-bg rounded-3xl shadow-neu-modal w-full max-w-lg p-8 relative border border-white/5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+          <div className="bg-card rounded-3xl shadow-2xl w-full max-w-lg p-8 relative border border-subtle">
             <button
               type="button"
               onClick={() => setSelectedTestimonial(null)}
-              className="absolute top-5 right-5 p-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-neu-text transition-colors"
+              className="absolute top-5 right-5 p-2 rounded-full bg-canvas hover:bg-card text-secondary hover:text-primary transition-colors border border-subtle"
             >
               <X size={20} />
             </button>
@@ -327,10 +327,10 @@ export default function AdminTestimoni() {
             animate={{ opacity: 1, y: 0, x: "-50%" }}
             exit={{ opacity: 0, y: 50, x: "-50%" }}
             className={cn(
-              "fixed bottom-8 left-1/2 z-[200] px-6 py-3.5 rounded-2xl font-mono text-xs shadow-neu border backdrop-blur-md flex items-center gap-2.5",
+              "fixed bottom-8 left-1/2 z-[200] px-6 py-3.5 rounded-2xl font-mono text-xs shadow-xl border flex items-center gap-2.5",
               toastMessage.type === "success"
-                ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
-                : "bg-red-500/10 text-red-500 border-red-500/20",
+                ? "bg-card text-emerald-400 border-subtle"
+                : "bg-card text-red-400 border-red-500/50",
             )}
           >
             {toastMessage.type === "success" ? (

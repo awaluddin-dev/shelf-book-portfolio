@@ -61,7 +61,7 @@ export default function AdminDashboard() {
     Promise.all([
       fetch("/api/status").then((res) => res.json()),
       fetch("/api/testimonials?all=true").then((res) => res.json()),
-      fetch("/api/hero").then((res) => res.json()),
+      fetch("/api/v2/hero").then((res) => res.json()),
     ]).then(([statusData, testData, heroData]) => {
       let testExtracted = [];
       if (testData.data?.testimonials) {
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
   const saveHeroConfig = async () => {
     setIsProcessing(true);
     try {
-      const res = await fetch("/api/hero", {
+      const res = await fetch("/api/v2/hero", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
       });
       if (!res.ok) throw new Error("Failed");
       setToastMessage({
-        message: "Hero Section updated successfully",
+        message: "Hero Section updated successfully (v2)",
         type: "success",
       });
     } catch (err) {
@@ -134,8 +134,10 @@ export default function AdminDashboard() {
         id: "m_" + Date.now(),
         value: "",
         label: "",
-        icon: "Code2",
-        isSavings: false,
+        description: "",
+        subtext: "",
+        icon: "DollarSign",
+        order: metrics.length + 1,
       },
     ]);
   };
@@ -174,32 +176,43 @@ export default function AdminDashboard() {
                 </div>
               </div>
               <div className="p-6 glass-card-inset rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div
-                  className={cn(
-                    "text-sm font-bold transition-colors duration-300",
-                    heroConfig.openForWork
-                      ? "text-emerald-500"
-                      : "text-amber-500",
-                  )}
-                >
-                  {heroConfig.openForWork
-                    ? "Open to Opportunities"
-                    : "Closed to Opportunities"}
+                <div>
+                  <div
+                    className={cn(
+                      "text-sm font-bold transition-colors duration-300",
+                      heroConfig.status === "available"
+                        ? "text-emerald-500"
+                        : "text-amber-500",
+                    )}
+                  >
+                    {heroConfig.status === "available"
+                      ? "Available for Opportunities"
+                      : "Currently Busy / Closed"}
+                  </div>
+                  <div className="text-xs text-neu-text-muted font-mono mt-0.5">
+                    {heroConfig.statusText || (heroConfig.status === "available" ? "Available for Remote Roles (UTC+7)" : "Not Available")}
+                  </div>
                 </div>
                 <button
                   type="button"
-                  onClick={() =>
+                  onClick={() => {
+                    const nextStatus = heroConfig.status === "available" ? "busy" : "available";
+                    const nextStatusText = nextStatus === "available"
+                      ? "Available for Remote Roles (UTC+7)"
+                      : "Currently Busy / Not Available";
                     setHeroConfig({
                       ...heroConfig,
-                      openForWork: !heroConfig.openForWork,
-                    })
-                  }
+                      status: nextStatus,
+                      statusText: heroConfig.statusText || nextStatusText,
+                      openForWork: nextStatus === "available",
+                    });
+                  }}
                   className="relative inline-flex h-8 w-16 items-center rounded-full bg-gray-200 dark:bg-zinc-850 shadow-inner transition-colors duration-200 focus:outline-none cursor-pointer"
                 >
                   <span
                     className={cn(
                       "inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition-transform duration-200",
-                      heroConfig.openForWork
+                      heroConfig.status === "available"
                         ? "translate-x-9 bg-emerald-500"
                         : "translate-x-1 bg-zinc-400",
                     )}
@@ -268,24 +281,94 @@ export default function AdminDashboard() {
                     onChange={(e) =>
                       setHeroConfig({ ...heroConfig, role: e.target.value })
                     }
-                    placeholder="e.g. Backend Engineer"
+                    placeholder="e.g. Backend Engineer & AI Integrator"
                     className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
                   />
                 </div>
                 <div className="space-y-1">
                   <span className="text-xs font-mono text-neu-text-muted">
-                    Available From
+                    Headline
                   </span>
                   <input
-                    value={heroConfig.availableFrom || ""}
+                    value={heroConfig.headline || ""}
                     onChange={(e) =>
                       setHeroConfig({
                         ...heroConfig,
-                        availableFrom: e.target.value,
+                        headline: e.target.value,
                       })
                     }
-                    placeholder="e.g. Now, Jan 2027"
+                    placeholder="e.g. Production Systems at Scale"
                     className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <span className="text-xs font-mono text-neu-text-muted">
+                    Availability Status Text
+                  </span>
+                  <input
+                    value={heroConfig.statusText || ""}
+                    onChange={(e) =>
+                      setHeroConfig({
+                        ...heroConfig,
+                        statusText: e.target.value,
+                      })
+                    }
+                    placeholder="e.g. Available for Remote Roles (UTC+7)"
+                    className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
+                  />
+                </div>
+                <div className="space-y-1 md:col-span-2">
+                  <span className="text-xs font-mono text-neu-text-muted">
+                    Core Quote / Positioning Statement
+                  </span>
+                  <input
+                    value={heroConfig.quote || ""}
+                    onChange={(e) =>
+                      setHeroConfig({
+                        ...heroConfig,
+                        quote: e.target.value,
+                      })
+                    }
+                    placeholder="e.g. I ship LLM integrations into production — not train models in notebooks."
+                    className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
+                  />
+                </div>
+                <div className="space-y-1 md:col-span-2">
+                  <span className="text-xs font-mono text-neu-text-muted">
+                    Documentation URL
+                  </span>
+                  <input
+                    value={heroConfig.docsUrl || ""}
+                    onChange={(e) =>
+                      setHeroConfig({
+                        ...heroConfig,
+                        docsUrl: e.target.value,
+                      })
+                    }
+                    placeholder="https://sb.awaluddin.dev/docs"
+                    className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
+                  />
+                </div>
+                <div className="space-y-1 md:col-span-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-neu-text-muted">
+                      Long About Story / Bio (Markdown & Paragraphs supported)
+                    </span>
+                    <span className="text-[11px] font-mono text-neu-text-muted">
+                      Displayed in #about section
+                    </span>
+                  </div>
+                  <textarea
+                    rows={8}
+                    value={heroConfig.aboutText || ""}
+                    onChange={(e) =>
+                      setHeroConfig({
+                        ...heroConfig,
+                        aboutText: e.target.value,
+                      })
+                    }
+                    placeholder="Write your long-form about text here. Multi-line paragraphs will render formatted on the public homepage. If empty, the default engineering narrative is displayed."
+                    className="w-full px-4 py-3 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent leading-relaxed resize-y font-sans"
                   />
                 </div>
               </div>
@@ -294,7 +377,7 @@ export default function AdminDashboard() {
               <div className="pt-6 border-t border-white/5 space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono text-neu-text-muted">
-                    Metric Strip Items (Max 4 recommended)
+                    Operational & Production Metrics (Max 4 recommended)
                   </span>
                   <button
                     type="button"
@@ -309,7 +392,7 @@ export default function AdminDashboard() {
                   {metrics.map((m, idx) => (
                     <div
                       key={idx as number}
-                      className="p-4 rounded-xl glass-card-inset border border-white/5 relative group"
+                      className="p-4 rounded-xl glass-card-inset border border-white/5 relative group space-y-3"
                     >
                       <button
                         type="button"
@@ -318,79 +401,84 @@ export default function AdminDashboard() {
                       >
                         <Trash2 size={12} />
                       </button>
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-3">
-                          <div className="space-y-1">
-                            <span className="text-[10px] font-mono text-neu-text-muted">
-                              Value (e.g. 5+ Years)
-                            </span>
-                            <input
-                              value={m.value || ""}
-                              onChange={(e) =>
-                                handleMetricChange(idx, "value", e.target.value)
-                              }
-                              className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50"
-                            />
-                          </div>
-                          <div className="space-y-1">
-                            <span className="text-[10px] font-mono text-neu-text-muted">
-                              Label (e.g. EXPERIENCE)
-                            </span>
-                            <input
-                              value={m.label}
-                              onChange={(e) =>
-                                handleMetricChange(idx, "label", e.target.value)
-                              }
-                              className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50"
-                            />
-                          </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-mono text-neu-text-muted">
+                            Value (e.g. $18K / yr, Sub-Second)
+                          </span>
+                          <input
+                            value={m.value || ""}
+                            onChange={(e) =>
+                              handleMetricChange(idx, "value", e.target.value)
+                            }
+                            className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50"
+                          />
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div className="space-y-1">
-                            <span className="text-[10px] font-mono text-neu-text-muted">
-                              Icon Name
-                            </span>
-                            <select
-                              value={m.icon}
-                              onChange={(e) =>
-                                handleMetricChange(idx, "icon", e.target.value)
-                              }
-                              className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50"
-                            >
-                              <option value="Code2">Code2</option>
-                              <option value="Briefcase">Briefcase</option>
-                              <option value="TrendingUp">TrendingUp</option>
-                              <option value="MapPin">MapPin</option>
-                              <option value="Cpu">Cpu</option>
-                              <option value="Zap">Zap</option>
-                              <option value="Activity">Activity</option>
-                              <option value="Award">Award</option>
-                              <option value="Terminal">Terminal</option>
-                              <option value="Server">Server</option>
-                              <option value="Database">Database</option>
-                              <option value="Box">Box</option>
-                              <option value="Layers">Layers</option>
-                              <option value="Cloud">Cloud</option>
-                            </select>
-                          </div>
-                          <div className="space-y-1 flex flex-col justify-end">
-                            <label className="flex items-center gap-2 text-xs font-mono text-neu-text-muted cursor-pointer py-1.5">
-                              <input
-                                type="checkbox"
-                                checked={m.isSavings}
-                                onChange={(e) =>
-                                  handleMetricChange(
-                                    idx,
-                                    "isSavings",
-                                    e.target.checked,
-                                  )
-                                }
-                                className="rounded bg-black/5 dark:bg-white/5 border-transparent text-neu-accent focus:ring-neu-accent"
-                              />{" "}
-                              Highlight (Savings)
-                            </label>
-                          </div>
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-mono text-neu-text-muted">
+                            Label
+                          </span>
+                          <input
+                            value={m.label || ""}
+                            onChange={(e) =>
+                              handleMetricChange(idx, "label", e.target.value)
+                            }
+                            className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50"
+                          />
                         </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-mono text-neu-text-muted">
+                            Subtext (Badge)
+                          </span>
+                          <input
+                            value={m.subtext || ""}
+                            onChange={(e) =>
+                              handleMetricChange(idx, "subtext", e.target.value)
+                            }
+                            placeholder="e.g. Documented Annual Impact"
+                            className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-mono text-neu-text-muted">
+                            Icon
+                          </span>
+                          <select
+                            value={m.icon || "DollarSign"}
+                            onChange={(e) =>
+                              handleMetricChange(idx, "icon", e.target.value)
+                            }
+                            className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-sm outline-none border border-transparent focus:border-neu-accent/50"
+                          >
+                            <option value="DollarSign">DollarSign (Cost)</option>
+                            <option value="Zap">Zap (Speed/Latency)</option>
+                            <option value="RefreshCw">RefreshCw (Fault-Tolerance/AI)</option>
+                            <option value="ShieldCheck">ShieldCheck (Compliance)</option>
+                            <option value="Server">Server</option>
+                            <option value="Database">Database</option>
+                            <option value="Cpu">Cpu</option>
+                            <option value="Activity">Activity</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-mono text-neu-text-muted">
+                          Description
+                        </span>
+                        <textarea
+                          rows={2}
+                          value={m.description || ""}
+                          onChange={(e) =>
+                            handleMetricChange(idx, "description", e.target.value)
+                          }
+                          placeholder="Brief explanation of the achieved impact..."
+                          className="w-full px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 text-xs outline-none border border-transparent focus:border-neu-accent/50 resize-none"
+                        />
                       </div>
                     </div>
                   ))}
@@ -409,10 +497,10 @@ export default function AdminDashboard() {
             animate={{ opacity: 1, y: 0, x: "-50%" }}
             exit={{ opacity: 0, y: 50, x: "-50%" }}
             className={cn(
-              "fixed bottom-8 left-1/2 z-[200] px-6 py-3.5 rounded-2xl font-mono text-xs shadow-neu border backdrop-blur-md flex items-center gap-2.5",
+              "fixed bottom-8 left-1/2 z-[200] px-6 py-3.5 rounded-2xl font-mono text-xs shadow-xl border flex items-center gap-2.5",
               toastMessage.type === "success"
-                ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
-                : "bg-red-500/10 text-red-500 border-red-500/20",
+                ? "bg-card text-emerald-400 border-subtle"
+                : "bg-card text-red-400 border-red-500/50",
             )}
           >
             {toastMessage.type === "success" ? (

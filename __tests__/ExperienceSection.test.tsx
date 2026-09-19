@@ -58,26 +58,18 @@ const mockSetSelectedTestimonial = jest.fn()
 
 jest.mock('@/shared/store/portfolioStore', () => ({
   usePortfolioStore: () => ({
-    dynamicWork: [
+    dynamicExperiencesV2: [
       {
-        id: 1,
-        years: '2023 - Present',
+        id: '1',
+        period: '2023 – Present',
         company: 'Test Company',
         role: 'Test Role',
-        stack: ['React', 'Node.js'],
-        duration: '1 yr',
-        metric: '100% Growth',
-        bullets: ['Detail 1'],
-        projects: [{ name: 'Project 1', tech: ['React'] }]
+        isActive: true,
+        bullets: [{ situation: 'Situation', action: 'Action', metric: '100% Growth' }],
+        techTags: ['React', 'Node.js']
       }
     ],
-    testimonialsList: [{ id: '1', name: 'Test Author', role: 'Tester', testimonial: 'Test text', company: 'Acme', tags: [] }],
-    setSelectedTestimonial: mockSetSelectedTestimonial,
-    contributionData: [[{ date: '2024-01-01', count: 5, level: 2, month: 1 }]],
-    timelineData: [{ month: 'Jan', commits: 10 }],
-    repoData: [{ name: 'test-repo', commits: 10, pullRequests: 2 }],
     isLoading: false,
-    languageData: [{ name: 'TypeScript', percentage: 100, color: '#000' }], // Note: Not used in UI now? Wait, check if used in repoData or something.
   })
 }))
 
@@ -95,41 +87,26 @@ describe('ExperienceSection', () => {
 
   it('renders correctly with default props', () => {
     render(<ExperienceSection isDark={true} />)
-    expect(screen.getByText('Experience')).toBeInTheDocument()
-    expect(screen.getByText('Git Activity & Contribution Frequency')).toBeInTheDocument()
-  })
-
-  it('toggles chart type', async () => {
-    render(<ExperienceSection isDark={true} />)
-    
-    fireEvent.click(screen.getByText(/Repos/))
-    await waitFor(() => {
-      expect(screen.getByTestId('bar-chart')).toBeInTheDocument()
-    })
-    
-    fireEvent.click(screen.getByText(/Commit Timeline/))
-    await waitFor(() => {
-      expect(screen.getByTestId('area-chart')).toBeInTheDocument()
-    })
+    expect(screen.getByText('Career')).toBeInTheDocument()
+    expect(screen.getByText('Journey & Chronology')).toBeInTheDocument()
   })
 
   it('renders dynamic work experiences', async () => {
     render(<ExperienceSection isDark={true} />)
-    expect(screen.getAllByText('Test Company').length).toBeGreaterThan(0)
-    await waitFor(() => {
-      expect(screen.getAllByText('Test Role').length).toBeGreaterThan(0)
-    })
+    expect(screen.getByText('Test Company')).toBeInTheDocument()
+    expect(screen.getByText('Test Role')).toBeInTheDocument()
+    expect(screen.getByText('100% Growth')).toBeInTheDocument()
+    expect(screen.getByText('React')).toBeInTheDocument()
   })
 
-  it('expands experience item on click', () => {
+  it('handles mouse hover interactions on timeline items', () => {
     render(<ExperienceSection isDark={true} />)
-    const rows = screen.getAllByText('Test Company')
-    
-    // Assuming clicking the row expands it; testing active state via UI changes if any
-    if (rows.length > 0) {
-      fireEvent.click(rows[0])
-      // We can just verify it doesn't crash since state is local now
-      expect(rows[0]).toBeInTheDocument()
+    const card = screen.getByText('Test Company').closest('article')
+    if (card) {
+      fireEvent.mouseEnter(card)
+      expect(card).toBeInTheDocument()
+      fireEvent.mouseLeave(card)
+      expect(card).toBeInTheDocument()
     }
   })
 })

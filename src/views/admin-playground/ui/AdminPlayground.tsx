@@ -113,7 +113,7 @@ export default function AdminPlayground({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto"
+            className="absolute inset-0 bg-black/80 pointer-events-auto"
             onClick={onClose}
           />
         )}
@@ -333,16 +333,13 @@ export default function AdminPlayground({
                     <div className="absolute top-1/4 right-1/4 w-24 h-24 bg-pink-500 rounded-full mix-blend-multiply blur-xl opacity-50 animate-pulse delay-700"></div>
 
                     <div
-                      className="relative p-6 rounded-2xl border border-white/20 backdrop-blur-md shadow-xl"
-                      style={{
-                        backgroundColor: `rgba(255,255,255,${themeConfig.glassOpacity})`,
-                      }}
+                      className="relative p-6 rounded-2xl border border-subtle bg-card shadow-xl"
                     >
-                      <h4 className="font-bold text-lg mb-2">
-                        Glassmorphism Overlay
+                      <h4 className="font-bold text-lg mb-2 text-primary">
+                        Solid Flat Surface
                       </h4>
-                      <p className="text-sm opacity-80 leading-relaxed">
-                        This pane tests how text legibility and blur hold up
+                      <p className="text-sm opacity-80 leading-relaxed text-secondary">
+                        This pane tests how text legibility and contrast hold up
                         over complex, colorful backgrounds.
                       </p>
                     </div>

@@ -9,10 +9,17 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
   async rewrites() {
+    let apiUrl = (process.env.API_URL || "http://localhost:3002").trim();
+    while (apiUrl.endsWith("/")) {
+      apiUrl = apiUrl.slice(0, -1);
+    }
+    if (apiUrl.endsWith("/api")) {
+      apiUrl = apiUrl.slice(0, -4);
+    }
     return [
       {
         source: "/api/:path*",
-        destination: `${process.env.API_URL || "http://localhost:3001"}/api/:path*`,
+        destination: `${apiUrl}/api/:path*`,
       },
     ];
   },

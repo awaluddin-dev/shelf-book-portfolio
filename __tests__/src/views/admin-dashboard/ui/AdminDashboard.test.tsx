@@ -152,10 +152,10 @@ describe("AdminDashboard", () => {
     const nameInput = screen.getByPlaceholderText("Your full name");
     fireEvent.change(nameInput, { target: { value: "New Name" } });
 
-    const roleInput = screen.getByPlaceholderText("e.g. Backend Engineer");
+    const roleInput = screen.getByPlaceholderText(/Backend Engineer/i);
     fireEvent.change(roleInput, { target: { value: "New Role" } });
 
-    const availableInput = screen.getByPlaceholderText("e.g. Now, Jan 2027");
+    const availableInput = screen.getByPlaceholderText(/Available for Remote/i);
     fireEvent.change(availableInput, { target: { value: "Now" } });
 
     const addMetricBtn = screen.getByText("Add Metric");
@@ -170,7 +170,7 @@ describe("AdminDashboard", () => {
     await fireEvent.click(saveBtn);
 
     expect(global.fetch).toHaveBeenCalledWith(
-      "/api/hero",
+      "/api/v2/hero",
       expect.objectContaining({
         method: "PATCH",
         body: expect.any(String),
@@ -179,7 +179,7 @@ describe("AdminDashboard", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("Hero Section updated successfully"),
+        screen.getByText(/Hero Section updated successfully/i),
       ).toBeInTheDocument();
     });
   });
@@ -199,8 +199,8 @@ describe("AdminDashboard", () => {
                   id: "m1",
                   value: "5",
                   label: "Years",
-                  icon: "Code2",
-                  isSavings: false,
+                  icon: "DollarSign",
+                  description: "test desc",
                 },
               ],
             },
@@ -215,12 +215,8 @@ describe("AdminDashboard", () => {
     const labelInput = screen.getByDisplayValue("Years");
     fireEvent.change(labelInput, { target: { value: "Months" } });
 
-    const iconSelect = screen.getByDisplayValue("Code2");
-    fireEvent.change(iconSelect, { target: { value: "Briefcase" } });
-
-    const checkbox = screen.getByRole("checkbox");
-    fireEvent.click(checkbox);
-    expect(checkbox).toBeChecked();
+    const iconSelect = screen.getByDisplayValue("DollarSign (Cost)");
+    fireEvent.change(iconSelect, { target: { value: "Zap" } });
 
     const trashBtn = document.querySelector("button.bg-red-500");
     if (trashBtn) {

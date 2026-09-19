@@ -10,36 +10,56 @@ export default function AdminWork() {
   return (
     <>
       <AdminCrudTable
-        title="Work Experience"
-        itemName="Experience"
-        apiEndpoint="/api/work"
+        title="Career Experience (v2)"
+        itemName="Career Experience"
+        apiEndpoint="/api/v2/experience"
         dataExtractor={(data) => {
-          if (data.data?.workExperience) return data.data.workExperience;
-          if (data.workExperience) return data.workExperience;
+          if (data.data?.experiences) return data.data.experiences;
+          if (data.experiences) return data.experiences;
           if (Array.isArray(data.data)) return data.data;
           if (Array.isArray(data)) return data;
           return [];
         }}
         defaultFormData={{
-          years: "",
-          duration: "",
           company: "",
           role: "",
-          stack: "",
-          teaser: "",
-          fullImpact: "",
+          period: "",
+          isActive: false,
           bullets: "",
+          techTags: "",
+          order: 1,
         }}
-        onBeforeSave={(formData) => ({
-          ...formData,
-          bullets:
-            typeof formData.bullets === "string"
-              ? formData.bullets
-                  .split("\n")
-                  .map((b: string) => b.trim())
-                  .filter(Boolean)
-              : formData.bullets,
-        })}
+        onBeforeSave={(formData) => {
+          let bulletsArray = formData.bullets;
+          if (typeof formData.bullets === "string") {
+            try {
+              bulletsArray = JSON.parse(formData.bullets);
+            } catch {
+              bulletsArray = formData.bullets
+                .split("\n")
+                .map((line: string) => line.trim())
+                .filter(Boolean)
+                .map((text: string) => ({
+                  situation: text,
+                  action: "",
+                  metric: "",
+                }));
+            }
+          }
+          let techTagsArray = formData.techTags;
+          if (typeof formData.techTags === "string") {
+            techTagsArray = formData.techTags
+              .split(",")
+              .map((t: string) => t.trim())
+              .filter(Boolean);
+          }
+          return {
+            ...formData,
+            bullets: bulletsArray,
+            techTags: techTagsArray,
+            order: Number(formData.order) || 1,
+          };
+        }}
         customActions={(item: any) => (
           <button
             type="button"
@@ -63,15 +83,17 @@ export default function AdminWork() {
             ),
           },
           {
-            header: "Duration",
+            header: "Period",
             render: (item: any) => (
               <>
                 <div className="text-xs font-bold text-neu-accent">
-                  {item.years}
+                  {item.period}
                 </div>
-                <div className="text-xs text-neu-text-muted">
-                  {item.duration}
-                </div>
+                {item.isActive && (
+                  <span className="text-[10px] font-mono text-emerald-400 font-semibold uppercase">
+                    Current Active
+                  </span>
+                )}
               </>
             ),
           },
@@ -94,7 +116,7 @@ export default function AdminWork() {
                     setFormData({ ...formData, company: e.target.value })
                   }
                   className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none"
-                  placeholder="e.g. Acme Corp"
+                  placeholder="e.g. PT Serasi Autoraya (SERA)"
                 />
               </div>
               <div className="space-y-1">
@@ -112,125 +134,104 @@ export default function AdminWork() {
                     setFormData({ ...formData, role: e.target.value })
                   }
                   className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none"
-                  placeholder="e.g. Senior Engineer"
+                  placeholder="e.g. Backend Engineer"
                 />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-1 col-span-2">
+                <label
+                  htmlFor="period-adminWork"
+                  className="text-xs font-mono text-neu-text-muted"
+                >
+                  Period
+                </label>
+                <input
+                  required
+                  id="period-adminWork"
+                  value={formData.period || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, period: e.target.value })
+                  }
+                  className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none"
+                  placeholder="e.g. 2024 – Present"
+                />
+              </div>
+              <div className="space-y-1 flex flex-col justify-end pb-2">
+                <label className="flex items-center gap-2 text-xs font-mono text-neu-text-muted cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(formData.isActive)}
+                    onChange={(e) =>
+                      setFormData({ ...formData, isActive: e.target.checked })
+                    }
+                    className="rounded bg-black/5 dark:bg-white/5 border-transparent text-neu-accent focus:ring-neu-accent"
+                  />
+                  Current Active Role
+                </label>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
                 <label
-                  htmlFor="years-adminWork"
+                  htmlFor="tags-adminWork"
                   className="text-xs font-mono text-neu-text-muted"
                 >
-                  Years
+                  Tech Tags (Comma separated)
                 </label>
                 <input
-                  required
-                  id="years-adminWork"
-                  value={formData.years || ""}
+                  id="tags-adminWork"
+                  value={
+                    Array.isArray(formData.techTags)
+                      ? formData.techTags.join(", ")
+                      : formData.techTags || ""
+                  }
                   onChange={(e) =>
-                    setFormData({ ...formData, years: e.target.value })
+                    setFormData({ ...formData, techTags: e.target.value })
                   }
                   className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none"
-                  placeholder="e.g. 2022 - Present"
+                  placeholder="Go, Node.js, Azure Service Bus"
                 />
               </div>
               <div className="space-y-1">
                 <label
-                  htmlFor="duration-adminWork"
+                  htmlFor="order-adminWork"
                   className="text-xs font-mono text-neu-text-muted"
                 >
-                  Duration
+                  Display Order
                 </label>
                 <input
-                  required
-                  id="duration-adminWork"
-                  value={formData.duration || ""}
+                  type="number"
+                  id="order-adminWork"
+                  value={formData.order || 1}
                   onChange={(e) =>
-                    setFormData({ ...formData, duration: e.target.value })
+                    setFormData({ ...formData, order: e.target.value })
                   }
                   className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none"
-                  placeholder="e.g. 2 yrs 5 mos"
                 />
               </div>
-            </div>
-            <div className="space-y-1">
-              <label
-                htmlFor="stack-adminWork"
-                className="text-xs font-mono text-neu-text-muted"
-              >
-                Tech Stack
-              </label>
-              <input
-                required
-                id="stack-adminWork"
-                value={formData.stack || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, stack: e.target.value })
-                }
-                className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none"
-                placeholder="e.g. React, Node.js, AWS"
-              />
-            </div>
-            <div className="space-y-1">
-              <label
-                htmlFor="teaser-adminWork"
-                className="text-xs font-mono text-neu-text-muted"
-              >
-                Teaser
-              </label>
-              <textarea
-                required
-                id="teaser-adminWork"
-                value={formData.teaser || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, teaser: e.target.value })
-                }
-                rows={2}
-                className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none resize-none"
-                placeholder="Short description..."
-              />
-            </div>
-            <div className="space-y-1">
-              <label
-                htmlFor="fullImpact-adminWork"
-                className="text-xs font-mono text-neu-text-muted"
-              >
-                Full Impact
-              </label>
-              <textarea
-                required
-                id="fullImpact-adminWork"
-                value={formData.fullImpact || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, fullImpact: e.target.value })
-                }
-                rows={4}
-                className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none resize-none"
-                placeholder="Detailed impact and responsibilities..."
-              />
             </div>
             <div className="space-y-1">
               <label
                 htmlFor="bullets-adminWork"
                 className="text-xs font-mono text-neu-text-muted"
               >
-                Bullets (One per line)
+                Bullets (JSON Array of &#123; situation, action, metric, metricSuffix? &#125; or lines of text)
               </label>
               <textarea
                 required
                 id="bullets-adminWork"
+                rows={6}
                 value={
-                  Array.isArray(formData.bullets)
-                    ? formData.bullets.join("\n")
+                  typeof formData.bullets === "object"
+                    ? JSON.stringify(formData.bullets, null, 2)
                     : formData.bullets || ""
                 }
                 onChange={(e) =>
                   setFormData({ ...formData, bullets: e.target.value })
                 }
-                rows={4}
-                className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm font-medium border border-white/5 focus:border-neu-accent outline-none resize-none"
-                placeholder="Led a team of 5...&#10;Increased performance by 20%..."
+                className="w-full font-mono text-xs px-4 py-2.5 rounded-xl glass-card-inset border border-white/5 focus:border-neu-accent outline-none"
+                placeholder='[&#10;  {&#10;    "situation": "Managing telemetry,",&#10;    "action": "engineered event-driven microservices, achieving",&#10;    "metric": "99.9% uptime",&#10;    "metricSuffix": " across operations."&#10;  }&#10;]'
               />
             </div>
           </>
@@ -239,16 +240,16 @@ export default function AdminWork() {
 
       {/* View Detail Modal */}
       {viewingWork && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-neu-bg rounded-3xl shadow-neu-modal w-full max-w-2xl p-8 relative border border-white/5 max-h-[85vh] overflow-y-auto hide-scrollbar">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80">
+          <div className="bg-card rounded-3xl shadow-2xl w-full max-w-2xl p-8 relative border border-subtle max-h-[85vh] overflow-y-auto hide-scrollbar">
             <button
               type="button"
               onClick={() => setViewingWork(null)}
-              className="absolute top-5 right-5 p-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-neu-text transition-colors"
+              className="absolute top-5 right-5 p-2 rounded-full bg-canvas hover:bg-card text-secondary hover:text-primary transition-colors border border-subtle"
             >
               <X size={20} />
             </button>
-            <h3 className="text-xl font-bold font-display mb-6">
+            <h3 className="text-xl font-bold font-display mb-6 text-primary">
               Work Experience Detail
             </h3>
 
@@ -265,60 +266,52 @@ export default function AdminWork() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="text-sm font-mono text-neu-text-muted mb-1">
-                    Years
+                    Period
                   </h4>
                   <p className="text-base font-medium text-neu-text">
-                    {viewingWork.years}
+                    {viewingWork.period}
                   </p>
                 </div>
                 <div>
                   <h4 className="text-sm font-mono text-neu-text-muted mb-1">
-                    Duration
+                    Status
                   </h4>
                   <p className="text-base font-medium text-neu-text">
-                    {viewingWork.duration}
+                    {viewingWork.isActive ? "Current Active Role" : "Past Role"}
                   </p>
                 </div>
               </div>
 
               <div>
                 <h4 className="text-sm font-mono text-neu-text-muted mb-1">
-                  Tech Stack
+                  Tech Tags
                 </h4>
-                <p className="text-base font-medium text-neu-text">
-                  {viewingWork.stack}
-                </p>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-mono text-neu-text-muted mb-2">
-                  Teaser
-                </h4>
-                <div className="p-4 rounded-xl glass-card-inset text-sm font-medium border border-white/5 whitespace-pre-wrap text-neu-text">
-                  {viewingWork.teaser}
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {(Array.isArray(viewingWork.techTags) ? viewingWork.techTags : []).map((tag: string, idx: number) => (
+                    <span key={idx} className="px-2 py-0.5 rounded-md bg-canvas border border-subtle text-xs font-mono">
+                      {tag}
+                    </span>
+                  ))}
                 </div>
               </div>
 
               <div>
                 <h4 className="text-sm font-mono text-neu-text-muted mb-2">
-                  Full Impact
+                  Impact Bullets
                 </h4>
-                <div className="p-4 rounded-xl glass-card-inset text-sm font-medium border border-white/5 whitespace-pre-wrap text-neu-text">
-                  {viewingWork.fullImpact}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-mono text-neu-text-muted mb-2">
-                  Key Achievements
-                </h4>
-                <ul className="list-disc pl-5 space-y-1">
+                <ul className="list-disc pl-5 space-y-2 text-sm text-neu-text">
                   {(Array.isArray(viewingWork.bullets)
                     ? viewingWork.bullets
                     : []
-                  ).map((b: string, i: number) => (
-                    <li key={i as number} className="text-sm text-neu-text">
-                      {b}
+                  ).map((b: any, i: number) => (
+                    <li key={i}>
+                      {typeof b === "string" ? b : (
+                        <span>
+                          {b.situation} {b.action}{" "}
+                          <strong className="text-brand font-mono">{b.metricPrefix}{b.metric}</strong>
+                          {b.metricSuffix}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>

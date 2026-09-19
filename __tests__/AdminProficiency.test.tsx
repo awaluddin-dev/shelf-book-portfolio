@@ -33,17 +33,20 @@ describe('AdminProficiency', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url) => {
-      if (url.toString().includes('/api/proficiency')) {
+      if (url.toString().includes('/api/proficiency') || url.toString().includes('/api/v2/proficiency')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
             data: {
-              proficiency: [
+              pillars: [
                 {
                   id: 'pr1',
+                  pillarNumber: '01',
                   title: 'Core Backend',
+                  description: 'Backend desc',
+                  icon: 'Server',
                   skills: [
-                    { id: 's1', name: 'Node.js', subtext: 'Production-ready', status: 'Production-ready' }
+                    { id: 's1', name: 'Node.js', status: 'PROD' }
                   ]
                 }
               ]
@@ -51,7 +54,7 @@ describe('AdminProficiency', () => {
           })
         } as any)
       }
-      return Promise.reject(new Error('not mocked'))
+      return Promise.reject(new Error('not mocked: ' + url.toString()))
     })
   })
 
@@ -68,7 +71,7 @@ describe('AdminProficiency', () => {
       expect(screen.getByText('Core Backend')).toBeInTheDocument()
     })
     
-    expect(screen.getByText('1 skills listed')).toBeInTheDocument()
+    expect(screen.getByText(/1 skills/i)).toBeInTheDocument()
   })
 
   it('opens add form, adds and removes skills', async () => {
@@ -79,14 +82,14 @@ describe('AdminProficiency', () => {
     })
 
     // Click Add
-    const addBtn = screen.getByRole('button', { name: /Add Category/i })
+    const addBtn = screen.getByRole('button', { name: /Add Pillar/i })
     fireEvent.click(addBtn)
 
     // Form should be open
-    expect(screen.getAllByText('Add Category')[0]).toBeInTheDocument()
+    expect(screen.getAllByText(/Add Pillar/i)[0]).toBeInTheDocument()
 
     // Title field
-    const titleInput = screen.getByPlaceholderText('CORE BACKEND')
+    const titleInput = screen.getByPlaceholderText(/Core Backend/i)
     fireEvent.change(titleInput, { target: { value: 'Frontend' } })
     expect(screen.getByDisplayValue('Frontend')).toBeInTheDocument()
 
@@ -95,17 +98,13 @@ describe('AdminProficiency', () => {
     fireEvent.click(addSkillBtn)
 
     // Skill inputs should appear
-    const skillNameInput = screen.getByPlaceholderText('Node.js')
+    const skillNameInput = screen.getByPlaceholderText('e.g. Go (Golang)')
     fireEvent.change(skillNameInput, { target: { value: 'React' } })
     expect(screen.getByDisplayValue('React')).toBeInTheDocument()
-    
-    const skillSubtextInput = screen.getByPlaceholderText('Production · 3+ yrs · ...')
-    fireEvent.change(skillSubtextInput, { target: { value: 'Production' } })
-    expect(screen.getByDisplayValue('Production')).toBeInTheDocument()
 
-    const statusSelect = screen.getAllByRole('combobox')[0]
-    fireEvent.change(statusSelect, { target: { value: 'Building' } })
-    expect(screen.getByDisplayValue('Building')).toBeInTheDocument()
+    const statusSelect = screen.getAllByRole('combobox').pop()!
+    fireEvent.change(statusSelect, { target: { value: 'R&D' } })
+    expect(screen.getByDisplayValue('R&D')).toBeInTheDocument()
 
     // Remove skill
     const removeBtn = document.querySelector('.bg-red-500') as HTMLButtonElement

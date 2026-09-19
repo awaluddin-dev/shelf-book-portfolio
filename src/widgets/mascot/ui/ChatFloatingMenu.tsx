@@ -22,16 +22,16 @@ export function ChatFloatingMenu({
           animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 10, x: 20 }}
           transition={{ type: "spring", stiffness: 400, damping: 25 }}
-          className="absolute bottom-full right-full mb-4 mr-4 w-48 bg-neu-bg/95 dark:bg-neu-bg/90 backdrop-blur-md border border-neu-border rounded-xl shadow-neu-modal z-[110] overflow-hidden"
+          className="absolute bottom-full right-full mb-4 mr-4 w-48 bg-card border border-subtle rounded-xl shadow-xl z-[110] overflow-hidden"
         >
-          <div className="flex items-center justify-between px-3 py-2 border-b border-neu-border">
-            <span className="text-xs font-bold text-neu-text-muted">
+          <div className="flex items-center justify-between px-3 py-2 border-b border-subtle">
+            <span className="text-xs font-bold text-secondary">
               Options
             </span>
             <button
               type="button"
               onClick={onClose}
-              className="text-neu-text-muted hover:text-neu-accent transition-colors p-1 rounded-md"
+              className="text-secondary hover:text-primary transition-colors p-1 rounded-md"
             >
               <X size={14} />
             </button>
@@ -43,7 +43,7 @@ export function ChatFloatingMenu({
                 setShowCoverLetterModal(true);
                 onClose();
               }}
-              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neu-text hover:text-neu-accent hover:bg-neu-secondary/30 rounded-lg transition-colors text-left"
+              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-primary hover:text-brand hover:bg-canvas rounded-lg transition-colors text-left"
             >
               <FileText size={16} />
               Cover Letter
@@ -54,7 +54,7 @@ export function ChatFloatingMenu({
                 setIsChatOpen(true);
                 onClose();
               }}
-              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neu-text hover:text-neu-accent hover:bg-neu-secondary/30 rounded-lg transition-colors text-left mt-0.5"
+              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-primary hover:text-brand hover:bg-canvas rounded-lg transition-colors text-left mt-0.5"
             >
               <MessageSquare size={16} />
               AI Chat

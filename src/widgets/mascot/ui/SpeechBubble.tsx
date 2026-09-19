@@ -20,12 +20,12 @@ export function SpeechBubble({
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.8, y: 10 }}
       transition={{ type: "spring", stiffness: 200, damping: 20 }}
-      className="absolute bottom-full right-16 mb-4 w-64 p-4 pr-8 rounded-2xl rounded-br-sm glass-card border border-neu-accent/30 shadow-neu-modal bg-neu-bg/95 backdrop-blur-xl z-[200]"
+      className="absolute bottom-full right-16 mb-4 w-64 p-4 pr-8 rounded-2xl rounded-br-sm bg-card border border-subtle shadow-xl z-[200]"
     >
       <button
         type="button"
         onClick={onClose}
-        className="absolute top-3 right-3 text-neu-text-muted hover:text-neu-accent transition-colors"
+        className="absolute top-3 right-3 text-secondary hover:text-primary transition-colors"
         aria-label="Close Mascot"
       >
         <svg
@@ -44,7 +44,7 @@ export function SpeechBubble({
         </svg>
       </button>
 
-      <div className="text-sm font-mono text-neu-text-muted leading-relaxed">
+      <div className="text-sm font-mono text-secondary leading-relaxed">
         <AnimatePresence mode="wait">
           <motion.p
             key={text}
@@ -64,7 +64,7 @@ export function SpeechBubble({
               animate={{ opacity: 1, height: "auto", marginTop: 12 }}
               exit={{ opacity: 0, height: 0, marginTop: 0 }}
               onClick={() => setShowCoverLetterModal(true)}
-              className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-neu-accent/10 text-neu-accent hover:bg-neu-accent/20 border border-neu-accent/30 font-bold transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-brand/10 text-brand hover:bg-brand/20 border border-brand/30 font-bold transition-colors"
             >
               Cover Letter Generator
               <svg
@@ -91,7 +91,7 @@ export function SpeechBubble({
       </div>
 
       {/* Pointer Triangle */}
-      <div className="absolute -bottom-2 right-4 w-4 h-4 bg-neu-bg/95 border-b border-r border-neu-accent/30 backdrop-blur-xl transform rotate-45" />
+      <div className="absolute -bottom-2 right-4 w-4 h-4 bg-card border-b border-r border-subtle transform rotate-45" />
     </motion.div>
   );
 }

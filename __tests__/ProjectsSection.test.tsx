@@ -64,7 +64,7 @@ describe('ProjectsSection', () => {
   })
 
   it('renders correctly with default props', () => {
-    render(<ProjectsSection isDark={true} />)
+    render(<ProjectsSection isDark={true} initialViewMode="shelf" />)
     expect(screen.getByText('Featured Portfolio & Works')).toBeInTheDocument()
     expect(screen.getByTestId('book-item-1')).toBeInTheDocument()
     expect(screen.getByTestId('mobile-filter-modal')).toBeInTheDocument()
@@ -111,7 +111,7 @@ describe('ProjectsSection', () => {
       dynamicProjects: [{ id: '1', title: 'Test Project', tags: ['React'], category: 'Category 1', date: '2024' }],
       isLoading: false,
     })
-    render(<ProjectsSection isDark={true} />)
+    render(<ProjectsSection isDark={true} initialViewMode="shelf" />)
     
     expect(screen.getAllByText('Focused Project')[0]).toBeInTheDocument()
     expect(screen.getAllByText('A focused project subtitle')[0]).toBeInTheDocument()

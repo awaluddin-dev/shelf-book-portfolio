@@ -299,32 +299,38 @@ export function AdminCrudTable<T extends { id?: string }>({
 
       {/* Add/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-neu-bg rounded-3xl shadow-neu-modal w-full max-w-lg p-8 relative border border-white/5 max-h-[90vh] overflow-y-auto hide-scrollbar">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80">
+          <div className="bg-card rounded-3xl shadow-2xl w-full max-w-lg p-8 relative border border-subtle max-h-[90vh] overflow-y-auto hide-scrollbar">
             <button
               type="button"
               onClick={() => setShowModal(false)}
-              className="absolute top-5 right-5 p-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-neu-text transition-colors"
+              className="absolute top-5 right-5 p-2 rounded-full bg-canvas hover:bg-card text-secondary hover:text-primary transition-colors"
             >
               <X size={20} />
             </button>
-            <h3 className="text-xl font-bold font-display mb-6">
+            <h3 className="text-xl font-bold font-display mb-6 text-primary">
               {editingItem ? "Edit" : "Add"} {itemName}
             </h3>
 
             <form onSubmit={handleSave} className="space-y-4">
               {renderForm(formData, setFormData, !!editingItem)}
-              <button
-                type="submit"
-                disabled={isProcessing}
-                className="w-full py-3 rounded-xl font-bold text-white bg-neu-accent shadow-neu hover:shadow-neu-sm active:scale-95 transition-all text-sm mt-4 disabled:opacity-50"
-              >
-                {(() => {
-                  if (isProcessing) return "Processing...";
-                  if (editingItem) return "Save Changes";
-                  return `Create ${itemName}`;
-                })()}
-              </button>
+
+              <div className="flex justify-end gap-3 pt-6 border-t border-subtle">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-5 py-2.5 rounded-xl font-mono text-xs font-semibold text-secondary hover:text-primary transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isProcessing}
+                  className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-mono text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
+                >
+                  {isProcessing ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -338,10 +344,10 @@ export function AdminCrudTable<T extends { id?: string }>({
             animate={{ opacity: 1, y: 0, x: "-50%" }}
             exit={{ opacity: 0, y: 50, x: "-50%" }}
             className={cn(
-              "fixed bottom-8 left-1/2 z-[200] px-6 py-3.5 rounded-2xl font-mono text-xs shadow-neu border backdrop-blur-md flex items-center gap-2.5",
+              "fixed bottom-8 left-1/2 z-[200] px-6 py-3.5 rounded-2xl font-mono text-xs shadow-xl border flex items-center gap-2.5",
               toastMessage.type === "success"
-                ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
-                : "bg-red-500/10 text-red-500 border-red-500/20",
+                ? "bg-card text-emerald-400 border-subtle"
+                : "bg-card text-red-400 border-red-500/50",
             )}
           >
             {toastMessage.type === "success" ? (

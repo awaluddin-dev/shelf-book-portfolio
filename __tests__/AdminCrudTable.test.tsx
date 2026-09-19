@@ -188,7 +188,7 @@ describe("AdminCrudTable", () => {
     fireEvent.change(input, { target: { value: "New Item" } });
 
     // Save
-    const saveBtn = screen.getByRole("button", { name: "Create TestItem" });
+    const saveBtn = screen.getByRole("button", { name: "Save Changes" });
 
     fireEvent.click(saveBtn);
 

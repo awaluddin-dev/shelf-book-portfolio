@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css"; // Global styles
-import { ThemeProvider } from "@/shared/ui/ThemeProvider";
 import { ButtonSprinkles } from "@/shared/ui/ButtonSprinkles";
 import { ChatWidget } from "@/widgets/chat/ChatWidget";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -57,6 +56,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
   },
   robots: {
     index: true,
@@ -77,18 +77,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable}`}
+      className={`dark bg-canvas text-primary ${inter.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable}`}
       suppressHydrationWarning
     >
       <body
-        className="antialiased selection:bg-neu-accent/30"
+        className="antialiased selection:bg-subtle selection:text-primary min-h-screen bg-canvas text-secondary"
         suppressHydrationWarning
       >
-        <ThemeProvider>
-          {children}
-          <ButtonSprinkles />
-          <ChatWidget />
-        </ThemeProvider>
+        {children}
+        <ButtonSprinkles />
+        <ChatWidget />
         <Analytics />
         <SpeedInsights />
       </body>

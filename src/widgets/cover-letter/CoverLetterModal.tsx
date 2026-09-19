@@ -23,27 +23,27 @@ export function CoverLetterModal() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/80"
             />
 
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-2xl bg-neu-bg rounded-2xl shadow-neu-modal border border-white/10 overflow-hidden"
+              className="relative w-full max-w-2xl bg-card rounded-2xl shadow-2xl border border-subtle overflow-hidden"
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
+              <div className="flex items-center justify-between p-4 border-b border-subtle bg-canvas">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-neu-accent animate-pulse" />
-                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-neu-text">
+                  <div className="w-2 h-2 rounded-full bg-status animate-pulse" />
+                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-primary">
                     AI Cover Letter
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-lg text-neu-text-muted hover:text-neu-text hover:bg-white/10 transition-colors"
+                  className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-subtle/30 transition-colors"
                 >
                   <X size={18} />
                 </button>

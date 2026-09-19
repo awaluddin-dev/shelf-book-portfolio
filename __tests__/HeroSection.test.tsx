@@ -113,13 +113,11 @@ describe('HeroSection', () => {
     expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth' })
   })
 
-  it('handles Download CV button click', () => {
+  it('handles View Resume link click', () => {
     render(<HeroSection {...defaultProps} />)
     
-    const downloadBtn = screen.getByText(/Download CV/i)
-    fireEvent.click(downloadBtn)
-    
-    expect(mockTriggerToast).toHaveBeenCalledWith('Downloading CV...')
+    const resumeLink = screen.getByText(/View Resume/i)
+    expect(resumeLink.closest('a')).toHaveAttribute('href', '/assets/resume/Awaluddin_cv.pdf')
   })
 
   it('handles Inquiries button click', () => {
