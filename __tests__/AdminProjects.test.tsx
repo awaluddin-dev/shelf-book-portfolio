@@ -33,7 +33,7 @@ describe('AdminProjects', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url) => {
-      if (url.toString().includes('/api/projects')) {
+      if (url.toString().includes('/api/projects') || url.toString().includes('/api/v2/projects')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
@@ -54,7 +54,7 @@ describe('AdminProjects', () => {
           })
         } as any)
       }
-      return Promise.reject(new Error('not mocked'))
+      return Promise.reject(new Error('not mocked: ' + url.toString()))
     })
   })
 

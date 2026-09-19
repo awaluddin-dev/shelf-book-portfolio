@@ -77,10 +77,6 @@ describe('Home Page View', () => {
     jest.clearAllMocks()
   })
 
-  afterEach(() => {
-    // If fake timers are used implicitly, clear them or just leave this empty
-  })
-
   it('renders all sections correctly', async () => {
     render(
       <ThemeProvider>
@@ -88,11 +84,7 @@ describe('Home Page View', () => {
       </ThemeProvider>
     )
 
-    // Initially it will be in loading state for 1.2s, let's fast forward
-    jest.advanceTimersByTime(1500)
-    
     await waitFor(() => {
-      expect(screen.getByTestId('hero-section')).toBeInTheDocument()
       expect(screen.getByTestId('projects-section')).toBeInTheDocument()
       expect(screen.getByTestId('proficiency-section')).toBeInTheDocument()
       expect(screen.getByTestId('experience-section')).toBeInTheDocument()
@@ -111,7 +103,7 @@ describe('Home Page View', () => {
     })
   })
 
-  it('renders the bottom navigation dock', async () => {
+  it('renders navigation links and sections', async () => {
     render(
       <ThemeProvider>
         <Home />
@@ -119,10 +111,9 @@ describe('Home Page View', () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Proficiency')).toBeInTheDocument()
-      expect(screen.getByLabelText('Experience')).toBeInTheDocument()
-      expect(screen.getByLabelText('Endorse')).toBeInTheDocument()
-      expect(screen.getByLabelText('Toggle Theme')).toBeInTheDocument()
+      expect(screen.getByText('Status:')).toBeInTheDocument()
+      expect(screen.getAllByText('Resume').length).toBeGreaterThan(0)
+      expect(screen.getAllByText('Activity').length).toBeGreaterThan(0)
     })
   })
 })

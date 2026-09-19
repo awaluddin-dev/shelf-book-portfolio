@@ -38,10 +38,11 @@ export function ResumeModal() {
   useEffect(() => {
     if (!showResumeModal) return;
 
+    const docs = Array.isArray(resumeDocuments) ? resumeDocuments : [];
     if (primaryResume?.id) {
       queueMicrotask(() => setActiveDocId(primaryResume.id));
-    } else if (resumeDocuments.length > 0) {
-      const primary = resumeDocuments.find((d: any) => d.isPrimary) || resumeDocuments[0];
+    } else if (docs.length > 0) {
+      const primary = docs.find((d: any) => d.isPrimary) || docs[0];
       if (primary?.id) {
         queueMicrotask(() => setActiveDocId(primary.id));
       }
@@ -49,10 +50,11 @@ export function ResumeModal() {
   }, [showResumeModal, primaryResume, resumeDocuments]);
 
   // Find currently selected document
+  const docsList = Array.isArray(resumeDocuments) ? resumeDocuments : [];
   const selectedDoc =
-    resumeDocuments.find((d: any) => d.id === activeDocId) ||
+    docsList.find((d: any) => d.id === activeDocId) ||
     primaryResume ||
-    (resumeDocuments.length > 0 ? resumeDocuments[0] : null);
+    (docsList.length > 0 ? docsList[0] : null);
 
   // Fetch markdown content if current selected is .md
   useEffect(() => {

@@ -66,7 +66,7 @@ describe('AdminSidebar', () => {
     
     // Now it should be expanded
     expect(screen.getByText('Collapse')).toBeInTheDocument()
-    expect(screen.getByText('Dashboard')).toBeInTheDocument() // nav item labels appear
+    expect(screen.getByText('Hero & Metrics')).toBeInTheDocument() // nav item labels appear
   })
 
   it('navigates to different paths on nav item click', () => {
@@ -112,7 +112,7 @@ describe('AdminSidebar', () => {
     const { container } = render(<AdminSidebar />)
     
     // Initial state: menu is closed, mobile backdrop is not visible
-    expect(container.querySelector('.bg-black\\/50')).not.toBeInTheDocument()
+    expect(container.querySelector('.bg-black\\/75')).not.toBeInTheDocument()
     
     // Find mobile toggle button (first button with md:hidden)
     const mobileToggleBtn = container.querySelector('button.md\\:hidden')
@@ -124,7 +124,7 @@ describe('AdminSidebar', () => {
     }
     
     // Now backdrop should be present
-    const backdrop = container.querySelector('.bg-black\\/50')
+    const backdrop = container.querySelector('.bg-black\\/75')
     expect(backdrop).toBeInTheDocument()
     
     // Close via click
@@ -133,14 +133,14 @@ describe('AdminSidebar', () => {
     }
     
     // Backdrop should be gone
-    expect(container.querySelector('.bg-black\\/50')).not.toBeInTheDocument()
+    expect(container.querySelector('.bg-black\\/75')).not.toBeInTheDocument()
     
     // Open again to test keyboard close
     if (mobileToggleBtn) {
       fireEvent.click(mobileToggleBtn)
     }
     
-    const newBackdrop = container.querySelector('.bg-black\\/50')
+    const newBackdrop = container.querySelector('.bg-black\\/75')
     expect(newBackdrop).toBeInTheDocument()
     
     // Close via Escape key
@@ -148,7 +148,7 @@ describe('AdminSidebar', () => {
       fireEvent.keyDown(newBackdrop, { key: 'Escape', code: 'Escape' })
     }
     
-    expect(container.querySelector('.bg-black\\/50')).not.toBeInTheDocument()
+    expect(container.querySelector('.bg-black\\/75')).not.toBeInTheDocument()
     
     // Open again to test close button (X) inside sidebar
     if (mobileToggleBtn) {
@@ -160,6 +160,6 @@ describe('AdminSidebar', () => {
       fireEvent.click(closeBtn)
     }
     
-    expect(container.querySelector('.bg-black\\/50')).not.toBeInTheDocument()
+    expect(container.querySelector('.bg-black\\/75')).not.toBeInTheDocument()
   })
 })

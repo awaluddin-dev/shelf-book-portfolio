@@ -491,7 +491,8 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
         try {
           const res = await fetch("/api/resume/documents");
           const data = await res.json();
-          const list = data.data || (Array.isArray(data) ? data : []);
+          const rawList = data.data || (Array.isArray(data) ? data : []);
+          const list = Array.isArray(rawList) ? rawList : [];
           set({ resumeDocuments: list });
           const primary = list.find((d: any) => d.isPrimary) || list[0] || null;
           if (primary) {

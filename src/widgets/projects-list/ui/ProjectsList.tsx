@@ -35,6 +35,7 @@ interface ProjectsSectionProps {
   isDark: boolean;
   isFeaturedOnly?: boolean;
   showViewAll?: boolean;
+  initialViewMode?: "grid" | "shelf";
 }
 
 const getProjectMetadata = (project: any) => {
@@ -178,12 +179,7 @@ const ProjectCardGrid = ({
   const archDiagram = project.systemArchitectures?.[0];
 
   return (
-    <motion.article
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ duration: 0.3 }}
+    <article
       className="group relative rounded-2xl border border-subtle bg-card p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-subtle-hover transition-colors duration-150 flex flex-col justify-between gap-5"
     >
       <div className="flex flex-col gap-4">
@@ -372,7 +368,7 @@ const ProjectCardGrid = ({
           )}
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 };
 
@@ -814,6 +810,7 @@ export default function ProjectsSection({
   isDark,
   isFeaturedOnly = false,
   showViewAll = false,
+  initialViewMode = "grid",
 }: Readonly<ProjectsSectionProps>) {
   const {
     searchQuery,
@@ -829,7 +826,7 @@ export default function ProjectsSection({
     isLoading,
   } = usePortfolioStore();
 
-  const [viewMode, setViewMode] = useState<"grid" | "shelf">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "shelf">(initialViewMode);
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "alphabetical">(
     "newest",
   );

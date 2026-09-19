@@ -97,7 +97,7 @@ describe('ExperienceSection', () => {
       jest.advanceTimersByTime(1000);
     });
 
-    expect(screen.getByText('Experience')).toBeInTheDocument();
+    expect(screen.getByText('Career')).toBeInTheDocument();
   });
 
   it('renders correctly and displays section title', () => {
@@ -108,8 +108,8 @@ describe('ExperienceSection', () => {
       jest.advanceTimersByTime(1000);
     });
 
-    expect(screen.getByText('Experience')).toBeInTheDocument();
-    expect(screen.getByText('Professional Experience')).toBeInTheDocument();
+    expect(screen.getByText('Career')).toBeInTheDocument();
+    expect(screen.getByText('Journey & Chronology')).toBeInTheDocument();
   });
   
   it('renders the vertical career timeline entries correctly', () => {

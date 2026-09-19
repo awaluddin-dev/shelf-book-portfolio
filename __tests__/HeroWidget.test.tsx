@@ -131,9 +131,8 @@ describe('HeroSection Widget', () => {
     fireEvent.click(projectsBtn);
     expect(mockScrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
 
-    const downloadBtn = screen.getByText('Download CV');
-    fireEvent.click(downloadBtn);
-    expect(defaultStoreValues.triggerToast).toHaveBeenCalledWith('Downloading CV...');
+    const resumeLink = screen.getByText('View Resume');
+    expect(resumeLink.closest('a')).toHaveAttribute('href', '/assets/resume/Awaluddin_cv.pdf');
   });
 
   it('handles Inquiries button click', () => {

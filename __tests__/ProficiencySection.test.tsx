@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import ProficiencySection from '@/widgets/proficiency/ui/Proficiency'
 
 // Mock sub-components
@@ -65,48 +65,21 @@ jest.mock('motion/react', () => ({
 
 jest.mock('@/shared/store/portfolioStore', () => ({
   usePortfolioStore: () => ({
-    dynamicProficiency: [
+    dynamicPillarsV2: [
       {
-        title: 'Frontend',
+        id: 'p1',
+        pillarNumber: '01',
+        title: 'Core Backend & Distributed Systems',
+        description: 'High-concurrency services, event-driven orchestration.',
+        icon: 'Server',
         skills: [
-          { name: 'React', subtext: 'Hooks, Context', status: 'Production-ready' },
-          { name: 'Vue', subtext: 'Composition API', status: 'In Use' },
-          { name: 'Svelte', subtext: 'Stores', status: 'Building' }
+          { name: 'Go (Golang)', status: 'PROD' },
+          { name: 'Kafka', status: 'PROD' },
+          { name: 'pgvector', status: 'R&D' }
         ]
       }
     ],
-    dynamicRoadmap: [
-      {
-        quarter: 'Q1 2024',
-        status: 'In Progress',
-        tech: 'React Server Components',
-        description: 'Test description',
-        depth: 'Deep',
-        icon: 'test-icon',
-        topics: ['Topic 1', 'Topic 2'],
-        projects: ['Project 1']
-        , currentFocuses: [{ title: 'Writing', items: ['Current Work', 'Currently Learning'] }]
-      },
-      {
-        quarter: 'Q2 2024',
-        status: 'Planned',
-        tech: 'GraphQL',
-        description: 'Test description 2',
-        depth: 'Medium',
-        icon: 'test-icon-2',
-        topics: ['Topic 3'],
-        projects: ['Project 2']
-      }
-    ],
-    languageData: [
-      { name: 'TypeScript', percentage: 100, color: '#000' }
-    ],
     isLoading: false,
-    activeCurrentFocus: {
-      writing: 'Writing',
-      currentWork: 'Current Work',
-      currentlyLearning: 'Currently Learning'
-    }
   })
 }))
 
@@ -125,48 +98,25 @@ describe('ProficiencySection', () => {
 
   it('renders correctly with default props', () => {
     render(<ProficiencySection {...defaultProps} />)
-    expect(screen.getByText('Technical Proficiency')).toBeInTheDocument()
-    expect(screen.getByText(/Current Focus/)).toBeInTheDocument()
-    expect(screen.getByText('Most Used Languages')).toBeInTheDocument()
+    expect(screen.getByText('Production Systems Architecture')).toBeInTheDocument()
+    expect(screen.getByText('Engineering Capability Matrix')).toBeInTheDocument()
+    expect(screen.getByText('In Production')).toBeInTheDocument()
+    expect(screen.getByText('Active R&D')).toBeInTheDocument()
   })
 
-  it('renders proficiency categories and skills', () => {
+  it('renders proficiency pillars and skills from store', () => {
     render(<ProficiencySection {...defaultProps} />)
-    expect(screen.getByText('Frontend')).toBeInTheDocument()
-    expect(screen.getByText('React')).toBeInTheDocument()
-    expect(screen.getAllByText('Production-ready')[0]).toBeInTheDocument()
-    expect(screen.getByText('Vue')).toBeInTheDocument()
-    expect(screen.getAllByText('In Use')[0]).toBeInTheDocument()
-    expect(screen.getByText('Svelte')).toBeInTheDocument()
-    expect(screen.getAllByText('Building')[0]).toBeInTheDocument()
+    expect(screen.getByText('Core Backend & Distributed Systems')).toBeInTheDocument()
+    expect(screen.getByText('High-concurrency services, event-driven orchestration.')).toBeInTheDocument()
+    expect(screen.getByText('Go (Golang)')).toBeInTheDocument()
+    expect(screen.getByText('Kafka')).toBeInTheDocument()
+    expect(screen.getByText('pgvector')).toBeInTheDocument()
+    expect(screen.getAllByText('PROD').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('R&D').length).toBeGreaterThan(0)
   })
 
-  it('renders roadmap items', () => {
+  it('renders AnimatedDivider', () => {
     render(<ProficiencySection {...defaultProps} />)
-    expect(screen.getAllByText('React Server Components').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Q1 2024').length).toBeGreaterThan(0)
-  })
-
-  it('handles roadmap selection click', () => {
-    render(<ProficiencySection {...defaultProps} />)
-    const q2Buttons = screen.getAllByText('Q2 2024')
-    if (q2Buttons.length > 0) {
-      fireEvent.click(q2Buttons[0].closest('button')!)
-      expect(screen.getByText('Test description 2')).toBeInTheDocument()
-    }
-  })
-
-  it('renders selected roadmap details', () => {
-    render(<ProficiencySection {...defaultProps} />)
-    expect(screen.getByText('Test description')).toBeInTheDocument()
-    expect(screen.getByText('Deep')).toBeInTheDocument()
-    expect(screen.getByText('Topic 1')).toBeInTheDocument()
-    expect(screen.getByText('Project 1')).toBeInTheDocument()
-  })
-
-  it('renders SkillTree and AnimatedDivider', () => {
-    render(<ProficiencySection {...defaultProps} />)
-    expect(screen.getByTestId('skill-tree')).toBeInTheDocument()
     expect(screen.getByTestId('animated-divider')).toBeInTheDocument()
   })
 })

@@ -57,9 +57,9 @@ describe('AdminDashboard', () => {
           json: () => Promise.resolve({ data: [{ status: 'pending' }, { status: 'approved' }] })
         } as any)
       }
-      if (url.toString().includes('/api/hero')) {
-        return Promise.resolve({
-          ok: true,
+      if (url.toString().includes('/api/hero') || url.toString().includes('/api/v2/hero')) {
+        return Promise.resolve({ 
+          ok: true, 
           json: () => Promise.resolve({ 
             data: { 
               heroConfig: { name: 'Admin', role: 'Dev', openForWork: true, availableFrom: 'Now' },
@@ -68,7 +68,7 @@ describe('AdminDashboard', () => {
           })
         } as any)
       }
-      return Promise.reject(new Error('not mocked'))
+      return Promise.reject(new Error('not mocked: ' + url.toString()))
     })
   })
 
@@ -128,7 +128,7 @@ describe('AdminDashboard', () => {
     
     // Mock save response
     ;(global.fetch as jest.Mock).mockImplementationOnce((url) => {
-      if (url.toString().includes('/api/hero')) {
+      if (url.toString().includes('/api/hero') || url.toString().includes('/api/v2/hero')) {
         return Promise.resolve({ ok: true } as any)
       }
       return Promise.resolve({ ok: true, json: () => Promise.resolve({}) } as any)
@@ -137,7 +137,7 @@ describe('AdminDashboard', () => {
     fireEvent.click(saveBtn)
 
     await waitFor(() => {
-      expect(screen.getByText('Hero Section updated successfully')).toBeInTheDocument()
+      expect(screen.getByText(/Hero Section updated successfully/i)).toBeInTheDocument()
     })
   })
 })

@@ -33,21 +33,19 @@ describe('AdminWork', () => {
     localStorage.setItem('isAdmin', 'true')
 
     global.fetch = jest.fn((url) => {
-      if (url.toString().includes('/api/work')) {
+      if (url.toString().includes('/api/work') || url.toString().includes('/api/v2/experience')) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve({ 
             data: { 
-              workExperience: [
+              experiences: [
                 {
                   id: 'w1',
                   company: 'Acme Corp',
                   role: 'Senior Engineer',
-                  years: '2022 - Present',
-                  duration: '2 yrs',
-                  stack: 'React, Node.js',
-                  teaser: 'A short teaser',
-                  fullImpact: 'A full impact',
+                  period: '2022 - Present',
+                  isActive: true,
+                  techTags: ['React', 'Node.js'],
                   bullets: ['Bullet 1', 'Bullet 2']
                 }
               ] 
@@ -55,7 +53,7 @@ describe('AdminWork', () => {
           })
         } as any)
       }
-      return Promise.reject(new Error('not mocked'))
+      return Promise.reject(new Error('not mocked: ' + url.toString()))
     })
   })
 
@@ -84,14 +82,14 @@ describe('AdminWork', () => {
     })
 
     // Click Add
-    const addBtn = screen.getByRole('button', { name: /Add Experience/i })
+    const addBtn = screen.getByRole('button', { name: /Add (Career )?Experience/i })
     fireEvent.click(addBtn)
 
     // Form should be open
-    expect(screen.getAllByText('Add Experience')[0]).toBeInTheDocument()
+    expect(screen.getAllByText(/Add (Career )?Experience/i)[0]).toBeInTheDocument()
 
     // Fill fields
-    const companyInput = screen.getByPlaceholderText('e.g. Acme Corp')
+    const companyInput = screen.getByPlaceholderText(/PT Serasi|Acme/i)
     fireEvent.change(companyInput, { target: { value: 'New Company' } })
     expect(screen.getByDisplayValue('New Company')).toBeInTheDocument()
   })
