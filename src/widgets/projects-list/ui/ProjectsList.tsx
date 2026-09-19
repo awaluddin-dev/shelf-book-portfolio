@@ -29,6 +29,7 @@ import { usePortfolioStore } from "@/shared/store/portfolioStore";
 import React, { useState, useRef, useMemo } from "react";
 import { useProjectExplainer } from "@/hooks/useProjectExplainer";
 import ProjectArchitectureDiagram from "@/entities/project/ui/ProjectArchitectureDiagram";
+import { FeaturedProjectShowcase } from "./FeaturedProjectShowcase";
 
 interface ProjectsSectionProps {
   isDark: boolean;
@@ -841,6 +842,8 @@ export default function ProjectsSection({
 
   const filteredProjects = useMemo(() => {
     if (isFeaturedOnly) {
+      const featured = (activeProjects || []).find((p: any) => p.isFeatured);
+      if (featured) return [featured];
       return (activeProjects || []).slice(0, 1);
     }
 
@@ -947,6 +950,18 @@ export default function ProjectsSection({
         />
       );
     }
+
+    if (isFeaturedOnly) {
+      return (
+        <div className="w-full">
+          <FeaturedProjectShowcase
+            project={filteredProjects[0]}
+            setSelectedProject={setSelectedProject}
+          />
+        </div>
+      );
+    }
+
     return (
       <div className="grid grid-cols-1 gap-6">
         <AnimatePresence mode="popLayout">

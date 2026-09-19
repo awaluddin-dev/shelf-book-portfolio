@@ -1,10 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { AdminCrudTable } from "@/widgets/admin-crud-table/ui/AdminCrudTable";
-import { Trash2 } from "lucide-react";
+import { Trash2, UploadCloud } from "lucide-react";
 
 export default function AdminProjects() {
+  const [uploadingField, setUploadingField] = useState<string | null>(null);
+
   const defaultForm = {
     title: "",
     subtitle: "",
@@ -22,6 +24,11 @@ export default function AdminProjects() {
     github: "",
     markdown: "",
     order: 1,
+    isFeatured: false,
+    mediaType: "screenshot",
+    mediaUrl: "",
+    architectureDiagram: "",
+    keyHighlights: "",
     stats: [] as { label: string; value: string }[],
     phases: [] as { date: string; title: string; description: string }[],
   };
@@ -55,6 +62,14 @@ export default function AdminProjects() {
                 .map((s: string) => s.trim())
                 .filter(Boolean)
             : formData.pipelineFlow,
+        keyHighlights:
+          typeof formData.keyHighlights === "string"
+            ? formData.keyHighlights
+                .split("\n")
+                .map((s: string) => s.trim())
+                .filter(Boolean)
+            : formData.keyHighlights,
+        isFeatured: Boolean(formData.isFeatured),
         order: Number(formData.order) || 1,
       })}
       columns={[
@@ -62,7 +77,14 @@ export default function AdminProjects() {
           header: "Title",
           render: (item: any) => (
             <>
-              <div className="font-bold">{item.title}</div>
+              <div className="flex items-center gap-2 font-bold">
+                {item.title}
+                {item.isFeatured && (
+                  <span className="px-2 py-0.5 rounded text-[10px] uppercase font-mono tracking-wide bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                    Featured
+                  </span>
+                )}
+              </div>
               <div className="text-xs text-neu-text-muted truncate max-w-[250px]">
                 {item.subtitle}
               </div>
@@ -83,6 +105,37 @@ export default function AdminProjects() {
         },
       ]}
       renderForm={(formData, setFormData) => {
+        const handleUpload = async (file: File, fieldName: "mediaUrl" | "architectureDiagram") => {
+          const token = localStorage.getItem("token");
+          setUploadingField(fieldName);
+          try {
+            const uploadData = new FormData();
+            uploadData.append("file", file);
+
+            const res = await fetch("/api/v2/projects/upload", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              body: uploadData,
+            });
+
+            const result = await res.json();
+            const data = result.data || result;
+            if (data.url) {
+              setFormData((prev: any) => ({
+                ...prev,
+                [fieldName]: data.url,
+              }));
+            }
+          } catch (err) {
+            console.error("Upload error:", err);
+            alert("Failed to upload asset");
+          } finally {
+            setUploadingField(null);
+          }
+        };
+
         const addStat = () =>
           setFormData({
             ...formData,
@@ -405,6 +458,140 @@ export default function AdminProjects() {
                   onChange={(e) =>
                     setFormData({ ...formData, demoUrl: e.target.value })
                   }
+                  className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* Featured Project Showcase Controls */}
+            <div className="p-4 border border-amber-500/20 rounded-2xl space-y-4 bg-amber-500/5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-sm text-amber-300">Featured Project Showcase</h3>
+                  <p className="text-xs text-neu-text-muted">Display this project prominently with media previews, architecture diagrams, and recruiter highlights on the home view.</p>
+                </div>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(formData.isFeatured)}
+                    onChange={(e) =>
+                      setFormData({ ...formData, isFeatured: e.target.checked })
+                    }
+                    className="w-4 h-4 rounded text-neu-accent border-gray-600 focus:ring-neu-accent bg-transparent"
+                  />
+                  <span className="text-xs font-mono font-medium text-amber-200">Set as Featured</span>
+                </label>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label
+                    htmlFor="adm-proj-mtype"
+                    className="text-xs font-mono text-neu-text-muted"
+                  >
+                    Media Type
+                  </label>
+                  <select
+                    id="adm-proj-mtype"
+                    value={formData.mediaType || "screenshot"}
+                    onChange={(e) =>
+                      setFormData({ ...formData, mediaType: e.target.value })
+                    }
+                    className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent bg-black/20"
+                  >
+                    <option value="screenshot">Screenshot / Image</option>
+                    <option value="gif">Animated GIF</option>
+                    <option value="video">Interactive Video</option>
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="adm-proj-murl"
+                      className="text-xs font-mono text-neu-text-muted"
+                    >
+                      Media Preview URL (GIF, Screenshot, or Video)
+                    </label>
+                    <label className="text-[11px] font-mono text-neu-accent hover:underline cursor-pointer flex items-center gap-1">
+                      <UploadCloud size={12} />
+                      <span>{uploadingField === "mediaUrl" ? "Uploading..." : "Upload File"}</span>
+                      <input
+                        type="file"
+                        accept="image/*,video/*"
+                        className="hidden"
+                        disabled={uploadingField !== null}
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) handleUpload(f, "mediaUrl");
+                        }}
+                      />
+                    </label>
+                  </div>
+                  <input
+                    id="adm-proj-murl"
+                    value={formData.mediaUrl || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, mediaUrl: e.target.value })
+                    }
+                    placeholder="/api/v2/projects/assets/... or https://..."
+                    className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <label
+                    htmlFor="adm-proj-archdiag"
+                    className="text-xs font-mono text-neu-text-muted"
+                  >
+                    Architecture Diagram Image URL
+                  </label>
+                  <label className="text-[11px] font-mono text-neu-accent hover:underline cursor-pointer flex items-center gap-1">
+                    <UploadCloud size={12} />
+                    <span>{uploadingField === "architectureDiagram" ? "Uploading..." : "Upload Diagram"}</span>
+                    <input
+                      type="file"
+                      accept="image/*,.pdf"
+                      className="hidden"
+                      disabled={uploadingField !== null}
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (f) handleUpload(f, "architectureDiagram");
+                      }}
+                    />
+                  </label>
+                </div>
+                <input
+                  id="adm-proj-archdiag"
+                  value={formData.architectureDiagram || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, architectureDiagram: e.target.value })
+                  }
+                  placeholder="/api/v2/projects/assets/... or https://..."
+                  className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label
+                  htmlFor="adm-proj-khighlights"
+                  className="text-xs font-mono text-neu-text-muted"
+                >
+                  Key Highlights / Engineering Impact (One bullet per line)
+                </label>
+                <textarea
+                  id="adm-proj-khighlights"
+                  value={
+                    Array.isArray(formData.keyHighlights)
+                      ? formData.keyHighlights.join("\n")
+                      : formData.keyHighlights || ""
+                  }
+                  onChange={(e) =>
+                    setFormData({ ...formData, keyHighlights: e.target.value })
+                  }
+                  rows={3}
+                  placeholder="Architected distributed BullMQ queue processing 10k+ jobs/sec&#10;Sub-50ms p99 latency across all edge nodes&#10;Zero downtime migration with LangGraph checkpointing"
                   className="w-full px-4 py-2.5 rounded-xl glass-card-inset text-sm outline-none focus:border-neu-accent border border-transparent"
                 />
               </div>

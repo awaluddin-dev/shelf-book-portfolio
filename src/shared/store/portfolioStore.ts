@@ -427,9 +427,15 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
           const payload = resData.data || resData;
           const list = payload.projects || (Array.isArray(payload) ? payload : []);
           if (list.length > 0) {
+            // Sort featured first, then by order asc
+            const sorted = [...list].sort((a: any, b: any) => {
+              if (a.isFeatured && !b.isFeatured) return -1;
+              if (!a.isFeatured && b.isFeatured) return 1;
+              return (a.order ?? 0) - (b.order ?? 0);
+            });
             set({
-              dynamicProjectsV2: list,
-              dynamicProjects: list,
+              dynamicProjectsV2: sorted,
+              dynamicProjects: sorted,
             });
           }
         } catch (e) {
