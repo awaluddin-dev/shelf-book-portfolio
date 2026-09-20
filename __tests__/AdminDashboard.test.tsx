@@ -139,5 +139,14 @@ describe('AdminDashboard', () => {
     await waitFor(() => {
       expect(screen.getByText(/Hero Section updated successfully/i)).toBeInTheDocument()
     })
+
+    const saveCall = (global.fetch as jest.Mock).mock.calls.find(
+      (call: any[]) => call[0] === '/api/v2/hero' && call[1]?.method === 'PATCH'
+    )
+    expect(saveCall).toBeDefined()
+    const payload = JSON.parse(saveCall[1].body)
+    expect(payload.heroConfig.createdAt).toBeUndefined()
+    expect(payload.heroConfig.updatedAt).toBeUndefined()
+    expect(payload.heroConfig.id).toBeUndefined()
   })
 })

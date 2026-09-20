@@ -97,13 +97,21 @@ export default function AdminDashboard() {
   const saveHeroConfig = async () => {
     setIsProcessing(true);
     try {
+      const { id: _id, createdAt: _createdAt, updatedAt: _updatedAt, ...cleanHeroConfig } = heroConfig || {};
+      const cleanMetrics = Array.isArray(metrics)
+        ? metrics.map((m: any) => {
+            const { createdAt: _mCreatedAt, updatedAt: _mUpdatedAt, ...restMetric } = m || {};
+            return restMetric;
+          })
+        : [];
+
       const res = await fetch("/api/v2/hero", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ heroConfig, metrics }),
+        body: JSON.stringify({ heroConfig: cleanHeroConfig, metrics: cleanMetrics }),
       });
       if (!res.ok) throw new Error("Failed");
       setToastMessage({
