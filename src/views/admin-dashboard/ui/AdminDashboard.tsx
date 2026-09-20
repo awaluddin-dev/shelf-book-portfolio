@@ -97,11 +97,17 @@ export default function AdminDashboard() {
   const saveHeroConfig = async () => {
     setIsProcessing(true);
     try {
-      const { id: _id, createdAt: _createdAt, updatedAt: _updatedAt, ...cleanHeroConfig } = heroConfig || {};
+      const cleanHeroConfig = { ...(heroConfig || {}) };
+      delete cleanHeroConfig.id;
+      delete cleanHeroConfig.createdAt;
+      delete cleanHeroConfig.updatedAt;
+
       const cleanMetrics = Array.isArray(metrics)
         ? metrics.map((m: any) => {
-            const { createdAt: _mCreatedAt, updatedAt: _mUpdatedAt, ...restMetric } = m || {};
-            return restMetric;
+            const copy = { ...(m || {}) };
+            delete copy.createdAt;
+            delete copy.updatedAt;
+            return copy;
           })
         : [];
 
